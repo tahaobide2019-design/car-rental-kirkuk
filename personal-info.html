@@ -1,101 +1,757 @@
-<script>
-// دالة إرسال رسالة واتساب تلقائية إليك
-async function sendAutoWhatsAppToAdmin() {
-    // جمع بيانات الحجز
-    const bookingData = JSON.parse(localStorage.getItem('bookingData')) || {};
-    const personalData = {
-        name: document.getElementById('name')?.value || 'غير محدد',
-        phone: document.getElementById('phone')?.value || 'غير محدد',
-        email: document.getElementById('email')?.value || 'غير محدد'
-    };
-    
-    // حفظ البيانات الشخصية
-    localStorage.setItem('personalData', JSON.stringify(personalData));
-    
-    // دالة لتحويل رمز السيارة إلى اسم
-    function getCarName(carCode) {
-        const cars = {
-            'camry': 'تويوتا كامري 2023',
-            'elantra': 'هيونداي النترا 2024',
-            'sportage': 'كيا سبورتيج 2023',
-            'mercedes': 'مرسيدس C200 2022',
-            'h1': 'هيونداي H1 2023',
-            'sunny': 'نيسان صني 2023'
-        };
-        return cars[carCode] || carCode;
-    }
-    
-    // إنشاء نص الرسالة
-    const bookingNumber = `KRK-${Date.now().toString().slice(-6)}`;
-    const message = `📋 *طلب حجز جديد*
-    
-🔢 *رقم الحجز:* ${bookingNumber}
-⏰ *الوقت:* ${new Date().toLocaleString('ar-IQ')}
-
-🚗 *السيارة:* ${getCarName(bookingData.carType)}
-📅 *المدة:* ${bookingData.days || 1} يوم
-💰 *المبلغ:* ${bookingData.totalPrice || '0 دينار'}
-📆 *التاريخ:* ${bookingData.pickupDate || 'غير محدد'}
-⏰ *الوقت:* ${bookingData.pickupTime || 'غير محدد'}
-📍 *الموقع:* ${bookingData.location?.area || 'غير محدد'}
-
-👤 *العميل:*
-   • الاسم: ${personalData.name}
-   • الهاتف: ${personalData.phone}
-   • البريد: ${personalData.email}
-
-📝 *ملاحظات:* ${bookingData.notes || 'لا توجد'}
-
-📞 *للتواصل مع العميل:* ${personalData.phone}
-
-_تم إرسال هذه الرسالة تلقائياً من موقع تأجير السيارات_`;
-    
-    // إعداد بيانات API
-    const apiKey = '123456'; // استبدل بمفتاح CallMeBot الحقيقي
-    const phoneNumber = '9647713225471'; // رقمك
-    const text = encodeURIComponent(message);
-    
-    // رابط API
-    const apiURL = `https://api.callmebot.com/whatsapp.php?phone=${phoneNumber}&text=${text}&apikey=${apiKey}`;
-    
-    try {
-        // إرسال الطلب (استخدم no-cors لتجنب مشاكل)
-        const response = await fetch(apiURL, { mode: 'no-cors' });
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المعلومات الشخصية - تأجير سيارات كركوك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ff6f00;
+            --light: #f5f7ff;
+            --dark: #0d1b2a;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --danger: #d32f2f;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --card-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
         
-        console.log('تم إرسال رسالة واتساب تلقائياً إلى المسؤول');
-        return true;
-    } catch (error) {
-        console.error('خطأ في الاتصال:', error);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        // بديل: إنشاء رابط واتساب يدوي
-        createWhatsAppLink(message);
-        return false;
-    }
-}
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            direction: rtl;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ============ NAVBAR ============ */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text span:first-child {
+            color: var(--dark);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        
+        .logo-text span:last-child {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        
+        /* ============ PROGRESS BAR ============ */
+        .progress-container {
+            max-width: 800px;
+            margin: 100px auto 3rem;
+            padding: 0 2rem;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 3rem;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            left: 0;
+            height: 3px;
+            background: #e2e8f0;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: translateY(-50%);
+            z-index: 2;
+            transition: width 0.4s ease;
+            width: 75%;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #94a3b8;
+            transition: all 0.3s;
+        }
+        
+        .step.active .step-circle {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        .step.completed .step-circle {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+        
+        .step.completed .step-circle::after {
+            content: '✓';
+            font-size: 1.2rem;
+        }
+        
+        .step-text {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .step.active .step-text {
+            color: var(--primary);
+        }
+        
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto 5rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ============ FORM SECTION ============ */
+        .form-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .section-header h2 {
+            color: var(--dark);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-header p {
+            color: #64748b;
+            margin-top: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-label {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-label .required {
+            color: var(--danger);
+            font-size: 1.2rem;
+        }
+        
+        .form-input {
+            padding: 1rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .form-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: var(--danger);
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        
+        .input-with-icon .form-input {
+            padding-left: 3rem;
+        }
+        
+        .document-upload {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .document-upload:hover {
+            border-color: var(--secondary);
+            background: #f0f7ff;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-note {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        
+        .document-list {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .document-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .document-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .document-size {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        .remove-document {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f1f5f9;
+        }
+        
+        /* ============ SUMMARY SECTION ============ */
+        .summary-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .summary-title h3 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .summary-title p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .car-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .car-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .summary-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .detail-group {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .detail-group h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #64748b;
+        }
+        
+        .detail-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .price-breakdown {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%);
+            border: 2px solid #bbdefb;
+        }
+        
+        .price-breakdown h4 {
+            color: var(--secondary);
+        }
+        
+        .total-price {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .total-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .total-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+        
+        /* ============ BUTTONS ============ */
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            border: none;
+            min-width: 160px;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(26, 35, 126, 0.25);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        /* ============ MODAL ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            background: #f1f5f9;
+        }
+        
+        .modal h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .modal p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .progress-container {
+                margin-top: 80px;
+                padding: 0 1rem;
+            }
+            
+            .main-content {
+                padding: 0 1rem;
+            }
+            
+            .form-section,
+            .summary-section {
+                padding: 1.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: 100%;
+            }
+            
+            .progress-steps {
+                gap: 1rem;
+            }
+            
+            .step-text {
+                font-size: 0.8rem;
+                text-align: center;
+            }
+            
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .logo-text span:first-child {
+                font-size: 1rem;
+            }
+            
+            .progress-steps {
+                flex-direction: column;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+            
+            .progress-steps::before {
+                height: 100%;
+                width: 3px;
+                top: 0;
+                right: 24px;
+                left: auto;
+                transform: none;
+            }
+            
+            .progress-bar {
+                height: 75%;
+                width: 3px;
+                top: 0;
+                right: 24px;
+                left: auto;
+                transform: none;
+            }
+            
+            .step {
+                flex-direction: row;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============ NAVBAR ============ -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="logo-text">
+                    <span>تأجير سيارات كركوك</span>
+                    <span>حجز آمن وسريع</span>
+                </div>
+            </a>
+        </div>
+    </nav>
 
-// دالة بديلة إنشاء رابط واتساب
-function createWhatsAppLink(message) {
-    const whatsappURL = `https://wa.me/9647713225471?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-}
+    <!-- ============ PROGRESS BAR ============ -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-bar" id="progress-bar"></div>
+            
+            <div class="step completed">
+                <div class="step-circle">1</div>
+                <div class="step-text">اختيار السيارة</div>
+            </div>
+            
+            <div class="step completed">
+                <div class="step-circle">2</div>
+                <div class="step-text">تفاصيل الحجز</div>
+            </div>
+            
+            <div class="step active">
+                <div class="step-circle">3</div>
+                <div class="step-text">المعلومات الشخصية</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-circle">4</div>
+                <div class="step-text">التأكيد</div>
+            </div>
+        </div>
+    </div>
 
-// عند إرسال النموذج
-document.getElementById('personal-info-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // حفظ البيانات الشخصية
-    const personalData = {
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value
-    };
-    
-    localStorage.setItem('personalData', JSON.stringify(personalData));
-    
-    // إرسال رسالة واتساب
-    await sendAutoWhatsAppToAdmin();
-    
-    // الانتقال لصفحة التأكيد
-    window.location.href = 'confirmation.html';
-});
-</script>
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="main-content">
+        <!-- معلومات شخصية -->
+        <section class="form-section">
+            <div class="section-header">
+                <h2><i class="fas fa-user-circle"></i> معلوماتك الشخصية</h2>
+                <p>الرجاء تعبئة جميع الحقول المطلوبة لإكمال عملية الحجز</p>
+            </div>
+            
+            <
