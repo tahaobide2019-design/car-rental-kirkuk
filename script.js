@@ -1,7 +1,13 @@
-
-fetch('data/cars.json').then(r=>r.json()).then(cars=>{
-let c=document.getElementById('cars');
-cars.forEach(car=>{
-c.innerHTML+=`<div><h3>${car.name}</h3><p>${car.price}$/يوم</p><a href="booking.html">احجز</a></div>`
-})
-})
+{
+    id: 5, // رقماً جديداً غير مستخدم
+    name: "هيونداي سوناتا 2023",
+    category: "عائلي",
+    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027",
+    price: 45000,
+    transmission: "أوتوماتيك",
+    seats: 5,
+    fuel: "بنزين",
+    year: 2023,
+    features: ["تكييف", "شاشة لمس", "كاميرا خلفية"],
+    description: "سيارة عائلية مريحة واقتصادية"
+}
