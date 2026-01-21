@@ -1,11 +1,575 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><title>الحجز</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحجز - تأجير سيارات كركوك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            direction: rtl;
+            padding-top: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* شريط التنقل */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        /* قسم الهيدر */
+        .page-header {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* خريطة كركوك البسيطة */
+        .simple-map-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        .map-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-title i {
+            color: var(--accent-color);
+        }
+        
+        #clickable-map {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .map-marker {
+            position: absolute;
+            color: red;
+            font-size: 32px;
+            transform: translate(-50%, -100%);
+            display: none;
+        }
+        
+        .map-instructions {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .map-instructions i {
+            color: var(--secondary-color);
+            margin-left: 5px;
+        }
+        
+        .selected-location-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-right: 4px solid var(--secondary-color);
+        }
+        
+        .selected-location-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .selected-location-box p {
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        /* نموذج الحجز */
+        .booking-form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+        
+        .btn-full {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        /* تفاصيل الحجز */
+        .booking-summary {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-right: 4px solid var(--accent-color);
+        }
+        
+        .booking-summary h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-item.total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+        
+        /* الفوتر */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
 <body>
-<h2>احجز الآن</h2>
-<label>عدد الأيام: <input type="number" id="days" value="1"></label>
-<button onclick="calc()">احسب السعر</button>
-<p id="total"></p>
-<a id="next" href="personal-info.html">التالي</a>
-<script src="js/booking.js"></script>
-</body></html>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-car"></i>
+                <span>تأجير سيارات كركوك</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="cars.html">السيارات</a></li>
+                <li><a href="booking.html" style="color: var(--secondary-color);">الحجز</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- هيدر الصفحة -->
+    <section class="page-header">
+        <div class="container">
+            <h1>حجز سيارة</h1>
+            <p>اختر موقع الاستلام على الخريطة ثم املأ بيانات الحجز</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- خريطة اختيار الموقع -->
+        <section class="simple-map-container">
+            <h2 class="map-title"><i class="fas fa-map-marker-alt"></i> اختر موقع الاستلام</h2>
+            <p style="margin-bottom: 15px; color: #666;">انقر على الخريطة في المكان الذي تريد استلام السيارة منه</p>
+            
+            <div id="clickable-map">
+                <div class="map-instructions">
+                    <i class="fas fa-hand-point-up"></i>
+                    <p>انقر في أي مكان على الخريطة لتحديد موقع الاستلام</p>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">(خريطة كركوك توضيحية)</p>
+                </div>
+                <div class="map-marker" id="map-marker">📍</div>
+            </div>
+            
+            <div class="selected-location-box" id="location-box" style="display: none;">
+                <h4><i class="fas fa-check-circle" style="color: #27ae60;"></i> الموقع المحدد</h4>
+                <p><strong>المنطقة:</strong> <span id="selected-area">...</span></p>
+                <p><strong>الإحداثيات التقريبية:</strong> <span id="selected-coords">...</span></p>
+                <p><i class="fas fa-info-circle" style="color: #f39c12;"></i> سنتواصل معك لتأكيد العنوان الدقيق</p>
+                <input type="hidden" id="selected-lat">
+                <input type="hidden" id="selected-lng">
+            </div>
+        </section>
+
+        <!-- نموذج الحجز -->
+        <section class="booking-form-container">
+            <h2 class="form-title"><i class="fas fa-file-contract"></i> بيانات الحجز</h2>
+            
+            <form id="booking-form" onsubmit="return validateForm()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="car-type"><i class="fas fa-car"></i> نوع السيارة</label>
+                        <select id="car-type" required>
+                            <option value="">اختر نوع السيارة</option>
+                            <option value="camry">تويوتا كامري 2023 - 75,000 دينار/يوم</option>
+                            <option value="elantra">هيونداي النترا 2024 - 60,000 دينار/يوم</option>
+                            <option value="sportage">كيا سبورتيج 2023 - 90,000 دينار/يوم</option>
+                            <option value="mercedes">مرسيدس C200 2022 - 120,000 دينار/يوم</option>
+                            <option value="h1">هيونداي H1 2023 - 110,000 دينار/يوم</option>
+                            <option value="sunny">نيسان صني 2023 - 45,000 دينار/يوم</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="days"><i class="fas fa-calendar-alt"></i> عدد أيام التأجير</label>
+                        <input type="number" id="days" min="1" max="30" value="1" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pickup-date"><i class="fas fa-calendar-plus"></i> تاريخ الاستلام</label>
+                        <input type="date" id="pickup-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pickup-time"><i class="fas fa-clock"></i> وقت الاستلام</label>
+                        <select id="pickup-time" required>
+                            <option value="08:00">8:00 صباحاً</option>
+                            <option value="09:00">9:00 صباحاً</option>
+                            <option value="10:00">10:00 صباحاً</option>
+                            <option value="11:00">11:00 صباحاً</option>
+                            <option value="12:00">12:00 ظهراً</option>
+                            <option value="13:00">1:00 مساءً</option>
+                            <option value="14:00">2:00 مساءً</option>
+                            <option value="15:00">3:00 مساءً</option>
+                            <option value="16:00">4:00 مساءً</option>
+                            <option value="17:00">5:00 مساءً</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address-details"><i class="fas fa-map-signs"></i> العنوان التفصيلي (اختياري)</label>
+                    <textarea id="address-details" rows="3" placeholder="اكتب تفاصيل العنوان مثل: اسم الشارع، قرب مبنى معين، رقم المنزل..."></textarea>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">سيساعدنا هذا في تحديد موقعك بدقة أكبر</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes"><i class="fas fa-sticky-note"></i> ملاحظات إضافية (اختياري)</label>
+                    <textarea id="notes" rows="3" placeholder="أي متطلبات خاصة أو طلبات إضافية..."></textarea>
+                </div>
+                
+                <!-- ملخص الحجز -->
+                <div class="booking-summary">
+                    <h3><i class="fas fa-receipt"></i> ملخص الحجز</h3>
+                    <div class="summary-item">
+                        <span>سعر اليوم:</span>
+                        <span id="daily-price">0 دينار</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>عدد الأيام:</span>
+                        <span id="days-count">1 يوم</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>المبلغ الإجمالي:</span>
+                        <span id="total-price">0 دينار</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> سيتم التواصل معك خلال 24 ساعة لتأكيد الحجز
+                    </p>
+                </div>
+                
+                <button type="submit" class="btn btn-full btn-success">
+                    <i class="fas fa-check-circle"></i> تأكيد الحجز والمتابعة
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="container">
+            <h3>تأجير سيارات كركوك</h3>
+            <p>نقدم لكم أفضل خدمة تأجير سيارات في مدينة كركوك</p>
+            <div style="margin: 30px 0;">
+                <p><i class="fas fa-phone"></i> +964 771 322 5471</p>
+                <p><i class="fas fa-envelope"></i> tahaobide2019@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> كركوك، العراق</p>
+            </div>
+            <p>© 2024 تأجير سيارات كركوك. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        // مناطق كركوك الرئيسية
+        const kirkukAreas = [
+            { name: "مركز المدينة", lat: 35.4667, lng: 44.3920 },
+            { name: "حي الإسكان", lat: 35.4800, lng: 44.3800 },
+            { name: "شارع 60", lat: 35.4700, lng: 44.4100 },
+            { name: "حي الخضراء", lat: 35.4500, lng: 44.4000 },
+            { name: "حي الخالص", lat: 35.4900, lng: 44.3700 },
+            { name: "حي الخدمات", lat: 35.4600, lng: 44.3600 },
+            { name: "حي المفتية", lat: 35.4550, lng: 44.3900 },
+            { name: "حي القادسية", lat: 35.4750, lng: 44.3950 }
+        ];
+        
+        // أسعار السيارات
+        const carPrices = {
+            "camry": 75000,
+            "elantra": 60000,
+            "sportage": 90000,
+            "mercedes": 120000,
+            "h1": 110000,
+            "sunny": 45000
+        };
+        
+        // تحديد موقع على الخريطة
+        document.getElementById('clickable-map').addEventListener('click', function(event) {
+            const map = this;
+            const marker = document.getElementById('map-marker');
+            const locationBox = document.getElementById('location-box');
+            const selectedArea = document.getElementById('selected-area');
+            const selectedCoords = document.getElementById('selected-coords');
+            const latInput = document.getElementById('selected-lat');
+            const lngInput = document.getElementById('selected-lng');
+            
+            // إحداثيات النقرة
+            const rect = map.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // تحريك العلامة
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            marker.style.display = 'block';
+            
+            // إخفاء التعليمات
+            document.querySelector('.map-instructions').style.display = 'none';
+            
+            // حساب الإحداثيات التقريبية (لكركوك)
+            const lat = 35.46 + ((rect.height/2 - y) / rect.height * 0.06);
+            const lng = 44.38 + ((x - rect.width/2) / rect.width * 0.06);
+            
+            // حفظ الإحداثيات
+            latInput.value = lat.toFixed(6);
+            lngInput.value = lng.toFixed(6);
+            
+            // تحديد المنطقة الأقرب
+            let closestArea = kirkukAreas[0];
+            let minDistance = Infinity;
+            
+            kirkukAreas.forEach(area => {
+                const distance = Math.sqrt(
+                    Math.pow(area.lat - lat, 2) + 
+                    Math.pow(area.lng - lng, 2)
+                );
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestArea = area;
+                }
+            });
+            
+            // عرض المعلومات
+            selectedArea.textContent = closestArea.name;
+            selectedCoords.textContent = lat.toFixed(4) + ', ' + lng.toFixed(4);
+            locationBox.style.display = 'block';
+            
+            // إضافة مؤثرات
+            marker.style.transform = 'translate(-50%, -100%) scale(1.2)';
+            setTimeout(() => {
+                marker.style.transform = 'translate(-50%, -100%) scale(1)';
+            }, 300);
+        });
+        
+        // حساب السعر
+        function calculatePrice() {
+            const carType = document.getElementById('car-type').value;
+            const days = parseInt(document.getEleme
