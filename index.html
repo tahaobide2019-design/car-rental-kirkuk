@@ -3,162 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأجير سيارات كركوك | تأجير سيارات فاخرة وعائلية</title>
+    <title>تأجير سيارات كركوك - الصفحة الرئيسية</title>
+    
+    <!-- روابط خارجية -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- أنماطنا -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- أيقونة الموقع -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Cairo', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
-            direction: rtl;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* شريط التنقل */
-        .navbar {
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .logo i {
-            margin-left: 10px;
-            color: var(--secondary-color);
-            font-size: 1.8rem;
-        }
-        
-        /* قسم الهيرو */
-        .hero {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding-top: 120px;
-            padding-bottom: 80px;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #666;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: var(--secondary-color);
+        /* أنماط إضافية للصفحة الرئيسية */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            padding: 100px 0;
+            text-align: center;
+            margin-bottom: 60px;
         }
         
-        .btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-3px);
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
         }
         
-        /* الخدمات */
-        .services {
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1.3s ease;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.6s ease;
+        }
+        
+        .features-section {
             padding: 80px 0;
-            background-color: white;
+            background: #f8fafc;
         }
         
-        .section-title {
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 50px;
-            color: var(--primary-color);
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-        
-        .service-card {
-            background-color: #f8f9fa;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             transition: transform 0.3s ease;
+            height: 100%;
         }
         
-        .service-card:hover {
+        .feature-card:hover {
             transform: translateY(-10px);
         }
         
-        .service-card i {
-            font-size: 3rem;
-            color: var(--secondary-color);
-            margin-bottom: 20px;
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
         }
         
-        /* الفوتر */
-        .footer {
-            background-color: var(--primary-color);
+        .cars-section {
+            padding: 80px 0;
+        }
+        
+        .car-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .car-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .car-info {
+            padding: 25px;
+        }
+        
+        .car-price {
+            color: #ff6f00;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .car-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .car-feature {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .booking-form-section {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
             color: white;
-            padding: 60px 0 20px;
+            padding: 80px 0;
+            border-radius: 20px;
+            margin: 60px 0;
+        }
+        
+        .booking-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .testimonials-section {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 15px;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
+        
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .client-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            padding: 60px 0;
+            border-radius: 20px;
+            margin: 60px 0;
+        }
+        
+        .stat-item {
             text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ff6f00;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .section-title { font-size: 1.5rem; }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -166,63 +234,291 @@
     <!-- شريط التنقل -->
     <nav class="navbar">
         <div class="container">
+            <!-- الشعار -->
             <a href="index.html" class="logo">
                 <i class="fas fa-car"></i>
                 <span>تأجير سيارات كركوك</span>
             </a>
+            
+            <!-- القائمة الرئيسية -->
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
+                <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> الحجوزات</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> من نحن</a></li>
+                <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
+            </ul>
+            
+            <!-- أزرار العمل -->
+            <div class="nav-actions">
+                <a href="bookings.html" class="btn btn-primary">
+                    <i class="fas fa-calendar-check"></i> حجز الآن
+                </a>
+                
+                <!-- زر لوحة التحكم (يظهر للمسؤولين) -->
+                <a href="admin-login.html" class="btn btn-secondary">
+                    <i class="fas fa-user-shield"></i> دخول المدير
+                </a>
+            </div>
+            
+            <!-- زر القائمة المتنقلة -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- قسم الهيرو -->
-    <section class="hero">
+    <!-- القائمة المتنقلة -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
+            <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> الحجوزات</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i> من نحن</a></li>
+            <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
+            <li><a href="admin-login.html"><i class="fas fa-user-shield"></i> دخول المدير</a></li>
+        </ul>
+    </div>
+
+    <!-- قسم البطل -->
+    <section class="hero-section">
         <div class="container">
-            <h1>أفضل خدمة تأجير سيارات في <span style="color: #e74c3c;">كركوك</span></h1>
-            <p>استأجر سيارة مناسبة لك بكل سهولة وأمان. نقدم لك مجموعة واسعة من السيارات بأسعار تنافسية.</p>
-            <a href="cars.html" class="btn">استعرض السيارات</a>
+            <h1 class="hero-title">أفضل خدمة تأجير سيارات في كركوك</h1>
+            <p class="hero-subtitle">
+                اكتشف أسطولنا المتميز من السيارات الحديثة بأفضل الأسعار. 
+                خدمة 24/7، تأمين كامل، وأفضل تجربة قيادة.
+            </p>
+            <div class="hero-buttons">
+                <a href="cars.html" class="btn btn-accent btn-lg">
+                    <i class="fas fa-car"></i> استعرض السيارات
+                </a>
+                <a href="bookings.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-check"></i> احجز الآن
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- قسم الخدمات -->
-    <section class="services">
+    <!-- قسم المميزات -->
+    <section class="features-section">
         <div class="container">
-            <h2 class="section-title">لماذا تختارنا؟</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>أمان وموثوقية</h3>
-                    <p>جميع سياراتنا مؤمنة وتمر بفحوصات دورية للتأكد من سلامتها.</p>
+            <div class="section-header">
+                <h2>لماذا تختارنا؟</h2>
+                <p class="section-subtitle">نقدم لكم أفضل خدمات تأجير السيارات في كركوك</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3>أسطول حديث</h3>
+                        <p>سيارات حديثة ومجهزة بأحدث التقنيات والمواصفات العالية</p>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <h3>أسعار تنافسية</h3>
-                    <p>نقدم أفضل الأسعار مع خيارات دفع مرنة تناسب جميع العملاء.</p>
+                
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>تأمين كامل</h3>
+                        <p>تغطية تأمينية شاملة لحماية العملاء والمركبات</p>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-headset"></i>
-                    <h3>دعم فني 24/7</h3>
-                    <p>فريق دعم فني متاح على مدار الساعة لمساعدتك في أي استفسار.</p>
+                
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>دعم فني 24/7</h3>
+                        <p>فريق دعم فني متاح على مدار الساعة لخدمتكم</p>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-car-side"></i>
-                    <h3>أسطول متنوع</h3>
-                    <p>خيارات متنوعة من السيارات الاقتصادية والفاخرة والعائلية.</p>
+                
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <h3>أسعار منافسة</h3>
+                        <p>أفضل الأسعار في السوق مع عروض وتخفيضات مستمرة</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- الفوتر -->
-    <footer class="footer">
+    <!-- قسم السيارات المميزة -->
+    <section class="cars-section">
         <div class="container">
-            <h3>تأجير سيارات كركوك</h3>
-            <p>نقدم لكم أفضل خدمة تأجير سيارات في مدينة كركوك</p>
-            <div style="margin: 30px 0;">
-                <p><i class="fas fa-phone"></i> +964 771 322 5471</p>
-                <p><i class="fas fa-envelope"></i> tahaobide2019@gmail.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> كركوك، العراق</p>
+            <div class="section-header">
+                <h2>سياراتنا المميزة</h2>
+                <p class="section-subtitle">اختر من بين مجموعة واسعة من السيارات الحديثة</p>
             </div>
-            <p>© 2024 تأجير سيارات كركوك. جميع الحقوق محفوظة.</p>
+            
+            <div class="row">
+                <!-- سيارة 1 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="car-card">
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="تويوتا كامري 2023" class="car-image">
+                        <div class="car-info">
+                            <h3>تويوتا كامري 2023</h3>
+                            <div class="car-price">50,000 دينار/يوم</div>
+                            <div class="car-features">
+                                <span class="car-feature"><i class="fas fa-user-friends"></i> 5 ركاب</span>
+                                <span class="car-feature"><i class="fas fa-gas-pump"></i> بنزين</span>
+                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
+                                <span class="car-feature"><i class="fas fa-snowflake"></i> تكييف</span>
+                            </div>
+                            <a href="bookings.html?car=toyota-camry" class="btn btn-primary btn-block">
+                                <i class="fas fa-calendar-check"></i> احجز الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- سيارة 2 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="car-card">
+                        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="هيونداي سوناتا 2022" class="car-image">
+                        <div class="car-info">
+                            <h3>هيونداي سوناتا 2022</h3>
+                            <div class="car-price">45,000 دينار/يوم</div>
+                            <div class="car-features">
+                                <span class="car-feature"><i class="fas fa-user-friends"></i> 5 ركاب</span>
+                                <span class="car-feature"><i class="fas fa-gas-pump"></i> بنزين</span>
+                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
+                                <span class="car-feature"><i class="fas fa-bluetooth"></i> بلوتوث</span>
+                            </div>
+                            <a href="bookings.html?car=hyundai-sonata" class="btn btn-primary btn-block">
+                                <i class="fas fa-calendar-check"></i> احجز الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- سيارة 3 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="car-card">
+                        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="كيا سورينتو 2023" class="car-image">
+                        <div class="car-info">
+                            <h3>كيا سورينتو 2023</h3>
+                            <div class="car-price">60,000 دينار/يوم</div>
+                            <div class="car-features">
+                                <span class="car-feature"><i class="fas fa-user-friends"></i> 7 ركاب</span>
+                                <span class="car-feature"><i class="fas fa-gas-pump"></i> ديزل</span>
+                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
+                                <span class="car-feature"><i class="fas fa-film"></i> شاشة لمس</span>
+                            </div>
+                            <a href="bookings.html?car=kia-sorento" class="btn btn-primary btn-block">
+                                <i class="fas fa-calendar-check"></i> احجز الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="cars.html" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-car"></i> عرض جميع السيارات
+                </a>
+            </div>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+
+    <!-- قسم الإحصائيات -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCars">50+</div>
+                        <p>سيارة في الأسطول</p>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number" id="happyCustomers">1000+</div>
+                        <p>عميل سعيد</p>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number" id="completedBookings">5000+</div>
+                        <p>حجز مكتمل</p>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number" id="serviceYears">5+</div>
+                        <p>سنوات خدمة</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم نموذج الحجز السريع -->
+    <section class="booking-form-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>احجز سيارتك الآن</h2>
+                <p class="section-subtitle">املأ النموذج للحجز السريع</p>
+            </div>
+            
+            <div class="booking-form">
+                <form id="quickBookingForm">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">اسمك الكامل</label>
+                                <input type="text" class="form-control" placeholder="أدخل اسمك" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">رقم الهاتف</label>
+                                <input type="tel" class="form-control" placeholder="0770XXXXXXX" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">اختر السيارة</label>
+                                <select class="form-control" required>
+                                    <option value="">اختر سيارة</option>
+                                    <option value="camry">تويوتا كامري 2023</option>
+                                    <option value="sonata">هيونداي سوناتا 2022</option>
+                                    <option value="sorento">كيا سورينتو 2023</option>
+                                    <option value="sunny">نيسان صني 2023</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">عدد الأيام</label>
+                                <select class="form-control" required>
+                                    <option value="1">1 يوم</option>
+                                    <option value="2">2 يوم</option>
+                                    <option value="3">3 أيام</option>
+                                    <option value="7">أسبوع</option>
+                                    <option value="30">شهر</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label">ملاحظات إضافية (اختياري)</label>
+                                <textarea class="form-control" rows="3" placeholder
