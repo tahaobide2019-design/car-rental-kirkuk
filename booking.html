@@ -2,71 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الحوت - حجز سيارة</title>
+    <title>الحوت - احجز سيارة</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            background: #f5f5f5; 
-        }
-        .step { 
-            background: white; 
-            padding: 30px; 
-            margin: 20px auto; 
-            max-width: 600px; 
-            border-radius: 10px; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
-            display: none; 
-        }
+        body { font-family: Arial; text-align: center; padding: 20px; background: #f5f5f5; }
+        .step { background: white; padding: 30px; margin: 20px auto; max-width: 600px; border-radius: 10px; display: none; }
         .step.active { display: block; }
-        button { 
-            background: #1a5fb4; 
-            color: white; 
-            border: none; 
-            padding: 12px 24px; 
-            font-size: 16px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            margin: 10px; 
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+        button { background: #1a5fb4; color: white; border: none; padding: 12px 24px; margin: 10px; border-radius: 5px; cursor: pointer; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>🔷 الحوت لتأجير السيارات - كركوك</h1>
-    <h3>احجز سيارتك في 3 خطوات</h3>
-
-    <!-- الخطوات -->
-    <div class="steps">
-        <button onclick="showStep(1)">1. بيانات الحجز</button>
-        <button onclick="showStep(2)">2. معلومات شخصية</button>
-        <button onclick="showStep(3)">3. تأكيد</button>
-    </div>
-
-    <!-- الخطوة 1 -->
-    <div id="step1" class="step active">
-        <h2>📅 الخطوة 1: بيانات الحجز</h2>
-        <input type="date" id="pickupDate" placeholder="تاريخ الاستلام">
-        <input type="date" id="returnDate" placeholder="تاريخ الإعادة">
-        <select id="carType">
-            <option>اختر نوع السيارة</option>
-            <option>تويوتا كامري - 55,000 دينار/يوم</option>
-            <option>هيونداي أكسنت - 45,000 دينار/يوم</option>
+    <h1>🔷 احجز سيارتك مع الحوت</h1>
+    <p>📍 كركوك - العراق | 📞 0771 322 5471</p>
+    
+    <div class="step active" id="step1">
+        <h2>الخطوة 1: اختر السيارة والتواريخ</h2>
+        <select>
+            <option>تويوتا كامري 2023 - 55,000 دينار/يوم</option>
+            <option>هيونداي أكسنت 2023 - 45,000 دينار/يوم</option>
         </select>
+        <br>
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
         <br><br>
         <button onclick="showStep(2)">التالي →</button>
     </div>
-
-    <!-- الخطوة 2 -->
-    <div id="step2" class="step">
-        <h2>👤 الخطوة 2: معلومات شخصية</h2>
+    
+    <div class="step" id="step2">
+        <h2>الخطوة 2: معلوماتك الشخصية</h2>
         <input type="text" placeholder="الاسم الكامل">
         <input type="tel" placeholder="رقم الهاتف">
         <input type="email" placeholder="البريد الإلكتروني">
@@ -74,54 +37,43 @@
         <button onclick="showStep(1)">← السابق</button>
         <button onclick="showStep(3)">التالي →</button>
     </div>
-
-    <!-- الخطوة 3 -->
-    <div id="step3" class="step">
-        <h2>✅ الخطوة 3: تأكيد الحجز</h2>
-        <p>هل أنت متأكد من حجز السيارة؟</p>
+    
+    <div class="step" id="step3">
+        <h2>الخطوة 3: تأكيد الحجز</h2>
+        <p>✔️ تويوتا كامري 2023</p>
+        <p>✔️ 3 أيام - 165,000 دينار</p>
+        <br>
         <button onclick="showStep(2)">← السابق</button>
         <button onclick="completeBooking()">تأكيد الحجز ✓</button>
     </div>
-
-    <!-- نتيجة النجاح -->
-    <div id="success" style="display:none; background:green; color:white; padding:30px; margin:20px auto; max-width:600px; border-radius:10px;">
+    
+    <div id="success" style="display:none; background:green; color:white; padding:30px; border-radius:10px; max-width:600px; margin:auto;">
         <h2>🎉 تم الحجز بنجاح!</h2>
-        <p>شكراً لاستئجارك من الحوت لتأجير السيارات</p>
-        <p>رقم حجزك: <strong>HOUT-2024-1234</strong></p>
-        <button onclick="location.reload()">حجز جديد</button>
+        <p>شكراً لاختيارك الحوت لتأجير السيارات</p>
+        <p>📞 سنتصل بك على الرقم: 0771 322 5471</p>
+        <button onclick="location.href='index.html'">العودة للرئيسية</button>
     </div>
 
     <script>
-        // دالة الانتقال بين الخطوات
+        // تعيين التواريخ
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        document.getElementById('startDate').valueAsDate = today;
+        document.getElementById('endDate').valueAsDate = tomorrow;
+        
+        // دالة الانتقال
         function showStep(step) {
-            // إخفاء جميع الخطوات
-            document.querySelectorAll('.step').forEach(s => {
-                s.classList.remove('active');
-            });
-            
-            // إظهار الخطوة المطلوبة
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
         }
-
+        
         // دالة إكمال الحجز
         function completeBooking() {
-            document.querySelectorAll('.step').forEach(s => {
-                s.style.display = 'none';
-            });
+            document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
             document.getElementById('success').style.display = 'block';
-            alert('تم الحجز بنجاح! رقم حجزك: HOUT-2024-1234');
-        }
-
-        // تعيين التواريخ الافتراضية
-        window.onload = function() {
-            const today = new Date();
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            document.getElementById('pickupDate').valueAsDate = today;
-            document.getElementById('returnDate').valueAsDate = tomorrow;
-            
-            alert('مرحباً في نظام حجز سيارات الحوت! ابدأ بإدخال بيانات الحجز.');
+            alert('تم الحجز! سنتصل بك قريباً على 0771 322 5471');
         }
     </script>
 </body>
