@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول المشرف</title>
+    <link rel="stylesheet" href="css/admin-style.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <!-- شعار الموقع -->
+        <div class="login-header">
+            <img src="images/logo.svg" alt="شعار الموقع" class="login-logo">
+            <h1>نظام إدارة المحتوى</h1>
+            <p>تسجيل دخول المشرفين</p>
+        </div>
+
+        <!-- رسائل التنبيه -->
+        <div id="loginMessage" class="alert-message" style="display: none;"></div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="adminLoginForm" class="login-form">
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i> اسم المستخدم
+                </label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="أدخل اسم المستخدم" 
+                    required
+                    autocomplete="username"
+                >
+                <div class="input-error" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> كلمة المرور
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="أدخل كلمة المرور" 
+                    required
+                    autocomplete="current-password"
+                >
+                <div class="input-error" id="passwordError"></div>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>تذكرني</span>
+                </label>
+                <a href="forgot-password.html" class="forgot-password">نسيت كلمة المرور؟</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                <span id="loginText">تسجيل الدخول</span>
+                <span id="loginLoading" class="loading-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+
+            <!-- روابط إضافية -->
+            <div class="login-links">
+                <a href="index.html" class="back-to-site">
+                    <i class="fas fa-arrow-right"></i> العودة للموقع الرئيسي
+                </a>
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>نظام آمن - جميع البيانات مشفرة</span>
+                </div>
+            </div>
+        </form>
+
+        <!-- معلومات الدعم -->
+        <div class="support-info">
+            <h3><i class="fas fa-headset"></i> الدعم الفني</h3>
+            <p>في حال وجود أي مشكلة في الدخول، يرجى التواصل مع الدعم الفني على:</p>
+            <p><i class="fas fa-phone"></i> ٠١٢٣٤٥٦٧٨٩</p>
+            <p><i class="fas fa-envelope"></i> support@example.com</p>
+        </div>
+
+        <!-- حقوق النشر -->
+        <footer class="login-footer">
+            <p>&copy; <span id="currentYear"></span> جميع الحقوق محفوظة</p>
+            <p class="version">الإصدار ١.٠.٠</p>
+        </footer>
+    </div>
+
+    <!-- المكتبات الأساسية -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    
+    <!-- ملفات JavaScript المخصصة -->
+    <script src="js/auth.js"></script>
+    <script src="js/admin-login.js"></script>
+</body>
+</html>
