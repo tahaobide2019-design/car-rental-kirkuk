@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحوت - تأجير السيارات الفاخرة في كركوك</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* الأنماط الأساسية */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            direction: rtl;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* أنماط البحث */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        
+        .search-form {
+            margin-top: 20px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a5fb4;
+            font-weight: 600;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a5fb4;
+            box-shadow: 0 0 0 3px rgba(26, 95, 180, 0.1);
+            outline: none;
+        }
+        
+        .form-action {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1a5fb4, #0d4a9c);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0d4a9c, #1a5fb4);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 95, 180, 0.3);
+        }
+        
+        .btn-outline {
+            border: 2px solid #1a5fb4;
+            color: #1a5fb4;
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: #1a5fb4;
+            color: white;
+        }
+        
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 18px;
+        }
+        
+        /* نتائج البحث */
+        .search-results {
+            margin-top: 40px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .results-count {
+            color: #1a5fb4;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .car-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .car-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .car-type {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #1a5fb4;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .car-details {
+            padding: 20px;
+        }
+        
+        .car-name {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .car-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .car-feature {
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .car-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .car-price {
+            color: #1a5fb4;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-action {
+                flex-direction: column;
+            }
+            
+            .cars-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .search-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- قسم البحث -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">ابحث عن السيارة المناسبة في كركوك</h1>
+            <p class="hero-subtitle">اختر مواصفات السيارة التي تريدها وسنظهر لك أفضل الخيارات المتاحة</p>
+            
+            <div class="search-box">
+                <form id="searchForm" class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location"><i class="fas fa-map-marker-alt"></i> مكان الاستلام</label>
+                            <select id="location" required>
+                                <option value="">اختر موقع الاستلام</option>
+                                <option value="airport">مطار كركوك الدولي</option>
+                                <option value="city-center">وسط مدينة كركوك</option>
+                                <option value="hotel">الفنادق في كركوك</option>
+                                <option value="branch">فرع الحوت الرئيسي</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pickup-date"><i class="fas fa-calendar-alt"></i> تاريخ الاستلام</label>
+                            <input type="date" id="pickup-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="return-date"><i class="fas fa-calendar-alt"></i> تاريخ الإعادة</label>
+                            <input type="date" id="return-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="car-type"><i class="fas fa-car"></i> نوع السيارة</label>
+                            <select id="car-type">
+                                <option value="">جميع الأنواع</option>
+                                <option value="economy">اقتصادية</option>
+                                <option value="suv">عائلية / دفع رباعي</option>
+                                <option value="luxury">فاخرة</option>
+                                <option value="van">فان / نقل</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-action">
+                        <button type="button" id="searchBtn" class="btn btn-primary btn-large">
+                            <i class="fas fa-search"></i> ابحث عن سيارة
+                        </button>
+                        <button type="button" id="clearBtn" class="btn btn-outline">مسح البحث</button>
+                    </div>
+                </form>
+                
+                <!-- نتائج البحث ستظهر هنا -->
+                <div id="searchResults" class="search-results" style="display: none;">
+                    <div class="results-header">
+                        <h3>نتائج البحث</h3>
+                        <div class="results-count" id="resultsCount">0 سيارة</div>
+                    </div>
+                    <div id="resultsContainer" class="cars-grid">
+                        <!-- سيتم تعبئة النتائج هنا -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // بيانات السيارات
+        const carsData = [
+            {
+                id: 1,
+                name: "تويوتا كامري 2023",
+                type: "اقتصادية",
+                price: "55,000",
+                image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                features: ["أوتوماتيك", "مكيف", "5 ركاب"],
+                locations: ["airport", "city-center", "hotel"]
+            },
+            {
+                id: 2,
+                name: "هيونداي توسان 2023",
+                type: "عائلية / دفع رباعي",
+                price: "75,000",
+                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                features: ["أوتوماتيك", "مكيف", "7 ركاب"],
+                locations: ["airport", "city-center"]
+            },
+            {
+                id: 3,
+                name: "مرسيدس E-Class 2022",
+                type: "فاخرة",
+                price: "150,000",
+                image: "https://images.unsplash.com/photo-1563720223487-62e5c6bce5f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                features: ["أوتوماتيك", "مكيف", "5 ركاب"],
+                locations: ["airport", "branch"]
+            },
+            {
+                id: 4,
+                name: "تويوتا هايلكس 2023",
+                type: "فان / نقل",
+                price: "65,000",
+                image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                features: ["عادي", "مكيف", "5 ركاب"],
+                locations: ["city-center", "branch"]
+            }
+        ];
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تعيين التواريخ الافتراضية
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('pickup-date').value = today.toISOString().split('T')[0];
+            document.getElementById('pickup-date').min = today.toISOString().split('T')[0];
+            document.getElementById('return-date').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('return-date').min = tomorrow.toISOString().split('T')[0];
+            
+            // زر البحث
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            
+            // زر مسح البحث
+            document.getElementById('clearBtn').addEventListener('click', clearSearch);
+            
+            // تفعيل البحث عند الضغط على Enter
+            document.getElementById('searchForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                performSearch();
+            });
+        });
+
+        // دالة البحث الرئيسية
+        function performSearch() {
+            // جمع بيانات البحث
+            const location = document.getElementById('location').value;
+            const pickupDate = document.getElementById('pickup-date').value;
+            const returnDate = document.getElementById('return-date').value;
+            const carType = document.getElementById('car-type').value;
+            
+            // التحقق من البيانات المطلوبة
+            if (!location) {
+                alert('يرجى اختيار مكان الاستلام');
+                return;
+            }
+            
+            if (!pickupDate || !returnDate) {
+                alert('يرجى تحديد تاريخي الاستلام والإعادة');
+                return;
+            }
+            
+            if (new Date(returnDate) <= new Date(pickupDate)) {
+                alert('تاريخ الإعادة يجب أن يكون بعد تاريخ الاستلام');
+                return;
+            }
+            
+            // تصفية السيارات
+            let filteredCars = carsData;
+            
+            // تصفية حسب الموقع
+            if (location) {
+                filteredCars = filteredCars.filter(car => 
+                    car.locations.includes(location)
+                );
+            }
+            
+            // تصفية حسب نوع السيارة
+            if (carType) {
+                let typeName = '';
+                switch(carType) {
+                    case 'economy': typeName = 'اقتصادية'; break;
+                    case 'suv': typeName = 'عائلية / دفع رباعي'; break;
+                    case 'luxury': typeName = 'فاخرة'; break;
+                    case 'van': typeName = 'فان / نقل'; break;
+                }
+                
+                if (typeName) {
+                    filteredCars = filteredCars.filter(car => 
+                        car.type === typeName
+                    );
+                }
+            }
+            
+            // عرض النتائج
+            displayResults(filteredCars);
+        }
+
+        // عرض نتائج البحث
+        function displayResults(cars) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultsSection = document.getElementById('searchResults');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            // تحديث العدد
+            resultsCount.textContent = `${cars.length} سيارة`;
+            
+            if (cars.length === 0) {
+                // لا توجد نتائج
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-car"></i>
+                        <h3>لم يتم العثور على سيارات</h3>
+                        <p>لا توجد سيارات تطابق معايير البحث. حاول تغيير معايير البحث.</p>
+                    </div>
+                `;
+            } else {
+                // عرض السيارات
+                resultsContainer.innerHTML = cars.map(car => `
+                    <div class="car-card">
+                        <div class="car-image">
+                            <img src="${car.image}" alt="${car.name}">
+                            <span class="car-type">${car.type}</span>
+                        </div>
+                        <div class="car-details">
+                            <h3 class="car-name">${car.name}</h3>
+                            <div class="car-features">
+                                ${car.features.map(feature => `<span class="car-feature">${feature}</span>`).join('')}
+                            </div>
+                            <div class="car-footer">
+                                <div class="car-price">${car.price} دينار/يوم</div>
+                                <a href="booking.html?car=${car.id}" class="btn btn-primary">احجز الآن</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // إظهار قسم النتائج
+            resultsSection.style.display = 'block';
+            
+            // التمرير إلى النتائج
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // مسح البحث
+        function clearSearch() {
+            // إعادة تعيين النموذج
+            document.getElementById('searchForm').reset();
+            
+            // تعيين التواريخ الافتراضية
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('pickup-date').value = today.toISOString().split('T')[0];
+            document.getElementById('return-date').value = tomorrow.toISOString().split('T')[0];
+            
+            // إخفاء النتائج
+            document.getElementById('searchResults').style.display = 'none';
+        }
+    </script>
+</body>
+                      </html>
