@@ -1,519 +1,291 @@
-/**
- * booking.js - إدارة نظام الحجوزات لتأجير السيارات
- * تأجير سيارات كركوك
- */
-
-// بيانات الحجوزات المخزنة محلياً (في تطبيق حقيقي، سيتم جلبها من قاعدة البيانات)
-let bookings = JSON.parse(localStorage.getItem('carRentalBookings')) || [
-    {
-        id: 'BK001',
-        carId: 'CAR001',
-        carName: 'تويوتا كامري 2023',
-        customerName: 'علي أحمد',
-        customerPhone: '07701234567',
-        customerEmail: 'ali.ahmed@example.com',
-        startDate: '2023-11-01',
-        endDate: '2023-11-05',
-        totalDays: 4,
-        dailyRate: 50000,
-        totalAmount: 200000,
-        paymentStatus: 'مدفوع',
-        bookingStatus: 'نشطة',
-        createdAt: '2023-10-25',
-        notes: 'يحتاج إلى مقعد أطفال'
-    },
-    {
-        id: 'BK002',
-        carId: 'CAR002',
-        carName: 'هيونداي سوناتا 2022',
-        customerName: 'سارة محمد',
-        customerPhone: '07707654321',
-        customerEmail: 'sara.mohamed@example.com',
-        startDate: '2023-11-10',
-        endDate: '2023-11-15',
-        totalDays: 5,
-        dailyRate: 45000,
-        totalAmount: 225000,
-        paymentStatus: 'مدفوع جزئياً',
-        bookingStatus: 'مؤكدة',
-        createdAt: '2023-10-26',
-        notes: ''
-    },
-    {
-        id: 'BK003',
-        carId: 'CAR003',
-        carName: 'كيا سورينتو 2023',
-        customerName: 'حسن كريم',
-        customerPhone: '07709876543',
-        customerEmail: 'hassan.kareem@example.com',
-        startDate: '2023-11-03',
-        endDate: '2023-11-08',
-        totalDays: 5,
-        dailyRate: 60000,
-        totalAmount: 300000,
-        paymentStatus: 'غير مدفوع',
-        bookingStatus: 'قيد الانتظار',
-        createdAt: '2023-10-27',
-        notes: 'تأخير في الدفع'
+// ملف js/booking.js
+class BookingSystem {
+    constructor() {
+        this.init();
     }
-];
-
-// بيانات السيارات
-let cars = JSON.parse(localStorage.getItem('carRentalCars')) || [
-    {
-        id: 'CAR001',
-        brand: 'تويوتا',
-        model: 'كامري 2023',
-        plateNumber: 'كركوك 1234 أ ب',
-        color: 'أبيض',
-        dailyRate: 50000,
-        status: 'محجوزة'
-    },
-    {
-        id: 'CAR002',
-        brand: 'هيونداي',
-        model: 'سوناتا 2022',
-        plateNumber: 'كركوك 5678 ج د',
-        color: 'أسود',
-        dailyRate: 45000,
-        status: 'محجوزة'
-    },
-    {
-        id: 'CAR003',
-        brand: 'كيا',
-        model: 'سورينتو 2023',
-        plateNumber: 'كركوك 9012 هـ و',
-        color: 'رمادي',
-        dailyRate: 60000,
-        status: 'محجوزة'
-    },
-    {
-        id: 'CAR004',
-        brand: 'نيسان',
-        model: 'صني 2023',
-        plateNumber: 'كركوك 3456 ز ح',
-        color: 'أزرق',
-        dailyRate: 35000,
-        status: 'متاحة'
-    }
-];
-
-// ============================================
-// وظائف إدارة الحجوزات
-// ============================================
-
-/**
- * تهيئة صفحة الحجوزات
- */
-function initBookingsPage() {
-    loadBookingsTable();
-    updateStats();
-    setupEventListeners();
-    loadCarsForDropdown();
-}
-
-/**
- * تحميل جدول الحجوزات
- */
-function loadBookingsTable(filter = 'all') {
-    const tableBody = document.getElementById('bookingsTableBody');
-    if (!tableBody) return;
-
-    let filteredBookings = bookings;
     
-    // تطبيق التصفية
-    if (filter !== 'all') {
-        filteredBookings = bookings.filter(booking => booking.bookingStatus === filter);
+    init() {
+        this.bindEvents();
+        this.checkLoginStatus();
     }
-
-    // البحث (إذا كان هناك حقل بحث)
-    const searchInput = document.getElementById('bookingSearch');
-    if (searchInput && searchInput.value) {
-        const searchTerm = searchInput.value.toLowerCase();
-        filteredBookings = filteredBookings.filter(booking => 
-            booking.customerName.toLowerCase().includes(searchTerm) ||
-            booking.customerPhone.includes(searchTerm) ||
-            booking.carName.toLowerCase().includes(searchTerm) ||
-            booking.id.toLowerCase().includes(searchTerm)
-        );
-    }
-
-    // الفرز (افترضياً حسب التاريخ الجديد أولاً)
-    filteredBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-    // تفريغ الجدول
-    tableBody.innerHTML = '';
-
-    // إضافة الصفوف
-    if (filteredBookings.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="11" style="text-align: center; padding: 40px;">
-                    <i class="fas fa-calendar-times" style="font-size: 3rem; color: #94a3b8; margin-bottom: 15px; display: block;"></i>
-                    <p style="color: #64748b; font-size: 1.1rem;">لا توجد حجوزات</p>
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    filteredBookings.forEach((booking, index) => {
-        const row = document.createElement('tr');
+    
+    bindEvents() {
+        // التعامل مع زر احجز الآن
+        $(document).on('click', '.book-btn', (e) => this.handleBookClick(e));
         
-        // تحديد لون حالة الحجز
-        let statusClass = '';
-        let statusText = '';
-        switch(booking.bookingStatus) {
-            case 'نشطة':
-                statusClass = 'status-active';
-                statusText = 'نشطة';
-                break;
-            case 'مؤكدة':
-                statusClass = 'status-confirmed';
-                statusText = 'مؤكدة';
-                break;
-            case 'قيد الانتظار':
-                statusClass = 'status-pending';
-                statusText = 'قيد الانتظار';
-                break;
-            case 'ملغاة':
-                statusClass = 'status-cancelled';
-                statusText = 'ملغاة';
-                break;
-            case 'مكتملة':
-                statusClass = 'status-completed';
-                statusText = 'مكتملة';
-                break;
-        }
-
-        // تحديد لون حالة الدفع
-        let paymentClass = '';
-        switch(booking.paymentStatus) {
-            case 'مدفوع':
-                paymentClass = 'status-paid';
-                break;
-            case 'مدفوع جزئياً':
-                paymentClass = 'status-partial';
-                break;
-            case 'غير مدفوع':
-                paymentClass = 'status-unpaid';
-                break;
-        }
-
-        row.innerHTML = `
-            <td>${booking.id}</td>
-            <td>
-                <strong>${booking.carName}</strong><br>
-                <small class="text-muted">${booking.carId}</small>
-            </td>
-            <td>
-                <strong>${booking.customerName}</strong><br>
-                <small class="text-muted">${booking.customerPhone}</small>
-            </td>
-            <td>${formatDate(booking.startDate)}</td>
-            <td>${formatDate(booking.endDate)}</td>
-            <td>${booking.totalDays} يوم</td>
-            <td>${formatCurrency(booking.totalAmount)}</td>
-            <td><span class="status-badge ${paymentClass}">${booking.paymentStatus}</span></td>
-            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-            <td>${formatDate(booking.createdAt)}</td>
-            <td>
-                <div class="table-actions">
-                    <button class="action-btn view-btn" onclick="viewBookingDetails('${booking.id}')" title="عرض التفاصيل">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="action-btn edit-btn" onclick="editBooking('${booking.id}')" title="تعديل">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="action-btn delete-btn" onclick="deleteBooking('${booking.id}')" title="حذف">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </td>
-        `;
-        
-        tableBody.appendChild(row);
-    });
-}
-
-/**
- * تحديث الإحصائيات
- */
-function updateStats() {
-    const totalBookings = bookings.length;
-    const activeBookings = bookings.filter(b => b.bookingStatus === 'نشطة').length;
-    const pendingBookings = bookings.filter(b => b.bookingStatus === 'قيد الانتظار').length;
-    
-    // حساب إجمالي الإيرادات من الحجوزات المدفوعة
-    const totalRevenue = bookings
-        .filter(b => b.paymentStatus === 'مدفوع')
-        .reduce((sum, booking) => sum + booking.totalAmount, 0);
-    
-    // تحديث عناصر HTML (إذا كانت موجودة)
-    const totalBookingsEl = document.getElementById('totalBookingsCount');
-    const activeBookingsEl = document.getElementById('activeBookingsCount');
-    const revenueEl = document.getElementById('revenueCount');
-    const pendingBookingsEl = document.getElementById('pendingBookingsCount');
-    
-    if (totalBookingsEl) totalBookingsEl.textContent = totalBookings;
-    if (activeBookingsEl) activeBookingsEl.textContent = activeBookings;
-    if (revenueEl) revenueEl.textContent = formatCurrency(totalRevenue);
-    if (pendingBookingsEl) pendingBookingsEl.textContent = pendingBookings;
-}
-
-/**
- * إعداد مستمعي الأحداث
- */
-function setupEventListeners() {
-    // البحث
-    const searchInput = document.getElementById('bookingSearch');
-    if (searchInput) {
-        searchInput.addEventListener('input', () => loadBookingsTable());
-    }
-    
-    // التصفية
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // إزالة النشاط من جميع الأزرار
-            filterButtons.forEach(b => b.classList.remove('active'));
-            // إضافة النشاط للزر المضغوط
-            this.classList.add('active');
-            // تحميل الجدول مع التصفية
-            const filter = this.getAttribute('data-filter');
-            loadBookingsTable(filter);
+        // إغلاق المودال
+        $(document).on('click', '.close-modal', () => this.closeModal());
+        $(document).on('click', '#bookingModal', (e) => {
+            if (e.target.id === 'bookingModal') this.closeModal();
         });
-    });
-    
-    // زر إضافة حجز جديد
-    const addBookingBtn = document.getElementById('addBookingBtn');
-    if (addBookingBtn) {
-        addBookingBtn.addEventListener('click', showAddBookingModal);
+        
+        // إرسال نموذج الحجز
+        $(document).on('submit', '#bookingForm', (e) => this.handleBookingSubmit(e));
     }
     
-    // حاسبة السعر
-    const calculatePriceBtn = document.getElementById('calculatePriceBtn');
-    if (calculatePriceBtn) {
-        calculatePriceBtn.addEventListener('click', calculateBookingPrice);
+    checkLoginStatus() {
+        this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || 
+                          sessionStorage.getItem('isLoggedIn') === 'true';
     }
     
-    // تغيير السيارة في نموذج الحجز
-    const carSelect = document.getElementById('bookingCar');
-    if (carSelect) {
-        carSelect.addEventListener('change', updateCarDetails);
+    handleBookClick(e) {
+        e.preventDefault();
+        
+        // منع التكرار
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+        
+        if (!this.isLoggedIn) {
+            alert('يرجى تسجيل الدخول أولاً لحجز الموعد');
+            window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+            return;
+        }
+        
+        const $btn = $(e.currentTarget);
+        const bookingData = {
+            serviceId: $btn.data('service-id') || 1,
+            serviceName: $btn.data('service-name') || 'خدمة عامة',
+            doctorId: $btn.data('doctor-id') || 1,
+            doctorName: $btn.data('doctor-name') || 'طبيب عام',
+            price: $btn.data('price') || 0
+        };
+        
+        this.openBookingForm(bookingData);
+        
+        // إعادة تفعيل الزر بعد ثانية
+        setTimeout(() => {
+            this.isProcessing = false;
+        }, 1000);
     }
     
-    // تغيير التواريخ في نموذج الحجز
-    const startDateInput = document.getElementById('bookingStartDate');
-    const endDateInput = document.getElementById('bookingEndDate');
-    if (startDateInput && endDateInput) {
-        startDateInput.addEventListener('change', updateTotalDays);
-        endDateInput.addEventListener('change', updateTotalDays);
-    }
-}
-
-/**
- * تحميل السيارات في القائمة المنسدلة
- */
-function loadCarsForDropdown() {
-    const carSelect = document.getElementById('bookingCar');
-    if (!carSelect) return;
-    
-    // تصفية السيارات المتاحة فقط
-    const availableCars = cars.filter(car => car.status === 'متاحة');
-    
-    carSelect.innerHTML = '<option value="">اختر سيارة</option>';
-    
-    availableCars.forEach(car => {
-        const option = document.createElement('option');
-        option.value = car.id;
-        option.textContent = `${car.brand} ${car.model} - ${car.plateNumber} (${formatCurrency(car.dailyRate)}/يوم)`;
-        option.setAttribute('data-rate', car.dailyRate);
-        carSelect.appendChild(option);
-    });
-}
-
-/**
- * عرض تفاصيل الحجز
- */
-function viewBookingDetails(bookingId) {
-    const booking = bookings.find(b => b.id === bookingId);
-    if (!booking) {
-        alert('الحجز غير موجود');
-        return;
+    openBookingForm(data) {
+        // إنشاء المودال إذا لم يكن موجوداً
+        if ($('#bookingModal').length === 0) {
+            this.createModal();
+        }
+        
+        // ملء البيانات
+        $('#bookingServiceId').val(data.serviceId);
+        $('#bookingServiceName').val(data.serviceName);
+        $('#bookingDoctorId').val(data.doctorId);
+        $('#bookingDoctorName').val(data.doctorName);
+        
+        // إظهار المودال
+        $('#bookingModal').fadeIn();
+        $('body').addClass('modal-open');
     }
     
-    // عرض تفاصيل الحجز في modal
-    const modalContent = `
-        <div class="modal-header">
-            <h3>تفاصيل الحجز #${booking.id}</h3>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="booking-details">
-                <div class="detail-section">
-                    <h4><i class="fas fa-car"></i> معلومات السيارة</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">السيارة:</span>
-                            <span class="detail-value">${booking.carName}</span>
+    createModal() {
+        const modalHTML = `
+            <div id="bookingModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3><i class="fas fa-calendar-check"></i> حجز موعد</h3>
+                    <form id="bookingForm">
+                        <input type="hidden" id="bookingServiceId">
+                        <input type="hidden" id="bookingDoctorId">
+                        
+                        <div class="form-group">
+                            <label>الخدمة المطلوبة</label>
+                            <input type="text" id="bookingServiceName" readonly class="form-control">
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label">رقم السيارة:</span>
-                            <span class="detail-value">${booking.carId}</span>
+                        
+                        <div class="form-group">
+                            <label>اسم الطبيب</label>
+                            <input type="text" id="bookingDoctorName" readonly class="form-control">
                         </div>
-                    </div>
+                        
+                        <div class="form-group">
+                            <label>التاريخ المطلوب</label>
+                            <input type="date" id="bookingDate" required class="form-control" 
+                                   min="${this.getTomorrowDate()}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الوقت المفضل</label>
+                            <select id="bookingTime" required class="form-control">
+                                <option value="">اختر الوقت</option>
+                                <option value="09:00">09:00 صباحاً</option>
+                                <option value="10:00">10:00 صباحاً</option>
+                                <option value="11:00">11:00 صباحاً</option>
+                                <option value="12:00">12:00 ظهراً</option>
+                                <option value="13:00">01:00 ظهراً</option>
+                                <option value="14:00">02:00 عصراً</option>
+                                <option value="15:00">03:00 عصراً</option>
+                                <option value="16:00">04:00 عصراً</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>ملاحظات إضافية (اختياري)</label>
+                            <textarea id="bookingNotes" rows="3" class="form-control"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i> تأكيد الحجز
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                
-                <div class="detail-section">
-                    <h4><i class="fas fa-user"></i> معلومات العميل</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">اسم العميل:</span>
-                            <span class="detail-value">${booking.customerName}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">رقم الهاتف:</span>
-                            <span class="detail-value">${booking.customerPhone}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">البريد الإلكتروني:</span>
-                            <span class="detail-value">${booking.customerEmail || 'غير محدد'}</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4><i class="fas fa-calendar-alt"></i> معلومات الحجز</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">تاريخ البدء:</span>
-                            <span class="detail-value">${formatDate(booking.startDate)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">تاريخ الانتهاء:</span>
-                            <span class="detail-value">${formatDate(booking.endDate)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">عدد الأيام:</span>
-                            <span class="detail-value">${booking.totalDays} يوم</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">السعر اليومي:</span>
-                            <span class="detail-value">${formatCurrency(booking.dailyRate)}</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4><i class="fas fa-money-bill-wave"></i> معلومات الدفع</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">المبلغ الإجمالي:</span>
-                            <span class="detail-value">${formatCurrency(booking.totalAmount)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">حالة الدفع:</span>
-                            <span class="status-badge ${booking.paymentStatus === 'مدفوع' ? 'status-paid' : booking.paymentStatus === 'مدفوع جزئياً' ? 'status-partial' : 'status-unpaid'}">
-                                ${booking.paymentStatus}
-                            </span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">حالة الحجز:</span>
-                            <span class="status-badge ${booking.bookingStatus === 'نشطة' ? 'status-active' : booking.bookingStatus === 'مؤكدة' ? 'status-confirmed' : booking.bookingStatus === 'قيد الانتظار' ? 'status-pending' : 'status-cancelled'}">
-                                ${booking.bookingStatus}
-                            </span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">تاريخ الحجز:</span>
-                            <span class="detail-value">${formatDate(booking.createdAt)}</span>
-                        </div>
-                    </div>
-                </div>
-                
-                ${booking.notes ? `
-                <div class="detail-section">
-                    <h4><i class="fas fa-sticky-note"></i> ملاحظات إضافية</h4>
-                    <div class="notes-box">
-                        ${booking.notes}
-                    </div>
-                </div>
-                ` : ''}
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeModal()">إغلاق</button>
-            <button class="btn btn-primary" onclick="printBooking('${booking.id}')">
-                <i class="fas fa-print"></i> طباعة
-            </button>
-            ${booking.bookingStatus !== 'مكتملة' && booking.bookingStatus !== 'ملغاة' ? `
-            <button class="btn btn-success" onclick="changeBookingStatus('${booking.id}', 'مكتملة')">
-                <i class="fas fa-check-circle"></i> تم الاستلام
-            </button>
-            ` : ''}
-        </div>
-    `;
-    
-    showModal(modalContent);
-}
-
-/**
- * تعديل الحجز
- */
-function editBooking(bookingId) {
-    const booking = bookings.find(b => b.id === bookingId);
-    if (!booking) {
-        alert('الحجز غير موجود');
-        return;
+        `;
+        
+        $('body').append(modalHTML);
+        this.addModalStyles();
     }
     
-    // إنشاء نموذج التعديل
-    const modalContent = `
-        <div class="modal-header">
-            <h3>تعديل الحجز #${booking.id}</h3>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="editBookingForm" onsubmit="updateBooking('${booking.id}'); return false;">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">حالة الحجز</label>
-                        <select class="form-select" id="editBookingStatus" required>
-                            <option value="قيد الانتظار" ${booking.bookingStatus === 'قيد الانتظار' ? 'selected' : ''}>قيد الانتظار</option>
-                            <option value="مؤكدة" ${booking.bookingStatus === 'مؤكدة' ? 'selected' : ''}>مؤكدة</option>
-                            <option value="نشطة" ${booking.bookingStatus === 'نشطة' ? 'selected' : ''}>نشطة</option>
-                            <option value="مكتملة" ${booking.bookingStatus === 'مكتملة' ? 'selected' : ''}>مكتملة</option>
-                            <option value="ملغاة" ${booking.bookingStatus === 'ملغاة' ? 'selected' : ''}>ملغاة</option>
-                        </select>
-                    </div>
+    addModalStyles() {
+        if ($('#modalStyles').length === 0) {
+            const styles = `
+                <style id="modalStyles">
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        right: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.7);
+                        z-index: 9999;
+                        overflow-y: auto;
+                    }
                     
-                    <div class="form-group">
-                        <label class="form-label">حالة الدفع</label>
-                        <select class="form-select" id="editPaymentStatus" required>
-                            <option value="غير مدفوع" ${booking.paymentStatus === 'غير مدفوع' ? 'selected' : ''}>غير مدفوع</option>
-                            <option value="مدفوع جزئياً" ${booking.paymentStatus === 'مدفوع جزئياً' ? 'selected' : ''}>مدفوع جزئياً</option>
-                            <option value="مدفوع" ${booking.paymentStatus === 'مدفوع' ? 'selected' : ''}>مدفوع</option>
-                        </select>
-                    </div>
+                    .modal-content {
+                        background: white;
+                        margin: 50px auto;
+                        padding: 30px;
+                        width: 95%;
+                        max-width: 500px;
+                        border-radius: 10px;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                        animation: modalSlide 0.3s ease;
+                    }
                     
-                    <div class="form-group full-width">
-                        <label class="form-label">ملاحظات</label>
-                        <textarea class="form-textarea" id="editBookingNotes" placeholder="أدخل أي ملاحظات إضافية...">${booking.notes || ''}</textarea>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
-            <button class="btn btn-primary" onclick="updateBooking('${booking.id}')">
-                <i class="fas fa-save"></i> حفظ التغييرات
-            </button>
-        </div>
-    `;
+                    @keyframes modalSlide {
+                        from { transform: translateY(-50px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                    
+                    .close-modal {
+                        position: absolute;
+                        left: 20px;
+                        top: 15px;
+                        font-size: 28px;
+                        cursor: pointer;
+                        color: #666;
+                    }
+                    
+                    .close-modal:hover { color: #333; }
+                    
+                    .modal-open { overflow: hidden; }
+                    
+                    .form-control {
+                        width: 100%;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        font-size: 16px;
+                        margin-top: 5px;
+                    }
+                    
+                    .form-group { margin-bottom: 20px; }
+                    
+                    .form-actions {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 30px;
+                    }
+                    
+                    .btn {
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 16px;
+                    }
+                    
+                    .btn-primary {
+                        background: #007bff;
+                        color: white;
+                    }
+                    
+                    .btn-secondary {
+                        background: #6c757d;
+                        color: white;
+                    }
+                </style>
+            `;
+            $('head').append(styles);
+        }
+    }
     
-    showModal(modalContent);
+    getTomorrowDate() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow.toISOString().split('T')[0];
+    }
+    
+    closeModal() {
+        $('#bookingModal').fadeOut();
+        $('body').removeClass('modal-open');
+    }
+    
+    handleBookingSubmit(e) {
+        e.preventDefault();
+        
+        const bookingData = {
+            serviceId: $('#bookingServiceId').val(),
+            doctorId: $('#bookingDoctorId').val(),
+            date: $('#bookingDate').val(),
+            time: $('#bookingTime').val(),
+            notes: $('#bookingNotes').val()
+        };
+        
+        if (!this.validateBooking(bookingData)) return;
+        
+        this.submitBooking(bookingData);
+    }
+    
+    validateBooking(data) {
+        if (!data.date) {
+            alert('يرجى اختيار تاريخ للحجز');
+            return false;
+        }
+        
+        if (!data.time) {
+            alert('يرجى اختيار وقت للحجز');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    submitBooking(data) {
+        // عرض حالة التحميل
+        const $submitBtn = $('#bookingForm button[type="submit"]');
+        const originalText = $submitBtn.html();
+        $submitBtn.html('<i class="fas fa-spinner fa-spin"></i> جاري الحجز...');
+        $submitBtn.prop('disabled', true);
+        
+        // محاكاة إرسال البيانات (استبدلها بـ API حقيقي)
+        setTimeout(() => {
+            // هنا ضع كود الاتصال بالخادم
+            console.log('Booking data:', data);
+            
+            alert('تم حجز الموعد بنجاح! سيتم التواصل معك لتأكيد الحجز.');
+            this.closeModal();
+            
+            // إعادة تعيين الزر
+            $submitBtn.html(originalText);
+            $submitBtn.prop('disabled', false);
+        }, 1500);
+    }
 }
 
-/**
- * تحديث الحجز
- */
+// تهيئة النظام عند تحميل الصفحة
+$(document).ready(function() {
+    window.bookingSystem = new BookingSystem();
+    console.log('Booking system initialized');
+});
