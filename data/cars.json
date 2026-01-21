@@ -1,0 +1,28 @@
+[
+    {
+        "id": 1,
+        "name": "تويوتا كامري 2022",
+        "category": "عائلي",
+        "image": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb",
+        "price": 50000,
+        "transmission": "أوتوماتيك",
+        "seats": 5,
+        "fuel": "بنزين",
+        "year": 2022,
+        "features": ["تكييف", "بلوتوث", "كاميرا خلفية"],
+        "description": "سيارة عائلية مريحة"
+    },
+    {
+        "id": 2,
+        "name": "هيونداي النترا 2023",
+        "category": "اقتصادي",
+        "image": "https://images.unsplash.com/photo-1550355291-bbee04a92027",
+        "price": 35000,
+        "transmission": "أوتوماتيك",
+        "seats": 5,
+        "fuel": "بنزين",
+        "year": 2023,
+        "features": ["تكييف", "شاشة تعمل باللمس"],
+        "description": "سيارة اقتصادية"
+    }
+]
