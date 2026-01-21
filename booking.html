@@ -5,15 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الحوت - احجز سيارة في كركوك</title>
     <meta name="description" content="احجز سيارة الآن في كركوك بأفضل الأسعار. تأكيد فوري وخدمة التوصيل المجاني">
-    <meta name="keywords" content="حجز سيارة كركوك, استئجار سيارة, تأجير سيارات, الحوت كركوك, حجز سيارات فاخرة">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <style>
-        /* أنماط خاصة بصفحة الحجز */
+        /* أنماط خاصة بصفحة الحجز - معدلة */
+        :root {
+            --primary-color: #1a5fb4;
+            --secondary-color: #e67e22;
+            --accent-color: #27ae60;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
         .booking-page {
             background-color: #f8f9fa;
             min-height: 100vh;
@@ -29,13 +37,6 @@
         .booking-header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-        }
-        
-        .booking-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
         }
         
         .booking-container {
@@ -68,6 +69,7 @@
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: var(--shadow);
+            display: block; /* تأكد من أن جميع البطاقات ظاهرة */
         }
         
         .form-title {
@@ -281,9 +283,43 @@
             border-top: 2px solid #f0f0f0;
         }
         
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #0d4a9c);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0d4a9c, var(--primary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 95, 180, 0.3);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
         .btn-full {
             flex: 1;
-            text-align: center;
         }
         
         .info-box {
@@ -429,6 +465,63 @@
             margin-left: 15px;
         }
         
+        /* أنماط التنقل */
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .logo i {
+            color: var(--secondary-color);
+            margin-left: 10px;
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
         @media (max-width: 768px) {
             .booking-container {
                 flex-direction: column;
@@ -465,24 +558,12 @@
                 <a href="index.html" class="logo">
                     <i class="fas fa-car"></i>
                     <span>الحوت</span>
-                    <span class="logo-sub">لتأجير السيارات</span>
+                    <span style="font-size: 1rem; color: #666; margin-right: 10px;">لتأجير السيارات</span>
                 </a>
                 
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="cars.html">السيارات</a></li>
-                    <li><a href="offers.html">العروض</a></li>
-                    <li><a href="about.html">من نحن</a></li>
-                    <li><a href="contact.html">اتصل بنا</a></li>
-                </ul>
-                
                 <div class="nav-actions">
-                    <a href="tel:+9647713225471" class="nav-phone">
-                        <i class="fas fa-phone"></i>
+                    <a href="tel:+9647713225471" style="display: flex; align-items: center; text-decoration: none; color: var(--primary-color); font-weight: 600;">
+                        <i class="fas fa-phone" style="margin-left: 5px;"></i>
                         <span>+964 771 322 5471</span>
                     </a>
                 </div>
@@ -492,14 +573,14 @@
 
     <!-- رأس صفحة الحجز -->
     <section class="booking-header">
-        <div class="container">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
             <h1>احجز سيارتك الآن في كركوك</h1>
             <p>أكمل بيانات الحجز لتأكيد حجزك والحصول على أفضل العروض والخدمات</p>
         </div>
     </section>
 
     <!-- خطوات التقدم في الحجز -->
-    <section class="container">
+    <section class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
         <div class="progress-steps">
             <div class="progress-step active">
                 <div class="step-circle">1</div>
@@ -521,7 +602,7 @@
     </section>
 
     <!-- نموذج الحجز -->
-    <main class="container">
+    <main class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
         <div class="booking-container" id="bookingContainer">
             <!-- الجزء الأيمن: نموذج الحجز -->
             <div class="booking-form-section">
@@ -530,7 +611,7 @@
                     <span>يتم حجز السيارة فوراً بعد إكمال عملية الدفع. تأكد من صحة جميع البيانات المدخلة.</span>
                 </div>
                 
-                <!-- بيانات الحجز -->
+                <!-- بيانات الحجز - الخطوة 1 -->
                 <div class="form-card" id="bookingDetailsForm">
                     <h2 class="form-title"><i class="fas fa-calendar-alt"></i> بيانات الحجز</h2>
                     
@@ -543,7 +624,6 @@
                                 <option value="city-center">وسط مدينة كركوك</option>
                                 <option value="hotel">الفندق (سيتم التوصيل)</option>
                                 <option value="branch">فرع الحوت الرئيسي</option>
-                                <option value="other">مكان آخر (حدد في الملاحظات)</option>
                             </select>
                         </div>
                         
@@ -555,7 +635,6 @@
                                 <option value="city-center" selected>وسط مدينة كركوك</option>
                                 <option value="hotel">الفندق</option>
                                 <option value="branch">فرع الحوت الرئيسي</option>
-                                <option value="different">مكان مختلف عن الاستلام</option>
                             </select>
                         </div>
                     </div>
@@ -575,40 +654,4 @@
                                 <option value="11:00">11:00 صباحاً</option>
                                 <option value="12:00">12:00 ظهراً</option>
                                 <option value="13:00">01:00 ظهراً</option>
-                                <option value="14:00">02:00 ظهراً</option>
-                                <option value="15:00">03:00 عصراً</option>
-                                <option value="16:00">04:00 عصراً</option>
-                                <option value="17:00">05:00 مساءً</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="return-date" class="required">تاريخ الإعادة</label>
-                            <input type="date" id="return-date" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="return-time" class="required">وقت الإعادة</label>
-                            <select id="return-time" class="form-control" required>
-                                <option value="08:00">08:00 صباحاً</option>
-                                <option value="09:00">09:00 صباحاً</option>
-                                <option value="10:00" selected>10:00 صباحاً</option>
-                                <option value="11:00">11:00 صباحاً</option>
-                                <option value="12:00">12:00 ظهراً</option>
-                                <option value="13:00">01:00 ظهراً</option>
-                                <option value="14:00">02:00 ظهراً</option>
-                                <option value="15:00">03:00 عصراً</option>
-                                <option value="16:00">04:00 عصراً</option>
-                                <option value="17:00">05:00 مساءً</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="special-requests">طلبات خاصة (اختياري)</label>
-                        <textarea id="special-requests" class="form-control" rows="3" placeholder="مثل: مقعد أطفال، توجيه GPS، تأمين إضافي..."></textarea>
-                    </div>
-                    
-                    <div class="form-a
+              
