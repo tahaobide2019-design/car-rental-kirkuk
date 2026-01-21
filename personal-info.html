@@ -755,4 +755,23 @@
             </div>
             
             <
-window.location.href = 'confirmation.html';
+                <!-- بعد حقول المعلومات الشخصية -->
+<button type="button" onclick="sendWhatsApp()" class="whatsapp-btn">
+    <i class="fab fa-whatsapp"></i> إرسال الحجز عبر واتساب
+</button>
+
+<script>
+function sendWhatsApp() {
+    // حفظ البيانات الشخصية
+    const personalData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value
+    };
+    
+    localStorage.setItem('personalData', JSON.stringify(personalData));
+    
+    // الانتقال لصفحة التأكيد
+    window.location.href = 'confirmation.html';
+}
+</script>
