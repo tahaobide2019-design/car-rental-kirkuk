@@ -3,522 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأجير سيارات كركوك - الصفحة الرئيسية</title>
-    
-    <!-- روابط خارجية -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- أنماطنا -->
+    <title>الحوت - تأجير السيارات في كركوك</title>
+    <meta name="description" content="استأجر أفضل السيارات في كركوك بأفضل الأسعار. تأجير سيارات فاخرة، اقتصادية وعائلية مع خدمة التوصيل في كركوك والمناطق المجاورة">
+    <meta name="keywords" content="تأجير سيارات كركوك, استئجار سيارات كركوك, سيارات للايجار في كركوك, الحوت لتأجير السيارات">
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- أيقونة الموقع -->
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    
-    <style>
-        /* أنماط إضافية للصفحة الرئيسية */
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/hero-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .hero-title {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            animation: fadeInUp 1.3s ease;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1.6s ease;
-        }
-        
-        .features-section {
-            padding: 80px 0;
-            background: #f8fafc;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-            height: 100%;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-            color: white;
-            font-size: 2rem;
-        }
-        
-        .cars-section {
-            padding: 80px 0;
-        }
-        
-        .car-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .car-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .car-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .car-info {
-            padding: 25px;
-        }
-        
-        .car-price {
-            color: #ff6f00;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        
-        .car-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .car-feature {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-        
-        .booking-form-section {
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-            color: white;
-            padding: 80px 0;
-            border-radius: 20px;
-            margin: 60px 0;
-        }
-        
-        .booking-form {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .testimonials-section {
-            padding: 80px 0;
-            background: #f8fafc;
-        }
-        
-        .testimonial-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            margin: 15px;
-        }
-        
-        .testimonial-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            color: #4a5568;
-        }
-        
-        .client-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .client-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .stats-section {
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-            color: white;
-            padding: 60px 0;
-            border-radius: 20px;
-            margin: 60px 0;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #ff6f00;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .hero-buttons .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 </head>
 <body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="container">
-            <!-- الشعار -->
-            <a href="index.html" class="logo">
-                <i class="fas fa-car"></i>
-                <span>تأجير سيارات كركوك</span>
-            </a>
-            
-            <!-- القائمة الرئيسية -->
-            <ul class="nav-menu">
-                <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
-                <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
-                <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> الحجوزات</a></li>
-                <li><a href="about.html"><i class="fas fa-info-circle"></i> من نحن</a></li>
-                <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
-            </ul>
-            
-            <!-- أزرار العمل -->
-            <div class="nav-actions">
-                <a href="bookings.html" class="btn btn-primary">
-                    <i class="fas fa-calendar-check"></i> حجز الآن
+    <!-- شريط التنقل العلوي -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-car"></i>
+                    <span>الحوت</span>
+                    <span class="logo-sub">لتأجير السيارات</span>
                 </a>
                 
-                <!-- زر لوحة التحكم (يظهر للمسؤولين) -->
-                <a href="admin-login.html" class="btn btn-secondary">
-                    <i class="fas fa-user-shield"></i> دخول المدير
-                </a>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="active">الرئيسية</a></li>
+                    <li><a href="cars.html">السيارات</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                    <li><a href="offers.html">عروض خاصة</a></li>
+                    <li><a href="locations.html">فروعنا</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <a href="tel:+9647713225471" class="nav-phone">
+                        <i class="fas fa-phone"></i>
+                        <span>+964 771 322 5471</span>
+                    </a>
+                    <a href="login.html" class="btn btn-outline">تسجيل الدخول</a>
+                    <a href="register.html" class="btn btn-primary">حساب جديد</a>
+                </div>
             </div>
-            
-            <!-- زر القائمة المتنقلة -->
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- القائمة المتنقلة -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
-            <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
-            <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> الحجوزات</a></li>
-            <li><a href="about.html"><i class="fas fa-info-circle"></i> من نحن</a></li>
-            <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
-            <li><a href="admin-login.html"><i class="fas fa-user-shield"></i> دخول المدير</a></li>
-        </ul>
-    </div>
-
-    <!-- قسم البطل -->
-    <section class="hero-section">
-        <div class="container">
-            <h1 class="hero-title">أفضل خدمة تأجير سيارات في كركوك</h1>
-            <p class="hero-subtitle">
-                اكتشف أسطولنا المتميز من السيارات الحديثة بأفضل الأسعار. 
-                خدمة 24/7، تأمين كامل، وأفضل تجربة قيادة.
-            </p>
-            <div class="hero-buttons">
-                <a href="cars.html" class="btn btn-accent btn-lg">
-                    <i class="fas fa-car"></i> استعرض السيارات
-                </a>
-                <a href="bookings.html" class="btn btn-primary btn-lg">
-                    <i class="fas fa-calendar-check"></i> احجز الآن
-                </a>
+    <!-- قسم البطل الرئيسي -->
+    <section class="hero">
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="location-badge">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>كركوك، العراق</span>
+                    </div>
+                    <h1 class="hero-title">الحوت لتأجير السيارات في <span class="highlight">كركوك</span></h1>
+                    <p class="hero-subtitle">اكتشف مجموعتنا الواسعة من السيارات الفاخرة والاقتصادية. أسعار تنافسية وخدمة عملاء على مدار الساعة في كركوك والمناطق المجاورة.</p>
+                    
+                    <div class="search-box">
+                        <form id="searchForm" class="search-form">
+                            <div class="form-group">
+                                <label for="location"><i class="fas fa-map-marker-alt"></i> موقع الاستلام في كركوك</label>
+                                <select id="location">
+                                    <option value="">اختر موقع الاستلام</option>
+                                    <option value="city-center">وسط مدينة كركوك</option>
+                                    <option value="airport">مطار كركوك الدولي</option>
+                                    <option value="hotel">الفنادق في كركوك</option>
+                                    <option value="other">موقع آخر في كركوك</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pickup-date"><i class="fas fa-calendar-alt"></i> تاريخ الاستلام</label>
+                                <input type="date" id="pickup-date">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="return-date"><i class="fas fa-calendar-alt"></i> تاريخ الإعادة</label>
+                                <input type="date" id="return-date">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="car-type"><i class="fas fa-car"></i> نوع السيارة</label>
+                                <select id="car-type">
+                                    <option value="">جميع الأنواع</option>
+                                    <option value="economy">اقتصادية</option>
+                                    <option value="luxury">فاخرة</option>
+                                    <option value="suv">عائلية/SUV</option>
+                                    <option value="truck">شاحنات ونقل</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-search"></i> ابحث عن سيارة في كركوك
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- قسم المميزات -->
-    <section class="features-section">
+    <section class="features section-padding">
         <div class="container">
             <div class="section-header">
-                <h2>لماذا تختارنا؟</h2>
-                <p class="section-subtitle">نقدم لكم أفضل خدمات تأجير السيارات في كركوك</p>
+                <h2 class="section-title">لماذا تختار <span class="highlight">الحوت</span> في كركوك؟</h2>
+                <p class="section-subtitle">نقدم لكم أفضل خدمة تأجير سيارات في كركوك مع ضمان الجودة والثقة</p>
             </div>
             
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-car"></i>
-                        </div>
-                        <h3>أسطول حديث</h3>
-                        <p>سيارات حديثة ومجهزة بأحدث التقنيات والمواصفات العالية</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
                     </div>
+                    <h3 class="feature-title">أسعار كركوك تنافسية</h3>
+                    <p class="feature-desc">عروض وأسعار تنافسية تناسب جميع الميزانيات مع خصومات خاصة لسكان كركوك والعملاء الدائمين.</p>
                 </div>
                 
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>تأمين كامل</h3>
-                        <p>تغطية تأمينية شاملة لحماية العملاء والمركبات</p>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-car-side"></i>
                     </div>
+                    <h3 class="feature-title">أسطول متنوع في كركوك</h3>
+                    <p class="feature-desc">مجموعة واسعة من السيارات الاقتصادية والفاخرة والعائلية والشاحنات الصغيرة المتاحة في كركوك.</p>
                 </div>
                 
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <h3>دعم فني 24/7</h3>
-                        <p>فريق دعم فني متاح على مدار الساعة لخدمتكم</p>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
                     </div>
+                    <h3 class="feature-title">دعم فني 24/7 في كركوك</h3>
+                    <p class="feature-desc">خدمة عملاء على مدار الساعة لمساعدتك في أي استفسار أو طارئ خلال فترة التأجير في كركوك.</p>
                 </div>
                 
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-tag"></i>
-                        </div>
-                        <h3>أسعار منافسة</h3>
-                        <p>أفضل الأسعار في السوق مع عروض وتخفيضات مستمرة</p>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
+                    <h3 class="feature-title">تأمين شامل في العراق</h3>
+                    <p class="feature-desc">جميع سياراتنا مؤمنة تأميناً شاملاً وفق قوانين العراق لتضمن لك رحلة آمنة ومطمئنة.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- قسم السيارات المميزة -->
-    <section class="cars-section">
+    <section class="featured-cars section-padding bg-light">
         <div class="container">
             <div class="section-header">
-                <h2>سياراتنا المميزة</h2>
-                <p class="section-subtitle">اختر من بين مجموعة واسعة من السيارات الحديثة</p>
+                <h2 class="section-title">السيارات <span class="highlight">المميزة</span> في كركوك</h2>
+                <p class="section-subtitle">استعرض مجموعة من أفضل السيارات المتاحة لدينا في كركوك</p>
             </div>
             
-            <div class="row">
-                <!-- سيارة 1 -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="car-card">
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                             alt="تويوتا كامري 2023" class="car-image">
-                        <div class="car-info">
-                            <h3>تويوتا كامري 2023</h3>
-                            <div class="car-price">50,000 دينار/يوم</div>
-                            <div class="car-features">
-                                <span class="car-feature"><i class="fas fa-user-friends"></i> 5 ركاب</span>
-                                <span class="car-feature"><i class="fas fa-gas-pump"></i> بنزين</span>
-                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
-                                <span class="car-feature"><i class="fas fa-snowflake"></i> تكييف</span>
-                            </div>
-                            <a href="bookings.html?car=toyota-camry" class="btn btn-primary btn-block">
-                                <i class="fas fa-calendar-check"></i> احجز الآن
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- سيارة 2 -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="car-card">
-                        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                             alt="هيونداي سوناتا 2022" class="car-image">
-                        <div class="car-info">
-                            <h3>هيونداي سوناتا 2022</h3>
-                            <div class="car-price">45,000 دينار/يوم</div>
-                            <div class="car-features">
-                                <span class="car-feature"><i class="fas fa-user-friends"></i> 5 ركاب</span>
-                                <span class="car-feature"><i class="fas fa-gas-pump"></i> بنزين</span>
-                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
-                                <span class="car-feature"><i class="fas fa-bluetooth"></i> بلوتوث</span>
-                            </div>
-                            <a href="bookings.html?car=hyundai-sonata" class="btn btn-primary btn-block">
-                                <i class="fas fa-calendar-check"></i> احجز الآن
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- سيارة 3 -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="car-card">
-                        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                             alt="كيا سورينتو 2023" class="car-image">
-                        <div class="car-info">
-                            <h3>كيا سورينتو 2023</h3>
-                            <div class="car-price">60,000 دينار/يوم</div>
-                            <div class="car-features">
-                                <span class="car-feature"><i class="fas fa-user-friends"></i> 7 ركاب</span>
-                                <span class="car-feature"><i class="fas fa-gas-pump"></i> ديزل</span>
-                                <span class="car-feature"><i class="fas fa-cog"></i> أوتوماتيك</span>
-                                <span class="car-feature"><i class="fas fa-film"></i> شاشة لمس</span>
-                            </div>
-                            <a href="bookings.html?car=kia-sorento" class="btn btn-primary btn-block">
-                                <i class="fas fa-calendar-check"></i> احجز الآن
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="cars-grid" id="featuredCars">
+                <!-- سيتم تعبئة السيارات ديناميكياً بواسطة JavaScript -->
             </div>
             
-            <div class="text-center mt-5">
-                <a href="cars.html" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-car"></i> عرض جميع السيارات
-                </a>
+            <div class="text-center">
+                <a href="cars.html" class="btn btn-secondary">عرض جميع السيارات في كركوك <i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
     </section>
 
-    <!-- قسم الإحصائيات -->
-    <section class="stats-section">
+    <!-- قسم كيفية الحجز -->
+    <section class="booking-steps section-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-6 col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number" id="totalCars">50+</div>
-                        <p>سيارة في الأسطول</p>
+            <div class="section-header">
+                <h2 class="section-title">كيف <span class="highlight">تحجز</span> سيارة في كركوك؟</h2>
+                <p class="section-subtitle">4 خطوات بسيطة لاستئجار السيارة المناسبة لك من الحوت في كركوك</p>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">اختر السيارة</h3>
+                        <p class="step-desc">تصفح مجموعتنا الواسعة واختر السيارة التي تناسب احتياجاتك وميزانيتك في كركوك.</p>
                     </div>
                 </div>
                 
-                <div class="col-6 col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number" id="happyCustomers">1000+</div>
-                        <p>عميل سعيد</p>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">حدد المواعيد</h3>
+                        <p class="step-desc">حدد تاريخ ومكان الاستلام في كركوك وموعد إعادة السيارة للتحقق من التوافر.</p>
                     </div>
                 </div>
                 
-                <div class="col-6 col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number" id="completedBookings">5000+</div>
-                        <p>حجز مكتمل</p>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">أكمل الحجز</h3>
+                        <p class="step-desc">أكمل بيانات الحجز واختر طريقة الدفع المناسبة لك (نقداً أو عن طريق البطاقة).</p>
                     </div>
                 </div>
                 
-                <div class="col-6 col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number" id="serviceYears">5+</div>
-                        <p>سنوات خدمة</p>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 class="step-title">استلم سيارتك</h3>
+                        <p class="step-desc">استلم سيارتك في الموعد والمكان المحدد في كركوك واستمتع برحلتك.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="booking-cta">
+                <p>لديك استفسار؟ اتصل بنا مباشرة على <a href="tel:+9647713225471" class="phone-link">+964 771 322 5471</a></p>
+                <a href="contact.html" class="btn btn-outline">اطلب استشارة مجانية</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم آراء العملاء -->
+    <section class="testimonials section-padding bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">آراء <span class="highlight">عملاء كركوك</span></h2>
+                <p class="section-subtitle">ماذا يقول عملاؤنا في كركوك عن تجربتهم معنا</p>
+            </div>
+            
+            <div class="testimonials-slider">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"تعاملت مع شركة الحوت عدة مرات لتأجير سيارات في كركوك، الخدمة ممتازة والسيارات بحالة جيدة جداً. أنصح الجميع بتجربتهم."</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4 class="author-name">علي محمود</h4>
+                            <p class="author-role">ساكن في كركوك</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="testimonial-text">"استأجرت سيارة من الحوت لزيارة عائلتي في كركوك، كانت التجربة سلسة والسيارة مريحة. شكراً لفريق العمل المحترف."</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4 class="author-name">سمر عبدالله</h4>
+                            <p class="author-role">زائرة من بغداد</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"كنت بحاجة لشاحنة صغيرة لنقل أغراضي في كركوك، وجدت ما أريد في شركة الحوت بسعر معقول وخدمة توصيل مباشرة."</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4 class="author-name">حسن كريم</h4>
+                            <p class="author-role">صاحب محل في كركوك</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- قسم نموذج الحجز السريع -->
-    <section class="booking-form-section">
+    <!-- قسم مناطق الخدمة في كركوك -->
+    <section class="service-areas section-padding">
         <div class="container">
             <div class="section-header">
-                <h2>احجز سيارتك الآن</h2>
-                <p class="section-subtitle">املأ النموذج للحجز السريع</p>
+                <h2 class="section-title">نخدمكم في <span class="highlight">جميع مناطق كركوك</span></h2>
+                <p class="section-subtitle">نقدم خدمة التوصيل واستلام السيارات في جميع أحياء كركوك</p>
             </div>
             
-            <div class="booking-form">
-                <form id="quickBookingForm">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">اسمك الكامل</label>
-                                <input type="text" class="form-control" placeholder="أدخل اسمك" required>
-                            </div>
+            <div class="areas-grid">
+                <div class="area-card">
+                    <i class="fas fa-city"></i>
+                    <h3>وسط المدينة</h3>
+                    <p>خدمة التوصيل المجانية في وسط كركوك</p>
+                </div>
+                
+                <div class="area-card">
+                    <i class="fas fa-plane"></i>
+                    <h3>مطار كركوك</h3>
+                    <p>استلام السيارة مباشرة من المطار</p>
+                </div>
+                
+                <div class="area-card">
+                    <i class="fas fa-hotel"></i>
+                    <h3>الفنادق</h3>
+                    <p>توصيل السيارة لأي فندق في كركوك</p>
+                </div>
+                
+                <div class="area-card">
+                    <i class="fas fa-home"></i>
+                    <h3>المنازل</h3>
+                    <p>نوصل السيارة لمنزلك في أي منطقة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الاشتراك في النشرة البريدية -->
+    <section class="newsletter section-padding">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2 class="newsletter-title">اشترك في نشرتنا البريدية</h2>
+                <p class="newsletter-subtitle">كن أول من يعرف عن العروض الحصرية والخصومات الخاصة في كركوك</p>
+                
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="form-group-inline">
+                        <input type="email" placeholder="ادخل بريدك الإلكتروني" required>
+                        <button type="submit" class="btn btn-primary">اشترك الآن</button>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="newsletterAgree" required>
+                        <label for="newsletterAgree">أوافق على تلقي العروض والاخبار عبر البريد الإلكتروني</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="footer-logo">
+                        <i class="fas fa-car"></i>
+                        <div>
+                            <span>الحوت</span>
+                            <span class="logo-sub">لتأجير السيارات</span>
                         </div>
-                        
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">رقم الهاتف</label>
-                                <input type="tel" class="form-control" placeholder="0770XXXXXXX" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">اختر السيارة</label>
-                                <select class="form-control" required>
-                                    <option value="">اختر سيارة</option>
-                                    <option value="camry">تويوتا كامري 2023</option>
-                                    <option value="sonata">هيونداي سوناتا 2022</option>
-                                    <option value="sorento">كيا سورينتو 2023</option>
-                                    <option value="sunny">نيسان صني 2023</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">عدد الأيام</label>
-                                <select class="form-control" required>
-                                    <option value="1">1 يوم</option>
-                                    <option value="2">2 يوم</option>
-                                    <option value="3">3 أيام</option>
-                                    <option value="7">أسبوع</option>
-                                    <option value="30">شهر</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="form-label">ملاحظات إضافية (اختياري)</label>
-                                <textarea class="form-control" rows="3" placeholder
+                    </a>
+                    <p class="footer-description">الحوت لتأجير السيارات - الوجهة الأمثل لتأجير السيارات في كركوك. نوفر مجموعة واسعة من السيارات الفاخرة والاقتصادية والعائلية بأفضل الأسعار.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-title">روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="cars.html">السيارات</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="offers.html">عروض خاصة</a></li>
+                        <li><a href="locations.html">فروعنا في كركوك</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-title">خدماتنا في كركوك</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">تأجير السيارات الفاخرة</a></li>
+                        <li><a href="#">تأجير السيارات الاقتصادية</a></li>
+                        <li><a href="#">تأجير سيارات العائلة</a></li>
+                        <li><a href="#">تأجير الشاحنات الصغيرة</a></li>
+                        <li><a href="#">تأجير السيارات شهرياً</a></li>
+                        <li><a href="#">خدمة السائق في كركوك</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-title">اتصل بنا في كركوك</h3>
+                    <ul class="footer-contact">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>كركوك، العراق - فرعنا الرئيسي</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+9647713225471">+964 771 322 5471</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:tahaobide2019@gmail.com">tahaobide2019@gmail.com</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            <span>الأحد - الخميس: 8 صباحاً - 10 مساءً<br>الجمعة - السبت: 9 صباحاً - 8 مساءً</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                
