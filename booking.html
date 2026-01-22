@@ -3,12 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حجز السيارة | الحوت لتأجير السيارات</title>
+  <title>حجز سيارتك | الحوت لتأجير السيارات</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* تصميم VIP++ كامل للحجز */
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:#f4f6f8;
+      margin:0;
+      padding:0;
+    }
+
+    .navbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:15px 30px;
+      background:#0b3d91;
+      color:#fff;
+    }
+    .navbar a{
+      color:#fff;
+      text-decoration:none;
+      margin-left:20px;
+      font-weight:bold;
+    }
+    .hero{
+      text-align:center;
+      padding:40px 20px;
+      background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('images/hero.jpg') center/cover no-repeat;
+      color:#fff;
+      margin-bottom:30px;
+      border-bottom-left-radius:40px;
+      border-bottom-right-radius:40px;
+    }
+
+    .hero h1{
+      font-size:36px;
+      margin-bottom:10px;
+    }
+
+    .booking-container{
+      max-width:900px;
+      margin:auto;
+      background:#fff;
+      border-radius:25px;
+      box-shadow:0 15px 35px rgba(0,0,0,0.1);
+      padding:30px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:30px;
+    }
+
+    .selected-car{
+      flex:1 1 300px;
+      text-align:center;
+    }
+
+    .selected-car img{
+      width:100%;
+      border-radius:20px;
+      margin-bottom:15px;
+    }
+
+    .car-details{
+      flex:2 1 400px;
+    }
+
+    .car-details h2{
+      margin-top:0;
+    }
+
+    .extras label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .extras input{
+      transform:scale(1.3);
+      cursor:pointer;
+    }
+
+    .total-price{
+      margin-top:20px;
+      font-size:20px;
+      font-weight:bold;
+      color:#0b3d91;
+    }
+
+    .btn-next{
+      background:#25d366;
+      color:#fff;
+      border:none;
+      padding:15px 20px;
+      border-radius:20px;
+      font-size:18px;
+      cursor:pointer;
+      margin-top:25px;
+      width:100%;
+      transition:.3s;
+    }
+
+    .btn-next:hover{
+      opacity:.9;
+      transform:scale(1.02);
+    }
+
+    @media(max-width:768px){
+      .booking-container{
+        flex-direction:column;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- NAVBAR -->
 <div class="navbar">
   <h2>🐋 الحوت</h2>
   <div>
@@ -19,142 +133,74 @@
   </div>
 </div>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="hero">
-  <div class="whale">🐋</div>
   <h1>🚗 احجز سيارتك بسهولة</h1>
-  <p>اختر السيارة ثم الميزات الإضافية وأكمل الحجز في خطوات بسيطة</p>
+  <p>اختر ميزات إضافية واضغط التالي لإكمال الحجز</p>
 </section>
 
-<!-- ===== CAR SELECTION ===== -->
-<section>
-  <h2 class="section-title">اختر سيارتك</h2>
-  <div class="cars">
+<!-- FORM -->
+<section class="booking-container">
 
-    <div class="car">
-      <img src="images/corolla.jpg" alt="تويوتا كورولا">
-      <div class="car-content">
-        <h3>تويوتا كورولا</h3>
-        <p>سيدان • اقتصادية • مريحة</p>
-        <button onclick="selectCar('تويوتا كورولا')">اختيار السيارة</button>
-      </div>
-    </div>
-
-    <div class="car">
-      <img src="images/prado.jpg" alt="تويوتا برادو">
-      <div class="car-content">
-        <h3>تويوتا برادو</h3>
-        <p>دفع رباعي • قوية • سفر</p>
-        <button onclick="selectCar('تويوتا برادو')">اختيار السيارة</button>
-      </div>
-    </div>
-
-    <div class="car">
-      <img src="images/rio.jpg" alt="كيا ريو">
-      <div class="car-content">
-        <h3>كيا ريو</h3>
-        <p>اقتصادية • مدينة • موفرة</p>
-        <button onclick="selectCar('كيا ريو')">اختيار السيارة</button>
-      </div>
-    </div>
-
+  <!-- بطاقة السيارة المختارة -->
+  <div class="selected-car">
+    <img id="car-img" src="images/corolla.jpg" alt="السيارة المختارة">
+    <h3 id="car-name">تويوتا كورولا</h3>
+    <p id="car-features">سيدان • اقتصادية • مريحة</p>
+    <p><strong>السعر اليومي:</strong> $<span id="car-price">50</span></p>
   </div>
-</section>
 
-<!-- ===== EXTRAS SELECTION ===== -->
-<section>
-  <h2 class="section-title">ميزات إضافية</h2>
-  <div class="extras">
-    <div class="extra-card" onclick="toggleExtra(this, '🚼 مقعد أطفال')">
-      🚼 مقعد أطفال
+  <!-- خيارات الميزات الإضافية -->
+  <div class="car-details">
+    <h2>ميزات إضافية</h2>
+    <div class="extras">
+      <label><input type="checkbox" value="مقعد أطفال" data-price="5"> مقعد أطفال (+$5)</label>
+      <label><input type="checkbox" value="سائق" data-price="20"> سائق (+$20)</label>
+      <label><input type="checkbox" value="توصيل السيارة" data-price="10"> توصيل السيارة (+$10)</label>
     </div>
-    <div class="extra-card" onclick="toggleExtra(this, '🚗 توصيل السيارة')">
-      🚗 توصيل السيارة
-    </div>
-    <div class="extra-card" onclick="toggleExtra(this, '👨‍✈️ سائق مع السيارة')">
-      👨‍✈️ سائق مع السيارة
-    </div>
+
+    <p class="total-price">المجموع: $<span id="total">50</span></p>
+
+    <button class="btn-next" onclick="goToPersonalInfo()">➡️ التالي</button>
   </div>
-  <button onclick="goPersonalInfo()">➡️ متابعة الحجز</button>
-</section>
 
-<!-- ===== FOOTER ===== -->
-<footer>
-  🐋 الحوت لتأجير السيارات – كركوك  
-  <br>📧 tahaobide2019@gmail.com | 📞 +9647713225471
-</footer>
+</section>
 
 <script>
-let selectedExtras = [];
+  // تحميل بيانات السيارة المختارة
+  const carName = localStorage.getItem("car") || "تويوتا كورولا";
+  const carPrice = parseFloat(localStorage.getItem("price")) || 50;
+  const carFeatures = localStorage.getItem("features") || "سيدان • اقتصادية • مريحة";
+  const carImg = localStorage.getItem("image") || "images/corolla.jpg";
 
-function selectCar(car){
-  localStorage.setItem("car", car);
-  alert("تم اختيار السيارة: " + car);
-}
+  document.getElementById("car-name").innerText = carName;
+  document.getElementById("car-price").innerText = carPrice;
+  document.getElementById("car-features").innerText = carFeatures;
+  document.getElementById("car-img").src = carImg;
+  document.getElementById("total").innerText = carPrice;
 
-// لتحديد الميزات الإضافية
-function toggleExtra(element, value){
-  if(selectedExtras.includes(value)){
-    selectedExtras = selectedExtras.filter(e => e !== value);
-    element.style.background = "#fff";
-    element.style.color = "#222";
-  } else {
-    selectedExtras.push(value);
-    element.style.background = "#0b5ed7";
-    element.style.color = "#fff";
+  // تحديث السعر حسب الميزات الإضافية
+  const extras = document.querySelectorAll(".extras input");
+  extras.forEach(extra => {
+    extra.addEventListener("change", () => {
+      let total = carPrice;
+      let selectedExtras = [];
+      extras.forEach(e => {
+        if(e.checked){
+          total += parseFloat(e.dataset.price);
+          selectedExtras.push(e.value);
+        }
+      });
+      document.getElementById("total").innerText = total;
+      localStorage.setItem("extras", selectedExtras.join("، "));
+    });
+  });
+
+  function goToPersonalInfo(){
+    localStorage.setItem("price", document.getElementById("total").innerText);
+    window.location.href = "personal-info.html";
   }
-}
-
-// للانتقال لصفحة معلومات الزبون
-function goPersonalInfo(){
-  localStorage.setItem("extras", selectedExtras.join("، "));
-  window.location.href = "personal-info.html";
-}
 </script>
-
-<style>
-/* VIP++ STYLE */
-
-.extras{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  justify-content:center;
-  margin-bottom:20px;
-}
-
-.extra-card{
-  background:#fff;
-  border:2px solid #0b5ed7;
-  border-radius:15px;
-  padding:15px 25px;
-  cursor:pointer;
-  transition:.3s;
-  font-weight:600;
-}
-
-.extra-card:hover{
-  transform:scale(1.05);
-}
-
-section button{
-  display:block;
-  margin:20px auto 0;
-  background:#25d366;
-  color:#fff;
-  padding:14px 26px;
-  font-size:16px;
-  border:none;
-  border-radius:14px;
-  cursor:pointer;
-  transition:.3s;
-}
-
-section button:hover{
-  opacity:.9;
-  transform:scale(1.05);
-}
-</style>
 
 </body>
 </html>
