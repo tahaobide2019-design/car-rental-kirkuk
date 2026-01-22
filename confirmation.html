@@ -1,19 +1,55 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>تأكيد الحجز</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تأكيد الحجز | الحوت لتأجير السيارات</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>تم تجهيز الحجز</h1>
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2>🐋 الحوت</h2>
+  <div>
+    <a href="index.html">الرئيسية</a>
+    <a href="cars.html">السيارات</a>
+    <a href="booking.html">احجز الآن</a>
+    <a href="about.html">من نحن</a>
+  </div>
+</div>
 
-<button onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
+<!-- HERO -->
+<section class="hero">
+  <h1>✅ تم تجهيز الحجز</h1>
+  <p>راجع بياناتك قبل إرسال الطلب عبر واتساب</p>
+</section>
+
+<!-- SUMMARY -->
+<section style="max-width:600px; margin:auto; background:#fff; border-radius:20px; padding:25px; box-shadow:0 15px 35px rgba(0,0,0,.1)">
+  <h2 style="text-align:center; margin-bottom:20px">ملخص الحجز</h2>
+
+  <p><strong>السيارة:</strong> <span id="carName"></span></p>
+  <p><strong>الميزات الإضافية:</strong> <span id="extras"></span></p>
+  <p><strong>الاسم:</strong> <span id="name"></span></p>
+  <p><strong>رقم الهوية / الجواز:</strong> <span id="id"></span></p>
+  <p><strong>رقم الهاتف:</strong> <span id="phone"></span></p>
+  <p><strong>موقع الاستلام:</strong> <span id="location"></span></p>
+
+  <button onclick="sendWhatsApp()" style="margin-top:20px; background:#25d366; color:#fff; font-size:16px; padding:15px; width:100%; border:none; border-radius:15px; cursor:pointer">
+    📲 إرسال الحجز عبر واتساب
+  </button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  🐋 الحوت لتأجير السيارات – كركوك  
+  <br>📧 tahaobide2019@gmail.com | 📞 +9647713225471
+</footer>
 
 <script>
 function sendWhatsApp(){
-let msg = `
+  const msg = `
 🚗 حجز جديد – الحوت لتأجير السيارات
 
 السيارة: ${localStorage.getItem("car")}
@@ -24,9 +60,17 @@ let msg = `
 موقع الاستلام: ${localStorage.getItem("location")}
 `;
 
-let url = "https://wa.me/9647713225471?text=" + encodeURIComponent(msg);
-window.open(url, "_blank");
+  const url = "https://wa.me/9647713225471?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
 }
+
+// عرض البيانات على الصفحة
+document.getElementById("carName").innerText = localStorage.getItem("car");
+document.getElementById("extras").innerText = localStorage.getItem("extras") || "-";
+document.getElementById("name").innerText = localStorage.getItem("name");
+document.getElementById("id").innerText = localStorage.getItem("id");
+document.getElementById("phone").innerText = localStorage.getItem("phone");
+document.getElementById("location").innerText = localStorage.getItem("location");
 </script>
 
 </body>
