@@ -1,42 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
+
+:root {
+  --primary: #0a3d62;
+  --secondary: #1e90ff;
+  --accent: #25d366;
+  --bg: #f4f8fb;
+  --card: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Tahoma;
-  background: #f2f2f2;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: #222;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+header p {
+  margin-top: 8px;
+  opacity: 0.9;
+}
+
+/* ===== GENERAL ===== */
+h1, h2 {
+  text-align: center;
+  margin: 30px 0 15px;
+}
+
+section {
   padding: 20px;
 }
 
-header {
-  background: #004aad;
-  color: white;
-  padding: 15px;
-  text-align: center;
-  border-radius: 8px;
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* ===== CAR GRID ===== */
 .cars {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .car {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
+  background: var(--card);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s;
 }
 
-button {
-  background: #25d366;
-  border: none;
-  color: white;
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-  border-radius: 5px;
+.car:hover {
+  transform: translateY(-8px);
+}
+
+.car img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.car h3 {
+  margin: 12px;
+}
+
+.car p {
+  margin: 0 12px 12px;
+  color: #666;
+}
+
+.car button {
+  width: calc(100% - 24px);
+  margin: 0 12px 15px;
+}
+
+/* ===== FORMS ===== */
+form {
+  max-width: 500px;
+  margin: auto;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 input {
   width: 100%;
-  padding: 8px;
-  margin: 5px 0;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* ===== CONFIRM PAGE ===== */
+.confirm {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.whale {
+  font-size: 60px;
 }
