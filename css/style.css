@@ -1,141 +1,176 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
 
 :root {
-  --primary: #0a3d62;
-  --secondary: #1e90ff;
-  --accent: #25d366;
-  --bg: #f4f8fb;
-  --card: #ffffff;
+  --navy:#071a2b;
+  --blue:#0b5ed7;
+  --green:#25d366;
+  --bg:#f5f7fb;
+  --card:#ffffff;
 }
 
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Cairo',sans-serif;
+  background:var(--bg);
+  color:#222;
 }
 
-body {
-  margin: 0;
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: #222;
+/* ===== NAVBAR ===== */
+.navbar{
+  background:var(--navy);
+  color:#fff;
+  padding:15px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-/* ===== HEADER ===== */
-header {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  padding: 40px 20px;
-  text-align: center;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+.navbar h2{
+  margin:0;
+  font-size:22px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 32px;
+.navbar a{
+  color:#fff;
+  text-decoration:none;
+  margin-right:15px;
+  font-weight:600;
 }
 
-header p {
-  margin-top: 8px;
-  opacity: 0.9;
+/* ===== HERO ===== */
+.hero{
+  background:
+    linear-gradient(rgba(7,26,43,.85),rgba(7,26,43,.85)),
+    url("images/hero.jpg") center/cover;
+  color:#fff;
+  text-align:center;
+  padding:90px 20px;
 }
 
-/* ===== GENERAL ===== */
-h1, h2 {
-  text-align: center;
-  margin: 30px 0 15px;
+.hero h1{
+  font-size:38px;
+  margin-bottom:10px;
 }
 
-section {
-  padding: 20px;
+.hero p{
+  font-size:18px;
+  opacity:.9;
 }
 
-button {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.3s;
+.hero button{
+  margin-top:25px;
+  background:var(--green);
+  padding:14px 26px;
+  font-size:16px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
 }
 
-button:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
+/* ===== SECTIONS ===== */
+section{
+  padding:50px 20px;
 }
 
-/* ===== CAR GRID ===== */
-.cars {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  padding: 20px;
+.section-title{
+  text-align:center;
+  font-size:28px;
+  margin-bottom:30px;
 }
 
-.car {
-  background: var(--card);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: 0.3s;
+/* ===== CAR CARDS ===== */
+.cars{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  max-width:1200px;
+  margin:auto;
 }
 
-.car:hover {
-  transform: translateY(-8px);
+.car{
+  background:var(--card);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 15px 35px rgba(0,0,0,.1);
+  transition:.4s;
 }
 
-.car img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
+.car:hover{
+  transform:translateY(-10px);
 }
 
-.car h3 {
-  margin: 12px;
+.car img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
 }
 
-.car p {
-  margin: 0 12px 12px;
-  color: #666;
+.car-content{
+  padding:18px;
 }
 
-.car button {
-  width: calc(100% - 24px);
-  margin: 0 12px 15px;
+.car h3{
+  margin:0;
+}
+
+.car p{
+  color:#666;
+  margin:8px 0 15px;
+}
+
+.car button{
+  width:100%;
+  background:var(--blue);
+  color:#fff;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-size:15px;
 }
 
 /* ===== FORMS ===== */
-form {
-  max-width: 500px;
-  margin: auto;
-  background: var(--card);
-  padding: 25px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+form{
+  background:#fff;
+  max-width:520px;
+  margin:auto;
+  padding:30px;
+  border-radius:22px;
+  box-shadow:0 15px 35px rgba(0,0,0,.1);
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 14px;
+input{
+  width:100%;
+  padding:13px;
+  margin-bottom:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:15px;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
+label{
+  font-weight:600;
 }
 
-/* ===== CONFIRM PAGE ===== */
-.confirm {
-  text-align: center;
-  padding: 40px 20px;
+form button{
+  width:100%;
+  background:var(--green);
+  padding:14px;
+  font-size:16px;
+  border:none;
+  border-radius:14px;
 }
 
-.whale {
-  font-size: 60px;
+/* ===== FOOTER ===== */
+footer{
+  background:var(--navy);
+  color:#fff;
+  text-align:center;
+  padding:20px;
+  margin-top:50px;
+}
+
+.whale{
+  font-size:60px;
 }
