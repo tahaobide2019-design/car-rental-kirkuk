@@ -6,7 +6,7 @@
 <title>تفاصيل السيارة | الحوت لتأجير السيارات</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-/* تصميم VIP++ كامل لتفاصيل السيارة */
+/* تصميم VIP+++ */
 body{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin:0;
@@ -21,67 +21,102 @@ body{
   padding:15px 30px;
   background:#0b3d91;
   color:#fff;
+  position: sticky;
+  top:0;
+  z-index:100;
 }
 .navbar a{
   color:#fff;
   text-decoration:none;
   margin-left:20px;
   font-weight:bold;
+  transition:0.3s;
+}
+.navbar a:hover{
+  color:#25d366;
 }
 
 .hero{
   text-align:center;
-  padding:40px 20px;
-  background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('images/hero.jpg') center/cover no-repeat;
+  padding:50px 20px;
+  background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), url('images/hero.jpg') center/cover no-repeat;
   color:#fff;
-  border-bottom-left-radius:40px;
-  border-bottom-right-radius:40px;
+  border-bottom-left-radius:50px;
+  border-bottom-right-radius:50px;
 }
 
 .hero h1{
-  font-size:36px;
+  font-size:40px;
   margin-bottom:10px;
+  text-shadow:2px 2px 5px rgba(0,0,0,0.5);
 }
 
 .details-container{
   max-width:1000px;
-  margin:30px auto;
+  margin:40px auto;
   display:flex;
   flex-wrap:wrap;
   gap:30px;
   background:#fff;
   border-radius:25px;
-  box-shadow:0 15px 35px rgba(0,0,0,0.1);
+  box-shadow:0 20px 50px rgba(0,0,0,0.15);
   padding:30px;
 }
 
-.car-image{
-  flex:1 1 400px;
+.car-slider{
+  flex:1 1 450px;
   text-align:center;
+  position:relative;
 }
-.car-image img{
+
+.car-slider img{
   width:100%;
-  border-radius:20px;
-  transition:.4s;
+  border-radius:25px;
+  transition:.5s;
 }
-.car-image img:hover{
-  transform:scale(1.05);
+
+.slider-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,0.4);
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  transition:.3s;
+}
+.slider-btn:hover{
+  background:#25d366;
+}
+
+.slider-btn.left{
+  left:10px;
+}
+.slider-btn.right{
+  right:10px;
 }
 
 .car-info{
   flex:1 1 500px;
 }
+
 .car-info h2{
   margin-top:0;
   color:#0b3d91;
+  font-size:32px;
 }
+
 .car-info p{
   font-size:16px;
-  margin:8px 0;
+  margin:10px 0;
   color:#555;
 }
+
 .car-info .price{
-  font-size:22px;
+  font-size:24px;
   font-weight:bold;
   color:#25d366;
   margin-top:15px;
@@ -103,20 +138,27 @@ body{
   cursor:pointer;
 }
 
+.total{
+  font-size:22px;
+  font-weight:bold;
+  color:#0b3d91;
+  margin-top:20px;
+}
+
 .btn-book{
   background:#25d366;
   color:#fff;
   border:none;
   padding:15px 25px;
-  border-radius:20px;
-  font-size:18px;
+  border-radius:25px;
+  font-size:20px;
   cursor:pointer;
   margin-top:25px;
-  transition:.3s;
   width:100%;
+  transition:.3s;
 }
 .btn-book:hover{
-  transform:scale(1.02);
+  transform:scale(1.05);
   opacity:.9;
 }
 
@@ -149,9 +191,11 @@ body{
 <!-- DETAILS -->
 <section class="details-container">
 
-  <!-- صورة السيارة -->
-  <div class="car-image">
+  <!-- سلايدر السيارة -->
+  <div class="car-slider">
+    <button class="slider-btn left" onclick="prevImage()">❮</button>
     <img id="car-img" src="images/corolla.jpg" alt="السيارة">
+    <button class="slider-btn right" onclick="nextImage()">❯</button>
   </div>
 
   <!-- معلومات السيارة -->
@@ -170,7 +214,7 @@ body{
     </div>
 
     <!-- المجموع -->
-    <p class="price">المجموع: $<span id="total">50</span></p>
+    <p class="total">المجموع: $<span id="total">50</span></p>
 
     <!-- زر حجز الآن -->
     <button class="btn-book" onclick="bookCar()">🚗 احجز الآن</button>
@@ -179,21 +223,37 @@ body{
 </section>
 
 <script>
-  // جلب بيانات السيارة من localStorage
+  // بيانات السيارة
+  const carImages = [
+    "images/corolla.jpg",
+    "images/corolla2.jpg",
+    "images/corolla3.jpg"
+  ];
+  let currentImage = 0;
+
   const carName = localStorage.getItem("car") || "تويوتا كورولا";
   const carPrice = parseFloat(localStorage.getItem("price")) || 50;
   const carType = localStorage.getItem("type") || "سيدان";
   const carFeatures = localStorage.getItem("features") || "اقتصادية • مريحة • مناسبة للعائلة";
-  const carImg = localStorage.getItem("image") || "images/corolla.jpg";
 
   document.getElementById("car-name").innerText = carName;
   document.getElementById("car-price").innerText = carPrice;
   document.getElementById("car-features").innerText = carFeatures;
   document.getElementById("car-type").innerText = carType;
-  document.getElementById("car-img").src = carImg;
+  document.getElementById("car-img").src = carImages[currentImage];
   document.getElementById("total").innerText = carPrice;
 
-  // حساب المجموع حسب الميزات الإضافية
+  // سلايدر الصور
+  function prevImage(){
+    currentImage = (currentImage -1 + carImages.length) % carImages.length;
+    document.getElementById("car-img").src = carImages[currentImage];
+  }
+  function nextImage(){
+    currentImage = (currentImage +1) % carImages.length;
+    document.getElementById("car-img").src = carImages[currentImage];
+  }
+
+  // تحديث السعر حسب الميزات الإضافية
   const extras = document.querySelectorAll(".extras input");
   extras.forEach(extra => {
     extra.addEventListener("change", () => {
@@ -210,7 +270,7 @@ body{
     });
   });
 
-  // حجز السيارة والانتقال للصفحة التالية
+  // حجز السيارة
   function bookCar(){
     localStorage.setItem("price", document.getElementById("total").innerText);
     window.location.href = "booking.html";
