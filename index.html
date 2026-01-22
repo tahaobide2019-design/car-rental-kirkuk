@@ -1,52 +1,47 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>الحوت لتأجير السيارات - كركوك</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
 <body>
 
-<header>
-  <h1>🐋 الحوت لتأجير السيارات</h1>
-  <p>كركوك – أفضل خدمة تأجير سيارات</p>
-</header>
+<div class="navbar">
+  <h2>🐋 الحوت</h2>
+  <div>
+    <a href="index.html">الرئيسية</a>
+    <a href="cars.html">السيارات</a>
+    <a href="about.html">من نحن</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="whale">🐋</div>
+  <h1>الحوت لتأجير السيارات</h1>
+  <p>كركوك • سيارات حديثة • حجز سريع • دفع نقدي</p>
+  <button onclick="location.href='cars.html'">🚗 احجز الآن</button>
+</div>
 
 <section>
-  <h2>اختر نوع السيارة</h2>
-
+  <h2 class="section-title">لماذا الحوت؟</h2>
   <div class="cars">
     <div class="car">
-      <h3>سيدان</h3>
-      <p>تويوتا كورولا</p>
-      <button onclick="selectCar('تويوتا كورولا')">اختيار</button>
+      <div class="car-content">
+        <h3>✔ سيارات نظيفة</h3>
+        <p>صيانة دورية وفحص كامل</p>
+      </div>
     </div>
-
     <div class="car">
-      <h3>دفع رباعي</h3>
-      <p>تويوتا برادو</p>
-      <button onclick="selectCar('تويوتا برادو')">اختيار</button>
+      <div class="car-content">
+        <h3>✔ أسعار مناسبة</h3>
+        <p>بدون عمولات أو مفاجآت</p>
+      </div>
     </div>
-
     <div class="car">
-      <h3>اقتصادية</h3>
-      <p>كيا ريو</p>
-      <button onclick="selectCar('كيا ريو')">اختيار</button>
+      <div class="car-content">
+        <h3>✔ دعم واتساب</h3>
+        <p>تواصل مباشر وسريع</p>
+      </div>
     </div>
   </div>
 </section>
 
-<script>
-function selectCar(car){
-  localStorage.setItem("car", car);
-  window.location.href = "booking.html";
-}
-</script>
+<footer>
+  🐋 الحوت لتأجير السيارات – كركوك  
+</footer>
 
 </body>
-</html>
-<header>
-  <div class="whale">🐋</div>
-  <h1>الحوت لتأجير السيارات</h1>
-  <p>كركوك – سيارات مضمونة • حجز سريع • دفع نقدي</p>
-</header>
