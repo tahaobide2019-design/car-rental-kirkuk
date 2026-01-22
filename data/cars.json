@@ -1,28 +1,51 @@
 [
-    {
-        "id": 1,
-        "name": "تويوتا كامري 2022",
-        "category": "عائلي",
-        "image": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb",
-        "price": 50000,
-        "transmission": "أوتوماتيك",
-        "seats": 5,
-        "fuel": "بنزين",
-        "year": 2022,
-        "features": ["تكييف", "بلوتوث", "كاميرا خلفية"],
-        "description": "سيارة عائلية مريحة"
-    },
-    {
-        "id": 2,
-        "name": "هيونداي النترا 2023",
-        "category": "اقتصادي",
-        "image": "https://images.unsplash.com/photo-1550355291-bbee04a92027",
-        "price": 35000,
-        "transmission": "أوتوماتيك",
-        "seats": 5,
-        "fuel": "بنزين",
-        "year": 2023,
-        "features": ["تكييف", "شاشة تعمل باللمس"],
-        "description": "سيارة اقتصادية"
-    }
+  {
+    "name": "تويوتا كورولا",
+    "type": "سيدان",
+    "features": "اقتصادية • مريحة • مناسبة للعائلة",
+    "price": 50,
+    "image": "images/corolla.jpg"
+  },
+  {
+    "name": "تويوتا برادو",
+    "type": "دفع رباعي",
+    "features": "قوية • مناسبة للسفر والطرق الوعرة",
+    "price": 120,
+    "image": "images/prado.jpg"
+  },
+  {
+    "name": "كيا ريو",
+    "type": "سيدان",
+    "features": "موفرة • مدينة • اقتصادية",
+    "price": 40,
+    "image": "images/rio.jpg"
+  },
+  {
+    "name": "هيونداي توسان",
+    "type": "SUV",
+    "features": "مريحة • عائلية • دفع رباعي",
+    "price": 90,
+    "image": "images/tucson.jpg"
+  },
+  {
+    "name": "نيسان صني",
+    "type": "سيدان",
+    "features": "اقتصادية • صغيرة • سهلة القيادة",
+    "price": 35,
+    "image": "images/sunny.jpg"
+  },
+  {
+    "name": "شيفروليه كابتيفا",
+    "type": "SUV",
+    "features": "واسعة • مريحة • عائلية",
+    "price": 100,
+    "image": "images/captiva.jpg"
+  },
+  {
+    "name": "ميتسوبيشي لانسر",
+    "type": "سيدان",
+    "features": "رياضية • صغيرة • اقتصادية",
+    "price": 45,
+    "image": "images/lancer.jpg"
+  }
 ]
