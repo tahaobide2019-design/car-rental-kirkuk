@@ -1,13 +1,58 @@
-images/
-├─ hero.jpg           ← خلفية Hero Section (واجهة رئيسية) 1920x1080 px
-├─ whale-logo.png     ← شعار الحوت 🐋 (شفاف PNG 150x150 px)
-├─ corolla.jpg        ← تويوتا كورولا 800x500 px
-├─ corolla2.jpg       ← صورة إضافية كورولا 800x500 px
-├─ corolla3.jpg       ← صورة إضافية كورولا 800x500 px
-├─ prado.jpg          ← تويوتا برادو 800x500 px
-├─ prado2.jpg         ← صورة إضافية برادو 800x500 px
-├─ rio.jpg            ← كيا ريو 800x500 px
-├─ tucson.jpg         ← هيونداي توسان 800x500 px
-├─ sunny.jpg          ← نيسان صني 800x500 px
-├─ captiva.jpg        ← شيفروليه كابتيفا 800x500 px
-├─ lancer.jpg         ← ميتسوبيشي لانسر 800x500 px
+const carsData = {
+    camry: {
+        name: "تويوتا كامري 2024",
+        type: "سيدان",
+        price: 55000,
+        features: ["5 ركاب", "تكييف", "أوتوماتيك", "بلوتوث", "كاميرا خلفية"],
+        images: [
+            {
+                src: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا كامري 2024 - أمامية"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا كامري 2024 - جانبية"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا كامري 2024 - داخلية"
+            }
+        ]
+    },
+    
+    prado: {
+        name: "تويوتا برادو 2024",
+        type: "دفع رباعي",
+        price: 85000,
+        features: ["7 ركاب", "دفع رباعي", "تكييف", "أوتوماتيك", "شاشة لمس"],
+        images: [
+            {
+                src: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا برادو 2024 - أمامية"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا برادو 2024 - جانبية"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "تويوتا برادو 2024 - داخلية"
+            }
+        ]
+    },
+    
+    accent: {
+        name: "هيونداي أكسنت 2023",
+        type: "سيدان",
+        price: 45000,
+        features: ["5 ركاب", "تكييف", "أوتوماتيك", "بلوتوث"],
+        images: [
+            {
+                src: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                alt: "هيونداي أكسنت 2023 - أمامية"
+            }
+        ]
+    }
+};
+
+export default carsData;
