@@ -2,42 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>بيانات الزبون | الحوت لتأجير السيارات 🐋</title>
+  <title>بيانات الزبون | الحوت 🐋</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header class="top-bar">
-  <h1>🐋 الحوت لتأجير السيارات</h1>
+  <h1>🐋 الحوت لتأجير السيارات – بيانات الزبون</h1>
 </header>
 
 <section class="form-container">
-  <h2>📝 بيانات الزبون</h2>
+
+  <h2>🧾 معلومات الزبون</h2>
+  <p class="subtitle">الرجاء إدخال البيانات بدقة لإتمام الحجز</p>
 
   <form id="customerForm">
-    <label>الاسم الثلاثي</label>
-    <input type="text" id="fullName" required placeholder="مثال: أحمد محمد علي">
 
-    <label>رقم الهاتف</label>
-    <input type="tel" id="phone" required placeholder="07xxxxxxxx">
+    <label>👤 الاسم الثلاثي</label>
+    <input type="text" id="fullName" required>
 
-    <label>الهوية الوطنية أو جواز السفر</label>
-    <input type="text" id="identity" required placeholder="رقم الهوية / الجواز">
+    <label>📞 رقم الهاتف</label>
+    <input type="tel" id="phone" required>
 
-    <label>موقع استلام السيارة</label>
-    <input type="text" id="pickupLocation" required placeholder="كركوك - ...">
+    <label>🪪 رقم الهوية الوطنية / جواز السفر</label>
+    <input type="text" id="identity" required>
+
+    <!-- رفع الهوية -->
+    <label>📸 صورة الهوية الوطنية</label>
+    <input type="file" accept="image/*" required>
+
+    <label>📸 صورة إجازة السوق</label>
+    <input type="file" accept="image/*" required>
+
+    <!-- تنبيه قانوني -->
+    <div class="notice-box">
+      ⚠️ يجب إحضار <strong>الهوية الأصلية</strong> و<strong>إجازة السوق</strong> عند الاستلام.
+      عدم الالتزام يؤدي إلى إلغاء الحجز فورًا.
+    </div>
+
+    <!-- الموقع -->
+    <label>📍 موقع استلام السيارة</label>
+    <input type="text" id="pickupLocation" required>
+
+    <button type="button" class="btn-secondary" onclick="getLocation()">
+      📡 تحديد موقعي تلقائيًا
+    </button>
+
+    <div class="map-box">
+      <iframe id="mapFrame"
+        src="https://www.google.com/maps?q=Kirkuk&output=embed">
+      </iframe>
+    </div>
+
+    <!-- موافقة قانونية -->
+    <div class="checkbox-box">
+      <input type="checkbox" id="agree" required>
+      <label for="agree">
+        أتعهد بصحة المعلومات وأوافق على شروط التأجير
+      </label>
+    </div>
 
     <button type="submit" class="btn-primary">
-      متابعة تأكيد الحجز →
+      🔐 متابعة تأكيد الحجز
     </button>
+
   </form>
 </section>
 
-<script src="utils.js"></script>
 <script>
-document.getElementById("customerForm").addEventListener("submit", function(e) {
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      pickupLocation.value = `GPS: ${lat}, ${lng}`;
+      document.getElementById("mapFrame").src =
+        `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+    }, () => {
+      alert("تعذر تحديد الموقع");
+    });
+  }
+}
+
+document.getElementById("customerForm").addEventListener("submit", e => {
   e.preventDefault();
+
+  if (!agree.checked) {
+    alert("يجب الموافقة على الشروط");
+    return;
+  }
 
   const customer = {
     name: fullName.value,
