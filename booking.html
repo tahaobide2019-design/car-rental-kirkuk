@@ -6,7 +6,6 @@
   <title>حجز السيارة | الحوت لتأجير السيارات</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
 <!-- ===== NAVBAR ===== -->
@@ -16,17 +15,20 @@
     <a href="index.html">الرئيسية</a>
     <a href="cars.html">السيارات</a>
     <a href="booking.html">احجز الآن</a>
+    <a href="about.html">من نحن</a>
   </div>
 </div>
 
-<!-- ===== HEADER ===== -->
-<section class="hero" style="padding:50px 20px">
-  <h1>🚗 اختر سيارتك</h1>
-  <p>اختر السيارة المناسبة ثم الميزات الإضافية</p>
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="whale">🐋</div>
+  <h1>🚗 احجز سيارتك بسهولة</h1>
+  <p>اختر السيارة ثم الميزات الإضافية وأكمل الحجز في خطوات بسيطة</p>
 </section>
 
-<!-- ===== CARS SELECTION ===== -->
+<!-- ===== CAR SELECTION ===== -->
 <section>
+  <h2 class="section-title">اختر سيارتك</h2>
   <div class="cars">
 
     <div class="car">
@@ -59,51 +61,100 @@
   </div>
 </section>
 
-<!-- ===== EXTRAS ===== -->
+<!-- ===== EXTRAS SELECTION ===== -->
 <section>
   <h2 class="section-title">ميزات إضافية</h2>
-
-  <form onsubmit="goNext(event)">
-    <label>
-      <input type="checkbox" value="🚼 مقعد أطفال">
-      مقعد أطفال
-    </label>
-
-    <label>
-      <input type="checkbox" value="🚗 توصيل السيارة">
-      توصيل السيارة لموقعك
-    </label>
-
-    <label>
-      <input type="checkbox" value="👨‍✈️ سائق مع السيارة">
-      سائق مع السيارة
-    </label>
-
-    <button type="submit">➡️ المتابعة</button>
-  </form>
+  <div class="extras">
+    <div class="extra-card" onclick="toggleExtra(this, '🚼 مقعد أطفال')">
+      🚼 مقعد أطفال
+    </div>
+    <div class="extra-card" onclick="toggleExtra(this, '🚗 توصيل السيارة')">
+      🚗 توصيل السيارة
+    </div>
+    <div class="extra-card" onclick="toggleExtra(this, '👨‍✈️ سائق مع السيارة')">
+      👨‍✈️ سائق مع السيارة
+    </div>
+  </div>
+  <button onclick="goPersonalInfo()">➡️ متابعة الحجز</button>
 </section>
 
 <!-- ===== FOOTER ===== -->
 <footer>
-  🐋 الحوت لتأجير السيارات – كركوك
+  🐋 الحوت لتأجير السيارات – كركوك  
+  <br>📧 tahaobide2019@gmail.com | 📞 +9647713225471
 </footer>
 
 <script>
+let selectedExtras = [];
+
 function selectCar(car){
   localStorage.setItem("car", car);
-  alert("تم اختيار: " + car);
+  alert("تم اختيار السيارة: " + car);
 }
 
-function goNext(e){
-  e.preventDefault();
-  let extras = [];
-  document.querySelectorAll("input[type=checkbox]:checked")
-    .forEach(x => extras.push(x.value));
+// لتحديد الميزات الإضافية
+function toggleExtra(element, value){
+  if(selectedExtras.includes(value)){
+    selectedExtras = selectedExtras.filter(e => e !== value);
+    element.style.background = "#fff";
+    element.style.color = "#222";
+  } else {
+    selectedExtras.push(value);
+    element.style.background = "#0b5ed7";
+    element.style.color = "#fff";
+  }
+}
 
-  localStorage.setItem("extras", extras.join("، "));
+// للانتقال لصفحة معلومات الزبون
+function goPersonalInfo(){
+  localStorage.setItem("extras", selectedExtras.join("، "));
   window.location.href = "personal-info.html";
 }
 </script>
+
+<style>
+/* VIP++ STYLE */
+
+.extras{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+.extra-card{
+  background:#fff;
+  border:2px solid #0b5ed7;
+  border-radius:15px;
+  padding:15px 25px;
+  cursor:pointer;
+  transition:.3s;
+  font-weight:600;
+}
+
+.extra-card:hover{
+  transform:scale(1.05);
+}
+
+section button{
+  display:block;
+  margin:20px auto 0;
+  background:#25d366;
+  color:#fff;
+  padding:14px 26px;
+  font-size:16px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+section button:hover{
+  opacity:.9;
+  transform:scale(1.05);
+}
+</style>
 
 </body>
 </html>
