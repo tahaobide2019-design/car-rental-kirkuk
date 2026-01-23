@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحوت - تأكيد الحجز</title>
+<title>الحوت - بيانات الحجز</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/booking-steps.css">
+<script src="js/booking.js" defer></script>
 </head>
 <body>
 
@@ -15,26 +17,78 @@
     <a href="index.html">الرئيسية</a>
     <a href="cars.html">السيارات</a>
     <a href="about.html">عن الشركة</a>
-    <a href="booking.html">الحجز</a>
+    <a href="booking.html" class="active">الحجز</a>
     <a href="contact.html">تواصل معنا</a>
   </nav>
 </header>
 
-<section class="confirmation-wrapper">
-  <div class="confirmation-card">
-    <div class="success-icon">✔</div>
-    <h2>تم تأكيد الحجز!</h2>
-    <p>شكرًا لك على حجز سيارتك معنا. رقم الحجز الخاص بك هو:</p>
-    <div class="note-box">#123456</div>
-    <div class="summary">
-      <p><strong>السيارة:</strong> Toyota Camry 2023</p>
-      <p><strong>الخدمات الإضافية:</strong> GPS, كرسي أطفال</p>
-      <p><strong>تاريخ الاستلام:</strong> 25/01/2026</p>
-      <p><strong>تاريخ الإرجاع:</strong> 28/01/2026</p>
-    </div>
-    <a href="index.html" class="btn-primary" style="margin-top:20px;">عودة للصفحة الرئيسية</a>
-  </div>
+<section class="page-hero small">
+  <div class="overlay"></div>
+  <h1>بيانات الحجز والخدمات الإضافية</h1>
 </section>
+
+<div class="step-card active" data-step="2">
+
+  <h2 style="color:#0E1A2B; margin-bottom:25px;">أضف خدماتك ومعلوماتك الشخصية</h2>
+
+  <!-- ================= خدمات إضافية ================= -->
+  <div class="addons-grid">
+    <label class="addon">
+      <input type="checkbox" name="addon" value="GPS">
+      <div class="addon-content">
+        <h3>نظام ملاحة GPS</h3>
+        <p>تحديد المواقع بسهولة أثناء الرحلة.</p>
+      </div>
+    </label>
+
+    <label class="addon">
+      <input type="checkbox" name="addon" value="ChildSeat">
+      <div class="addon-content">
+        <h3>كرسي أطفال</h3>
+        <p>راحة وأمان للأطفال أثناء الرحلة.</p>
+      </div>
+    </label>
+
+    <label class="addon">
+      <input type="checkbox" name="addon" value="Driver">
+      <div class="addon-content">
+        <h3>سائق خاص</h3>
+        <p>استمتع برحلة بدون قيادة.</p>
+      </div>
+    </label>
+
+    <label class="addon">
+      <input type="checkbox" name="addon" value="Delivery">
+      <div class="addon-content">
+        <h3>توصيل السيارة</h3>
+        <p>توصيل السيارة إلى المنزل أو الفندق أو المطار.</p>
+      </div>
+    </label>
+  </div>
+
+  <!-- ================= بيانات المستخدم ================= -->
+  <div class="user-info">
+    <input type="text" placeholder="الاسم الكامل" name="fullName" required>
+    <input type="tel" placeholder="رقم الهاتف" name="phone" required>
+
+    <label style="font-weight:600; margin-top:15px;">رفع المستندات</label>
+    <input type="file" name="documents" class="upload" accept="image/*">
+  </div>
+
+  <!-- ================= مواعيد الاستلام والإرجاع ================= -->
+  <div class="date-time" style="margin-top:25px;">
+    <label>تاريخ ووقت الاستلام</label>
+    <input type="datetime-local" name="pickup" required>
+    <label>تاريخ ووقت الإرجاع</label>
+    <input type="datetime-local" name="return" required>
+  </div>
+
+  <div class="buttons" style="margin-top:30px;">
+    <button class="btn-secondary prev-step">السابق</button>
+    <button class="btn-primary next-step">التالي</button>
+  </div>
+
+</div>
 
 </body>
 </html>
