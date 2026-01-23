@@ -1,45 +1,32 @@
 .steps-container {
   max-width: 800px;
-  margin: 30px auto;
-  background-color: #fff;
-  padding: 25px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-.step {
+.steps-container .step {
   display: none;
 }
-
-.step.active {
+.steps-container .step.active {
   display: block;
 }
 
-.step h3 {
+.steps-container .progress {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
-  color: #0b3d91;
 }
-
-.step form input,
-.step form select {
-  display: block;
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.steps-container .progress div {
+  flex: 1;
+  height: 5px;
+  background: #ccc;
+  margin: 0 5px;
+  border-radius: 3px;
+  transition: 0.4s;
 }
-
-.step form button, .step button {
-  background-color: #0b3d91;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.step form button:hover, .step button:hover {
-  background-color: #092c6a;
+.steps-container .progress .active {
+  background: #0b3d91;
 }
