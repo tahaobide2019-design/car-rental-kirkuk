@@ -1,8 +1,9 @@
-// إدارة السيارات في لوحة التحكم
+// === عرض السيارات في manage-cars.html ===
 async function loadCars() {
   const response = await fetch('../data/cars.json');
   const cars = await response.json();
   const container = document.getElementById('cars-table');
+  if (!container) return;
   container.innerHTML = '';
   cars.forEach(car => {
     container.innerHTML += `
@@ -18,6 +19,35 @@ async function loadCars() {
   });
 }
 
+// === عرض إحصائيات في dashboard.html ===
+async function loadDashboard() {
+  const carsResponse = await fetch('../data/cars.json');
+  const cars = await carsResponse.json();
+  document.getElementById('total-cars')?.innerText = cars.length;
+
+  const bookingsResponse = await fetch('../data/bookings.json');
+  const bookings = await bookingsResponse.json();
+  document.getElementById('total-bookings')?.innerText = bookings.length;
+
+  const table = document.getElementById('bookings-table');
+  if (table) {
+    table.innerHTML = '';
+    bookings.slice(-5).forEach((b, i) => {
+      table.innerHTML += `
+        <tr>
+          <td>HLT${i+1000}</td>
+          <td>${b.customer.fullname}</td>
+          <td>${b.customer.phone}</td>
+          <td>${b.carId}</td>
+          <td>${b.customer.pickup}</td>
+          <td>${b.customer.return}</td>
+        </tr>
+      `;
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('cars-table')) loadCars();
+  loadCars();
+  loadDashboard();
 });
