@@ -1,34 +1,107 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الحوت - تأجير سيارات</title>
+
+<!-- خطوط حديثة -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- أيقونات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- CSS -->
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- HEADER -->
 <header>
-  <div class="logo">الحوت</div>
+  <div class="logo">الحوت <span>🚗</span></div>
   <nav>
     <a href="index.html">الرئيسية</a>
     <a href="cars.html">السيارات</a>
     <a href="about.html">عن الشركة</a>
+    <a href="booking.html" class="btn">احجز الآن</a>
   </nav>
 </header>
 
+<!-- HERO -->
 <section class="hero">
-  <h1>أفضل سيارات للإيجار في العراق</h1>
-  <p>اختر سيارتك وابدأ رحلتك الآن!</p>
-  <a href="cars.html" class="btn">استعرض السيارات</a>
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>رحلتك تبدأ معنا</h1>
+    <p>اختر السيارة المناسبة واستمتع بتجربة تأجير سلسة ومريحة في أي مكان بالعراق</p>
+    <a href="cars.html" class="btn btn-primary">استعرض السيارات</a>
+  </div>
 </section>
 
-<section id="featured-cars" class="cars-container"></section>
+<!-- CARS FEATURE -->
+<section class="featured-cars">
+  <h2>أشهر سياراتنا</h2>
+  <div class="cars-grid">
+    <div class="car-card">
+      <img src="images/corolla.jpg" alt="تويوتا كورولا">
+      <div class="car-info">
+        <h3>تويوتا كورولا</h3>
+        <p>عائلية | أوتوماتيك | 5 ركاب</p>
+        <p class="price">50,000 د.ع / يوم</p>
+        <a href="car-details.html?car=1" class="btn btn-details">تفاصيل</a>
+      </div>
+    </div>
+    <div class="car-card">
+      <img src="images/bmw-x5.jpg" alt="BMW X5">
+      <div class="car-info">
+        <h3>BMW X5</h3>
+        <p>SUV | أوتوماتيك | 7 ركاب</p>
+        <p class="price">120,000 د.ع / يوم</p>
+        <a href="car-details.html?car=2" class="btn btn-details">تفاصيل</a>
+      </div>
+    </div>
+    <div class="car-card">
+      <img src="images/audi-a6.jpg" alt="Audi A6">
+      <div class="car-info">
+        <h3>Audi A6</h3>
+        <p>فاخرة | أوتوماتيك | 5 ركاب</p>
+        <p class="price">110,000 د.ع / يوم</p>
+        <a href="car-details.html?car=3" class="btn btn-details">تفاصيل</a>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- WHY CHOOSE US -->
+<section class="why-choose">
+  <h2>لماذا تختار الحوت؟</h2>
+  <div class="features-grid">
+    <div class="feature">
+      <i class="fas fa-shield-alt fa-2x"></i>
+      <h3>أمان مضمون</h3>
+      <p>جميع سياراتنا خضعت لفحوصات سلامة كاملة قبل التسليم</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-hand-holding-dollar fa-2x"></i>
+      <h3>أسعار مناسبة</h3>
+      <p>خطط أسعار مرنة تناسب جميع الميزانيات</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-headset fa-2x"></i>
+      <h3>دعم متواصل</h3>
+      <p>خدمة العملاء متاحة على مدار الساعة لأي استفسار</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  جميع الحقوق محفوظة © الحوت
+  <p>جميع الحقوق محفوظة © الحوت 2026</p>
+  <div class="socials">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+  </div>
 </footer>
 
-<script src="js/main.js"></script>
 </body>
 </html>
