@@ -1,206 +1,347 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حجز سيارتك | الحوت لتأجير السيارات</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* تصميم VIP++ كامل للحجز */
-    body{
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background:#f4f6f8;
-      margin:0;
-      padding:0;
-    }
-
-    .navbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:15px 30px;
-      background:#0b3d91;
-      color:#fff;
-    }
-    .navbar a{
-      color:#fff;
-      text-decoration:none;
-      margin-left:20px;
-      font-weight:bold;
-    }
-    .hero{
-      text-align:center;
-      padding:40px 20px;
-      background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('images/hero.jpg') center/cover no-repeat;
-      color:#fff;
-      margin-bottom:30px;
-      border-bottom-left-radius:40px;
-      border-bottom-right-radius:40px;
-    }
-
-    .hero h1{
-      font-size:36px;
-      margin-bottom:10px;
-    }
-
-    .booking-container{
-      max-width:900px;
-      margin:auto;
-      background:#fff;
-      border-radius:25px;
-      box-shadow:0 15px 35px rgba(0,0,0,0.1);
-      padding:30px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:30px;
-    }
-
-    .selected-car{
-      flex:1 1 300px;
-      text-align:center;
-    }
-
-    .selected-car img{
-      width:100%;
-      border-radius:20px;
-      margin-bottom:15px;
-    }
-
-    .car-details{
-      flex:2 1 400px;
-    }
-
-    .car-details h2{
-      margin-top:0;
-    }
-
-    .extras label{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
-      cursor:pointer;
-      font-weight:bold;
-    }
-
-    .extras input{
-      transform:scale(1.3);
-      cursor:pointer;
-    }
-
-    .total-price{
-      margin-top:20px;
-      font-size:20px;
-      font-weight:bold;
-      color:#0b3d91;
-    }
-
-    .btn-next{
-      background:#25d366;
-      color:#fff;
-      border:none;
-      padding:15px 20px;
-      border-radius:20px;
-      font-size:18px;
-      cursor:pointer;
-      margin-top:25px;
-      width:100%;
-      transition:.3s;
-    }
-
-    .btn-next:hover{
-      opacity:.9;
-      transform:scale(1.02);
-    }
-
-    @media(max-width:768px){
-      .booking-container{
-        flex-direction:column;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز سيارة - الحوت لتأجير السيارات</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-car"></i>
+                    <span>الحوت</span>
+                    <span class="logo-sub">لتأجير السيارات</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
+                    <li><a href="booking.html" class="active"><i class="fas fa-calendar-check"></i> حجز سريع</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> عن الشركة</a></li>
+                    <li><a href="faq.html"><i class="fas fa-question-circle"></i> الأسئلة الشائعة</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <div class="language-switcher">
+                        <button class="lang-btn" id="langToggle">
+                            <i class="fas fa-globe"></i>
+                            <span>العربية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="lang-dropdown">
+                            <a href="#" data-lang="ar">العربية</a>
+                            <a href="#" data-lang="en">English</a>
+                        </div>
+                    </div>
+                    <a href="admin-dashboard.html" class="admin-btn">
+                        <i class="fas fa-user-cog"></i>
+                        <span>لوحة التحكم</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <h2>🐋 الحوت</h2>
-  <div>
-    <a href="index.html">الرئيسية</a>
-    <a href="cars.html">السيارات</a>
-    <a href="booking.html">احجز الآن</a>
-    <a href="about.html">من نحن</a>
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <h1>🚗 احجز سيارتك بسهولة</h1>
-  <p>اختر ميزات إضافية واضغط التالي لإكمال الحجز</p>
-</section>
-
-<!-- FORM -->
-<section class="booking-container">
-
-  <!-- بطاقة السيارة المختارة -->
-  <div class="selected-car">
-    <img id="car-img" src="images/corolla.jpg" alt="السيارة المختارة">
-    <h3 id="car-name">تويوتا كورولا</h3>
-    <p id="car-features">سيدان • اقتصادية • مريحة</p>
-    <p><strong>السعر اليومي:</strong> $<span id="car-price">50</span></p>
-  </div>
-
-  <!-- خيارات الميزات الإضافية -->
-  <div class="car-details">
-    <h2>ميزات إضافية</h2>
-    <div class="extras">
-      <label><input type="checkbox" value="مقعد أطفال" data-price="5"> مقعد أطفال (+$5)</label>
-      <label><input type="checkbox" value="سائق" data-price="20"> سائق (+$20)</label>
-      <label><input type="checkbox" value="توصيل السيارة" data-price="10"> توصيل السيارة (+$10)</label>
-    </div>
-
-    <p class="total-price">المجموع: $<span id="total">50</span></p>
-
-    <button class="btn-next" onclick="goToPersonalInfo()">➡️ التالي</button>
-  </div>
-
-</section>
-
-<script>
-  // تحميل بيانات السيارة المختارة
-  const carName = localStorage.getItem("car") || "تويوتا كورولا";
-  const carPrice = parseFloat(localStorage.getItem("price")) || 50;
-  const carFeatures = localStorage.getItem("features") || "سيدان • اقتصادية • مريحة";
-  const carImg = localStorage.getItem("image") || "images/corolla.jpg";
-
-  document.getElementById("car-name").innerText = carName;
-  document.getElementById("car-price").innerText = carPrice;
-  document.getElementById("car-features").innerText = carFeatures;
-  document.getElementById("car-img").src = carImg;
-  document.getElementById("total").innerText = carPrice;
-
-  // تحديث السعر حسب الميزات الإضافية
-  const extras = document.querySelectorAll(".extras input");
-  extras.forEach(extra => {
-    extra.addEventListener("change", () => {
-      let total = carPrice;
-      let selectedExtras = [];
-      extras.forEach(e => {
-        if(e.checked){
-          total += parseFloat(e.dataset.price);
-          selectedExtras.push(e.value);
-        }
-      });
-      document.getElementById("total").innerText = total;
-      localStorage.setItem("extras", selectedExtras.join("، "));
-    });
-  });
-
-  function goToPersonalInfo(){
-    localStorage.setItem("price", document.getElementById("total").innerText);
-    window.location.href = "personal-info.html";
-  }
-</script>
-
-</body>
-</html>
+    <!-- قسم الحجز ثلاثي المراحل -->
+    <section class="booking-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>حجز سيارة جديدة</h1>
+                <p>اتبع الخطوات الثلاث لإتمام حجزك بنجاح</p>
+            </div>
+            
+            <!-- شريط التقدم -->
+            <div class="booking-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">اختر سيارتك</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">الخدمات الإضافية</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">البيانات الشخصية</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- محتوى المراحل -->
+            <div class="booking-content">
+                <!-- المرحلة 1: اختيار السيارة -->
+                <div class="booking-stage active" id="stage1">
+                    <div class="stage-header">
+                        <h2><i class="fas fa-car"></i> المرحلة الأولى: اختيار السيارة</h2>
+                        <p>اختر السيارة المناسبة لرحلتك من القائمة أدناه</p>
+                    </div>
+                    
+                    <div class="car-selection">
+                        <div class="selection-filters">
+                            <div class="filter-group">
+                                <label for="bookingCategory">
+                                    <i class="fas fa-filter"></i>
+                                    فئة السيارة
+                                </label>
+                                <select id="bookingCategory">
+                                    <option value="">جميع الفئات</option>
+                                    <option value="family">عائلية</option>
+                                    <option value="sports">رياضية</option>
+                                    <option value="economic">اقتصادية</option>
+                                    <option value="luxury">فاخرة</option>
+                                    <option value="suv">دفع رباعي</option>
+                                    <option value="commercial">تجارية</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="bookingPickupDate">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    تاريخ الاستلام
+                                </label>
+                                <input type="date" id="bookingPickupDate" value="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="bookingReturnDate">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    تاريخ الإرجاع
+                                </label>
+                                <input type="date" id="bookingReturnDate" value="<?php echo date('Y-m-d', strtotime('+3 days')); ?>">
+                            </div>
+                        </div>
+                        
+                        <div class="available-cars" id="availableCars">
+                            <!-- سيتم تحميل السيارات المتاحة ديناميكياً -->
+                        </div>
+                        
+                        <div class="selected-car-preview" id="selectedCarPreview" style="display: none;">
+                            <div class="preview-header">
+                                <h3><i class="fas fa-check-circle"></i> السيارة المختارة</h3>
+                                <button class="change-car-btn" id="changeCarBtn">
+                                    <i class="fas fa-redo"></i>
+                                    تغيير السيارة
+                                </button>
+                            </div>
+                            <div class="preview-content">
+                                <div class="preview-image">
+                                    <img id="previewCarImage" src="" alt="السيارة المختارة">
+                                </div>
+                                <div class="preview-details">
+                                    <h4 id="previewCarName"></h4>
+                                    <div class="preview-specs">
+                                        <span><i class="fas fa-user-friends"></i> <span id="previewCapacity"></span> أشخاص</span>
+                                        <span><i class="fas fa-cogs"></i> <span id="previewTransmission"></span></span>
+                                        <span><i class="fas fa-gas-pump"></i> <span id="previewFuel"></span></span>
+                                    </div>
+                                    <div class="preview-price">
+                                        <span class="label">السعر الإجمالي:</span>
+                                        <span class="price" id="previewTotalPrice"></span>
+                                        <span class="currency">دينار</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stage-actions">
+                        <button class="btn btn-outline" onclick="window.location.href='cars.html'">
+                            <i class="fas fa-arrow-right"></i>
+                            رجوع
+                        </button>
+                        <button class="btn btn-primary" id="nextToStage2" disabled>
+                            التالي
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- المرحلة 2: الخدمات الإضافية -->
+                <div class="booking-stage" id="stage2">
+                    <div class="stage-header">
+                        <h2><i class="fas fa-cogs"></i> المرحلة الثانية: الخدمات الإضافية</h2>
+                        <p>اختر الخدمات الإضافية التي تحتاجها (اختياري)</p>
+                    </div>
+                    
+                    <div class="services-selection">
+                        <div class="services-grid">
+                            <!-- خدمة التوصيل -->
+                            <div class="service-card" data-service="delivery">
+                                <div class="service-header">
+                                    <div class="service-icon">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="service-info">
+                                        <h3>خدمة التوصيل</h3>
+                                        <p class="service-price">+25,000 دينار</p>
+                                    </div>
+                                    <label class="service-toggle">
+                                        <input type="checkbox" id="deliveryService">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="service-options" id="deliveryOptions" style="display: none;">
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-map-marker-alt"></i> موقع التوصيل</h4>
+                                        <div class="radio-options">
+                                            <label>
+                                                <input type="radio" name="deliveryLocation" value="home" checked>
+                                                <span class="radio-checkmark"></span>
+                                                <i class="fas fa-home"></i>
+                                                المنزل
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="deliveryLocation" value="airport">
+                                                <span class="radio-checkmark"></span>
+                                                <i class="fas fa-plane"></i>
+                                                المطار
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="deliveryLocation" value="hotel">
+                                                <span class="radio-checkmark"></span>
+                                                <i class="fas fa-hotel"></i>
+                                                الفندق
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-map-pin"></i> تحديد الموقع على الخريطة</h4>
+                                        <div class="map-container" id="deliveryMap">
+                                            <!-- سيتم تحميل الخريطة هنا -->
+                                        </div>
+                                        <div class="location-input">
+                                            <input type="text" id="deliveryAddress" placeholder="أدخل العنوان يدوياً">
+                                            <button class="btn btn-sm" id="locateMeBtn">
+                                                <i class="fas fa-location-arrow"></i>
+                                                تحديد موقعي
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- كرسي أطفال -->
+                            <div class="service-card" data-service="child-seat">
+                                <div class="service-header">
+                                    <div class="service-icon">
+                                        <i class="fas fa-child"></i>
+                                    </div>
+                                    <div class="service-info">
+                                        <h3>كرسي أطفال</h3>
+                                        <p class="service-price">+10,000 دينار</p>
+                                    </div>
+                                    <label class="service-toggle">
+                                        <input type="checkbox" id="childSeatService">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="service-options" id="childSeatOptions" style="display: none;">
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-child"></i> عدد الكراسي</h4>
+                                        <div class="quantity-control">
+                                            <button class="qty-btn" id="decreaseSeats">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="number" id="childSeatsCount" value="1" min="1" max="3">
+                                            <button class="qty-btn" id="increaseSeats">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-baby"></i> عمر الطفل</h4>
+                                        <select id="childAge">
+                                            <option value="0-1">أقل من سنة</option>
+                                            <option value="1-3">1-3 سنوات</option>
+                                            <option value="4-7">4-7 سنوات</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- نظام الملاحة GPS -->
+                            <div class="service-card" data-service="gps">
+                                <div class="service-header">
+                                    <div class="service-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="service-info">
+                                        <h3>نظام ملاحة GPS</h3>
+                                        <p class="service-price">+15,000 دينار</p>
+                                    </div>
+                                    <label class="service-toggle">
+                                        <input type="checkbox" id="gpsService">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="service-options" id="gpsOptions" style="display: none;">
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-language"></i> اللغة</h4>
+                                        <select id="gpsLanguage">
+                                            <option value="ar">العربية</option>
+                                            <option value="en">الإنجليزية</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- سائق خاص -->
+                            <div class="service-card" data-service="driver">
+                                <div class="service-header">
+                                    <div class="service-icon">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="service-info">
+                                        <h3>سائق خاص</h3>
+                                        <p class="service-price">+50,000 دينار/يوم</p>
+                                    </div>
+                                    <label class="service-toggle">
+                                        <input type="checkbox" id="driverService">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="service-options" id="driverOptions" style="display: none;">
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-clock"></i> عدد الساعات</h4>
+                                        <div class="hours-selection">
+                                            <div class="hour-option" data-hours="8">8 ساعات</div>
+                                            <div class="hour-option active" data-hours="12">12 ساعة</div>
+                                            <div class="hour-option" data-hours="24">24 ساعة</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="options-group">
+                                        <h4><i class="fas fa-language"></i> لغة السائق</h4>
+                                        <div class="radio-options">
+                                            <label>
+                                                <input type="radio" name="driverLanguage" value="ar" checked>
+                                                <span class="radio-checkmark"></span>
+                                                العربية
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="driverLanguage" value="en">
+       
