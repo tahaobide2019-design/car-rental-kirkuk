@@ -1,1 +1,22 @@
-
+[
+  {
+    "id": 1,
+    "name": "تويوتا كورولا 2023",
+    "type": "عائلية",
+    "capacity": 5,
+    "transmission": "أوتوماتيك",
+    "fuel": "بنزين",
+    "price": 50000,
+    "image": "images/corolla.jpg"
+  },
+  {
+    "id": 2,
+    "name": "BMW X5 2022",
+    "type": "SUV",
+    "capacity": 7,
+    "transmission": "أوتوماتيك",
+    "fuel": "ديزل",
+    "price": 120000,
+    "image": "images/bmw-x5.jpg"
+  }
+]
