@@ -1,130 +1,451 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الحوت لتأجير السيارات 🐋 - كركوك</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحوت لتأجير السيارات - كركوك</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-car"></i>
+                    <span>الحوت</span>
+                    <span class="logo-sub">لتأجير السيارات</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="cars.html"><i class="fas fa-car"></i> السيارات</a></li>
+                    <li><a href="booking.html"><i class="fas fa-calendar-check"></i> حجز سريع</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> عن الشركة</a></li>
+                    <li><a href="faq.html"><i class="fas fa-question-circle"></i> الأسئلة الشائعة</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <div class="language-switcher">
+                        <button class="lang-btn" id="langToggle">
+                            <i class="fas fa-globe"></i>
+                            <span>العربية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="lang-dropdown">
+                            <a href="#" data-lang="ar">العربية</a>
+                            <a href="#" data-lang="en">English</a>
+                        </div>
+                    </div>
+                    <a href="admin-dashboard.html" class="admin-btn">
+                        <i class="fas fa-user-cog"></i>
+                        <span>لوحة التحكم</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-<!-- ================== HEADER ================== -->
-<header class="header">
-  <div class="container">
-    <h1>🐋 الحوت لتأجير السيارات</h1>
-    <p>أفضل سيارات للإيجار في كركوك بسرعة وأمان</p>
-    <a href="cars.html" class="btn-primary">ابدأ الحجز</a>
-  </div>
-</header>
+    <!-- الهيرو/القسم الرئيسي -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">استأجر أفضل السيارات في كركوك</h1>
+                <p class="hero-subtitle">سواء للرحلات العائلية أو العمل أو المناسبات الخاصة، لدينا السيارة المناسبة لك</p>
+                
+                <div class="hero-search">
+                    <div class="search-box">
+                        <div class="search-field">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="pickupLocation">
+                                <option value="">اختر موقع الاستلام</option>
+                                <option value="airport">مطار كركوك الدولي</option>
+                                <option value="city-center">وسط المدينة</option>
+                                <option value="hotel">الفندق</option>
+                                <option value="custom">موقع مخصص</option>
+                            </select>
+                        </div>
+                        
+                        <div class="search-field">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="pickupDate" value="<?php echo date('Y-m-d'); ?>">
+                        </div>
+                        
+                        <div class="search-field">
+                            <i class="fas fa-clock"></i>
+                            <select id="pickupTime">
+                                <option value="08:00">8:00 صباحاً</option>
+                                <option value="09:00">9:00 صباحاً</option>
+                                <option value="10:00">10:00 صباحاً</option>
+                                <option value="11:00">11:00 صباحاً</option>
+                                <option value="12:00">12:00 ظهراً</option>
+                                <option value="13:00">1:00 ظهراً</option>
+                                <option value="14:00">2:00 ظهراً</option>
+                                <option value="15:00">3:00 عصراً</option>
+                                <option value="16:00">4:00 عصراً</option>
+                                <option value="17:00">5:00 مساءً</option>
+                            </select>
+                        </div>
+                        
+                        <button class="search-btn" onclick="window.location.href='cars.html'">
+                            <i class="fas fa-search"></i>
+                            ابحث عن سيارة
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-car"></i>
+                        <div>
+                            <h3>50+</h3>
+                            <p>سيارة متنوعة</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3>1000+</h3>
+                            <p>عميل راضٍ</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>5</h3>
+                            <p>فروع في كركوك</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-headset"></i>
+                        <div>
+                            <h3>24/7</h3>
+                            <p>دعم فني</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- ================== FEATURES ================== -->
-<section class="features">
-  <div class="container">
-    <h2>🚗 لماذا تختار الحوت؟</h2>
-    <div class="feature-cards">
+    <!-- قسم فئات السيارات -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>اختر من فئات السيارات</h2>
+                <p>نوفر مجموعة واسعة من السيارات المناسبة لجميع الاحتياجات</p>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card" data-category="family">
+                    <div class="category-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>عائلية</h3>
+                    <p>مريحة وآمنة للرحلات العائلية</p>
+                    <span class="car-count">15 سيارة</span>
+                </div>
+                
+                <div class="category-card" data-category="sports">
+                    <div class="category-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>رياضية</h3>
+                    <p>للراغبين في القوة والأداء العالي</p>
+                    <span class="car-count">8 سيارات</span>
+                </div>
+                
+                <div class="category-card" data-category="economic">
+                    <div class="category-icon">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <h3>اقتصادية</h3>
+                    <p>توفير في الوقود والتكاليف</p>
+                    <span class="car-count">12 سيارة</span>
+                </div>
+                
+                <div class="category-card" data-category="luxury">
+                    <div class="category-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>فاخرة</h3>
+                    <p>للرفاهية والراحة القصوى</p>
+                    <span class="car-count">6 سيارات</span>
+                </div>
+                
+                <div class="category-card" data-category="suv">
+                    <div class="category-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>دفع رباعي</h3>
+                    <p>مثالية للطرق الوعرة والسفر</p>
+                    <span class="car-count">10 سيارات</span>
+                </div>
+                
+                <div class="category-card" data-category="commercial">
+                    <div class="category-icon">
+                        <i class="fas fa-truck-moving"></i>
+                    </div>
+                    <h3>تجارية</h3>
+                    <p>للأعمال والنقل التجاري</p>
+                    <span class="car-count">9 سيارات</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <div class="feature-card">
-        <span>🐋</span>
-        <h3>أسطول حديث</h3>
-        <p>سيارات حديثة ومريحة لجميع الاحتياجات.</p>
-      </div>
+    <!-- قسم السيارات المميزة -->
+    <section class="featured-cars">
+        <div class="container">
+            <div class="section-header">
+                <h2>السيارات الأكثر طلباً</h2>
+                <p>اختر من بين أفضل السيارات لدينا</p>
+            </div>
+            
+            <div class="cars-grid" id="featuredCars">
+                <!-- سيتم تحميل السيارات ديناميكياً -->
+            </div>
+            
+            <div class="text-center">
+                <a href="cars.html" class="btn btn-primary">
+                    <i class="fas fa-car"></i>
+                    عرض جميع السيارات
+                </a>
+            </div>
+        </div>
+    </section>
 
-      <div class="feature-card">
-        <span>⚡</span>
-        <h3>حجز سريع</h3>
-        <p>اختيار السيارة وإتمام الحجز بضغطة زر واحدة.</p>
-      </div>
+    <!-- قسم العروض الخاصة -->
+    <section class="special-offers">
+        <div class="container">
+            <div class="section-header">
+                <h2>عروض خاصة</h2>
+                <p>احصل على خصومات حصرية لفترة محدودة</p>
+            </div>
+            
+            <div class="offers-slider">
+                <div class="offer-card">
+                    <div class="offer-badge">خصم 20%</div>
+                    <div class="offer-content">
+                        <h3>عرض نهاية الأسبوع</h3>
+                        <p>احجز أي سيارة من الخميس إلى الأحد واحصل على خصم 20%</p>
+                        <div class="offer-details">
+                            <span><i class="fas fa-calendar"></i> حتى 30 ديسمبر</span>
+                            <span><i class="fas fa-clock"></i> 3 أيام متبقية</span>
+                        </div>
+                        <button class="btn btn-outline">استفد من العرض</button>
+                    </div>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-badge">خصم 15%</div>
+                    <div class="offer-content">
+                        <h3>عرض العائلة</h3>
+                        <p>احجز سيارة عائلية لمدة أسبوع واحصل على خصم 15%</p>
+                        <div class="offer-details">
+                            <span><i class="fas fa-calendar"></i> حتى 15 يناير</span>
+                            <span><i class="fas fa-clock"></i> 20 يوماً متبقياً</span>
+                        </div>
+                        <button class="btn btn-outline">استفد من العرض</button>
+                    </div>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-badge">عرض مجاني</div>
+                    <div class="offer-content">
+                        <h3>توصيل مجاني</h3>
+                        <p>احجز لمدة 3 أيام أو أكثر واحصل على توصيل مجاني</p>
+                        <div class="offer-details">
+                            <span><i class="fas fa-calendar"></i> مستمر</span>
+                            <span><i class="fas fa-gift"></i> هدية مجانية</span>
+                        </div>
+                        <button class="btn btn-outline">استفد من العرض</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <div class="feature-card">
-        <span>💰</span>
-        <h3>أسعار منافسة</h3>
-        <p>أفضل الأسعار مع خيارات إضافية مثل سائق أو مقعد أطفال.</p>
-      </div>
+    <!-- قسم كيفية الحجز -->
+    <section class="how-to-book">
+        <div class="container">
+            <div class="section-header">
+                <h2>كيف تحجز في 3 خطوات بسيطة</h2>
+                <p>عملية حجز سهلة وسريعة</p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>اختر سيارتك</h3>
+                    <p>تصفح مجموعتنا الواسعة واختر السيارة المناسبة لاحتياجاتك</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>أضف الخدمات</h3>
+                    <p>اختر الخدمات الإضافية التي تحتاجها مثل التوصيل أو السائق</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h3>أكمل الحجز</h3>
+                    <p>أدخل بياناتك واكمل الحجز بسهولة وأمان</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    </div>
-  </div>
-</section>
+    <!-- قسم المدونة/الأخبار -->
+    <section class="blog-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>أحدث الأخبار والعروض</h2>
+                <p>تابع آخر المستجدات والعروض الحصرية</p>
+            </div>
+            
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="images/blog1.jpg" alt="عرض الصيف">
+                        <div class="blog-date">
+                            <span class="day">15</span>
+                            <span class="month">ديسمبر</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="#">عروض الصيف الحارة على جميع السيارات</a></h3>
+                        <p>احصل على خصومات تصل إلى 30% على حجز السيارات الفاخرة خلال فصل الصيف</p>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-user"></i> إدارة الحوت</span>
+                            <span><i class="fas fa-eye"></i> 245 مشاهدة</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="images/blog2.jpg" alt="سيارات جديدة">
+                        <div class="blog-date">
+                            <span class="day">10</span>
+                            <span class="month">ديسمبر</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="#">إضافة 10 سيارات جديدة إلى الأسطول</a></h3>
+                        <p>نقدم لكم مجموعة جديدة من السيارات 2023 بأحدث المواصفات والتقنيات</p>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-user"></i> إدارة الحوت</span>
+                            <span><i class="fas fa-eye"></i> 189 مشاهدة</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="images/blog3.jpg" alt="نصائح القيادة">
+                        <div class="blog-date">
+                            <span class="day">5</span>
+                            <span class="month">ديسمبر</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <h3><a href="#">نصائح للقيادة الآمنة في فصل الشتاء</a></h3>
+                        <p>تعرف على أهم النصائح والإرشادات للقيادة الآمنة خلال الطقس الممطر</p>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-user"></i> إدارة الحوت</span>
+                            <span><i class="fas fa-eye"></i> 312 مشاهدة</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
 
-<!-- ================== CARS PREVIEW ================== -->
-<section class="cars-preview">
-  <div class="container">
-    <h2>أبرز السيارات لدينا</h2>
-    <div class="cars-grid">
-
-      <!-- سيارة مثال -->
-      <div class="car-card">
-        <img src="images/corolla.jpg" alt="تويوتا كورولا">
-        <h3>تويوتا كورولا</h3>
-        <p>سيدان • اقتصادية • 4 ركاب</p>
-        <p class="price">السعر اليومي: $50</p>
-        <a href="car-details.html?car=corolla" class="btn-secondary">عرض التفاصيل</a>
-      </div>
-
-      <!-- سيارة مثال -->
-      <div class="car-card">
-        <img src="images/camry.jpg" alt="تويوتا كامري">
-        <h3>تويوتا كامري</h3>
-        <p>سيدان • فخمة • 5 ركاب</p>
-        <p class="price">السعر اليومي: $70</p>
-        <a href="car-details.html?car=camry" class="btn-secondary">عرض التفاصيل</a>
-      </div>
-
-      <!-- سيارة مثال -->
-      <div class="car-card">
-        <img src="images/prado.jpg" alt="تويوتا برادو">
-        <h3>تويوتا برادو</h3>
-        <p>SUV • قوية • 7 ركاب</p>
-        <p class="price">السعر اليومي: $90</p>
-        <a href="car-details.html?car=prado" class="btn-secondary">عرض التفاصيل</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ================== HOW IT WORKS ================== -->
-<section class="how-it-works">
-  <div class="container">
-    <h2>خطوات الحجز</h2>
-    <div class="steps">
-
-      <div class="step">
-        <span>1️⃣</span>
-        <h3>اختيار نوع السيارة</h3>
-        <p>حدد السيارة التي تناسب احتياجاتك.</p>
-      </div>
-
-      <div class="step">
-        <span>2️⃣</span>
-        <h3>اختيار الميزات الإضافية</h3>
-        <p>مثل مقعد أطفال أو سائق أو توصيل السيارة.</p>
-      </div>
-
-      <div class="step">
-        <span>3️⃣</span>
-        <h3>إدخال بياناتك</h3>
-        <p>الاسم، الهاتف، الهوية، موقع استلام السيارة.</p>
-      </div>
-
-      <div class="step">
-        <span>4️⃣</span>
-        <h3>تأكيد الحجز</h3>
-        <p>يتم إرسال كل التفاصيل مباشرة على الواتساب.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ================== FOOTER ================== -->
-<footer class="footer">
-  <div class="container">
-    <p>📞 للتواصل: +9647713225471</p>
-    <p>📧 البريد الإلكتروني: tahaobide2019@gmail.com</p>
-    <p>© 2026 الحوت لتأجير السيارات</p>
-  </div>
-</footer>
-
-</body>
-</html>
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <i class="fas fa-car"></i>
+                        <span>الحوت</span>
+                        <span class="logo-sub">لتأجير السيارات</span>
+                    </div>
+                    <p class="footer-description">
+                        شركة الحوت لتأجير السيارات في كركوك، نقدم أفضل خدمة تأجير سيارات مع أسعار تنافسية وخدمة عملاء متميزة على مدار الساعة.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="cars.html">السيارات</a></li>
+                        <li><a href="booking.html">الحجز السريع</a></li>
+                        <li><a href="about.html">عن الشركة</a></li>
+                        <li><a href="faq.html">الأسئلة الشائعة</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>فئات السيارات</h3>
+                    <ul class="footer-links">
+                        <li><a href="cars.html?category=family">سيارات عائلية</a></li>
+                        <li><a href="cars.html?category=sports">سيارات رياضية</a></li>
+                        <li><a href="cars.html?category=economic">سيارات اقتصادية</a></li>
+                        <li><a href="cars.html?category=luxury">سيارات فاخرة</a></li>
+                        <li><a href="cars.html?category=suv">دفع رباعي</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>معلومات التواصل</h3>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>كركوك، العراق - شارع المدينة</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+964 771 322 5471</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>info@alhoot-rental.com</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            <span>مفتوح 24/7</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+ 
