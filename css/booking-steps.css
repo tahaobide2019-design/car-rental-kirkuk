@@ -1,43 +1,206 @@
+/* STEP CARDS */
 .step-card {
   display: none;
-  background: #fff;
-  border-radius: 16px;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 35px;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+  background: var(--card-bg);
+  border-radius: 20px;
+  max-width: 950px;
+  margin: 50px auto;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .step-card.active {
   display: block;
+  animation: fadeInUp 0.6s ease;
 }
 
+/* STEPS BAR */
 .steps-bar {
   display: flex;
   justify-content: center;
-  gap: 25px;
-  margin: 30px 0;
+  gap: 30px;
+  margin-top: 60px;
 }
 
 .step {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: #D1D5DB;
   color: #fff;
   text-align: center;
   font-weight: bold;
-  padding-top: 10px;
-  transition: all 0.3s;
+  padding-top: 12px;
+  font-size: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s ease;
 }
 
 .step.active {
-  background: #0E1A2B;
+  background: var(--primary);
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px var(--shadow);
 }
 
 .step span {
   display: block;
-  font-size: 12px;
-  margin-top: 4px;
-  font-weight: 400;
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* PROGRESS LINE */
+.steps-bar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 4px;
+  background: #D1D5DB;
+  z-index: -1;
+  border-radius: 2px;
+}
+
+.step.active ~ .step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: var(--primary);
+  z-index: -1;
+  border-radius: 2px;
+}
+
+/* ADDON CHECKBOX */
+.addon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  margin: 15px 0;
+  padding: 12px 20px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.addon input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+
+.addon:hover {
+  background: #EEF2F6;
+}
+
+/* INPUTS & UPLOAD */
+input[type="text"], input[type="tel"], input[type="file"] {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  border: 1px solid #D1D5DB;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+input[type="text"]:focus, input[type="tel"]:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 8px rgba(14,26,43,0.2);
+}
+
+/* NEXT / PREV BUTTONS */
+.btn-primary, .btn-secondary {
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 10px 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #1F3B5F);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px var(--shadow);
+}
+
+.btn-secondary {
+  background: #E5E7EB;
+  color: var(--primary);
+}
+
+.btn-secondary:hover {
+  background: #D1D5DB;
+}
+
+/* SUMMARY BOX */
+.summary-box {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+  padding: 20px;
+  background: #F7F9FC;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px var(--shadow);
+}
+
+.summary-box img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.summary-box div p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.summary-box div .total {
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .step-card {
+    padding: 30px 20px;
+  }
+
+  .steps-bar {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .summary-box {
+    flex-direction: column;
+    align-items: center;
+  }
 }
