@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحجز | الحوت</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<title>الحوت - الحجز</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/booking-steps.css">
-
+<script src="js/booking.js" defer></script>
 </head>
 <body>
 
@@ -17,86 +16,99 @@
   <nav>
     <a href="index.html">الرئيسية</a>
     <a href="cars.html">السيارات</a>
+    <a href="about.html">عن الشركة</a>
+    <a href="booking.html" class="active">الحجز</a>
+    <a href="contact.html">تواصل معنا</a>
   </nav>
 </header>
 
-<!-- Progress -->
-<div class="steps-bar">
-  <div class="step active">1<br><span>السيارة</span></div>
-  <div class="step">2<br><span>الخدمات</span></div>
-  <div class="step">3<br><span>البيانات</span></div>
-</div>
+<!-- ================= HERO ================= -->
+<section class="page-hero small">
+  <div class="overlay"></div>
+  <h1>حجز سيارتك الآن</h1>
+</section>
 
-<!-- Step 1 -->
-<section class="step-card active">
-  <h2>السيارة المختارة</h2>
-  <div class="summary-box">
-    <img src="images/camry.jpg">
-    <div>
-      <h3>Toyota Camry 2023</h3>
-      <p>عائلية • أوتوماتيك • بنزين</p>
-      <strong>70$ / يوم</strong>
+<!-- ================= STEPS BAR ================= -->
+<section class="steps-bar">
+  <div class="step active" data-step="1">1<span>اختر السيارة</span></div>
+  <div class="step" data-step="2">2<span>بياناتك والخدمات</span></div>
+  <div class="step" data-step="3">3<span>تأكيد الحجز</span></div>
+</section>
+
+<!-- ================= STEP 1 ================= -->
+<div class="step-card active" data-step="1">
+  <h2>اختر السيارة المناسبة</h2>
+  <div class="cars-grid">
+    <div class="car-card">
+      <img src="images/car1.jpg" alt="Toyota Camry">
+      <div class="badge">فاخرة</div>
+      <div class="content">
+        <h3>Toyota Camry 2023</h3>
+        <ul>
+          <li>ناقل: أوتوماتيك</li>
+          <li>سعة: 5 ركاب</li>
+          <li>الوقود: بنزين</li>
+        </ul>
+        <div class="price">120$/اليوم</div>
+        <input type="radio" name="selected-car" value="Toyota Camry 2023">
+      </div>
+    </div>
+
+    <div class="car-card">
+      <img src="images/car2.jpg" alt="BMW X5">
+      <div class="badge">SUV</div>
+      <div class="content">
+        <h3>BMW X5 2022</h3>
+        <ul>
+          <li>ناقل: أوتوماتيك</li>
+          <li>سعة: 5 ركاب</li>
+          <li>الوقود: ديزل</li>
+        </ul>
+        <div class="price">250$/اليوم</div>
+        <input type="radio" name="selected-car" value="BMW X5 2022">
+      </div>
     </div>
   </div>
-  <button class="btn-primary next">التالي</button>
-</section>
+  <button class="btn-primary next-step">التالي</button>
+</div>
 
-<!-- Step 2 -->
-<section class="step-card">
-  <h2>الخدمات الإضافية</h2>
+<!-- ================= STEP 2 ================= -->
+<div class="step-card" data-step="2">
+  <h2>الخدمات الإضافية والمعلومات الشخصية</h2>
 
-  <label class="addon">
-    <input type="checkbox" data-price="15"> 🚗 توصيل السيارة (+15$)
-  </label>
+  <h3>الخدمات الإضافية</h3>
+  <label class="addon"><input type="checkbox" name="addon" value="GPS"> نظام ملاحة GPS</label>
+  <label class="addon"><input type="checkbox" name="addon" value="ChildSeat"> كرسي أطفال</label>
+  <label class="addon"><input type="checkbox" name="addon" value="Driver"> سائق خاص</label>
+  <label class="addon"><input type="checkbox" name="addon" value="Delivery"> توصيل السيارة</label>
 
-  <label class="addon">
-    <input type="checkbox" data-price="10"> 👶 كرسي أطفال (+10$)
-  </label>
+  <h3>معلوماتك الشخصية</h3>
+  <input type="text" placeholder="الاسم الكامل" name="fullName" required>
+  <input type="tel" placeholder="رقم الهاتف" name="phone" required>
+  <label>صورة الهوية أو جواز السفر / رخصة القيادة</label>
+  <input type="file" name="documents" class="upload">
 
-  <label class="addon">
-    <input type="checkbox" data-price="8"> 📍 GPS (+8$)
-  </label>
+  <button class="btn-secondary prev-step">السابق</button>
+  <button class="btn-primary next-step">التالي</button>
+</div>
 
-  <label class="addon">
-    <input type="checkbox" data-price="50"> 👨‍✈️ سائق خاص (+50$)
-  </label>
-
-  <div class="total">الإجمالي: <span id="total">70</span>$</div>
-
-  <button class="btn-secondary back">رجوع</button>
-  <button class="btn-primary next">التالي</button>
-</section>
-
-<!-- Step 3 -->
-<section class="step-card">
-  <h2>بيانات الزبون</h2>
-
-  <input type="text" placeholder="الاسم الكامل">
-  <input type="tel" placeholder="رقم الهاتف">
-
-  <label class="upload">
-    📄 رفع الهوية / الجواز
-    <input type="file">
-  </label>
-
-  <label class="upload">
-    🚘 رخصة القيادة
-    <input type="file">
-  </label>
-
-  <input type="datetime-local">
-  <input type="datetime-local">
-
-  <p class="note">💰 الدفع نقدًا عند الاستلام</p>
-
-  <button class="btn-secondary back">رجوع</button>
+<!-- ================= STEP 3 ================= -->
+<div class="step-card" data-step="3">
+  <h2>تأكيد الحجز</h2>
+  <p>تأكد من بياناتك قبل الإرسال:</p>
+  <div class="summary-box">
+    <img src="images/car1.jpg" alt="Selected Car">
+    <div>
+      <p><strong>السيارة المختارة:</strong> <span id="summary-car">---</span></p>
+      <p><strong>الخدمات الإضافية:</strong> <span id="summary-addons">---</span></p>
+      <p><strong>الاسم:</strong> <span id="summary-name">---</span></p>
+      <p><strong>رقم الهاتف:</strong> <span id="summary-phone">---</span></p>
+      <p class="total"><strong>السعر الإجمالي:</strong> <span id="summary-price">---</span></p>
+    </div>
+  </div>
+  <button class="btn-secondary prev-step">السابق</button>
   <a href="confirmation.html" class="btn-primary">تأكيد الحجز</a>
-</section>
+</div>
 
-<footer>
-  © 2026 الحوت
-</footer>
-
-<script src="js/booking.js"></script>
 </body>
 </html>
