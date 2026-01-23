@@ -204,3 +204,68 @@ input[type="text"]:focus, input[type="tel"]:focus {
     align-items: center;
   }
 }
+/* GRID للخدمات الإضافية */
+.addons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.addon {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  background: #F8FAFC;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.addon:hover {
+  background: #EEF2F6;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.addon input[type="checkbox"] {
+  margin-top: 4px;
+  width: 22px;
+  height: 22px;
+}
+
+.addon-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #0E1A2B;
+}
+
+.addon-content p {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* بيانات المستخدم */
+.user-info input {
+  margin-bottom: 18px;
+}
+
+/* تواريخ الاستلام والإرجاع */
+.date-time input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #D1D5DB;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+/* أزرار */
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
