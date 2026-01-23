@@ -3,48 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحوت - تأجير سيارات فاخر</title>
+<title>الحوت - تأجير سيارات فاخرة</title>
 
-<!-- خطوط عربية -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-
+<!-- خطوط -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- ستايل رئيسي -->
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/booking-steps.css">
 
 </head>
 <body>
 
+<!-- ================= HEADER ================= -->
 <header class="premium-header">
-  <div class="logo">الحوت</div>
+  <div class="logo">🐋 الحوت</div>
   <nav>
-    <a href="index.html">الرئيسية</a>
+    <a href="index.html" class="active">الرئيسية</a>
     <a href="cars.html">السيارات</a>
     <a href="about.html">عن الشركة</a>
-    <a href="booking.html" class="btn-primary">احجز الآن</a>
+    <a href="booking.html">الحجز</a>
+    <a href="contact.html">تواصل معنا</a>
   </nav>
 </header>
 
-<!-- Hero Section Premium -->
+<!-- ================= HERO ================= -->
 <section class="hero-premium">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <h1>رحلتك تبدأ مع الحوت</h1>
-    <p>أفضل أسطول سيارات للإيجار في العراق، مع خيارات عائلية، فاخرة ورياضية.</p>
-    <a href="cars.html" class="btn-primary">استعرض السيارات</a>
+    <h1>تأجير سيارات فاخرة بسهولة وبأمان</h1>
+    <p>اختَر سيارتك، أضف الخدمات الإضافية، وحجزك جاهز في دقائق</p>
+    <a href="cars.html" class="btn-primary">استعرض السيارات الآن</a>
   </div>
 </section>
 
-<!-- سيارات مميزة -->
-<section class="featured-cars">
-  <h2>أشهر السيارات</h2>
-  <div class="cars-container" id="featured-cars"></div>
+<!-- ================= SEARCH FILTER ================= -->
+<section class="filters">
+  <select>
+    <option value="">نوع السيارة</option>
+    <option value="family">عائلية</option>
+    <option value="sport">رياضية</option>
+    <option value="economy">اقتصادية</option>
+    <option value="luxury">فاخرة</option>
+    <option value="suv">SUV / دفع رباعي</option>
+    <option value="commercial">تجارية</option>
+  </select>
+
+  <select>
+    <option value="">عدد الركاب</option>
+    <option value="2">2</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="7">7+</option>
+  </select>
+
+  <select>
+    <option value="">ناقل الحركة</option>
+    <option value="auto">أوتوماتيك</option>
+    <option value="manual">عادي</option>
+  </select>
+
+  <select>
+    <option value="">الوقود</option>
+    <option value="petrol">بنزين</option>
+    <option value="diesel">ديزل</option>
+    <option value="hybrid">هايبرد</option>
+  </select>
+
+  <select>
+    <option value="">السعر اليومي</option>
+    <option value="50-100">50$ - 100$</option>
+    <option value="101-200">101$ - 200$</option>
+    <option value="201-400">201$ - 400$</option>
+    <option value="400+">400$+</option>
+  </select>
+
+  <a href="cars.html" class="btn-primary">بحث</a>
 </section>
 
-<!-- Footer -->
+<!-- ================= FEATURED CARS ================= -->
+<section class="featured-cars">
+  <h2 style="text-align:center; color:#0E1A2B; margin:40px 0;">أكثر السيارات طلبًا</h2>
+  <div class="cars-grid">
+    <div class="car-card">
+      <img src="images/car1.jpg" alt="Toyota Camry">
+      <div class="badge">فاخرة</div>
+      <div class="content">
+        <h3>Toyota Camry 2023</h3>
+        <ul>
+          <li>ناقل: أوتوماتيك</li>
+          <li>سعة: 5 ركاب</li>
+          <li>الوقود: بنزين</li>
+        </ul>
+        <div class="price">120$/اليوم</div>
+        <a href="car-details.html">احجز الآن</a>
+      </div>
+    </div>
+
+    <div class="car-card">
+      <img src="images/car2.jpg" alt="BMW X5">
+      <div class="badge">SUV</div>
+      <div class="content">
+        <h3>BMW X5 2022</h3>
+        <ul>
+          <li>ناقل: أوتوماتيك</li>
+          <li>سعة: 5 ركاب</li>
+          <li>الوقود: ديزل</li>
+        </ul>
+        <div class="price">250$/اليوم</div>
+        <a href="car-details.html">احجز الآن</a>
+      </div>
+    </div>
+
+    <div class="car-card">
+      <img src="images/car3.jpg" alt="Honda Civic">
+      <div class="badge">اقتصادية</div>
+      <div class="content">
+        <h3>Honda Civic 2021</h3>
+        <ul>
+          <li>ناقل: أوتوماتيك</li>
+          <li>سعة: 4 ركاب</li>
+          <li>الوقود: بنزين</li>
+        </ul>
+        <div class="price">80$/اليوم</div>
+        <a href="car-details.html">احجز الآن</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY CHOOSE US ================= -->
+<section class="why-us" style="padding:50px 20px; background:#E5E7EB; text-align:center;">
+  <h2 style="color:#0E1A2B; margin-bottom:25px;">لماذا تختار الحوت؟</h2>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+    <div style="flex:1 1 250px; background:#fff; border-radius:16px; padding:25px; box-shadow:0 12px 35px rgba(0,0,0,0.15);">
+      <h3 style="color:#0E1A2B;">أسطول متنوع</h3>
+      <p>أحدث السيارات العائلية، الرياضية والفاخرة متاحة للحجز بسهولة.</p>
+    </div>
+    <div style="flex:1 1 250px; background:#fff; border-radius:16px; padding:25px; box-shadow:0 12px 35px rgba(0,0,0,0.15);">
+      <h3 style="color:#0E1A2B;">خدمات إضافية</h3>
+      <p>كرسي أطفال، GPS، توصيل السيارة وحتى سائق خاص حسب رغبتك.</p>
+    </div>
+    <div style="flex:1 1 250px; background:#fff; border-radius:16px; padding:25px; box-shadow:0 12px 35px rgba(0,0,0,0.15);">
+      <h3 style="color:#0E1A2B;">سهولة الحجز</h3>
+      <p>نظام حجز ثلاثي المراحل واضح وبسيط مع رقم مرجعي لكل عملية حجز.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
 <footer>
-  جميع الحقوق محفوظة © الحوت
+  © 2026 الحوت – تجربة تأجير سيارات فاخرة
 </footer>
 
-<script src="js/main.js"></script>
 </body>
 </html>
