@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحوت - الحجز</title>
+<title>الحوت - حجز سيارة</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/booking-steps.css">
@@ -22,23 +22,22 @@
   </nav>
 </header>
 
-<!-- ================= HERO ================= -->
 <section class="page-hero small">
   <div class="overlay"></div>
-  <h1>حجز سيارتك الآن</h1>
+  <h1>احجز سيارتك بسهولة</h1>
 </section>
 
-<!-- ================= STEPS BAR ================= -->
-<section class="steps-bar">
+<!-- STEPS BAR -->
+<section class="steps-bar premium">
   <div class="step active" data-step="1">1<span>اختر السيارة</span></div>
   <div class="step" data-step="2">2<span>بياناتك والخدمات</span></div>
   <div class="step" data-step="3">3<span>تأكيد الحجز</span></div>
 </section>
 
-<!-- ================= STEP 1 ================= -->
+<!-- STEP 1: اختيار السيارة -->
 <div class="step-card active" data-step="1">
-  <h2>اختر السيارة المناسبة</h2>
-  <div class="cars-grid">
+  <h2>اختر السيارة</h2>
+  <div class="cars-grid premium">
     <div class="car-card">
       <img src="images/car1.jpg" alt="Toyota Camry">
       <div class="badge">فاخرة</div>
@@ -72,42 +71,65 @@
   <button class="btn-primary next-step">التالي</button>
 </div>
 
-<!-- ================= STEP 2 ================= -->
+<!-- STEP 2: البيانات والخدمات -->
 <div class="step-card" data-step="2">
-  <h2>الخدمات الإضافية والمعلومات الشخصية</h2>
+  <h2>خدمات إضافية وبياناتك</h2>
+  <div class="addons-grid">
+    <label class="addon">
+      <input type="checkbox" name="addon" value="GPS">
+      <div class="addon-content"><h3>GPS</h3><p>نظام ملاحة</p></div>
+    </label>
+    <label class="addon">
+      <input type="checkbox" name="addon" value="ChildSeat">
+      <div class="addon-content"><h3>كرسي أطفال</h3><p>راحة وأمان للأطفال</p></div>
+    </label>
+    <label class="addon">
+      <input type="checkbox" name="addon" value="Driver">
+      <div class="addon-content"><h3>سائق خاص</h3><p>استمتع بالرحلة بدون قيادة</p></div>
+    </label>
+    <label class="addon">
+      <input type="checkbox" name="addon" value="Delivery">
+      <div class="addon-content"><h3>توصيل السيارة</h3><p>توصيل إلى المنزل أو الفندق</p></div>
+    </label>
+  </div>
 
-  <h3>الخدمات الإضافية</h3>
-  <label class="addon"><input type="checkbox" name="addon" value="GPS"> نظام ملاحة GPS</label>
-  <label class="addon"><input type="checkbox" name="addon" value="ChildSeat"> كرسي أطفال</label>
-  <label class="addon"><input type="checkbox" name="addon" value="Driver"> سائق خاص</label>
-  <label class="addon"><input type="checkbox" name="addon" value="Delivery"> توصيل السيارة</label>
+  <div class="user-info">
+    <input type="text" placeholder="الاسم الكامل" name="fullName" required>
+    <input type="tel" placeholder="رقم الهاتف" name="phone" required>
+    <label style="font-weight:600;">رفع المستندات</label>
+    <input type="file" name="documents" class="upload" accept="image/*">
+  </div>
 
-  <h3>معلوماتك الشخصية</h3>
-  <input type="text" placeholder="الاسم الكامل" name="fullName" required>
-  <input type="tel" placeholder="رقم الهاتف" name="phone" required>
-  <label>صورة الهوية أو جواز السفر / رخصة القيادة</label>
-  <input type="file" name="documents" class="upload">
+  <div class="date-time">
+    <label>تاريخ ووقت الاستلام</label>
+    <input type="datetime-local" name="pickup" required>
+    <label>تاريخ ووقت الإرجاع</label>
+    <input type="datetime-local" name="return" required>
+  </div>
 
-  <button class="btn-secondary prev-step">السابق</button>
-  <button class="btn-primary next-step">التالي</button>
+  <div class="buttons">
+    <button class="btn-secondary prev-step">السابق</button>
+    <button class="btn-primary next-step">التالي</button>
+  </div>
 </div>
 
-<!-- ================= STEP 3 ================= -->
+<!-- STEP 3: التأكيد -->
 <div class="step-card" data-step="3">
   <h2>تأكيد الحجز</h2>
-  <p>تأكد من بياناتك قبل الإرسال:</p>
-  <div class="summary-box">
+  <div class="summary-box premium">
     <img src="images/car1.jpg" alt="Selected Car">
     <div>
-      <p><strong>السيارة المختارة:</strong> <span id="summary-car">---</span></p>
-      <p><strong>الخدمات الإضافية:</strong> <span id="summary-addons">---</span></p>
+      <p><strong>السيارة:</strong> <span id="summary-car">---</span></p>
+      <p><strong>الخدمات:</strong> <span id="summary-addons">---</span></p>
       <p><strong>الاسم:</strong> <span id="summary-name">---</span></p>
-      <p><strong>رقم الهاتف:</strong> <span id="summary-phone">---</span></p>
+      <p><strong>الهاتف:</strong> <span id="summary-phone">---</span></p>
       <p class="total"><strong>السعر الإجمالي:</strong> <span id="summary-price">---</span></p>
     </div>
   </div>
-  <button class="btn-secondary prev-step">السابق</button>
-  <a href="confirmation.html" class="btn-primary">تأكيد الحجز</a>
+  <div class="buttons">
+    <button class="btn-secondary prev-step">السابق</button>
+    <a href="confirmation.html" class="btn-primary">تأكيد الحجز</a>
+  </div>
 </div>
 
 </body>
