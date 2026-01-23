@@ -1,41 +1,46 @@
-/* ============ العام ============ */
+/* خطوط عامة */
 body {
-  font-family: 'Tajawal', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f6f8;
+  font-family: 'Cairo', sans-serif;
+  background: #f0f0f0;
   color: #333;
+  line-height: 1.6;
 }
 
+/* رأس الموقع */
 header {
-  background-color: #0b3d91; /* أزرق الحوت */
+  background: #0b3d91;
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-
 header .logo {
   font-size: 24px;
   font-weight: bold;
+  color: #f5c518;
 }
-
 header nav a {
   color: #fff;
-  margin-left: 20px;
+  margin-left: 25px;
   text-decoration: none;
   font-weight: 500;
+  transition: 0.3s;
 }
-
 header nav a:hover {
-  color: #ffd700; /* ذهبي */
+  color: #f5c518;
 }
 
-/* ============ الهيرو ============ */
+/* Hero Section */
 .hero {
-  background: url('../images/hero.jpg') no-repeat center center/cover;
-  height: 70vh;
+  background: url('../images/hero.jpg') center/cover no-repeat;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,107 +48,110 @@ header nav a:hover {
   color: #fff;
   text-align: center;
 }
-
 .hero h1 {
   font-size: 48px;
-  margin: 0 0 15px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 }
-
 .hero p {
   font-size: 20px;
   margin-bottom: 20px;
 }
-
 .hero .btn {
-  background-color: #ffd700;
-  color: #0b3d91;
-  padding: 12px 25px;
-  border: none;
+  background: linear-gradient(45deg, #0b3d91, #f5c518);
+  padding: 12px 30px;
   border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
   text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: 0.4s;
 }
-
 .hero .btn:hover {
-  background-color: #e6c200;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }
 
-/* ============ السيارات المعروضة ============ */
+/* سيارات */
 .cars-container, .cars-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 25px;
   padding: 30px;
 }
 
 .car-card {
-  background-color: #fff;
+  background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 300px;
-  transition: transform 0.3s;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
 }
-
 .car-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
-
 .car-card img {
   width: 100%;
   height: 180px;
   object-fit: cover;
 }
-
 .car-card .info {
   padding: 15px;
 }
-
 .car-card .info h3 {
-  margin: 0 0 10px;
+  margin: 0;
+  font-size: 20px;
+  color: #0b3d91;
 }
-
 .car-card .info p {
-  font-size: 14px;
   margin: 5px 0;
 }
-
 .car-card .info a {
   display: inline-block;
   margin-top: 10px;
-  background-color: #0b3d91;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 5px;
   text-decoration: none;
+  color: #f5c518;
+  font-weight: bold;
+  transition: 0.3s;
 }
-
 .car-card .info a:hover {
-  background-color: #0a3573;
+  color: #0b3d91;
+  transform: scale(1.05);
 }
 
-/* ============ الفوتر ============ */
+/* الأزرار */
+button, input[type="submit"], .btn {
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+button:hover, input[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+/* Footer */
 footer {
-  background-color: #0b3d91;
-  color: #fff;
   text-align: center;
   padding: 20px 0;
+  background: #0b3d91;
+  color: #fff;
   margin-top: 50px;
 }
 
-/* ============ الاستجابة ============ */
-@media (max-width: 768px) {
+/* Responsive */
+@media(max-width:768px){
   header {
     flex-direction: column;
-    text-align: center;
+    padding: 15px 20px;
   }
-
   header nav a {
-    margin: 10px 0;
+    margin: 10px 10px 0 0;
   }
-
-  .cars-container, .cars-list {
-    justify-content: center;
+  .hero h1 {
+    font-size: 32px;
+  }
+  .hero p {
+    font-size: 16px;
   }
 }
