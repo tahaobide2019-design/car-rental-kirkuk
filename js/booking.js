@@ -1,36 +1,60 @@
+// js/booking.js
 let currentStep = 1;
+const carPriceDay = parseInt(new URLSearchParams(window.location.search).get('carPrice')) || 0;
 
-function showStep(step){
-    document.querySelectorAll('.step-content').forEach(s=>{
-        s.classList.remove('active');
-        if(s.dataset.step == step) s.classList.add('active');
+document.addEventListener('DOMContentLoaded', () => {
+    updatePrice();
+    
+    // مستمعات التغيير لحساب السعر فوراً
+    document.querySelectorAll('.extra-service, #dateStart, #dateEnd').forEach(el => {
+        el.addEventListener('change', updatePrice);
     });
-    document.querySelectorAll('.step').forEach(s=>{
-        s.classList.remove('active');
-        if(s.dataset.step <= step) s.classList.add('active');
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if(currentStep < 3) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateUI();
+        } else {
+            processBooking(); // من ملف whatsapp.js
+        }
     });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        currentStep--;
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        updateUI();
+    });
+});
+
+function updatePrice() {
+    const start = new Date(document.getElementById('dateStart').value);
+    const end = new Date(document.getElementById('dateEnd').value);
+    
+    let days = 1;
+    if (start && end && end > start) {
+        const diff = end - start;
+        days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
+    let extraTotal = 0;
+    document.querySelectorAll('.extra-service:checked').forEach(s => {
+        extraTotal += parseInt(s.value);
+    });
+
+    const total = (carPriceDay * days) + extraTotal;
+    document.getElementById('totalDisplay').innerText = `${total}$`;
 }
 
-function nextStep(){
-    if(currentStep < 3) currentStep++;
-    showStep(currentStep);
-}
-
-function prevStep(){
-    if(currentStep > 1) currentStep--;
-    showStep(currentStep);
-}
-
-function selectCar(card){
-    document.querySelectorAll('.car-card').forEach(c=>c.classList.remove('selected'));
-    card.classList.add('selected');
-}
-
-function toggleAddon(addon){
-    addon.classList.toggle('selected');
-}
-
-function finishBooking(){
-    alert('تم حفظ الحجز! سيتم توجيهك لصفحة التأكيد.');
-    window.location.href = 'confirmation.html';
+function updateUI() {
+    document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+    document.getElementById('nextBtn').innerText = currentStep === 3 ? 'إرسال عبر الواتساب' : 'التالي';
+    
+    // تحديث الدوائر والخط
+    for(let i=1; i<=3; i++) {
+        document.getElementById(`c${i}`).classList.toggle('active', i <= currentStep);
+    }
+    document.getElementById('line-fill').style.width = ((currentStep-1) / 2 * 100) + '%';
 }
