@@ -1,85 +1,63 @@
-let currentStep = 1;
-const basePrice = 180;
-let extras = 0;
+// تشغيل الكود بمجرد تحميل الصفحة
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const serviceType = params.get('type');
+    const bookingDate = params.get('date');
+    const vehicle = params.get('vehicle');
 
-// التنقل بين المراحل
-function goTo(step) {
-    // إخفاء الكل وإظهار الهدف
-    document.querySelectorAll('.booking-stage').forEach(s => s.classList.remove('active'));
-    document.getElementById(`stage${step}`).classList.add('active');
-    
-    // تحديث شريط التقدم
-    document.querySelectorAll('.step-item').forEach((item, idx) => {
-        if (idx + 1 <= step) item.classList.add('active');
-        else item.classList.remove('active');
-    });
-    
-    currentStep = step;
-}
-
-// حساب التكاليف
-function calc() {
-    extras = 0;
-    const checks = document.querySelectorAll('input[name="srv"]:checked');
-    checks.forEach(c => {
-        if (c.value === "سائق") extras += 50;
-        if (c.value === "توصيل") extras += 20;
-    });
-    
-    document.getElementById('extraCost').innerText = `$${extras}`;
-    document.getElementById('totalCost').innerText = `$${basePrice + extras}`;
-}
-
-// جلب الموقع الجغرافي GPS
-function fetchLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                document.getElementById('coords').value = `${lat},${lon}`;
-                alert("✅ تم التقاط موقعك الجغرافي بنجاح!");
-            },
-            (err) => {
-                alert("❌ فشل تحديد الموقع، يرجى تفعيل الـ GPS أو كتابة العنوان يدوياً.");
-            }
-        );
-    } else {
-        alert("متصفحك لا يدعم تحديد الموقع.");
+    // تحديث التاريخ في واجهة الحجز
+    if (bookingDate) {
+        document.getElementById('display-booking-date').innerText = bookingDate;
+        // ملئ حقل التاريخ المخفي في النموذج
+        if(document.getElementById('pTime')) document.getElementById('pTime').value = bookingDate + "T09:00";
     }
-}
 
-// إرسال البيانات للواتساب
+    // معالجة نوع الخدمة في ملخص الحساب
+    const label = document.getElementById('display-service-type');
+    const total = document.getElementById('totalCost');
+
+    if (serviceType === 'training') {
+        label.innerText = "تعليم قيادة (تدريب)";
+        total.innerText = "$25"; // سعر جلسة التدريب
+        alert("🎓 لقد اخترت خدمة التدريب، سيتم توجيهك لبيانات التواصل والموقع.");
+        goTo(3); // الانتقال فوراً للمرحلة الثالثة (الموقع والبيانات)
+    } 
+    else if (serviceType === 'cargo') {
+        label.innerText = `سيارة حمل (${vehicle})`;
+        total.innerText = (vehicle === 'ستوتة') ? "$15" : "$45";
+        alert("🚛 لقد اخترت خدمة النقل، سيتم توجيهك لبيانات الموقع.");
+        goTo(3); // توجيه مباشر للموقع
+    }
+};
+
+// وظيفة إرسال الواتساب (المعدلة لتشمل الأقسام الجديدة)
 function sendToWhatsapp() {
+    const sType = document.getElementById('display-service-type').innerText;
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    const date = document.getElementById('display-booking-date').innerText;
     const coords = document.getElementById('coords').value;
-    const pTime = document.getElementById('pTime').value;
-    const rTime = document.getElementById('rTime').value;
+    const total = document.getElementById('totalCost').innerText;
 
     if (!name || !phone || !address) {
-        alert("لطفاً، أكمل بياناتك وعنوانك أولاً.");
+        alert("يرجى إكمال الاسم، الهاتف، والموقع.");
         return;
     }
 
-    // بناء رابط الخريطة إذا توفرت الإحداثيات
-    const mapLink = coords ? `https://www.google.com/maps?q=${coords}` : "لم يتم التحديد (العنوان نصي)";
+    const mapLink = coords ? `https://www.google.com/maps?q=${coords}` : "مكتوب يدوياً";
 
-    const message = `*طلب حجز جديد - شركة الحوت* %0A` +
+    const message = `*طلب حجز - الحوت لخدمات النقل*%0A` +
                     `----------------------------%0A` +
+                    `📦 *نوع الخدمة:* ${sType}%0A` +
                     `👤 *العميل:* ${name}%0A` +
                     `📞 *الهاتف:* ${phone}%0A` +
-                    `📍 *العنوان:* ${address}%0A` +
-                    `🗺️ *موقع GPS:* ${mapLink}%0A` +
+                    `📅 *التاريخ:* ${date}%0A` +
+                    `📍 *الموقع:* ${address}%0A` +
+                    `🗺️ *رابط GPS:* ${mapLink}%0A` +
+                    `💰 *السعر:* ${total}%0A` +
                     `----------------------------%0A` +
-                    `🚗 *السيارة:* BMW M4 Competition%0A` +
-                    `📅 *الاستلام:* ${pTime}%0A` +
-                    `📅 *الإرجاع:* ${rTime}%0A` +
-                    `💰 *الإجمالي:* ${basePrice + extras}$%0A` +
-                    `----------------------------%0A` +
-                    `_يرجى مراجعة المستندات عند التسليم_`;
+                    `_تم الإرسال من موقع الحوت_`;
 
-    const waURL = `https://wa.me/9647713225471?text=${message}`;
-    window.open(waURL, '_blank');
+    window.open(`https://wa.me/9647713225471?text=${message}`, '_blank');
 }
