@@ -2,44 +2,183 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تأجير السيارات - الحوت</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسطول الحوت | ابحث عن سيارتك</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .filter-sidebar { position: sticky; top: 100px; height: fit-content; }
+        .car-badge { background: linear-gradient(45deg, #002349, #004080); }
+        .price-tag { background: linear-gradient(135deg, #D4AF37 0%, #F9E27D 100%); }
+        .custom-checkbox:checked + div { border-color: #D4AF37; background-color: #fdfaf0; }
+    </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-50">
 
-    <nav class="bg-white p-4 sticky top-0 z-50 border-b border-slate-100">
+    <nav class="bg-whale text-white sticky top-0 z-50 shadow-lg p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">AL-HOOT <span class="text-slate-800">الحوت</span></div>
-            <div class="hidden md:flex gap-8 font-medium">
-                <a href="index.html" class="text-blue-600 border-b-2 border-blue-600 pb-1">الرئيسية</a>
-                <a href="#" class="text-slate-500 hover:text-blue-600">من نحن</a>
+            <a href="index.html" class="text-3xl font-black text-gold">الحـوت <i class="fas fa-fish"></i></a>
+            <div class="flex gap-6 font-bold">
+                <a href="index.html" class="hover:text-gold transition">الرئيسية</a>
+                <a href="cars.html" class="text-gold">السيارات</a>
             </div>
-            <button class="md:hidden text-slate-600">☰</button>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex flex-col lg:flex-row gap-6">
+    <header class="bg-whale py-12 text-center text-white border-b-4 border-gold">
+        <h1 class="text-4xl font-black mb-2">استكشف أسطولنا الملكي</h1>
+        <p class="text-gold">أكثر من 100 سيارة بانتظارك في كركوك</p>
+    </header>
+
+    <div class="container mx-auto px-4 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
             
-            <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl border border-slate-200 h-fit">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">⚙️ تصفية النتائج</h3>
-                <div class="space-y-4">
-                    <select id="car-type" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">نوع السيارة</option>
-                        <option value="luxury">فاخرة</option>
-                        <option value="economic">اقتصادية</option>
-                    </select>
-                    <input type="range" id="price-range" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                    <button onclick="applyFilters()" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold">تطبيق البحث</button>
+            <aside class="w-full lg:w-1/4 filter-sidebar">
+                <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-filter ml-2 text-gold"></i> تخصيص البحث
+                    </h3>
+                    
+                    <div class="mb-8">
+                        <label class="block font-bold mb-4 text-whale">تصنيف السيارة</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" class="hidden custom-checkbox" checked>
+                                <div class="w-full p-3 border-2 rounded-xl group-hover:border-gold transition flex justify-between">
+                                    <span>فخامة / VIP</span> <i class="fas fa-crown text-gold"></i>
+                                </div>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" class="hidden custom-checkbox">
+                                <div class="w-full p-3 border-2 rounded-xl group-hover:border-gold transition flex justify-between">
+                                    <span>دفع رباعي 4x4</span> <i class="fas fa-mountain text-gold"></i>
+                                </div>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" class="hidden custom-checkbox">
+                                <div class="w-full p-3 border-2 rounded-xl group-hover:border-gold transition flex justify-between">
+                                    <span>اقتصادية</span> <i class="fas fa-leaf text-gold"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block font-bold mb-2 text-whale">السعر اليومي (أقصى حد)</label>
+                        <input type="range" min="30" max="500" value="250" class="w-full accent-gold">
+                        <div class="flex justify-between text-sm mt-2 font-bold text-gray-500">
+                            <span>30$</span>
+                            <span class="text-whale">500$</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block font-bold mb-4 text-whale">ناقل الحركة</label>
+                        <select class="w-full p-4 bg-gray-50 border rounded-xl outline-none focus:border-gold">
+                            <option>الكل</option>
+                            <option>أوتوماتيك</option>
+                            <option>عادي (مانيوال)</option>
+                        </select>
+                    </div>
+
+                    <button class="w-full btn-gold py-4 rounded-xl font-black shadow-lg">تحديث النتائج</button>
                 </div>
             </aside>
 
-            <main class="w-full lg:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-6" id="all-cars-list">
-                </main>
+            <main class="w-full lg:w-3/4">
+                <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm">
+                    <p class="font-bold text-gray-600">تم العثور على <span class="text-whale">24 سيارة</span></p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm">ترتيب حسب:</span>
+                        <select class="bg-transparent font-bold outline-none">
+                            <option>الأحدث</option>
+                            <option>السعر: من الأقل</option>
+                            <option>السعر: من الأعلى</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 group transition-all hover:-translate-y-2">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute top-4 right-4 flex gap-2">
+                                <span class="price-tag text-whale px-4 py-1 rounded-full font-black shadow-md">$180 / يوم</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 class="text-white text-2xl font-black underline decoration-gold decoration-4">BMW M4 Competition</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-users text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">الركاب</span>
+                                    <span class="font-bold text-sm">4 مقاعد</span>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-gas-pump text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">الوقود</span>
+                                    <span class="font-bold text-sm">بنزين</span>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-tachometer-alt text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">الناقل</span>
+                                    <span class="font-bold text-sm">أوتوماتيك</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <a href="car-details.html" class="flex-1 text-center py-3 rounded-xl border-2 border-whale font-bold hover:bg-whale hover:text-white transition">التفاصيل</a>
+                                <a href="booking.html" class="flex-1 text-center py-3 rounded-xl btn-gold font-bold shadow-lg">احجز الآن</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 group transition-all hover:-translate-y-2">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute top-4 right-4">
+                                <span class="price-tag text-whale px-4 py-1 rounded-full font-black shadow-md">$250 / يوم</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 class="text-white text-2xl font-black underline decoration-gold decoration-4">Range Rover Vogue</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-suitcase-rolling text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">الحقائب</span>
+                                    <span class="font-bold text-sm">5 كبيرة</span>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-road text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">النوع</span>
+                                    <span class="font-bold text-sm">SUV 4x4</span>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <i class="fas fa-fan text-gold mb-1"></i>
+                                    <span class="block text-xs text-gray-400">تكييف</span>
+                                    <span class="font-bold text-sm">مركزي</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <a href="car-details.html" class="flex-1 text-center py-3 rounded-xl border-2 border-whale font-bold hover:bg-whale hover:text-white transition">التفاصيل</a>
+                                <a href="booking.html" class="flex-1 text-center py-3 rounded-xl btn-gold font-bold shadow-lg">احجز الآن</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <a href="https://wa.me/9647713225471" class="fixed bottom-10 left-10 bg-green-500 text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-all z-50">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
 </body>
 </html>
