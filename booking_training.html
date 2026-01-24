@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز كورس تعليم | شركة الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 py-10 px-4 font-['Tajawal'] text-right">
+    <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-2xl p-8 border-t-8 border-blue-900">
+        <h2 class="text-2xl font-black mb-6 text-blue-900 text-center"><i class="fas fa-graduation-cap text-gold"></i> حجز كورس تعليم سياقة</h2>
+        <div class="space-y-6">
+            <input type="text" id="tName" placeholder="الاسم الكامل للمتدرب" class="w-full p-4 border rounded-2xl outline-none focus:border-gold font-bold">
+            
+            <div class="bg-gray-50 p-4 rounded-2xl border">
+                <label class="block font-black mb-4 text-center">جنس المتدرب (لتحديد نوع المدرب)</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="flex items-center justify-center p-4 border-2 rounded-2xl cursor-pointer bg-white" id="mLab">
+                        <input type="radio" name="gender" value="ذكر" checked class="ml-2"> ذكر
+                    </label>
+                    <label class="flex items-center justify-center p-4 border-2 rounded-2xl cursor-pointer bg-white" id="fLab">
+                        <input type="radio" name="gender" value="أنثى" class="ml-2"> أنثى
+                    </label>
+                </div>
+            </div>
+
+            <input type="tel" id="tPhone" placeholder="رقم الهاتف" class="w-full p-4 border rounded-2xl outline-none focus:border-gold font-bold text-right">
+            <textarea id="tAddr" placeholder="العنوان السكني بالتفصيل" class="w-full p-4 border rounded-2xl h-24 outline-none focus:border-gold font-bold"></textarea>
+            
+            <div class="p-4 bg-yellow-50 rounded-2xl border-2 border-yellow-200 text-center">
+                <span class="text-gray-600 font-bold">سعر الكورس الكامل:</span>
+                <span class="text-2xl font-black text-blue-900 block">100,000 د.ع</span>
+            </div>
+
+            <button onclick="sendOrder()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black text-xl shadow-lg">إرسال الطلب (واتساب) <i class="fab fa-whatsapp ml-2"></i></button>
+        </div>
+    </div>
+    <script>
+        function sendOrder() {
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const msg = `*طلب كورس تعليم سياقة*%0A---------------------------%0A*المتدرب:* ${document.getElementById('tName').value}%0A*الجنس:* ${gender}%0A*الهاتف:* ${document.getElementById('tPhone').value}%0A*العنوان:* ${document.getElementById('tAddr').value}%0A*السعر:* 100,000 د.ع`;
+            window.open(`https://wa.me/9647713225471?text=${msg}`);
+        }
+    </script>
+</body>
+</html>
+
