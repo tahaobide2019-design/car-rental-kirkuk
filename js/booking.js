@@ -1,27 +1,49 @@
-// عند تحميل صفحة الحجز
 window.onload = function() {
+    // 1. قراءة البيانات من الرابط
     const params = new URLSearchParams(window.location.search);
-    const type = params.get('type');
-    const date = params.get('date');
+    const serviceType = params.get('type');
+    const bookingDate = params.get('date');
     const vehicle = params.get('vehicle');
     const price = params.get('price');
 
-    // 1. تحديث التاريخ والخدمة في الواجهة
-    if (date) document.getElementById('display-booking-date').innerText = date;
-    
-    const label = document.getElementById('display-service-type');
-    const total = document.getElementById('totalCost');
+    // 2. تحديث التاريخ والخدمة في ملخص الحساب
+    if (bookingDate) {
+        document.getElementById('display-booking-date').innerText = bookingDate;
+    }
 
-    // 2. معالجة القفز المباشر لبيانات الزبون
-    if (type === 'training') {
-        label.innerText = "كورس تدريب قيادة";
-        total.innerText = "100,000 د.ع";
-        if(typeof goTo === 'function') goTo(3); // القفز لخانة البيانات
-    } 
-    else if (type === 'cargo') {
-        label.innerText = `سيارة حمل (${vehicle})`;
-        total.innerText = parseInt(price).toLocaleString() + " د.ع";
-        if(typeof goTo === 'function') goTo(3); // القفز لخانة البيانات
+    const label = document.getElementById('display-service-type');
+    const totalDisplay = document.getElementById('totalCost');
+
+    // 3. التحقق من نوع الخدمة للقفز المباشر للخطوة الثالثة
+    if (serviceType === 'training' || serviceType === 'cargo') {
+        
+        // تحديث النصوص والأسعار
+        if (serviceType === 'training') {
+            label.innerText = "كورس تعليم قيادة";
+            totalDisplay.innerText = "100,000 د.ع";
+        } else {
+            label.innerText = `خدمة نقل (${vehicle})`;
+            totalDisplay.innerText = parseInt(price).toLocaleString() + " د.ع";
+        }
+
+        // --- الجزء السحري: القفز للخطوة الثالثة ---
+        
+        // إخفاء كل المراحل
+        document.querySelectorAll('.booking-stage').forEach(s => s.classList.remove('active'));
+        
+        // إظهار المرحلة الثالثة (بيانات الزبون والموقع)
+        const stage3 = document.getElementById('stage3') || document.getElementById('stage-3');
+        if (stage3) {
+            stage3.classList.add('active');
+            stage3.style.display = 'block'; // للتأكيد إذا كان هناك CSS يمنع الظهور
+        }
+
+        // تحديث شريط التقدم ليكون واصلاً للنقطة الثالثة
+        document.querySelectorAll('.step-item').forEach((item, idx) => {
+            if (idx <= 2) item.classList.add('active');
+        });
+
+        console.log("تم التوجيه التلقائي للمرحلة الثالثة بنجاح");
     }
 };
 
@@ -32,14 +54,14 @@ function fetchLocation() {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
             document.getElementById('coords').value = `${lat},${lon}`;
-            alert("✅ تم تحديد موقعك بدقة عبر الأقمار الصناعية.");
+            alert("✅ تم تحديد موقعك بنجاح!");
         }, () => {
-            alert("❌ يرجى تفعيل الـ GPS أو كتابة العنوان يدوياً.");
+            alert("❌ يرجى تفعيل الموقع يدوياً.");
         });
     }
 }
 
-// وظيفة إرسال الواتساب النهائية
+// إرسال الطلب للواتساب
 function sendToWhatsapp() {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
@@ -50,13 +72,13 @@ function sendToWhatsapp() {
     const coords = document.getElementById('coords').value;
 
     if (!name || !phone || !addr) {
-        alert("⚠️ فضلاً، نحتاج اسمك ورقمك وعنوانك لإتمام الطلب.");
+        alert("⚠️ يرجى ملء بياناتك وموقعك أولاً");
         return;
     }
 
-    const map = coords ? `https://maps.google.com/maps?q=${coords}` : "مكتوب يدوياً";
+    const map = coords ? `https://www.google.com/maps?q=${coords}` : "مكتوب يدوياً";
 
-    const msg = `*طلب حجز من موقع الحوت*%0A` +
+    const msg = `*طلب حجز - شركة الحوت*%0A` +
                 `----------------------------%0A` +
                 `📦 *الخدمة:* ${sType}%0A` +
                 `👤 *العميل:* ${name}%0A` +
@@ -66,7 +88,7 @@ function sendToWhatsapp() {
                 `📅 *التاريخ:* ${date}%0A` +
                 `💰 *المبلغ:* ${total}%0A` +
                 `----------------------------%0A` +
-                `_يرجى التواصل لتأكيد الموعد_`;
+                `_يرجى التواصل لتأكيد الحجز_`;
 
     window.open(`https://wa.me/9647713225471?text=${msg}`, '_blank');
 }
