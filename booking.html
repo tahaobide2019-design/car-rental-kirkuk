@@ -3,120 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز سيارتك - الحوت</title>
+    <title>خطوات الحجز - الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root { --primary-blue: #0A6BEF; --dark-blue: #002B5B; }
-        .hidden-step { display: none; }
-        .step-active { background: var(--primary-blue) !important; color: white !important; border-color: white !important; }
-        .progress-line { height: 2px; background: rgba(255,255,255,0.1); position: absolute; top: 50%; left: 0; right: 0; z-index: 0; }
-        .progress-fill { height: 100%; background: var(--primary-blue); width: 0%; transition: 0.4s; }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.5s ease; }
+        .step-circle { transition: 0.3s; border: 2px solid rgba(255,255,255,0.2); }
+        .step-circle.active { background: var(--primary-blue); border-color: white; transform: scale(1.1); }
+        .progress-bar-bg { height: 4px; background: rgba(255,255,255,0.1); position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); z-index: 0; }
+        .progress-bar-fill { height: 100%; background: var(--primary-blue); width: 0%; transition: 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#002B5B] text-white p-4 md:p-10">
+<body class="bg-[#002B5B] text-white min-h-screen flex flex-col">
 
-    <div class="max-w-4xl mx-auto bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl relative">
-        <div class="relative flex justify-between items-center mb-12 max-w-md mx-auto">
-            <div class="progress-line"><div class="progress-fill" id="p-fill"></div></div>
-            <div class="w-10 h-10 rounded-full border-2 border-white/20 bg-gray-800 flex items-center justify-center z-10 step-active" id="s1">1</div>
-            <div class="w-10 h-10 rounded-full border-2 border-white/20 bg-gray-800 flex items-center justify-center z-10" id="s2">2</div>
-            <div class="w-10 h-10 rounded-full border-2 border-white/20 bg-gray-800 flex items-center justify-center z-10" id="s3">3</div>
+    <nav class="p-6 border-b border-white/10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-[#0A6BEF]">AL-HOOT <span class="text-white">الحوت</span></div>
+            <a href="cars.html" class="text-sm hover:underline">إلغاء والعودة للسيارات</a>
         </div>
+    </nav>
 
-        <form id="bookingForm">
-            <div class="step-content" id="step1">
-                <h2 class="text-2xl font-bold mb-6 text-[#0A6BEF]">المرحلة الأولى: تخصيص طلبك</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="p-5 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5">
-                        <input type="checkbox" name="extra" value="50" class="w-5 h-5 accent-[#0A6BEF]">
-                        <div><p class="font-bold">سائق خاص</p><p class="text-xs text-gray-400">+50$ يومياً</p></div>
-                    </label>
-                    <label class="p-5 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5">
-                        <input type="checkbox" name="extra" value="15" class="w-5 h-5 accent-[#0A6BEF]">
-                        <div><p class="font-bold">توصيل للمطار</p><p class="text-xs text-gray-400">+15$ لمرة واحدة</p></div>
-                    </label>
-                    <label class="p-5 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5">
-                        <input type="checkbox" name="extra" value="10" class="w-5 h-5 accent-[#0A6BEF]">
-                        <div><p class="font-bold">كرسي أطفال</p><p class="text-xs text-gray-400">+10$ يومياً</p></div>
-                    </label>
-                    <label class="p-5 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5">
-                        <input type="checkbox" name="extra" value="5" class="w-5 h-5 accent-[#0A6BEF]">
-                        <div><p class="font-bold">نظام ملاحة GPS</p><p class="text-xs text-gray-400">+5$ يومياً</p></div>
-                    </label>
-                </div>
+    <div class="container mx-auto px-4 py-12 flex-grow">
+        <div class="max-w-3xl mx-auto bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl relative">
+            
+            <div class="relative flex justify-between items-center mb-12 px-4">
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+                <div class="step-circle active w-12 h-12 rounded-full flex items-center justify-center font-bold z-10 bg-[#002B5B]" id="dot1">1</div>
+                <div class="step-circle w-12 h-12 rounded-full flex items-center justify-center font-bold z-10 bg-[#002B5B]" id="dot2">2</div>
+                <div class="step-circle w-12 h-12 rounded-full flex items-center justify-center font-bold z-10 bg-[#002B5B]" id="dot3">3</div>
             </div>
 
-            <div class="step-content hidden-step" id="step2">
-                <h2 class="text-2xl font-bold mb-6 text-[#0A6BEF]">المرحلة الثانية: بيانات المستأجر</h2>
-                <div class="space-y-4">
-                    <input type="text" id="c-name" placeholder="الاسم الكامل كما في الهوية" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
-                    <input type="tel" id="c-phone" placeholder="رقم الهاتف (واتساب)" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+            <form id="bookingStepsForm">
+                
+                <div class="step-content active" id="step1">
+                    <h2 class="text-2xl font-bold mb-2">المرحلة الأولى</h2>
+                    <p class="text-gray-400 mb-8">اختر الخدمات الإضافية التي تناسبك</p>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 border border-dashed border-white/20 rounded-xl text-center">
-                            <p class="text-xs mb-2 text-gray-400">صورة الهوية / الجواز</p>
-                            <input type="file" id="id-file" class="text-xs">
-                        </div>
-                        <div class="p-4 border border-dashed border-white/20 rounded-xl text-center">
-                            <p class="text-xs mb-2 text-gray-400">صورة رخصة القيادة</p>
-                            <input type="file" id="lic-file" class="text-xs">
+                        <label class="p-4 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5 transition">
+                            <input type="checkbox" name="extra" value="سائق خاص" class="w-5 h-5 accent-[#0A6BEF]">
+                            <div><span class="block font-bold">سائق خاص</span><span class="text-xs text-[#0A6BEF]">+50$ يومياً</span></div>
+                        </label>
+                        <label class="p-4 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5 transition">
+                            <input type="checkbox" name="extra" value="توصيل للمطار" class="w-5 h-5 accent-[#0A6BEF]">
+                            <div><span class="block font-bold">توصيل للمطار</span><span class="text-xs text-[#0A6BEF]">+20$ لمرة واحدة</span></div>
+                        </label>
+                        <label class="p-4 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5 transition">
+                            <input type="checkbox" name="extra" value="كرسي أطفال" class="w-5 h-5 accent-[#0A6BEF]">
+                            <div><span class="block font-bold">كرسي أطفال</span><span class="text-xs text-[#0A6BEF]">+10$ يومياً</span></div>
+                        </label>
+                        <label class="p-4 border border-white/10 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/5 transition">
+                            <input type="checkbox" name="extra" value="GPS" class="w-5 h-5 accent-[#0A6BEF]">
+                            <div><span class="block font-bold">نظام ملاحة GPS</span><span class="text-xs text-[#0A6BEF]">+5$ يومياً</span></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="step-content" id="step2">
+                    <h2 class="text-2xl font-bold mb-2">المرحلة الثانية</h2>
+                    <p class="text-gray-400 mb-8">معلومات المستأجر والوثائق المطلوبة</p>
+                    
+                    <div class="space-y-4">
+                        <input type="text" id="cust-name" placeholder="الاسم الكامل" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+                        <input type="tel" id="cust-phone" placeholder="رقم الهاتف (واتساب)" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 border border-dashed border-white/20 rounded-xl text-center">
+                                <span class="text-xs text-gray-400 block mb-2">صورة الهوية / جواز السفر</span>
+                                <input type="file" class="text-xs w-full">
+                            </div>
+                            <div class="p-4 border border-dashed border-white/20 rounded-xl text-center">
+                                <span class="text-xs text-gray-400 block mb-2">صورة رخصة القيادة</span>
+                                <input type="file" class="text-xs w-full">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="step-content hidden-step" id="step3">
-                <h2 class="text-2xl font-bold mb-6 text-[#0A6BEF]">المرحلة الثالثة: تفاصيل التسليم</h2>
-                <div class="space-y-4">
-                    <input type="text" id="p-loc" placeholder="موقع التسليم (فندق، مطار، حي...)" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-xs text-gray-400">تاريخ الاستلام</label><input type="datetime-local" id="p-date" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl"></div>
-                        <div><label class="text-xs text-gray-400">تاريخ الإرجاع</label><input type="datetime-local" id="r-date" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl"></div>
+                <div class="step-content" id="step3">
+                    <h2 class="text-2xl font-bold mb-2">المرحلة الثالثة</h2>
+                    <p class="text-gray-400 mb-8">تحديد موقع وتوقيت الاستلام</p>
+                    
+                    <div class="space-y-4">
+                        <input type="text" id="cust-loc" placeholder="موقع التسليم (اسم الفندق أو المنطقة)" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-gray-400 block mb-1">تاريخ ووقت الاستلام</label>
+                                <input type="datetime-local" id="date-start" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 block mb-1">تاريخ ووقت الإرجاع</label>
+                                <input type="datetime-local" id="date-end" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
+                            </div>
+                        </div>
+                        <div class="p-4 bg-[#0A6BEF]/10 border border-[#0A6BEF]/30 rounded-xl text-center mt-6">
+                            <span class="text-sm font-bold block">طريقة الدفع: نقداً عند الاستلام فقط 💵</span>
+                        </div>
                     </div>
-                    <div class="bg-[#0A6BEF] p-4 rounded-xl text-center font-bold">الدفع: نقداً عند الاستلام فقط</div>
                 </div>
-            </div>
 
-            <div class="flex justify-between mt-10">
-                <button type="button" id="prevB" class="px-8 py-3 border border-white/20 rounded-full hidden">السابق</button>
-                <button type="button" id="nextB" class="px-8 py-3 bg-[#0A6BEF] font-bold rounded-full mr-auto">التالي</button>
-            </div>
-        </form>
+                <div class="flex justify-between mt-12">
+                    <button type="button" id="btnPrev" class="px-10 py-3 border border-white/20 rounded-full font-bold transition hover:bg-white/5 invisible">السابق</button>
+                    <button type="button" id="btnNext" class="px-10 py-3 bg-[#0A6BEF] text-white rounded-full font-bold transition hover:bg-blue-600 shadow-lg shadow-blue-500/20">التالي</button>
+                </div>
+
+            </form>
+        </div>
     </div>
 
     <script src="js/whatsapp.js"></script>
     <script>
-        let currentS = 1;
-        const totalS = 3;
+        let currentStep = 1;
+        const totalSteps = 3;
 
-        document.getElementById('nextB').addEventListener('click', () => {
-            if (currentS < totalS) {
-                document.getElementById(`step${currentS}`).classList.add('hidden-step');
-                currentS++;
-                document.getElementById(`step${currentS}`).classList.remove('hidden-step');
-                updateSteps();
+        const btnNext = document.getElementById('btnNext');
+        const btnPrev = document.getElementById('btnPrev');
+        const progressFill = document.getElementById('progressFill');
+
+        btnNext.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateUI();
             } else {
-                processBooking(); // من ملف whatsapp.js
+                // إرسال للواتساب عند المرحلة الأخيرة
+                processBooking();
             }
         });
 
-        document.getElementById('prevB').addEventListener('click', () => {
-            if (currentS > 1) {
-                document.getElementById(`step${currentS}`).classList.add('hidden-step');
-                currentS--;
-                document.getElementById(`step${currentS}`).classList.remove('hidden-step');
-                updateSteps();
+        btnPrev.addEventListener('click', () => {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateUI();
             }
         });
 
-        function updateSteps() {
-            for(let i=1; i<=3; i++) {
-                document.getElementById(`s${i}`).classList.toggle('step-active', i <= currentS);
+        function updateUI() {
+            // تحديث الدوائر
+            for(let i=1; i<=totalSteps; i++) {
+                const dot = document.getElementById(`dot${i}`);
+                if(i <= currentStep) dot.classList.add('active');
+                else dot.classList.remove('active');
             }
-            document.getElementById('p-fill').style.width = ((currentS - 1) / (totalS - 1)) * 100 + '%';
-            document.getElementById('prevB').style.display = currentS === 1 ? 'none' : 'block';
-            document.getElementById('nextB').innerText = currentS === 3 ? 'تأكيد عبر الواتساب' : 'التالي';
-            document.getElementById('nextB').classList.toggle('mr-auto', currentS === 1);
+
+            // تحديث شريط التقدم
+            progressFill.style.width = ((currentStep - 1) / (totalSteps - 1)) * 100 + '%';
+
+            // تحديث الأزرار
+            btnPrev.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            btnNext.innerText = currentStep === totalSteps ? 'تأكيد الحجز (واتساب)' : 'التالي';
         }
     </script>
 </body>
