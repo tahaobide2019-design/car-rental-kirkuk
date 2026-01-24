@@ -1,53 +1,51 @@
-let selectedCar = null;
-let totalPrice = 0;
+let currentStage = 1;
+const carPrice = 120; // ثابت كمثال
+let extrasTotal = 0;
 
-function goToPhase(phaseNum) {
-    document.querySelectorAll('.booking-phase').forEach(p => p.classList.add('hidden'));
-    document.getElementById('phase' + phaseNum).classList.remove('hidden');
-    
+function nextStage(stage) {
+    // إخفاء المرحلة الحالية
+    document.querySelectorAll('.booking-stage').forEach(s => s.classList.remove('active'));
     // تحديث شريط التقدم
-    document.querySelectorAll('.step').forEach((s, idx) => {
-        if(idx < phaseNum) s.classList.add('active');
+    document.querySelectorAll('.step-item').forEach((item, index) => {
+        if(index + 1 <= stage) item.classList.add('active');
+        else item.classList.remove('active');
     });
+    // إظهار المرحلة الجديدة
+    document.getElementById(`stage-${stage}`).classList.add('active');
+    currentStage = stage;
 }
 
-function selectCar(name, price) {
-    selectedCar = name;
-    totalPrice = price;
-    document.getElementById('total-price').innerText = totalPrice;
-    goToPhase(2);
-}
-
-function sendToWhatsApp() {
-    const name = document.getElementById('user-name').value;
-    const phone = document.getElementById('user-phone').value;
-    const companyPhone = "+9647713225471";
+function updateTotal() {
+    extrasTotal = 0;
+    const checkboxes = document.querySelectorAll('input[name="extra"]:checked');
+    checkboxes.forEach(cb => {
+        if(cb.value === 'delivery') extrasTotal += 20;
+        if(cb.value === 'driver') extrasTotal += 50;
+    });
     
-    const message = `طلب حجز من موقع الحوت 🐋%0A
----------------------------%0A
-الاسم: ${name}%0A
-الهاتف: ${phone}%0A
-السيارة: ${selectedCar}%0A
-الإجمالي: ${totalPrice} IQD%0A
-طريقة الدفع: نقداً عند الاستلام`;
-
-    window.open(`https://wa.me/${companyPhone}?text=${message}`, '_blank');
+    document.getElementById('summary-extras').innerText = `$${extrasTotal}`;
+    document.getElementById('total-price').innerText = `$${carPrice + extrasTotal}`;
 }
 
-// محاكاة بيانات السيارات
-const cars = [
-    {name: "رينج روفر (فاخرة)", price: 150000, img: "car1.jpg"},
-    {name: "تويوتا كورولا (اقتصادية)", price: 50000, img: "car2.jpg"}
-];
+function finalizeBooking() {
+    const name = document.getElementById('cust_name').value;
+    const phone = document.getElementById('cust_phone').value;
+    
+    if(!name || !phone) {
+        alert("يرجى ملء البيانات الشخصية أولاً");
+        return;
+    }
 
-// عرض السيارات عند التحميل
-const carList = document.getElementById('car-list');
-cars.forEach(car => {
-    carList.innerHTML += `
-        <div class="car-card">
-            <h3>${car.name}</h3>
-            <p>السعر اليومي: ${car.price} IQD</p>
-            <button onclick="selectCar('${car.name}', ${car.price})" class="btn-gold">احجز الآن</button>
-        </div>
-    `;
-});
+    const message = `*طلب حجز جديد من موقع الحوت*%0A` +
+                    `--------------------------%0A` +
+                    `*الاسم:* ${name}%0A` +
+                    `*الهاتف:* ${phone}%0A` +
+                    `*السيارة:* شيفروليه كورفيت 2024%0A` +
+                    `*الإضافات:* ${extrasTotal}$%0A` +
+                    `*الإجمالي النهائي:* ${carPrice + extrasTotal}$%0A` +
+                    `--------------------------%0A` +
+                    `يرجى تأكيد الحجز لاستلام المستندات.`;
+
+    const whatsappUrl = `https://wa.me/9647713225471?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+}
