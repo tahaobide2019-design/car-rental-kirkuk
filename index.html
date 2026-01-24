@@ -1,114 +1,116 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحوت - الحجز</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/booking-steps.css">
-<script src="js/booking.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحوت - تأجير سيارات كركوك</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header class="premium-header">
-  <div class="logo">🐋 الحوت</div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="cars.html">السيارات</a>
-    <a href="about.html">عن الشركة</a>
-    <a href="booking.html" class="active">الحجز</a>
-    <a href="contact.html">تواصل معنا</a>
-  </nav>
-</header>
+    <!-- ================= HEADER ================= -->
+    <header class="premium-header">
+        <div class="logo">الحوت</div>
+        <nav>
+            <a href="index.html" class="active">الرئيسية</a>
+            <a href="cars.html">السيارات</a>
+            <a href="booking.html">الحجز</a>
+            <a href="about.html">من نحن</a>
+            <a href="confirmation.html">تأكيد الحجز</a>
+        </nav>
+    </header>
 
-<!-- HERO -->
-<section class="page-hero small">
-  <div class="overlay"></div>
-  <h1>حجز سيارتك الآن</h1>
-</section>
+    <!-- ================= HERO ================= -->
+    <section class="page-hero">
+        <h1>تأجير سياراتك بأفضل الأسعار والراحة القصوى</h1>
+        <p>اختر سيارتك، أضف الخدمات، واستمتع برحلة مريحة</p>
+        <a href="cars.html" class="btn-primary">ابدأ الحجز الآن</a>
+    </section>
 
-<!-- STEPS BAR -->
-<section class="steps-bar">
-  <div class="step active" data-step="1">1<span>اختر السيارة</span></div>
-  <div class="step" data-step="2">2<span>بياناتك والخدمات</span></div>
-  <div class="step" data-step="3">3<span>تأكيد الحجز</span></div>
-</section>
+    <!-- ================= FEATURED CARS ================= -->
+    <section class="featured-cars" style="padding: 60px 20px;">
+        <h2 style="text-align:center; margin-bottom:40px; font-size:32px;">أبرز السيارات</h2>
+        <div class="cars-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px;">
+            
+            <!-- CAR CARD 1 -->
+            <div class="car-card">
+                <div class="badge">VIP</div>
+                <img src="images/car1.jpg" alt="سيارة عائلية">
+                <div class="content">
+                    <h3>تويوتا كامري</h3>
+                    <ul>
+                        <li>سعة: 5 ركاب</li>
+                        <li>ناقل حركة: أوتوماتيك</li>
+                        <li>وقود: بنزين</li>
+                    </ul>
+                    <div class="price">50$ / يوم</div>
+                </div>
+            </div>
 
-<!-- STEP 1 -->
-<div class="step-card active" data-step="1">
-  <h2>اختر السيارة المناسبة</h2>
-  <div class="cars-grid">
-    <div class="car-card">
-      <img src="images/2c8434cad73d5a8b2177918977a5dfbc (1).jpg" alt="Toyota Camry">
-      <div class="badge">فاخرة</div>
-      <div class="content">
-        <h3>Toyota Camry 2023</h3>
-        <ul>
-          <li>ناقل: أوتوماتيك</li>
-          <li>سعة: 5 ركاب</li>
-          <li>الوقود: بنزين</li>
-        </ul>
-        <div class="price">120$/اليوم</div>
-        <input type="radio" name="selected-car" value="Toyota Camry 2023">
-      </div>
-    </div>
+            <!-- CAR CARD 2 -->
+            <div class="car-card">
+                <div class="badge">جديد</div>
+                <img src="images/car2.jpg" alt="سيارة رياضية">
+                <div class="content">
+                    <h3>BMW X6</h3>
+                    <ul>
+                        <li>سعة: 5 ركاب</li>
+                        <li>ناقل حركة: أوتوماتيك</li>
+                        <li>وقود: هايبرد</li>
+                    </ul>
+                    <div class="price">120$ / يوم</div>
+                </div>
+            </div>
 
-    <div class="car-card">
-      <img src="images/2c8434cad73d5a8b2177918977a5dfbc (1).jpg" alt="BMW X5">
-      <div class="badge">SUV</div>
-      <div class="content">
-        <h3>BMW X5 2022</h3>
-        <ul>
-          <li>ناقل: أوتوماتيك</li>
-          <li>سعة: 5 ركاب</li>
-          <li>الوقود: ديزل</li>
-        </ul>
-        <div class="price">250$/اليوم</div>
-        <input type="radio" name="selected-car" value="BMW X5 2022">
-      </div>
-    </div>
-  </div>
-  <button class="btn-primary next-step">التالي</button>
-</div>
+            <!-- CAR CARD 3 -->
+            <div class="car-card">
+                <img src="images/car3.jpg" alt="سيارة دفع رباعي">
+                <div class="content">
+                    <h3>جيب رانجلر</h3>
+                    <ul>
+                        <li>سعة: 5 ركاب</li>
+                        <li>ناقل حركة: أوتوماتيك</li>
+                        <li>وقود: ديزل</li>
+                    </ul>
+                    <div class="price">90$ / يوم</div>
+                </div>
+            </div>
 
-<!-- STEP 2 -->
-<div class="step-card" data-step="2">
-  <h2>الخدمات الإضافية والمعلومات الشخصية</h2>
+        </div>
+    </section>
 
-  <h3>الخدمات الإضافية</h3>
-  <label class="addon"><input type="checkbox" name="addon" value="GPS"> نظام ملاحة GPS</label>
-  <label class="addon"><input type="checkbox" name="addon" value="ChildSeat"> كرسي أطفال</label>
-  <label class="addon"><input type="checkbox" name="addon" value="Driver"> سائق خاص</label>
-  <label class="addon"><input type="checkbox" name="addon" value="Delivery"> توصيل السيارة</label>
+    <!-- ================= STEPS PREVIEW ================= -->
+    <section class="booking-steps-preview" style="padding:60px 20px; background:#F1F5F9;">
+        <h2 style="text-align:center; margin-bottom:40px; font-size:32px;">خطوات الحجز</h2>
+        <div class="steps-bar">
+            <div class="step active">
+                1
+                <span>اختيار السيارة</span>
+            </div>
+            <div class="step">
+                2
+                <span>إضافة الخدمات</span>
+            </div>
+            <div class="step">
+                3
+                <span>بياناتك</span>
+            </div>
+        </div>
+    </section>
 
-  <h3>معلوماتك الشخصية</h3>
-  <input type="text" placeholder="الاسم الكامل" name="fullName" required>
-  <input type="tel" placeholder="رقم الهاتف" name="phone" required>
-  <label>صورة الهوية أو جواز السفر / رخصة القيادة</label>
-  <input type="file" name="documents" class="upload">
+    <!-- ================= CTA ================= -->
+    <section class="cta" style="text-align:center; padding:60px 20px;">
+        <h2>جاهز للبدء برحلتك؟</h2>
+        <p>احجز سيارتك الآن وتمتع براحة لا مثيل لها</p>
+        <a href="booking.html" class="btn-primary">ابدأ الحجز الآن</a>
+    </section>
 
-  <button class="btn-secondary prev-step">السابق</button>
-  <button class="btn-primary next-step">التالي</button>
-</div>
+    <!-- ================= FOOTER ================= -->
+    <footer style="background: var(--primary); color:#fff; padding:30px 20px; text-align:center;">
+        <p>&copy; 2026 شركة الحوت لتأجير السيارات. جميع الحقوق محفوظة.</p>
+    </footer>
 
-<!-- STEP 3 -->
-<div class="step-card" data-step="3">
-  <h2>تأكيد الحجز</h2>
-  <p>تأكد من بياناتك قبل الإرسال:</p>
-  <div class="summary-box">
-    <img src="images/2c8434cad73d5a8b2177918977a5dfbc (1).jpg" alt="Selected Car">
-    <div>
-      <p><strong>السيارة المختارة:</strong> <span id="summary-car">---</span></p>
-      <p><strong>الخدمات الإضافية:</strong> <span id="summary-addons">---</span></p>
-      <p><strong>الاسم:</strong> <span id="summary-name">---</span></p>
-      <p><strong>رقم الهاتف:</strong> <span id="summary-phone">---</span></p>
-      <p class="total"><strong>السعر الإجمالي:</strong> <span id="summary-price">---</span></p>
-    </div>
-  </div>
-  <button class="btn-secondary prev-step">السابق</button>
-  <a href="confirmation.html" class="btn-primary">تأكيد الحجز</a>
-</div>
-
+    <script src="js/main.js"></script>
 </body>
 </html>
