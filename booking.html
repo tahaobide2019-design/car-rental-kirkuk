@@ -1,76 +1,28 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز سيارة الحوت - تأكيد الطلب</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/booking.steps.css">
-</head>
-<body class="bg-[#002B5B] text-white">
+<body class="bg-slate-50 text-slate-800 p-4 md:p-10">
 
-    <div class="container mx-auto px-4 py-10">
-        <div class="max-w-3xl mx-auto bg-white/5 rounded-3xl p-8 border border-white/10 shadow-2xl">
-            
-            <div class="relative flex justify-between items-center mb-12">
-                <div class="absolute h-1 bg-white/10 w-full top-1/2 -translate-y-1/2 z-0"></div>
-                <div id="line-fill" class="absolute h-1 bg-[#0A6BEF] w-0 top-1/2 -translate-y-1/2 transition-all duration-500 z-0"></div>
-                
-                <div class="step-circle active" id="c1">1</div>
-                <div class="step-circle" id="c2">2</div>
-                <div class="step-circle" id="c3">3</div>
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex justify-between items-center mb-10 relative">
+            <div class="absolute h-1 bg-slate-100 w-full top-1/2 -translate-y-1/2"></div>
+            <div id="p-fill" class="absolute h-1 bg-blue-600 w-0 top-1/2 -translate-y-1/2 transition-all"></div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center z-10 font-bold">1</div>
+            <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center z-10 font-bold" id="s2">2</div>
+            <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center z-10 font-bold" id="s3">3</div>
+        </div>
+
+        <div id="step1" class="step-content active">
+            <h2 class="text-xl font-bold mb-4">خيارات إضافية لرحلتك</h2>
+            <div class="space-y-3">
+                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-blue-400">
+                    <input type="checkbox" name="extra" value="50" class="w-5 h-5 ml-3 accent-blue-600">
+                    <span class="flex-grow">توفير سائق خاص (VIP)</span>
+                    <span class="font-bold text-blue-600">+50$</span>
+                </label>
             </div>
+        </div>
 
-            <form id="bookingForm">
-                <div class="step-content active" id="step1">
-                    <h2 class="text-2xl font-bold mb-6">🛠️ اختر الخدمات الإضافية</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <label class="flex items-center gap-4 p-4 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5">
-                            <input type="checkbox" class="extra-service w-5 h-5" value="50" data-name="سائق خاص">
-                            <span>سائق خاص (+50$/يوم)</span>
-                        </label>
-                        <label class="flex items-center gap-4 p-4 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5">
-                            <input type="checkbox" class="extra-service w-5 h-5" value="15" data-name="توصيل مطار">
-                            <span>توصيل للمطار (+15$)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="step-content" id="step2">
-                    <h2 class="text-2xl font-bold mb-6">👤 بيانات المستأجر</h2>
-                    <div class="space-y-4">
-                        <input type="text" id="name" placeholder="الاسم الكامل" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
-                        <input type="tel" id="phone" placeholder="رقم الواتساب" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
-                        <p class="text-xs text-gray-400 italic mt-2">* يرجى إحضار رخصة القيادة الأصلية عند الاستلام</p>
-                    </div>
-                </div>
-
-                <div class="step-content" id="step3">
-                    <h2 class="text-2xl font-bold mb-6">📍 تفاصيل الموعد والموقع</h2>
-                    <div class="space-y-4">
-                        <input type="text" id="location" placeholder="عنوان التسليم (مثلاً: مطار بغداد)" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-[#0A6BEF]">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="datetime-local" id="dateStart" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none">
-                            <input type="datetime-local" id="dateEnd" class="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="price-summary-tag">
-                    <p class="text-sm opacity-80">التكلفة الإجمالية التقديرية</p>
-                    <h3 class="text-3xl font-bold" id="totalDisplay">0$</h3>
-                </div>
-
-                <div class="flex justify-between mt-8">
-                    <button type="button" id="prevBtn" class="px-8 py-3 rounded-full border border-white/20 hidden">السابق</button>
-                    <button type="button" id="nextBtn" class="px-8 py-3 bg-[#0A6BEF] rounded-full font-bold mr-auto">التالي</button>
-                </div>
-            </form>
+        <div class="flex justify-between mt-8 border-t border-slate-100 pt-6">
+            <button id="prevBtn" class="text-slate-500 font-medium px-6">رجوع</button>
+            <button id="nextBtn" class="bg-blue-600 text-white px-10 py-3 rounded-xl font-bold hover:shadow-lg hover:bg-blue-700 transition">التالي</button>
         </div>
     </div>
-
-    <script src="js/whatsapp.js"></script>
-    <script src="js/booking.js"></script>
 </body>
-</html>
