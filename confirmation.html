@@ -1,54 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الحوت - تأكيد الحجز</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/booking-steps.css">
+    <meta charset="UTF-8">
+    <title>تأكيد الطلب - الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
-<header class="premium-header">
-  <div class="logo">🐋 الحوت</div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="cars.html">السيارات</a>
-    <a href="about.html">عن الشركة</a>
-    <a href="booking.html">الحجز</a>
-    <a href="contact.html">تواصل معنا</a>
-  </nav>
-</header>
-
-<section class="page-hero small">
-  <div class="overlay"></div>
-  <h1>تم تأكيد الحجز</h1>
-</section>
-
-<section class="confirmation-wrapper" style="padding:50px 20px;">
-  <div class="confirmation-card" style="max-width:800px; margin:0 auto; padding:40px; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.15); background:#fff; text-align:center;">
-
-    <div class="success-icon" style="font-size:60px; color:#22C55E; margin-bottom:25px;">✔</div>
-    <h2 style="color:#0E1A2B; margin-bottom:15px;">تم تأكيد الحجز بنجاح!</h2>
-    <p style="color:#374151; margin-bottom:25px;">شكرًا لحجز سيارتك معنا. رقم الحجز الخاص بك هو:</p>
-    <div class="note-box" style="font-size:22px; font-weight:600; color:#0E1A2B; background:#F0FDF4; padding:15px 20px; border-radius:12px; margin-bottom:30px;">#123456</div>
-
-    <!-- ================= SUMMARY ================= -->
-    <div class="summary-box" style="display:flex; gap:25px; flex-wrap:wrap; justify-content:center; background:#F7F9FC; padding:25px; border-radius:16px; box-shadow:0 12px 35px rgba(0,0,0,0.1);">
-      <img src="images/car1.jpg" alt="Selected Car" style="width:180px; height:120px; object-fit:cover; border-radius:12px;">
-      <div style="text-align:right; flex:1; min-width:220px;">
-        <p><strong>السيارة المختارة:</strong> Toyota Camry 2023</p>
-        <p><strong>الخدمات الإضافية:</strong> GPS, كرسي أطفال</p>
-        <p><strong>تاريخ الاستلام:</strong> 25/01/2026 الساعة 10:00</p>
-        <p><strong>تاريخ الإرجاع:</strong> 28/01/2026 الساعة 16:00</p>
-        <p style="margin-top:15px; font-size:18px; color:#0E1A2B;"><strong>السعر الإجمالي:</strong> 360$</p>
-      </div>
+<body class="bg-[#002B5B] flex items-center justify-center min-h-screen">
+    <div class="text-center p-10 bg-white/5 border border-white/20 rounded-3xl animate-fade">
+        <div class="text-6xl mb-6 text-[#0A6BEF]">✔️</div>
+        <h1 class="text-3xl font-bold mb-4">تم إرسال طلبك بنجاح!</h1>
+        <p class="text-gray-400 mb-8">رقم المرجع الخاص بك: <span class="text-white font-mono">WH-9923</span></p>
+        <p class="mb-8">سيتم التواصل معك عبر الواتساب لتأكيد موعد الاستلام.</p>
+        <a href="index.html" class="btn-premium">العودة للرئيسية</a>
     </div>
-
-    <a href="index.html" class="btn-primary" style="display:inline-block; margin-top:30px; padding:14px 36px; border-radius:12px;">عودة للصفحة الرئيسية</a>
-  </div>
-</section>
-
 </body>
 </html>
