@@ -3,71 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفاصيل السيارة - الحوت</title>
+    <title>تفاصيل السيارة | الحوت لتأجير السيارات</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .glass-nav { background: rgba(0, 35, 73, 0.95); backdrop-filter: blur(10px); }
+        .main-img-container { height: 500px; border-radius: 2rem; overflow: hidden; }
+        .thumb-img { height: 100px; cursor: pointer; transition: 0.3s; opacity: 0.6; }
+        .thumb-img:hover, .thumb-img.active { opacity: 1; border: 2px solid #D4AF37; }
+        .spec-badge { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 1.5rem; transition: 0.3s; }
+        .spec-badge:hover { border-color: #D4AF37; transform: translateY(-5px); }
+        .sticky-booking-card { position: sticky; top: 120px; }
+    </style>
 </head>
-<body class="bg-[#002B5B] text-white">
+<body class="bg-gray-50">
+
+    <nav class="glass-nav text-white sticky top-0 z-50 p-4 border-b border-gold/30">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-gold">الحـوت <i class="fas fa-fish"></i></a>
+            <div class="flex gap-4">
+                <a href="cars.html" class="bg-white/10 px-4 py-2 rounded-lg hover:bg-gold hover:text-whale transition">العودة للأسطول</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container mx-auto px-4 py-12">
-        <div class="max-w-5xl mx-auto bg-white/5 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-            <div class="flex flex-col md:flex-row">
-                
-                <div class="md:w-1/2">
-                    <img id="detail-img" src="" alt="صورة السيارة" class="w-full h-full object-cover min-h-[400px]">
+        <div class="flex flex-col lg:flex-row gap-12">
+            
+            <div class="lg:w-2/3">
+                <div class="main-img-container shadow-2xl mb-6">
+                    <img id="main-display" src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200" class="w-full h-full object-cover">
+                </div>
+                <div class="grid grid-cols-4 gap-4 mb-10">
+                    <img onclick="changeImg(this.src)" src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400" class="thumb-img rounded-xl active">
+                    <img onclick="changeImg(this.src)" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400" class="thumb-img rounded-xl">
+                    <img onclick="changeImg(this.src)" src="https://images.unsplash.com/photo-1517524008436-bbdb61ac540b?w=400" class="thumb-img rounded-xl">
+                    <img onclick="changeImg(this.src)" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400" class="thumb-img rounded-xl">
                 </div>
 
-                <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                    <div class="flex justify-between items-center mb-4">
-                        <h1 id="detail-name" class="text-4xl font-bold">اسم السيارة</h1>
-                        <span id="detail-price" class="text-2xl font-bold text-[#0A6BEF]">0$ <small class="text-sm text-white/50">/ يوم</small></span>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                    <div class="spec-badge text-center">
+                        <i class="fas fa-bolt text-gold text-2xl mb-2"></i>
+                        <span class="block text-gray-500 text-xs">قوة المحرك</span>
+                        <span class="font-bold">510 حصان</span>
                     </div>
-                    
-                    <p class="text-gray-400 mb-8">تمتع بتجربة قيادة فريدة مع شركة الحوت. هذه السيارة مجهزة بأحدث تقنيات الأمان والرفاهية لضمان رحلة مريحة.</p>
-
-                    <div class="grid grid-cols-2 gap-6 mb-10">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">⚙️</span>
-                            <div><p class="text-xs text-gray-500">ناقل الحركة</p><p id="detail-trans" class="font-bold">أوتوماتيك</p></div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">👤</span>
-                            <div><p class="text-xs text-gray-500">الركاب</p><p id="detail-seats" class="font-bold">5 أشخاص</p></div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">⛽</span>
-                            <div><p class="text-xs text-gray-500">نوع الوقود</p><p id="detail-fuel" class="font-bold">بنزين</p></div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">❄️</span>
-                            <div><p class="text-xs text-gray-500">التكييف</p><p class="font-bold">مركزي مميز</p></div>
-                        </div>
+                    <div class="spec-badge text-center">
+                        <i class="fas fa-tachometer-alt text-gold text-2xl mb-2"></i>
+                        <span class="block text-gray-500 text-xs">0-100 كم</span>
+                        <span class="font-bold">3.9 ثانية</span>
                     </div>
+                    <div class="spec-badge text-center">
+                        <i class="fas fa-gas-pump text-gold text-2xl mb-2"></i>
+                        <span class="block text-gray-500 text-xs">نوع الوقود</span>
+                        <span class="font-bold">بنزين سوبر</span>
+                    </div>
+                    <div class="spec-badge text-center">
+                        <i class="fas fa-cog text-gold text-2xl mb-2"></i>
+                        <span class="block text-gray-500 text-xs">نظام الدفع</span>
+                        <span class="font-bold">خلفي RWD</span>
+                    </div>
+                </div>
 
-                    <div class="flex gap-4">
-                        <button onclick="goToBooking()" class="flex-1 py-4 bg-[#0A6BEF] rounded-2xl font-bold text-lg hover:bg-blue-600 transition shadow-xl shadow-blue-500/20">احجز الآن</button>
-                        <a href="cars.html" class="px-6 py-4 border border-white/20 rounded-2xl font-bold hover:bg-white/5 transition">العودة</a>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-10">
+                    <h2 class="text-2xl font-black text-whale mb-4">عن السيارة</h2>
+                    <p class="text-gray-600 leading-loose mb-6">
+                        تعد BMW M4 Competition قمة الهندسة الألمانية، حيث تجمع بين القوة الهائلة في الأداء اليومي والفخامة المطلقة. مجهزة بمقاعد رياضية جلدية ونظام صوتي محيطي، مما يجعل كل رحلة تجربة لا تُنسى. مثالية للمناسبات الخاصة والقيادة الرياضية.
+                    </p>
+                    <h3 class="font-bold text-whale mb-4">الميزات التقنية:</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-600">
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> نظام ملاحة ذكي متطور</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> مثبت سرعة تفاعلي</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> فتحة سقف بانورامية</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> نظام المساعدة على الركن</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h2 class="text-2xl font-black text-whale mb-6">آراء المستأجرين</h2>
+                    <div class="space-y-6">
+                        <div class="flex gap-4 border-b border-gray-50 pb-6">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center font-bold text-whale">أ.م</div>
+                            <div>
+                                <div class="flex text-gold text-sm mb-1"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                                <p class="font-bold">أحمد محمد</p>
+                                <p class="text-sm text-gray-500 italic">"سيارة خرافية وتعامل الشركة كان في غاية الرقي، الاستلام كان في المطار في الموعد."</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="lg:w-1/3">
+                <div class="sticky-booking-card bg-whale text-white p-8 rounded-[2.5rem] shadow-2xl border-t-4 border-gold">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-gray-300 font-bold italic">السعر اليومي</span>
+                        <div class="text-left">
+                            <span class="text-4xl font-black text-gold">$180</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="bg-white/10 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="text-sm">
+                                <span class="block text-gray-400">تاريخ الاستلام</span>
+                                <span class="font-bold">اختر التاريخ</span>
+                            </div>
+                            <i class="fas fa-calendar-plus text-gold"></i>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="text-sm">
+                                <span class="block text-gray-400">خدمات إضافية</span>
+                                <span class="font-bold italic text-gold text-xs">سائق + توصيل مطار</span>
+                            </div>
+                            <i class="fas fa-concierge-bell"></i>
+                        </div>
+                    </div>
+
+                    <a href="booking.html" class="block w-full btn-gold text-center py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition duration-300">
+                        احجز هـذه السيارة الآن
+                    </a>
+                    
+                    <p class="text-center text-xs text-gray-400 mt-6">
+                        <i class="fas fa-shield-alt text-gold ml-1"></i> حجز آمن ودفع نقدي عند الاستلام
+                    </p>
+                </div>
+
+                <div class="mt-8 rounded-3xl overflow-hidden shadow-lg border-2 border-white">
+                    <iframe class="w-full h-48" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3248.8!2d44.3!3d35.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDMwJzAwLjAiTiA0NMKwMTgnMDguMCJF!5e0!3m2!1sar!2siq!4v1620000000000" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // كود بسيط لجلب البيانات من الرابط وعرضها
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            document.getElementById('detail-name').innerText = params.get('name') || 'سيارة الحوت';
-            document.getElementById('detail-price').innerHTML = `${params.get('price') || '0'}$ <small class="text-sm text-white/50">/ يوم</small>`;
-            document.getElementById('detail-img').src = params.get('img') || 'images/default-car.jpg';
-            
-            // يمكنك إضافة المزيد من البيانات هنا
-        });
-
-        function goToBooking() {
-            const params = new URLSearchParams(window.location.search);
-            window.location.href = `booking.html?carName=${params.get('name')}&carPrice=${params.get('price')}`;
+        function changeImg(src) {
+            document.getElementById('main-display').src = src;
+            // إضافة كلاس النشط للمصغرات
+            const thumbs = document.querySelectorAll('.thumb-img');
+            thumbs.forEach(img => img.classList.remove('active'));
+            event.target.classList.add('active');
         }
     </script>
+
 </body>
 </html>
