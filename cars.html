@@ -1,59 +1,86 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تفاصيل السيارة | الحوت</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسطول سيارات الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* تعريف الألوان هنا أيضاً لـ Tailwind لتستخدمها مباشرة */
+        :root { --primary-blue: #0A6BEF; --dark-blue: #002B5B; --white: #FFFFFF; }
+        .text-primary-blue { color: var(--primary-blue); }
+        .bg-primary-blue { background-color: var(--primary-blue); }
+        .border-primary-blue { border-color: var(--primary-blue); }
+        .hover\:text-primary-blue:hover { color: var(--primary-blue); }
+    </style>
 </head>
 <body>
+    <nav class="p-6 flex justify-between items-center border-b border-gray-700">
+        <div class="text-2xl font-bold text-primary-blue">AL-HOOT <span class="text-white">الحوت</span></div>
+        <ul class="flex gap-6">
+            <li><a href="index.html" class="hover:text-primary-blue">الرئيسية</a></li>
+            <li><a href="cars.html" class="hover:text-primary-blue">السيارات</a></li>
+            <li><a href="#" class="hover:text-primary-blue">من نحن</a></li>
+        </ul>
+    </nav>
 
-<header class="premium-header">
-  <div class="logo">🐋 الحوت</div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="cars.html">السيارات</a>
-    <a href="booking.html" class="btn-primary">احجز الآن</a>
-  </nav>
-</header>
+    <header class="py-16 text-center">
+        <h1 class="text-4xl font-extrabold mb-4">اكتشف أسطولنا المميز</h1>
+        <p class="text-gray-400">اختر سيارتك المثالية من مجموعتنا الواسعة</p>
+    </header>
 
-<!-- Hero Image -->
-<section class="car-hero">
-  <img src="images/camry.jpg" alt="Toyota Camry">
-  <div class="car-hero-info">
-    <h1>Toyota Camry 2023</h1>
-    <p>سيارة عائلية مريحة، اقتصادية، مناسبة للرحلات الطويلة</p>
-  </div>
-</section>
+    <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-8">
+        <aside class="w-full lg:w-1/4 bg-white/5 p-6 rounded-2xl border border-gray-700">
+            <h2 class="text-xl font-bold mb-5 text-primary-blue">فلترة السيارات</h2>
+            <div class="space-y-6">
+                <div>
+                    <label for="car-type" class="block mb-2 text-gray-300">نوع السيارة</label>
+                    <select id="car-type" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg">
+                        <option value="">جميع الأنواع</option>
+                        <option value="family">عائلية</option>
+                        <option value="sport">رياضية</option>
+                        <option value="economic">اقتصادية</option>
+                        <option value="luxury">فاخرة</option>
+                        <option value="suv">دفع رباعي/SUV</option>
+                        <option value="commercial">تجارية</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="seats" class="block mb-2 text-gray-300">السعة (عدد الركاب)</label>
+                    <select id="seats" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg">
+                        <option value="">الكل</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="7">7+</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transmission" class="block mb-2 text-gray-300">ناقل الحركة</label>
+                    <select id="transmission" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg">
+                        <option value="">الكل</option>
+                        <option value="أوتوماتيك">أوتوماتيك</option>
+                        <option value="عادي">عادي</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="price-range" class="block mb-2 text-gray-300">السعر اليومي (حد أقصى)</label>
+                    <input type="range" id="price-range" min="50" max="1000" value="1000" class="w-full accent-primary-blue">
+                    <p class="text-center text-sm mt-2"><span id="price-display">1000</span>$</p>
+                </div>
+                <button class="btn-premium w-full mt-4" onclick="filterCars()">تطبيق الفلاتر</button>
+            </div>
+        </aside>
 
-<!-- Details -->
-<section class="car-details-container">
+        <main class="w-full lg:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-8" id="all-cars-list">
+            </main>
+    </div>
 
-  <div class="car-specs">
-    <h2>مواصفات السيارة</h2>
-    <ul>
-      <li>🚘 الفئة: عائلية</li>
-      <li>⚙️ ناقل الحركة: أوتوماتيك</li>
-      <li>⛽ الوقود: بنزين</li>
-      <li>👥 عدد الركاب: 5</li>
-      <li>📅 سنة الصنع: 2023</li>
-    </ul>
-  </div>
+    <footer class="py-10 mt-20 text-center text-gray-500 border-t border-gray-800">
+        &copy; 2026 الحوت لتأجير السيارات. جميع الحقوق محفوظة.
+    </footer>
 
-  <div class="car-booking-box">
-    <div class="price">70$ / اليوم</div>
-    <p>الدفع نقدًا عند الاستلام</p>
-    <a href="booking.html" class="btn-primary full">احجز هذه السيارة</a>
-  </div>
-
-</section>
-
-<footer>
-  © 2026 الحوت – تأجير سيارات فاخر
-</footer>
-
+    <script src="js/app.js"></script>
 </body>
 </html>
