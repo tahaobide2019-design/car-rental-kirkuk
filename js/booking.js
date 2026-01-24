@@ -1,24 +1,16 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const steps = document.querySelectorAll('.step');
-  const stepCards = document.querySelectorAll('.step-card');
+document.addEventListener('DOMContentLoaded', () => {
   const nextBtns = document.querySelectorAll('.next-step');
   const prevBtns = document.querySelectorAll('.prev-step');
+  const steps = document.querySelectorAll('.step-card');
 
   let currentStep = 0;
 
-  function showStep(index) {
-    stepCards.forEach(card => card.classList.remove('active'));
-    stepCards[index].classList.add('active');
-
-    steps.forEach(step => step.classList.remove('active'));
-    steps[index].classList.add('active');
-  }
-
   nextBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      if(currentStep < stepCards.length - 1){
+      if(currentStep < steps.length - 1){
+        steps[currentStep].classList.remove('active');
         currentStep++;
-        showStep(currentStep);
+        steps[currentStep].classList.add('active');
       }
     });
   });
@@ -26,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
   prevBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       if(currentStep > 0){
+        steps[currentStep].classList.remove('active');
         currentStep--;
-        showStep(currentStep);
+        steps[currentStep].classList.add('active');
       }
     });
   });
-
-  showStep(currentStep);
 });
