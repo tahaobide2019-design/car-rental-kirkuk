@@ -1,39 +1,43 @@
-/* إعدادات الخطوط والألوان الأساسية */
+/* إعدادات الخطوط والألوان الأساسية (أزرق وأبيض) */
 :root {
-    --whale-blue: #0b1c2d;
-    --whale-dark: #050d16;
-    --gold-primary: #c5a059;
-    --gold-light: #e2c287;
-    --glass: rgba(255, 255, 255, 0.05);
+    --primary-blue: #0A6BEF; /* أزرق أساسي قوي */
+    --dark-blue: #002B5B; /* أزرق داكن للخلفيات */
+    --light-blue: #E0F2FE; /* أزرق فاتح للعناصر الخفيفة */
+    --white: #FFFFFF;
+    --gray-text: #E0E0E0; /* نص رمادي فاتح */
+    --light-gray-bg: #F0F0F0; /* خلفية رمادية فاتحة */
     --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* تنسيق الجسم والخلفية */
 body {
-    background-color: var(--whale-blue);
-    background-image: radial-gradient(circle at top right, #162a3d, var(--whale-blue));
-    color: #ffffff;
+    background-color: var(--dark-blue);
+    background-image: radial-gradient(circle at top right, #003F8A, var(--dark-blue));
+    color: var(--white);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     margin: 0;
     overflow-x: hidden;
+    direction: rtl; /* دعم اللغة العربية */
+    text-align: right; /* دعم اللغة العربية */
 }
 
 /* تصميم كروت السيارات (Premium Cards) */
 .car-card {
-    background: var(--glass);
+    background: rgba(255, 255, 255, 0.08); /* تأثير زجاجي فاتح */
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(197, 160, 89, 0.2);
+    border: 1px solid rgba(10, 107, 239, 0.3); /* حدود زرقاء شفافة */
     border-radius: 20px;
     padding: 15px;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    color: var(--gray-text); /* لون نص الكروت */
 }
 
 .car-card:hover {
     transform: translateY(-10px);
-    border-color: var(--gold-primary);
+    border-color: var(--primary-blue);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -44,7 +48,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(10, 107, 239, 0.15), transparent);
     transition: 0.5s;
 }
 
@@ -52,10 +56,14 @@ body {
     left: 100%;
 }
 
-/* الأزرار الذهبية */
+.car-card h3 {
+    color: var(--primary-blue); /* لون أزرق لعنوان السيارة */
+}
+
+/* الأزرار الزرقاء (التي كانت ذهبية) */
 .btn-premium {
-    background: linear-gradient(45deg, var(--gold-primary), var(--gold-light));
-    color: var(--whale-dark);
+    background: linear-gradient(45deg, var(--primary-blue), #50A0FF); /* تدرج أزرق */
+    color: var(--white);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -69,7 +77,7 @@ body {
 }
 
 .btn-premium:hover {
-    box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+    box-shadow: 0 0 20px rgba(10, 107, 239, 0.4);
     transform: scale(1.05);
 }
 
@@ -78,27 +86,58 @@ body {
     transition: var(--transition);
     position: relative;
     z-index: 2;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-blue);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .step-pill.active {
-    background: var(--gold-primary);
-    box-shadow: 0 0 15px var(--gold-primary);
-    border-color: var(--gold-light);
+    background: var(--primary-blue);
+    box-shadow: 0 0 15px rgba(10, 107, 239, 0.5);
+    border-color: var(--white);
+    color: var(--white);
 }
 
 /* تأثيرات المدخلات (Form Inputs) */
 input, select, textarea {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: var(--white) !important;
     transition: var(--transition);
 }
 
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
 input:focus {
-    border-color: var(--gold-primary) !important;
-    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--primary-blue) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
     outline: none;
-    box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+    box-shadow: 0 0 10px rgba(10, 107, 239, 0.3);
+}
+
+/* الأقسام الداخلية في صفحة الحجز */
+.booking-section-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.booking-section-card h3 {
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+}
+
+/* الرسالة التنبيهية للدفع */
+.payment-info {
+    background-color: var(--primary-blue);
+    border: 1px solid var(--white);
+    color: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
 }
 
 /* الرسوم المتحركة لدخول العناصر */
@@ -123,10 +162,10 @@ input:focus {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--whale-dark);
+    background: var(--dark-blue);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--gold-primary);
+    background: var(--primary-blue);
     border-radius: 10px;
 }
