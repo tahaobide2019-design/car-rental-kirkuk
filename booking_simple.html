@@ -3,118 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز سريع | شركة الحوت</title>
+    <title>إتمام الحجز | شركة الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f1f5f9; }
-        .bg-whale { background-color: #002349; }
-        .text-gold { color: #D4AF37; }
-        #map { height: 200px; border-radius: 1rem; margin-bottom: 1rem; border: 2px solid #e2e8f0; z-index: 1; }
-    </style>
 </head>
-<body class="py-10 px-4">
-    <div class="max-w-2xl mx-auto bg-white rounded-[2rem] shadow-xl overflow-hidden border-t-8 border-whale">
+<body class="bg-gray-100 py-10 px-4 font-['Tajawal'] text-right">
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border-t-8 border-[#002349]">
         <div class="p-8">
-            <h2 class="text-2xl font-black mb-6 text-whale flex items-center gap-2">
-                <i class="fas fa-shipping-fast text-gold"></i> إتمام الحجز السريع
-            </h2>
+            <h2 id="titleLabel" class="text-2xl font-black mb-6 text-[#002349]">حجز سيارات الحمل / تنكر ماء</h2>
+            
+            <div class="bg-blue-50 p-5 rounded-2xl mb-6 grid grid-cols-2 gap-4 border border-blue-100">
+                <div><span class="text-xs text-gray-500">الخدمة:</span><p id="stype" class="font-bold">-</p></div>
+                <div><span class="text-xs text-gray-500">السعر الفردي:</span><p id="sunit" class="font-bold text-green-700">-</p></div>
+            </div>
 
-            <div class="bg-blue-50 p-5 rounded-2xl mb-8 border border-blue-100">
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-600 font-bold">الخدمة:</span>
-                    <b id="stype" class="text-whale">-</b>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600 font-bold">السعر الإجمالي:</span>
-                    <b id="stotal" class="text-green-700 text-xl">-</b>
-                </div>
+            <div class="bg-yellow-50 p-5 rounded-2xl border-2 border-yellow-200 mb-6">
+                <label class="block font-black mb-2">كم عدد السيارات/التانكرات؟</label>
+                <input type="number" id="sqty" value="1" min="1" onchange="recalc()" class="w-full p-3 rounded-xl border-2 border-yellow-400 text-center font-black text-2xl outline-none">
             </div>
 
             <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-400 mb-1 mr-2">الاسم الكامل</label>
-                    <input type="text" id="sname" placeholder="أدخل اسمك هنا" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:border-gold font-bold">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-400 mb-1 mr-2">رقم الهاتف</label>
-                    <input type="tel" id="sphone" placeholder="رقم الموبايل" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:border-gold font-bold text-right">
-                </div>
-
-                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                    <label class="block text-sm font-bold text-whale mb-3"><i class="fas fa-map-pin text-gold"></i> حدد موقعك (للوصول إليك):</label>
-                    <div id="map"></div>
-                    <button onclick="getCurrentLoc()" class="w-full py-2 bg-white text-blue-600 border border-blue-200 rounded-xl font-bold text-sm hover:bg-blue-50 transition mb-3">
-                        <i class="fas fa-location-arrow"></i> تحديد موقعي الحالي عبر GPS
-                    </button>
+                <input type="text" id="sname" placeholder="الاسم بالكامل" class="w-full p-4 border rounded-2xl outline-none focus:border-[#D4AF37]">
+                <input type="tel" id="sphone" placeholder="رقم الموبايل" class="w-full p-4 border rounded-2xl outline-none focus:border-[#D4AF37] text-right">
+                
+                <div class="bg-gray-50 p-4 rounded-2xl border">
+                    <label class="block font-bold mb-2">موقع التسليم:</label>
+                    <div id="map" class="h-48 rounded-xl mb-3 z-10"></div>
                     <input type="hidden" id="scoords">
-                    <textarea id="saddr" placeholder="وصف العنوان (اختياري)" class="w-full p-4 bg-white border rounded-2xl h-20 outline-none focus:border-gold font-bold"></textarea>
+                    <textarea id="saddr" placeholder="وصف إضافي للعنوان" class="w-full p-4 border rounded-2xl h-20 outline-none"></textarea>
                 </div>
 
-                <button onclick="sendSimpleOrder()" class="w-full bg-whale text-white py-5 rounded-2xl font-black text-xl shadow-lg hover:bg-opacity-95 transition-all">
-                    تأكيد الحجز (واتساب) <i class="fab fa-whatsapp mr-2"></i>
-                </button>
+                <div class="pt-4 border-t flex justify-between items-center">
+                    <span class="font-black text-gray-500 text-lg">المجموع الكلي:</span>
+                    <span id="stotal" class="text-3xl font-black text-[#002349]">0 د.ع</span>
+                </div>
+
+                <button onclick="sendOrder()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black text-xl">تأكيد الحجز (واتساب) <i class="fab fa-whatsapp"></i></button>
             </div>
         </div>
     </div>
 
     <script>
-        let map, marker;
-
+        let uprice = 0, map, marker;
         window.onload = function() {
             const p = new URLSearchParams(window.location.search);
-            const type = p.get('type');
-            const vehicle = p.get('vehicle');
-            const price = p.get('price');
-
-            document.getElementById('stype').innerText = type === 'training' ? "كورس تعليم قيادة" : `سيارة حمل (${vehicle})`;
-            document.getElementById('stotal').innerText = parseInt(price).toLocaleString() + " د.ع";
-
-            initSimpleMap();
-        };
-
-        function initSimpleMap() {
+            uprice = parseInt(p.get('price'));
+            document.getElementById('stype').innerText = p.get('vehicle');
+            document.getElementById('sunit').innerText = uprice.toLocaleString() + " د.ع";
+            
+            recalc();
             const kirkuk = [35.4687, 44.3921];
             map = L.map('map').setView(kirkuk, 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker(kirkuk, {draggable: true}).addTo(map);
-
-            marker.on('dragend', function() {
+            marker.on('dragend', () => { 
                 const pos = marker.getLatLng();
                 document.getElementById('scoords').value = pos.lat + "," + pos.lng;
             });
-            
-            document.getElementById('scoords').value = kirkuk[0] + "," + kirkuk[1];
+            document.getElementById('scoords').value = "35.4687,44.3921";
+        };
+
+        function recalc() {
+            const q = document.getElementById('sqty').value;
+            document.getElementById('stotal').innerText = (uprice * q).toLocaleString() + " د.ع";
         }
 
-        function getCurrentLoc() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    map.setView([lat, lng], 15);
-                    marker.setLatLng([lat, lng]);
-                    document.getElementById('scoords').value = lat + "," + lng;
-                });
-            }
-        }
-
-        function sendSimpleOrder() {
-            const name = document.getElementById('sname').value;
-            const phone = document.getElementById('sphone').value;
-            const addr = document.getElementById('saddr').value;
-            const coords = document.getElementById('scoords').value;
-
-            if(!name || !phone) { alert("⚠️ يرجى إدخال الاسم ورقم الهاتف"); return; }
-
-            const msg = `*طلب حجز شركة الحوت*%0A---------------------------%0A*الخدمة:* ${document.getElementById('stype').innerText}%0A*الاسم:* ${name}%0A*الهاتف:* ${phone}%0A*العنوان:* ${addr}%0A*السعر:* ${document.getElementById('stotal').innerText}%0A*الموقع:* https://www.google.com/maps?q={coords}`;
-            
+        function sendOrder() {
+            const msg = `*طلب حجز شركة الحوت*%0A---------------------------%0A*الخدمة:* ${document.getElementById('stype').innerText}%0A*العدد:* ${document.getElementById('sqty').value}%0A*الاسم:* ${document.getElementById('sname').value}%0A*الهاتف:* ${document.getElementById('sphone').value}%0A*الإجمالي:* ${document.getElementById('stotal').innerText}%0A*الموقع:* http://maps.google.com/?q=${document.getElementById('scoords').value}`;
             window.open(`https://wa.me/9647713225471?text=${msg}`);
         }
     </script>
+    <style> #map { border: 2px solid #ddd; } </style>
 </body>
 </html>
