@@ -1,60 +1,53 @@
-// js/booking.js
-let currentStep = 1;
-const carPriceDay = parseInt(new URLSearchParams(window.location.search).get('carPrice')) || 0;
+let selectedCar = null;
+let totalPrice = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-    updatePrice();
+function goToPhase(phaseNum) {
+    document.querySelectorAll('.booking-phase').forEach(p => p.classList.add('hidden'));
+    document.getElementById('phase' + phaseNum).classList.remove('hidden');
     
-    // مستمعات التغيير لحساب السعر فوراً
-    document.querySelectorAll('.extra-service, #dateStart, #dateEnd').forEach(el => {
-        el.addEventListener('change', updatePrice);
+    // تحديث شريط التقدم
+    document.querySelectorAll('.step').forEach((s, idx) => {
+        if(idx < phaseNum) s.classList.add('active');
     });
+}
 
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        if(currentStep < 3) {
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            currentStep++;
-            document.getElementById(`step${currentStep}`).classList.add('active');
-            updateUI();
-        } else {
-            processBooking(); // من ملف whatsapp.js
-        }
-    });
+function selectCar(name, price) {
+    selectedCar = name;
+    totalPrice = price;
+    document.getElementById('total-price').innerText = totalPrice;
+    goToPhase(2);
+}
 
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        document.getElementById(`step${currentStep}`).classList.remove('active');
-        currentStep--;
-        document.getElementById(`step${currentStep}`).classList.add('active');
-        updateUI();
-    });
+function sendToWhatsApp() {
+    const name = document.getElementById('user-name').value;
+    const phone = document.getElementById('user-phone').value;
+    const companyPhone = "+9647713225471";
+    
+    const message = `طلب حجز من موقع الحوت 🐋%0A
+---------------------------%0A
+الاسم: ${name}%0A
+الهاتف: ${phone}%0A
+السيارة: ${selectedCar}%0A
+الإجمالي: ${totalPrice} IQD%0A
+طريقة الدفع: نقداً عند الاستلام`;
+
+    window.open(`https://wa.me/${companyPhone}?text=${message}`, '_blank');
+}
+
+// محاكاة بيانات السيارات
+const cars = [
+    {name: "رينج روفر (فاخرة)", price: 150000, img: "car1.jpg"},
+    {name: "تويوتا كورولا (اقتصادية)", price: 50000, img: "car2.jpg"}
+];
+
+// عرض السيارات عند التحميل
+const carList = document.getElementById('car-list');
+cars.forEach(car => {
+    carList.innerHTML += `
+        <div class="car-card">
+            <h3>${car.name}</h3>
+            <p>السعر اليومي: ${car.price} IQD</p>
+            <button onclick="selectCar('${car.name}', ${car.price})" class="btn-gold">احجز الآن</button>
+        </div>
+    `;
 });
-
-function updatePrice() {
-    const start = new Date(document.getElementById('dateStart').value);
-    const end = new Date(document.getElementById('dateEnd').value);
-    
-    let days = 1;
-    if (start && end && end > start) {
-        const diff = end - start;
-        days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    }
-
-    let extraTotal = 0;
-    document.querySelectorAll('.extra-service:checked').forEach(s => {
-        extraTotal += parseInt(s.value);
-    });
-
-    const total = (carPriceDay * days) + extraTotal;
-    document.getElementById('totalDisplay').innerText = `${total}$`;
-}
-
-function updateUI() {
-    document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
-    document.getElementById('nextBtn').innerText = currentStep === 3 ? 'إرسال عبر الواتساب' : 'التالي';
-    
-    // تحديث الدوائر والخط
-    for(let i=1; i<=3; i++) {
-        document.getElementById(`c${i}`).classList.toggle('active', i <= currentStep);
-    }
-    document.getElementById('line-fill').style.width = ((currentStep-1) / 2 * 100) + '%';
-}
