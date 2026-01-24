@@ -1,344 +1,132 @@
-/* ======================= VARIABLES ======================= */
+/* إعدادات الخطوط والألوان الأساسية */
 :root {
-    --primary: #0E1A2B;        /* أزرق غامق */
-    --accent: #1F3B5F;         /* أزرق متوسط */
-    --light-bg: #F8FAFC;       /* خلفية فاتحة */
-    --card-bg: #FFFFFF;         /* خلفية الكروت */
-    --shadow: rgba(0, 0, 0, 0.18);
-    --font-main: 'Tajawal', sans-serif;
-    --transition: 0.4s;
+    --whale-blue: #0b1c2d;
+    --whale-dark: #050d16;
+    --gold-primary: #c5a059;
+    --gold-light: #e2c287;
+    --glass: rgba(255, 255, 255, 0.05);
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ======================= GLOBAL ======================= */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-main);
-}
-
+/* تنسيق الجسم والخلفية */
 body {
-    background: linear-gradient(to bottom, #F7F9FC, #E5E7EB);
-    color: var(--primary);
+    background-color: var(--whale-blue);
+    background-image: radial-gradient(circle at top right, #162a3d, var(--whale-blue));
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    scroll-behavior: smooth;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-/* ======================= HEADER ======================= */
-.premium-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background: #fff;
-    box-shadow: 0 6px 25px var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    transition: all var(--transition) ease;
-}
-
-.premium-header:hover {
-    box-shadow: 0 10px 35px var(--shadow);
-}
-
-.premium-header .logo {
-    font-size: 30px;
-    font-weight: 800;
-    color: var(--primary);
-    letter-spacing: 1px;
-}
-
-.premium-header nav a {
-    margin: 0 15px;
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 600;
-    font-size: 16px;
-    transition: all var(--transition) ease;
-}
-
-.premium-header nav a.active,
-.premium-header nav a:hover {
-    color: var(--accent);
-    transform: scale(1.1);
-}
-
-/* ======================= HERO ======================= */
-.page-hero {
-    position: relative;
-    background: linear-gradient(rgba(14,26,43,0.5), rgba(14,26,43,0.5)), url('../images/hero.jpg') center/cover no-repeat;
-    padding: 130px 20px;
-    text-align: center;
-    color: #fff;
-    overflow: hidden;
-}
-
-.page-hero h1 {
-    font-size: 50px;
-    font-weight: 800;
-    animation: fadeInDown 1s ease forwards;
-    letter-spacing: 1px;
-}
-
-@keyframes fadeInDown {
-    0% { opacity: 0; transform: translateY(-40px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-/* ======================= BUTTONS ======================= */
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: #fff;
-    padding: 16px 42px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 18px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 8px 25px var(--shadow);
-    transition: all var(--transition) ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 15px 40px var(--shadow);
-}
-
-.btn-secondary {
-    background: #E5E7EB;
-    color: var(--primary);
-    padding: 14px 36px;
-    border-radius: 12px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-secondary:hover {
-    background: #D1D5DB;
-    transform: translateY(-2px);
-}
-
-/* ======================= CARDS ======================= */
+/* تصميم كروت السيارات (Premium Cards) */
 .car-card {
-    background: var(--card-bg);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 18px 45px var(--shadow);
-    transition: all var(--transition) ease;
-    cursor: pointer;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 20px;
+    padding: 15px;
+    transition: var(--transition);
     position: relative;
+    overflow: hidden;
 }
 
 .car-card:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 28px 65px var(--shadow);
+    transform: translateY(-10px);
+    border-color: var(--gold-primary);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
-.car-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    transition: all var(--transition) ease;
-}
-
-.car-card:hover img {
-    transform: scale(1.08);
-}
-
-.car-card .content {
-    padding: 22px;
-}
-
-.car-card h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
-    font-weight: 700;
-}
-
-.car-card ul {
-    list-style: none;
-    margin-bottom: 14px;
-}
-
-.car-card ul li {
-    font-size: 15px;
-    margin-bottom: 6px;
-    color: #4B5563;
-}
-
-.car-card .price {
-    font-weight: bold;
-    font-size: 18px;
-    color: var(--accent);
-}
-
-/* ======================= BADGES ======================= */
-.badge {
+.car-card::before {
+    content: '';
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(45deg,var(--primary),var(--accent));
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 600;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
+    transition: 0.5s;
 }
 
-/* ======================= ADDONS ======================= */
-.addons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-    margin-top: 30px;
+.car-card:hover::before {
+    left: 100%;
 }
 
-.addon {
-    display: flex;
-    gap: 16px;
-    padding: 22px;
-    border-radius: 20px;
-    border: 1px solid #E5E7EB;
-    background: var(--light-bg);
-    transition: all var(--transition) ease;
-    cursor: pointer;
-}
-
-.addon:hover {
-    background: #EEF2F6;
-    box-shadow: 0 12px 35px var(--shadow);
-}
-
-.addon h3 {
-    font-size: 17px;
+/* الأزرار الذهبية */
+.btn-premium {
+    background: linear-gradient(45deg, var(--gold-primary), var(--gold-light));
+    color: var(--whale-dark);
     font-weight: 700;
-}
-
-.addon p {
-    font-size: 14px;
-    color: #4B5563;
-}
-
-/* ======================= SUMMARY ======================= */
-.summary-box {
-    display: flex;
-    gap: 24px;
-    background: #F7F9FC;
-    padding: 28px;
-    border-radius: 20px;
-    box-shadow: 0 14px 40px var(--shadow);
-    animation: fadeIn 0.8s ease forwards;
-}
-
-.summary-box img {
-    width: 200px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 16px;
-}
-
-.summary-box div {
-    text-align: right;
-}
-
-/* ======================= STEPS ======================= */
-.steps-bar {
-    display: flex;
-    justify-content: center;
-    gap: 34px;
-    margin: 60px 0;
-    position: relative;
-}
-
-.step {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: #D1D5DB;
-    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    display: inline-block;
     text-align: center;
-    font-weight: bold;
-    padding-top: 14px;
-    font-size: 22px;
-    cursor: pointer;
-    transition: all var(--transition) ease;
+}
+
+.btn-premium:hover {
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+    transform: scale(1.05);
+}
+
+/* تنسيق مراحل الحجز (Step Indicators) */
+.step-pill {
+    transition: var(--transition);
     position: relative;
+    z-index: 2;
 }
 
-.step.active {
-    background: var(--primary);
-    transform: scale(1.2);
-    box-shadow: 0 10px 25px var(--shadow);
+.step-pill.active {
+    background: var(--gold-primary);
+    box-shadow: 0 0 15px var(--gold-primary);
+    border-color: var(--gold-light);
 }
 
-.step span {
-    display: block;
-    font-size: 14px;
-    margin-top: 8px;
-    font-weight: 600;
-    color: #fff;
+/* تأثيرات المدخلات (Form Inputs) */
+input, select, textarea {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    transition: var(--transition);
 }
 
-.steps-bar::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    right: 10%;
-    height: 5px;
-    background: #D1D5DB;
-    z-index: -1;
-    border-radius: 3px;
+input:focus {
+    border-color: var(--gold-primary) !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    outline: none;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
 }
 
-.step.active ~ .step::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 5px;
-    width: 100%;
-    background: var(--primary);
-    z-index: -1;
-    border-radius: 3px;
-}
-
-/* ======================= ANIMATIONS ======================= */
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(0); opacity: 0; }
-    50% { transform: translateY(-12px); opacity: 0.6; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-.car-card {
-    animation: floatUp 1s ease forwards;
-}
-
-/* ======================= RESPONSIVE ======================= */
-@media(max-width:900px){
-    .premium-header {
-        flex-direction: column;
-        gap: 14px;
+/* الرسوم المتحركة لدخول العناصر */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-
-    .cars-grid {
-        grid-template-columns: 1fr;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    .summary-box {
-        flex-direction: column;
-        align-items: center;
-    }
+.animate-fade {
+    animation: fadeInUp 0.6s ease forwards;
+}
 
-    .steps-bar {
-        flex-direction: column;
-        gap: 28px;
-    }
+/* شريط التمرير (Scrollbar) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--whale-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold-primary);
+    border-radius: 10px;
 }
