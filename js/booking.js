@@ -1,51 +1,85 @@
-let currentStage = 1;
-const carPrice = 120; // ثابت كمثال
-let extrasTotal = 0;
+let currentStep = 1;
+const basePrice = 180;
+let extras = 0;
 
-function nextStage(stage) {
-    // إخفاء المرحلة الحالية
+// التنقل بين المراحل
+function goTo(step) {
+    // إخفاء الكل وإظهار الهدف
     document.querySelectorAll('.booking-stage').forEach(s => s.classList.remove('active'));
+    document.getElementById(`stage${step}`).classList.add('active');
+    
     // تحديث شريط التقدم
-    document.querySelectorAll('.step-item').forEach((item, index) => {
-        if(index + 1 <= stage) item.classList.add('active');
+    document.querySelectorAll('.step-item').forEach((item, idx) => {
+        if (idx + 1 <= step) item.classList.add('active');
         else item.classList.remove('active');
     });
-    // إظهار المرحلة الجديدة
-    document.getElementById(`stage-${stage}`).classList.add('active');
-    currentStage = stage;
+    
+    currentStep = step;
 }
 
-function updateTotal() {
-    extrasTotal = 0;
-    const checkboxes = document.querySelectorAll('input[name="extra"]:checked');
-    checkboxes.forEach(cb => {
-        if(cb.value === 'delivery') extrasTotal += 20;
-        if(cb.value === 'driver') extrasTotal += 50;
+// حساب التكاليف
+function calc() {
+    extras = 0;
+    const checks = document.querySelectorAll('input[name="srv"]:checked');
+    checks.forEach(c => {
+        if (c.value === "سائق") extras += 50;
+        if (c.value === "توصيل") extras += 20;
     });
     
-    document.getElementById('summary-extras').innerText = `$${extrasTotal}`;
-    document.getElementById('total-price').innerText = `$${carPrice + extrasTotal}`;
+    document.getElementById('extraCost').innerText = `$${extras}`;
+    document.getElementById('totalCost').innerText = `$${basePrice + extras}`;
 }
 
-function finalizeBooking() {
-    const name = document.getElementById('cust_name').value;
-    const phone = document.getElementById('cust_phone').value;
-    
-    if(!name || !phone) {
-        alert("يرجى ملء البيانات الشخصية أولاً");
+// جلب الموقع الجغرافي GPS
+function fetchLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                document.getElementById('coords').value = `${lat},${lon}`;
+                alert("✅ تم التقاط موقعك الجغرافي بنجاح!");
+            },
+            (err) => {
+                alert("❌ فشل تحديد الموقع، يرجى تفعيل الـ GPS أو كتابة العنوان يدوياً.");
+            }
+        );
+    } else {
+        alert("متصفحك لا يدعم تحديد الموقع.");
+    }
+}
+
+// إرسال البيانات للواتساب
+function sendToWhatsapp() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const coords = document.getElementById('coords').value;
+    const pTime = document.getElementById('pTime').value;
+    const rTime = document.getElementById('rTime').value;
+
+    if (!name || !phone || !address) {
+        alert("لطفاً، أكمل بياناتك وعنوانك أولاً.");
         return;
     }
 
-    const message = `*طلب حجز جديد من موقع الحوت*%0A` +
-                    `--------------------------%0A` +
-                    `*الاسم:* ${name}%0A` +
-                    `*الهاتف:* ${phone}%0A` +
-                    `*السيارة:* شيفروليه كورفيت 2024%0A` +
-                    `*الإضافات:* ${extrasTotal}$%0A` +
-                    `*الإجمالي النهائي:* ${carPrice + extrasTotal}$%0A` +
-                    `--------------------------%0A` +
-                    `يرجى تأكيد الحجز لاستلام المستندات.`;
+    // بناء رابط الخريطة إذا توفرت الإحداثيات
+    const mapLink = coords ? `https://www.google.com/maps?q=${coords}` : "لم يتم التحديد (العنوان نصي)";
 
-    const whatsappUrl = `https://wa.me/9647713225471?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    const message = `*طلب حجز جديد - شركة الحوت* %0A` +
+                    `----------------------------%0A` +
+                    `👤 *العميل:* ${name}%0A` +
+                    `📞 *الهاتف:* ${phone}%0A` +
+                    `📍 *العنوان:* ${address}%0A` +
+                    `🗺️ *موقع GPS:* ${mapLink}%0A` +
+                    `----------------------------%0A` +
+                    `🚗 *السيارة:* BMW M4 Competition%0A` +
+                    `📅 *الاستلام:* ${pTime}%0A` +
+                    `📅 *الإرجاع:* ${rTime}%0A` +
+                    `💰 *الإجمالي:* ${basePrice + extras}$%0A` +
+                    `----------------------------%0A` +
+                    `_يرجى مراجعة المستندات عند التسليم_`;
+
+    const waURL = `https://wa.me/9647713225471?text=${message}`;
+    window.open(waURL, '_blank');
 }
