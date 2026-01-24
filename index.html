@@ -3,41 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحوت لتأجير السيارات | Al-Hoot Rental</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>الحوت لتأجير السيارات | الفخامة في القيادة</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* تعريف الألوان هنا أيضاً لـ Tailwind لتستخدمها مباشرة */
-        :root { --primary-blue: #0A6BEF; --dark-blue: #002B5B; --white: #FFFFFF; }
-        .text-primary-blue { color: var(--primary-blue); }
-        .bg-primary-blue { background-color: var(--primary-blue); }
-        .border-primary-blue { border-color: var(--primary-blue); }
-        .hover\:text-primary-blue:hover { color: var(--primary-blue); }
-    </style>
+    <link rel="stylesheet" href="css/booking-steps.css">
 </head>
 <body>
-    <nav class="p-6 flex justify-between items-center border-b border-gray-700">
-        <div class="text-2xl font-bold text-primary-blue">AL-HOOT <span class="text-white">الحوت</span></div>
-        <ul class="flex gap-6">
-            <li><a href="index.html" class="hover:text-primary-blue">الرئيسية</a></li>
-            <li><a href="cars.html" class="hover:text-primary-blue">السيارات</a></li>
-            <li><a href="#" class="hover:text-primary-blue">من نحن</a></li>
-        </ul>
-    </nav>
 
-    <header class="py-20 text-center">
-        <h1 class="text-5xl font-extrabold mb-4">استأجر سيارة أحلامك بنقرة واحدة</h1>
-        <p class="text-gray-400 mb-8">نظام الحوت يوفر لك الرفاهية والأمان في تنقلاتك</p>
-        <a href="cars.html" class="btn-premium px-10 py-3 rounded-full transition hover:scale-105 inline-block">تصفح الأسطول</a>
+    <header>
+        <nav>
+            <div class="logo">الحوت 🐋</div>
+        </nav>
     </header>
 
-    <section class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-cars">
+    <main id="booking-container">
+        <div class="progress-container">
+            <div class="step active" id="step1-indicator">1. الاختيار</div>
+            <div class="step" id="step2-indicator">2. الخدمات</div>
+            <div class="step" id="step3-indicator">3. التأكيد</div>
+        </div>
+
+        <section id="phase1" class="booking-phase">
+            <h2>اختر سيارتك المثالية</h2>
+            <div class="filters">
+                <select id="car-type">
+                    <option value="all">كل الأنواع</option>
+                    <option value="luxury">فاخرة (ذهبي)</option>
+                    <option value="suv">دفع رباعي</option>
+                    <option value="training">سيارة تدريب</option>
+                </select>
+            </div>
+            <div class="car-grid" id="car-list">
+                </div>
         </section>
 
-    <footer class="py-10 mt-20 text-center text-gray-500 border-t border-gray-800">
-        &copy; 2026 الحوت لتأجير السيارات. جميع الحقوق محفوظة.
-    </footer>
+        <section id="phase2" class="booking-phase hidden">
+            <h2>خدمات إضافية (Premium)</h2>
+            <div class="extra-services">
+                <label><input type="checkbox" value="50" class="extra-item"> سائق خاص (+50$)</label>
+                <label><input type="checkbox" value="20" class="extra-item"> توصيل للمطار (+20$)</label>
+                <label><input type="checkbox" value="10" class="extra-item"> كرسي أطفال (+10$)</label>
+            </div>
+            <button onclick="goToPhase(3)" class="btn-gold">التالي: بيانات الحجز</button>
+        </section>
 
-    <script src="js/app.js"></script>
-    </body>
+        <section id="phase3" class="booking-phase hidden">
+            <h2>تأكيد الحجز</h2>
+            <form id="booking-form">
+                <input type="text" placeholder="الاسم الكامل" required id="user-name">
+                <input type="tel" placeholder="رقم الهاتف" required id="user-phone">
+                <div class="upload-section">
+                    <label>صورة الهوية / جواز السفر</label>
+                    <input type="file" accept="image/*">
+                </div>
+                <div class="price-summary">
+                    Total: <span id="total-price">0</span> IQD
+                </div>
+                <button type="button" onclick="sendToWhatsApp()" class="btn-whatsapp">تأكيد عبر واتساب</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/booking.js"></script>
+</body>
 </html>
