@@ -3,141 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحوت - حجز سيارتك</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/booking-steps.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>حجز سيارتك - الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --whale-blue: #0b1c2d; --gold: #c5a059; }
+        body { background-color: var(--whale-blue); color: white; font-family: 'Segoe UI', sans-serif; }
+        .step-pill.active { background-color: var(--gold); color: var(--whale-blue); }
+        .hidden-step { display: none; }
+    </style>
 </head>
-<body>
+<body class="bg-[#0b1c2d] p-4 md:p-10">
 
-<header class="premium-header">
-    <div class="logo">الحوت</div>
-    <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="cars.html">السيارات</a>
-        <a href="booking.html" class="active">الحجز</a>
-        <a href="about.html">من نحن</a>
-    </nav>
-</header>
+    <div class="max-w-4xl mx-auto bg-gray-900/50 p-8 rounded-2xl border border-gray-700 shadow-2xl">
+        <div class="flex justify-between mb-10 relative">
+            <div class="step-pill active w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-[#c5a059]" id="pill-1">1</div>
+            <div class="step-pill w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-gray-600 text-gray-500" id="pill-2">2</div>
+            <div class="step-pill w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-gray-600 text-gray-500" id="pill-3">3</div>
+        </div>
 
-<section class="booking-container" style="padding:60px 20px; background:#F8FAFC;">
-    <h1 style="text-align:center; margin-bottom:50px; font-size:36px;">احجز سيارتك بثلاث خطوات فقط</h1>
+        <form id="multiStepForm">
+            <div class="step-content" id="step-1">
+                <h2 class="text-2xl font-bold mb-6 text-[#c5a059]">المرحلة الأولى: الخدمات الإضافية</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="p-4 border border-gray-700 rounded-lg flex items-center gap-4 cursor-pointer hover:bg-gray-800">
+                        <input type="checkbox" class="w-5 h-5 accent-[#c5a059]" name="extra" value="50"> 
+                        <div><span>سائق خاص</span> <p class="text-xs text-gray-400">+50$ يومياً</p></div>
+                    </label>
+                    <label class="p-4 border border-gray-700 rounded-lg flex items-center gap-4 cursor-pointer hover:bg-gray-800">
+                        <input type="checkbox" class="w-5 h-5 accent-[#c5a059]" name="extra" value="15"> 
+                        <div><span>توصيل للمطار</span> <p class="text-xs text-gray-400">+15$ لمرة واحدة</p></div>
+                    </label>
+                    <label class="p-4 border border-gray-700 rounded-lg flex items-center gap-4 cursor-pointer hover:bg-gray-800">
+                        <input type="checkbox" class="w-5 h-5 accent-[#c5a059]" name="extra" value="10"> 
+                        <div><span>كرسي أطفال</span> <p class="text-xs text-gray-400">+10$ يومياً</p></div>
+                    </label>
+                </div>
+            </div>
 
-    <!-- ===== STEPS BAR ===== -->
-    <div class="steps-bar">
-        <div class="step active" data-step="1">
-            1
-            <span>اختيار السيارة</span>
-        </div>
-        <div class="step" data-step="2">
-            2
-            <span>إضافة الخدمات</span>
-        </div>
-        <div class="step" data-step="3">
-            3
-            <span>بياناتك</span>
-        </div>
+            <div class="step-content hidden-step" id="step-2">
+                <h2 class="text-2xl font-bold mb-6 text-[#c5a059]">المرحلة الثانية: المستندات والبيانات</h2>
+                <div class="space-y-4">
+                    <input type="text" placeholder="الاسم الكامل" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-[#c5a059]">
+                    <input type="tel" placeholder="رقم الهاتف" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-[#c5a059]">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 text-sm text-gray-400">صورة الهوية / الجواز</label>
+                            <input type="file" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm text-gray-400">صورة رخصة القيادة</label>
+                            <input type="file" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-content hidden-step" id="step-3">
+                <h2 class="text-2xl font-bold mb-6 text-[#c5a059]">المرحلة الثالثة: التفاصيل اللوجستية</h2>
+                <div class="space-y-4">
+                    <input type="text" placeholder="حدد موقع الاستلام (كتابة)" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-[#c5a059]">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 text-xs text-gray-400">تاريخ الاستلام</label>
+                            <input type="datetime-local" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-xs text-gray-400">تاريخ الإرجاع</label>
+                            <input type="datetime-local" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg">
+                        </div>
+                    </div>
+                    <div class="p-4 bg-[#c5a059]/10 border border-[#c5a059]/30 rounded-lg text-center">
+                        <span class="text-sm">طريقة الدفع:</span>
+                        <span class="font-bold block text-xl">نقداً عند الاستلام</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-10">
+                <button type="button" id="prevBtn" class="px-8 py-2 border border-gray-600 rounded-full hidden">السابق</button>
+                <button type="button" id="nextBtn" class="px-8 py-2 bg-[#c5a059] text-[#0b1c2d] font-bold rounded-full mr-auto">التالي</button>
+            </div>
+        </form>
     </div>
 
-    <!-- ===== STEPS CONTENT ===== -->
-    <div class="steps-content">
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
 
-        <!-- STEP 1 -->
-        <div class="step-content active" data-step="1">
-            <h2>اختر السيارة التي تناسبك</h2>
-            <div class="cars-grid">
-                <div class="car-card" onclick="selectCar(this)">
-                    <div class="badge">VIP</div>
-                    <img src="images/car1.jpg" alt="تويوتا كامري">
-                    <div class="content">
-                        <h3>تويوتا كامري</h3>
-                        <ul>
-                            <li>سعة: 5 ركاب</li>
-                            <li>ناقل حركة: أوتوماتيك</li>
-                        </ul>
-                        <div class="price">50$ / يوم</div>
-                    </div>
-                </div>
-                <div class="car-card" onclick="selectCar(this)">
-                    <div class="badge">جديد</div>
-                    <img src="images/car2.jpg" alt="BMW X6">
-                    <div class="content">
-                        <h3>BMW X6</h3>
-                        <ul>
-                            <li>سعة: 5 ركاب</li>
-                            <li>ناقل حركة: أوتوماتيك</li>
-                        </ul>
-                        <div class="price">120$ / يوم</div>
-                    </div>
-                </div>
-                <div class="car-card" onclick="selectCar(this)">
-                    <img src="images/car3.jpg" alt="جيب رانجلر">
-                    <div class="content">
-                        <h3>جيب رانجلر</h3>
-                        <ul>
-                            <li>سعة: 5 ركاب</li>
-                            <li>ناقل حركة: أوتوماتيك</li>
-                        </ul>
-                        <div class="price">90$ / يوم</div>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align:center; margin-top:40px;">
-                <button class="btn-primary" onclick="nextStep()">التالي</button>
-            </div>
-        </div>
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                document.getElementById(`step-${currentStep}`).classList.add('hidden-step');
+                currentStep++;
+                document.getElementById(`step-${currentStep}`).classList.remove('hidden-step');
+                updateUI();
+            } else {
+                // استدعاء دالة الواتساب عند الانتهاء
+                alert("سيتم تحويلك الآن لتأكيد الحجز عبر الواتساب");
+                // هنا يتم استدعاء دالة whatsapp.js التي أنشأناها سابقاً
+            }
+        });
 
-        <!-- STEP 2 -->
-        <div class="step-content" data-step="2">
-            <h2>اختر الخدمات الإضافية</h2>
-            <div class="addons-grid">
-                <div class="addon" onclick="toggleAddon(this)">
-                    <h3>كرسي أطفال</h3>
-                    <p>مناسب للأطفال حتى 5 سنوات</p>
-                </div>
-                <div class="addon" onclick="toggleAddon(this)">
-                    <h3>نظام ملاحة GPS</h3>
-                    <p>لتسهيل الوصول لكل الأماكن</p>
-                </div>
-                <div class="addon" onclick="toggleAddon(this)">
-                    <h3>سائق خاص</h3>
-                    <p>استمتع برحلة بدون قيادة</p>
-                </div>
-                <div class="addon" onclick="toggleAddon(this)">
-                    <h3>توصيل السيارة</h3>
-                    <p>إلى المنزل أو الفندق أو المطار</p>
-                </div>
-            </div>
-            <div style="text-align:center; margin-top:40px;">
-                <button class="btn-secondary" onclick="prevStep()">الرجوع</button>
-                <button class="btn-primary" onclick="nextStep()">التالي</button>
-            </div>
-        </div>
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 1) {
+                document.getElementById(`step-${currentStep}`).classList.add('hidden-step');
+                currentStep--;
+                document.getElementById(`step-${currentStep}`).classList.remove('hidden-step');
+                updateUI();
+            }
+        });
 
-        <!-- STEP 3 -->
-        <div class="step-content" data-step="3">
-            <h2>أدخل بياناتك</h2>
-            <form id="customer-form" style="max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:20px;">
-                <input type="text" placeholder="الاسم الكامل" required>
-                <input type="tel" placeholder="رقم الهاتف" required>
-                <input type="file" accept="image/*" placeholder="رفع المستندات">
-                <input type="text" placeholder="عنوان التسليم" required>
-                <input type="datetime-local" placeholder="تاريخ ووقت الاستلام" required>
-                <input type="datetime-local" placeholder="تاريخ ووقت الإرجاع" required>
-            </form>
-            <div style="text-align:center; margin-top:30px;">
-                <button class="btn-secondary" onclick="prevStep()">الرجوع</button>
-                <button class="btn-primary" onclick="finishBooking()">تأكيد الحجز</button>
-            </div>
-        </div>
+        function updateUI() {
+            // تحديث شريط التقدم
+            document.querySelectorAll('.step-pill').forEach((p, idx) => {
+                if (idx + 1 <= currentStep) {
+                    p.classList.add('active');
+                    p.classList.remove('text-gray-500', 'border-gray-600');
+                } else {
+                    p.classList.remove('active');
+                    p.classList.add('text-gray-500', 'border-gray-600');
+                }
+            });
 
-    </div>
-</section>
-
-<footer style="background: var(--primary); color:#fff; padding:30px 20px; text-align:center;">
-    <p>&copy; 2026 شركة الحوت لتأجير السيارات. جميع الحقوق محفوظة.</p>
-</footer>
-
-<script src="js/booking.js"></script>
+            // تحديث الأزرار
+            document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').innerText = currentStep === totalSteps ? 'تأكيد الحجز وإرسال' : 'التالي';
+        }
+    </script>
 </body>
 </html>
