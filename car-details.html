@@ -1,28 +1,73 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تفاصيل السيارة - الحوت</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل السيارة - الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<header>
-<div class="logo">الحوت</div>
-<nav>
-  <a href="index.html">الرئيسية</a>
-  <a href="cars.html">السيارات</a>
-  <a href="about.html">عن الشركة</a>
-</nav>
-</header>
+<body class="bg-[#002B5B] text-white">
 
-<section id="car-details" style="padding:30px;"></section>
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-5xl mx-auto bg-white/5 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <div class="flex flex-col md:flex-row">
+                
+                <div class="md:w-1/2">
+                    <img id="detail-img" src="" alt="صورة السيارة" class="w-full h-full object-cover min-h-[400px]">
+                </div>
 
-<footer>
-جميع الحقوق محفوظة © الحوت
-</footer>
+                <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                    <div class="flex justify-between items-center mb-4">
+                        <h1 id="detail-name" class="text-4xl font-bold">اسم السيارة</h1>
+                        <span id="detail-price" class="text-2xl font-bold text-[#0A6BEF]">0$ <small class="text-sm text-white/50">/ يوم</small></span>
+                    </div>
+                    
+                    <p class="text-gray-400 mb-8">تمتع بتجربة قيادة فريدة مع شركة الحوت. هذه السيارة مجهزة بأحدث تقنيات الأمان والرفاهية لضمان رحلة مريحة.</p>
 
-<script src="js/main.js"></script>
+                    <div class="grid grid-cols-2 gap-6 mb-10">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">⚙️</span>
+                            <div><p class="text-xs text-gray-500">ناقل الحركة</p><p id="detail-trans" class="font-bold">أوتوماتيك</p></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">👤</span>
+                            <div><p class="text-xs text-gray-500">الركاب</p><p id="detail-seats" class="font-bold">5 أشخاص</p></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">⛽</span>
+                            <div><p class="text-xs text-gray-500">نوع الوقود</p><p id="detail-fuel" class="font-bold">بنزين</p></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">❄️</span>
+                            <div><p class="text-xs text-gray-500">التكييف</p><p class="font-bold">مركزي مميز</p></div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="goToBooking()" class="flex-1 py-4 bg-[#0A6BEF] rounded-2xl font-bold text-lg hover:bg-blue-600 transition shadow-xl shadow-blue-500/20">احجز الآن</button>
+                        <a href="cars.html" class="px-6 py-4 border border-white/20 rounded-2xl font-bold hover:bg-white/5 transition">العودة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // كود بسيط لجلب البيانات من الرابط وعرضها
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            document.getElementById('detail-name').innerText = params.get('name') || 'سيارة الحوت';
+            document.getElementById('detail-price').innerHTML = `${params.get('price') || '0'}$ <small class="text-sm text-white/50">/ يوم</small>`;
+            document.getElementById('detail-img').src = params.get('img') || 'images/default-car.jpg';
+            
+            // يمكنك إضافة المزيد من البيانات هنا
+        });
+
+        function goToBooking() {
+            const params = new URLSearchParams(window.location.search);
+            window.location.href = `booking.html?carName=${params.get('name')}&carPrice=${params.get('price')}`;
+        }
+    </script>
 </body>
 </html>
