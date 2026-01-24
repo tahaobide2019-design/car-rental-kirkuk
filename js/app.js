@@ -1,62 +1,139 @@
-let allCars = []; // لتخزين جميع السيارات التي تم جلبها
+/**
+ * نظام إدارة سيارات "الحوت" - الإصدار الاحترافي
+ * وظائف الملف: جلب البيانات، الفلترة المتقدمة، وحفظ تفاصيل الحجز
+ */
 
-// دالة لجلب السيارات وعرضها
-async function loadCars(containerId = 'featured-cars', isFilterable = false) {
+let allCars = []; // مخزن مؤقت لكافة السيارات
+
+// 1. دالة جلب البيانات من ملف JSON
+async function loadCarsData(containerId = 'featured-cars', isFilterable = false) {
     try {
         const response = await fetch('./data/cars.json');
-        allCars = await response.json(); // حفظ جميع السيارات
-        displayCars(allCars, containerId); // عرض جميع السيارات في البداية
+        if (!response.ok) throw new Error('تعذر تحميل بيانات السيارات');
+        
+        allCars = await response.json();
 
-        // إذا كانت الصفحة تدعم الفلترة، إعداد المستمعات
+        // إذا كنا في الصفحة الرئيسية (نعرض أول 3 أو 6 سيارات فقط)
+        if (containerId === 'featured-cars') {
+            displayCars(allCars.slice(0, 6), containerId);
+        } else {
+            // عرض الكل في صفحة البحث
+            displayCars(allCars, containerId);
+        }
+
+        // تفعيل المستمعات إذا كانت صفحة فلترة
         if (isFilterable) {
-            document.getElementById('price-range').addEventListener('input', updatePriceDisplay);
-            updatePriceDisplay(); // تحديث عرض السعر الأولي
+            setupFilterListeners();
         }
 
     } catch (error) {
-        console.error("خطأ في تحميل بيانات السيارات:", error);
+        console.error("خطأ:", error);
+        const container = document.getElementById(containerId);
+        if (container) container.innerHTML = `<p class="text-red-500 text-center col-span-full">عذراً، فشل تحميل السيارات. تأكد من ملف data/cars.json</p>`;
     }
 }
 
-// دالة لعرض السيارات في حاوية معينة
+// 2. دالة عرض الكروت بتصميم أزرق وأبيض (Premium)
 function displayCars(carsToDisplay, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    if (carsToDisplay.length === 0) {
+        container.innerHTML = `<p class="text-center col-span-full text-gray-400 py-10">لا توجد سيارات مطابقة لبحثك حالياً.</p>`;
+        return;
+    }
+
     container.innerHTML = carsToDisplay.map(car => `
-        <div class="car-card animate-fade">
-            <img src="${car.image}" alt="${car.name}" class="w-full h-48 object-cover rounded-lg mb-4">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-xl font-bold text-primary-blue">${car.name}</h3>
-                <span class="bg-primary-blue/20 text-white px-3 py-1 rounded-full text-xs">${car.specs.fuel}</span>
+        <div class="car-card animate-fade group">
+            <div class="relative overflow-hidden rounded-lg mb-4">
+                <img src="${car.image}" alt="${car.name}" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="absolute top-2 left-2 bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    ${car.price}$ / يوم
+                </div>
             </div>
-            <div class="text-gray-400 text-sm mb-4">
-                <p>⚙️ ${car.specs.transmission} | 👥 ${car.specs.seats} مقاعد | نوع: ${getArabicCarType(car.type)}</p>
+
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-white group-hover:text-primary-blue transition-colors">${car.name}</h3>
+                <span class="text-[10px] border border-primary-blue text-primary-blue px-2 py-0.5 rounded">${getArabicCarType(car.type)}</span>
             </div>
-            <div class="flex justify-between items-center">
-                <span class="text-2xl font-bold">${car.price}$ <small class="text-sm text-gray-400">/يوم</small></span>
-                <a href="booking.html?id=${car.id}&carName=${encodeURIComponent(car.name)}&carPrice=${car.price}" class="btn-premium py-2 px-5 text-sm">احجز الآن</a>
+
+            <div class="grid grid-cols-2 gap-2 text-gray-400 text-xs mb-5">
+                <div class="flex items-center gap-1">⚙️ <span>${car.specs.transmission}</span></div>
+                <div class="flex items-center gap-1">⛽ <span>${car.specs.fuel}</span></div>
+                <div class="flex items-center gap-1">👥 <span>${car.specs.seats} مقاعد</span></div>
+                <div class="flex items-center gap-1">📅 <span>2024</span></div>
             </div>
+
+            <button onclick="navigateToBooking(${car.id}, '${car.name}', ${car.price})" class="btn-premium w-full text-sm">
+                احجز هذه السيارة
+            </button>
         </div>
     `).join('');
 }
 
-// دالة لتحويل نوع السيارة الإنجليزي إلى عربي للعرض
-function getArabicCarType(type) {
-    switch(type) {
-        case 'family': return 'عائلية';
-        case 'sport': return 'رياضية';
-        case 'economic': return 'اقتصادية';
-        case 'luxury': return 'فاخرة';
-        case 'suv': return 'دفع رباعي/SUV';
-        case 'commercial': return 'تجارية';
-        default: return type;
-    }
+// 3. دالة التنقل لصفحة الحجز مع تمرير البيانات عبر URL
+function navigateToBooking(id, name, price) {
+    const query = `id=${id}&carName=${encodeURIComponent(name)}&carPrice=${price}`;
+    window.location.href = `booking.html?${query}`;
 }
 
+// 4. نظام الفلترة المتقدم
+function setupFilterListeners() {
+    const priceRange = document.getElementById('price-range');
+    const priceDisplay = document.getElementById('price-display');
 
-// دالة لتحديث عرض السعر في شريط الفلترة
-function updatePriceDisplay() {
-    const priceRange =
+    if (priceRange && priceDisplay) {
+        priceRange.addEventListener('input', () => {
+            priceDisplay.innerText = priceRange.value;
+            applyFilters(); // فلترة فورية عند تحريك السعر
+        });
+    }
 
-      
+    // ربط باقي القوائم بالفلترة التلقائية
+    ['car-type', 'seats', 'transmission'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.addEventListener('change', applyFilters);
+    });
+}
+
+function applyFilters() {
+    const type = document.getElementById('car-type')?.value || "";
+    const seats = document.getElementById('seats')?.value || "";
+    const transmission = document.getElementById('transmission')?.value || "";
+    const maxPrice = document.getElementById('price-range')?.value || 1000;
+
+    const filtered = allCars.filter(car => {
+        const matchType = type === "" || car.type === type;
+        const matchSeats = seats === "" || car.specs.seats >= parseInt(seats);
+        const matchTrans = transmission === "" || car.specs.transmission === transmission;
+        const matchPrice = car.price <= parseInt(maxPrice);
+        
+        return matchType && matchSeats && matchTrans && matchPrice;
+    });
+
+    displayCars(filtered, 'all-cars-list');
+}
+
+// 5. مساعدات اللغة
+function getArabicCarType(type) {
+    const types = {
+        'family': 'عائلية',
+        'sport': 'رياضية',
+        'economic': 'اقتصادية',
+        'luxury': 'فاخرة',
+        'suv': 'دفع رباعي',
+        'commercial': 'تجارية'
+    };
+    return types[type] || type;
+}
+
+// 6. تشغيل النظام عند التحميل
+document.addEventListener('DOMContentLoaded', () => {
+    // تحديد الصفحة الحالية لتشغيل الوظيفة المناسبة
+    if (document.getElementById('featured-cars')) {
+        loadCarsData('featured-cars', false);
+    } 
+    else if (document.getElementById('all-cars-list')) {
+        loadCarsData('all-cars-list', true);
+    }
+});
