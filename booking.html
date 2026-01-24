@@ -1,21 +1,126 @@
-<div class="booking-wizard">
-    <div class="steps-header">
-        <div class="step active" id="s1">1. اختيار السيارة</div>
-        <div class="step" id="s2">2. الخدمات الإضافية</div>
-        <div class="step" id="s3">3. التأكيد والبيانات</div>
-    </div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز سيارة - شركة الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking-steps.css">
+</head>
+<body class="bg-gray-100">
 
-    <div class="wizard-content">
-        <section id="step1">
-            <div class="filters">
-                <button>عائلية</button> <button>رياضية</button> <button>فاخرة</button>
+    <div class="container mx-auto px-4 py-10">
+        <div class="max-w-4xl mx-auto mb-12">
+            <div class="flex justify-between items-center relative">
+                <div class="step-line"></div>
+                <div class="step-item active" id="step-1-indicator">
+                    <span class="step-num">1</span>
+                    <span class="step-label">السيارة</span>
+                </div>
+                <div class="step-item" id="step-2-indicator">
+                    <span class="step-num">2</span>
+                    <span class="step-label">الخدمات</span>
+                </div>
+                <div class="step-item" id="step-3-indicator">
+                    <span class="step-num">3</span>
+                    <span class="step-label">التأكيد</span>
+                </div>
             </div>
-            </section>
+        </div>
 
-        <section id="step2" style="display:none;">
-            <h3>خدمات إضافية</h3>
-            <label><input type="checkbox"> سائق خاص (+20$)</label>
-            <label><input type="checkbox"> توصيل للمطار (+15$)</label>
-        </section>
+        <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+            
+            <div class="flex-1 p-8 md:p-12">
+                <form id="bookingForm">
+                    
+                    <div class="booking-stage active" id="stage-1">
+                        <h2 class="text-3xl font-bold text-whale mb-6">تأكيد اختيار السيارة</h2>
+                        <div class="selected-car-preview p-4 border-2 border-gold rounded-2xl mb-6 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=200" class="rounded-lg shadow">
+                            <div>
+                                <h3 class="font-bold text-xl">شيفروليه كورفيت 2024</h3>
+                                <p class="text-gold font-bold">$120 / يوم</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="nextStage(2)" class="w-full btn-gold py-4 rounded-xl font-bold text-lg">الاستمرار للخدمات <i class="fas fa-arrow-left mr-2"></i></button>
+                    </div>
+
+                    <div class="booking-stage" id="stage-2">
+                        <h2 class="text-3xl font-bold text-whale mb-6">إضافات الرفاهية</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                            <label class="service-card">
+                                <input type="checkbox" name="extra" value="delivery" class="hidden" onchange="updateTotal()">
+                                <div class="card-content">
+                                    <i class="fas fa-home text-2xl mb-2"></i>
+                                    <span class="block font-bold">توصيل للمنزل</span>
+                                    <span class="text-sm text-gray-500">+$20</span>
+                                </div>
+                            </label>
+                            <label class="service-card">
+                                <input type="checkbox" name="extra" value="driver" class="hidden" onchange="updateTotal()">
+                                <div class="card-content">
+                                    <i class="fas fa-user-tie text-2xl mb-2"></i>
+                                    <span class="block font-bold">سائق خاص</span>
+                                    <span class="text-sm text-gray-500">+$50 / يوم</span>
+                                </div>
+                            </label>
+                            <label class="service-card">
+                                <input type="checkbox" name="extra" value="gps" class="hidden" onchange="updateTotal()">
+                                <div class="card-content">
+                                    <i class="fas fa-map-marked-alt text-2xl mb-2"></i>
+                                    <span class="block font-bold">نظام GPS</span>
+                                    <span class="text-sm text-gray-400 font-bold italic">مجاناً</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="button" onclick="nextStage(1)" class="flex-1 bg-gray-200 py-4 rounded-xl font-bold">رجوع</button>
+                            <button type="button" onclick="nextStage(3)" class="flex-[2] btn-gold py-4 rounded-xl font-bold text-lg">بيانات الدفع <i class="fas fa-arrow-left mr-2"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="booking-stage" id="stage-3">
+                        <h2 class="text-3xl font-bold text-whale mb-6">المعلومات النهائية</h2>
+                        <div class="space-y-4">
+                            <input type="text" id="cust_name" placeholder="الاسم الكامل" class="w-full p-4 border rounded-xl outline-none focus:border-gold" required>
+                            <input type="tel" id="cust_phone" placeholder="رقم الهاتف (واتساب)" class="w-full p-4 border rounded-xl outline-none focus:border-gold" required>
+                            
+                            <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                                <p class="text-sm text-blue-800 mb-3 font-bold"><i class="fas fa-camera ml-2"></i> ارفع صورة رخصة القيادة والهوية</p>
+                                <input type="file" class="text-sm" multiple>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button type="button" onclick="nextStage(2)" class="flex-1 bg-gray-200 py-4 rounded-xl font-bold">رجوع</button>
+                                <button type="button" onclick="finalizeBooking()" class="flex-[2] bg-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-green-700 transition">تأكيد الحجز عبر واتساب <i class="fab fa-whatsapp mr-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="w-full md:w-80 bg-whale text-white p-8">
+                <h3 class="text-xl font-bold mb-6 border-b border-white/10 pb-4">ملخص الحجز</h3>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between"><span>السيارة:</span> <span id="summary-car">$120</span></div>
+                    <div class="flex justify-between"><span>الإضافات:</span> <span id="summary-extras">$0</span></div>
+                    <hr class="border-white/10">
+                    <div class="flex justify-between text-xl font-black text-gold">
+                        <span>الإجمالي:</span>
+                        <span id="total-price">$120</span>
+                    </div>
+                </div>
+                <div class="mt-10 p-4 bg-gold/10 rounded-xl border border-gold/20 text-xs">
+                    <p class="text-gold font-bold mb-2">تنبيه:</p>
+                    <p>الدفع نقداً عند الاستلام. يرجى إحضار أصل المستندات المرفوعة للمعاينة.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <script src="js/booking.js"></script>
+</body>
+</html>
