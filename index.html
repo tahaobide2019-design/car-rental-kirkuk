@@ -8,66 +8,98 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
-        .hero-section { background: linear-gradient(to bottom, #ffffff 0%, #f3f4f6 100%); }
-        .logo-main {
-            width: 280px;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
-            animation: float 4s ease-in-out infinite;
-            mix-blend-mode: multiply;
+        body { font-family: 'Tajawal', sans-serif; background-color: #001226; color: white; overflow-x: hidden; }
+        
+        /* تصميم الهيدر الاحترافي */
+        .hero-bg {
+            background: radial-gradient(circle at center, #002d5e 0%, #001226 100%);
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
+
+        .logo-container {
+            position: relative;
+            z-index: 10;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .main-logo {
+            width: 320px;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.2));
+            mix-blend-mode: screen; /* لمحاولة دمج اللوغو مع الخلفية بدون حواف */
+        }
+
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
         }
-        .service-card { transition: all 0.3s ease; border: 2px solid transparent; }
-        .service-card:hover { border-color: #D4AF37; transform: translateY(-5px); background: #fff; }
+
+        /* حاوية الخدمات الزجاجية */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #D4AF37;
+        }
+
+        .btn-gold {
+            background: linear-gradient(90deg, #D4AF37 0%, #F2D06B 100%);
+            color: #001226;
+            transition: all 0.4s ease;
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+            transform: translateY(-3px);
+        }
     </style>
 </head>
-<body class="text-[#002349]">
+<body>
 
-    <header class="hero-section pt-16 pb-32 text-center">
-        <div class="flex justify-center mb-6">
-            <img src="logo.jpg" alt="Alhut Logo" class="logo-main">
+    <section class="hero-bg">
+        <div class="logo-container">
+            <img src="logo.jpg" alt="Alhut Logo" class="main-logo">
         </div>
-        <h1 class="text-6xl font-black text-[#002349] mb-2">الحـوات</h1>
-        <p class="text-xl text-gray-500 font-bold tracking-widest uppercase">World Class Automotive Services</p>
-        <div class="flex justify-center gap-2 mt-4">
-            <span class="h-1.5 w-16 bg-[#D4AF37] rounded-full"></span>
-            <span class="h-1.5 w-4 bg-[#002349] rounded-full"></span>
-        </div>
-    </header>
+        <h1 class="text-6xl font-black mt-4 text-[#D4AF37] tracking-widest">الحـوات</h1>
+        <p class="text-xl opacity-60 mt-2 font-light">AUTOMOTIVE ELITE SERVICES</p>
+    </section>
 
-    <main class="container mx-auto px-4 -mt-20">
-        <div class="bg-white shadow-2xl rounded-[3rem] p-10 max-w-5xl mx-auto border border-gray-100">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                <div class="md:col-span-1 space-y-2">
-                    <label class="block text-sm font-black text-gray-400 mr-2">نوع الخدمة</label>
-                    <select id="mainService" onchange="checkService()" class="w-full p-4 bg-gray-50 border-2 rounded-2xl outline-none font-bold focus:border-[#D4AF37] transition-all">
-                        <option value="">اختر الخدمة...</option>
-                        <option value="personal">🚗 تأجير شخصي</option>
-                        <option value="wedding">🎁 سيارات مزينة</option>
-                        <option value="training">🎓 كورس تعليم</option>
-                        <option value="cargo">🚛 نقل وحمل</option>
-                        <option value="water">💧 تنكر ماء</option>
+    <main class="container mx-auto px-4 -mt-24 relative z-20 pb-20">
+        <div class="glass-card rounded-[3rem] p-10 max-w-5xl mx-auto shadow-2xl">
+            <h3 class="text-center text-2xl font-bold mb-8 border-b border-white/10 pb-4">ابـدأ الحجـز الآن</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
+                <div class="space-y-3">
+                    <label class="block text-sm font-bold text-[#D4AF37] mr-2">نـوع الخدمـة</label>
+                    <select id="mainService" onchange="checkService()" class="w-full p-4 bg-white/10 border border-white/20 rounded-2xl outline-none font-bold text-white focus:border-[#D4AF37] transition-all cursor-pointer">
+                        <option value="" class="bg-[#001226]">اختر نوع الخدمة...</option>
+                        <option value="personal" class="bg-[#001226]">🚗 تأجير سيارة شخصية</option>
+                        <option value="wedding" class="bg-[#001226]">🎁 تجهيز سيارات أعراس</option>
+                        <option value="training" class="bg-[#001226]">🎓 كورس تعليم سياقة</option>
+                        <option value="cargo" class="bg-[#001226]">🚛 خدمات النقل والحمل</option>
+                        <option value="water" class="bg-[#001226]">💧 طلب تنكر ماء</option>
                     </select>
                 </div>
 
-                <div id="cargoDiv" class="hidden space-y-2">
-                    <label class="block text-sm font-black text-gray-400 mr-2">نوع المركبة</label>
-                    <select id="cargoType" class="w-full p-4 bg-gray-50 border-2 border-[#D4AF37] rounded-2xl font-bold">
-                        <option value="ستوتة">ستوتة (10 آلاف)</option>
-                        <option value="سيارة كبيرة">سيارة حمل (20 ألف)</option>
+                <div id="cargoDiv" class="hidden space-y-3">
+                    <label class="block text-sm font-bold text-[#D4AF37] mr-2">المركبة</label>
+                    <select id="cargoType" class="w-full p-4 bg-white/10 border border-[#D4AF37] rounded-2xl text-white font-bold">
+                        <option value="ستوتة" class="bg-[#001226]">ستوتة (10,000 د.ع)</option>
+                        <option value="سيارة كبيرة" class="bg-[#001226]">سيارة حمل (20,000 د.ع)</option>
                     </select>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="block text-sm font-black text-gray-400 mr-2">التاريخ</label>
-                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold focus:border-[#D4AF37] outline-none">
+                <div class="space-y-3">
+                    <label class="block text-sm font-bold text-[#D4AF37] mr-2">تاريخ الموعد</label>
+                    <input type="date" id="searchDate" class="w-full p-4 bg-white/10 border border-white/20 rounded-2xl outline-none font-bold text-white focus:border-[#D4AF37]">
                 </div>
 
-                <button onclick="processSearch()" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#D4AF37] hover:text-[#002349] transition-all">
-                    احجز الآن <i class="fas fa-arrow-left mr-2"></i>
+                <button onclick="processSearch()" class="btn-gold w-full py-5 rounded-2xl font-black text-xl flex justify-center items-center gap-2">
+                    استمرار <i class="fas fa-chevron-left"></i>
                 </button>
             </div>
         </div>
