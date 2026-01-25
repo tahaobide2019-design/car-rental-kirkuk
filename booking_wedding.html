@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز سيارات حفلات | الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style> body { font-family: 'Tajawal', sans-serif; background-color: #fff5f7; } #map { height: 180px; border-radius: 1.5rem; } </style>
+</head>
+<body class="p-4">
+    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl border-t-8 border-[#e91e63] p-8">
+        <h2 class="text-2xl font-black text-[#e91e63] text-center mb-6">🎁 سيارات الحفلات والأعراس</h2>
+        
+        <div class="space-y-4">
+            <input type="text" id="wName" placeholder="اسم صاحب الحفل" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[#e91e63] font-bold">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold mr-2">نوع السيارة</label>
+                    <select id="wCarType" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                        <option value="أوباما (كرايسلر)">أوباما (كرايسلر)</option>
+                        <option value="جارجر">جارجر</option>
+                        <option value="تاهو">تاهو</option>
+                        <option value="لاندكروزر">لاندكروزر</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold mr-2">عدد السيارات</label>
+                    <input type="number" id="wCount" value="1" min="1" class="w-full p-4 bg-gray-50 rounded-2xl font-bold text-center">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 p-4 bg-pink-50 rounded-2xl border-2 border-pink-100">
+                <input type="checkbox" id="wDecor" class="w-6 h-6 accent-[#e91e63]">
+                <label for="wDecor" class="font-black text-[#e91e63]">هل ترغب بإضافة زينة للسيارة؟ 🎀</label>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-[2rem] border">
+                <div id="map" class="mb-3"></div>
+                <button type="button" onclick="getLoc()" class="w-full py-2 bg-white border text-pink-600 rounded-xl font-bold mb-2">📍 تحديد موقع الانطلاق</button>
+            </div>
+            <input type="hidden" id="wCoords">
+
+            <button onclick="sendOrder()" class="w-full bg-[#e91e63] text-white py-4 rounded-2xl font-black text-lg shadow-lg">إرسال طلب الحفلة 🎉</button>
+        </div>
+    </div>
+    <script>
+        let map, marker;
+        window.onload = function() {
+            map = L.map('map').setView([35.4687, 44.3921], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
+        };
+        function getLoc() {
+            navigator.geolocation.getCurrentPosition(p => {
+                const pos = [p.coords.latitude, p.coords.longitude];
+                map.setView(pos, 16); marker.setLatLng(pos);
+                document.getElementById('wCoords').value = pos[0] + "," + pos[1];
+            });
+        }
+        function sendOrder() {
+            const decor = document.getElementById('wDecor').checked ? "نعم" : "لا";
+            const msg = `*طلب حجز حفلة*%0Aالاسم: ${document.getElementById('wName').value}%0Aالنوع: ${document.getElementById('wCarType').value}%0Aالعدد: ${document.getElementById('wCount').value}%0Aزينة: ${decor}%0Aالموقع: https://www.google.com/maps?q=${document.getElementById('wCoords').value}`;
+            window.open(`https://wa.me/9647713225471?text=${msg}`);
+        }
+    </script>
+</body>
+</html>
+
