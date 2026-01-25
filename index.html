@@ -3,63 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شركة الحوت للخدمات</title>
+    <title>الحوت لخدمات السيارات | كركوك</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #ffffff; }
-        .blue-gradient { background-color: #0056b3; }
-        .card { border: 1px solid #ddd; border-radius: 10px; padding: 20px; text-align: center; }
-        .btn-primary { background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; display: inline-block; margin-top: 10px; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .hero-bg {
+            background-color: #002349;
+            background-image: radial-gradient(circle at 20% 30%, #003366 0%, #002349 100%);
+        }
+        /* حركة إيموجي الحوت */
+        .whale-emoji {
+            display: inline-block;
+            font-size: 4rem;
+            animation: swim 3s ease-in-out infinite;
+        }
+        @keyframes swim {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
     </style>
 </head>
-<body>
+<body class="text-[#002349]">
 
-    <nav class="p-4 bg-white border-b flex justify-between items-center">
-        <h1 class="text-xl font-bold text-blue-700">شركة الحوت</h1>
-        <a href="admin/index.html" class="text-sm text-gray-500">دخول الإدارة</a>
-    </nav>
-
-    <header class="blue-gradient text-white py-12 px-4 text-center">
-        <h2 class="text-3xl font-bold">خدمات شركة الحوت 🐋</h2>
-        <p class="mt-2">نقل بضائع، تنكر ماء، وتعليم سياقة في كركوك</p>
+    <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
+        <div class="relative z-10">
+            <div class="whale-emoji mb-2">🐋</div>
+            <h1 class="text-6xl font-black mb-2 text-[#D4AF37] tracking-tighter">الحـوت</h1>
+            <p class="text-xl opacity-90 font-light">الريادة في خدمات السيارات بمدينة كركوك</p>
+            <div class="mt-6 flex justify-center gap-2">
+                <span class="h-1 w-12 bg-[#D4AF37] rounded-full"></span>
+                <span class="h-1 w-4 bg-white/30 rounded-full"></span>
+            </div>
+        </div>
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
     </header>
 
-    <main class="container mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <div class="card">
-            <i class="fas fa-tint text-blue-500 text-4xl mb-3"></i>
-            <h3 class="font-bold">تنكر ماء</h3>
-            <p class="text-sm text-gray-600">توصيل الماء الصالح للشرب</p>
-            <a href="booking_simple.html?type=water" class="btn-primary">اطلب الآن</a>
+    <main class="container mx-auto px-4 -mt-28 relative z-20">
+        <div class="bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[3rem] p-8 md:p-12 max-w-5xl mx-auto border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">نوع الخدمة</label>
+                    <select id="mainService" onchange="checkService()" class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none font-bold text-[#002349] focus:border-[#D4AF37] focus:bg-white transition-all text-right">
+                        <option value="">-- اختر الخدمة --</option>
+                        <option value="personal">🚗 تأجير سيارة شخصية</option>
+                        <option value="wedding">🎁 سيارات مزينة (أعراس)</option>
+                        <option value="training">🎓 تعليم قيادة (كورس)</option>
+                        <option value="cargo">🚛 سيارة حمل ونقل</option>
+                        <option value="water">💧 تنكر ماء (20 ألف)</option>
+                    </select>
+                </div>
+
+                <div id="cargoDiv" class="space-y-2 hidden">
+                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">نوع المركبة</label>
+                    <select id="cargoType" class="w-full p-4 bg-gray-50 border-2 border-[#D4AF37] rounded-2xl font-bold text-right">
+                        <option value="ستوتة">ستوتة (10 آلاف)</option>
+                        <option value="سيارة كبيرة">سيارة حمل كبيرة (20 ألف)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">تاريخ الحجز</label>
+                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent font-bold focus:border-[#D4AF37] focus:bg-white transition-all">
+                </div>
+
+                <button onclick="processSearch()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+                    احجز الآن <i class="fas fa-arrow-left mr-2"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="card">
-            <i class="fas fa-truck text-blue-500 text-4xl mb-3"></i>
-            <h3 class="font-bold">سيارة حمل</h3>
-            <p class="text-sm text-gray-600">نقل كافة أنواع الأثاث</p>
-            <a href="booking_simple.html?type=truck" class="btn-primary">اطلب الآن</a>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
+            <div class="text-center p-4">
+                <i class="fas fa-check-circle text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">تأكيد فوري</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-shield-alt text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">دعم 24 ساعة</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-map-marker-alt text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">تغطية كركوك</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-star text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">أفضل الأسعار</p>
+            </div>
         </div>
-
-        <div class="card">
-            <i class="fas fa-car text-blue-500 text-4xl mb-3"></i>
-            <h3 class="font-bold">كورس سياقة</h3>
-            <p class="text-sm text-gray-600">تعليم السياقة للمبتدئين</p>
-            <a href="booking_training.html" class="btn-primary">اشترك الآن</a>
-        </div>
-
-        <div class="card">
-            <i class="fas fa-star text-yellow-500 text-4xl mb-3"></i>
-            <h3 class="font-bold">سيارات VIP</h3>
-            <p class="text-sm text-gray-600">سيارات حديثة للمناسبات</p>
-            <a href="booking_vip.html?type=vip" class="btn-primary">احجز الآن</a>
-        </div>
-
     </main>
 
-    <footer class="text-center py-6 border-t mt-10 text-gray-500 text-sm">
-        <p>جميع الحقوق محفوظة - شركة الحوت 2026</p>
-    </footer>
+    <script>
+        function checkService() {
+            const service = document.getElementById('mainService').value;
+            const cargoDiv = document.getElementById('cargoDiv');
+            cargoDiv.style.display = (service === 'cargo') ? 'block' : 'none';
+        }
 
+        function processSearch() {
+            const service = document.getElementById('mainService').value;
+            const date = document.getElementById('searchDate').value;
+            if (!service || !date) { alert("⚠️ يرجى تحديد الخدمة والتاريخ"); return; }
+
+            if (service === 'personal' || service === 'wedding') {
+                window.location.href = `booking_vip.html?type=${service}&date=${date}`;
+            } else if (service === 'training') {
+                window.location.href = `booking_training.html?type=training&date=${date}`;
+            } else {
+                let v = (service === 'water') ? 'تنكر ماء' : document.getElementById('cargoType').value;
+                let p = (service === 'water') ? '20000' : (v === 'ستوتة' ? '10000' : '20000');
+                window.location.href = `booking_simple.html?type=${service}&vehicle=${v}&date=${date}&price=${p}`;
+            }
+        }
+    </script>
 </body>
 </html>
