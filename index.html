@@ -10,129 +10,77 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        
-        .whale-float {
-            display: inline-block;
-            font-size: 5rem;
-            animation: floating 4s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        .feature-card { transition: 0.3s; }
-        .feature-card:hover { transform: translateY(-10px); }
+        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
     </style>
 </head>
 <body class="text-[#002349]">
-
     <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
         <div class="whale-float mb-4">🐋</div>
         <h1 class="text-6xl font-black text-[#D4AF37] mb-2">الحـوت</h1>
-        <p class="text-xl opacity-90 font-light">الريادة في خدمات السيارات - كركوك</p>
+        <p class="text-xl opacity-90">الريادة في خدمات السيارات - كركوك</p>
     </header>
 
     <main class="container mx-auto px-4 -mt-28 relative z-10 pb-20">
-        <div class="bg-white shadow-2xl rounded-[3rem] p-8 md:p-10 max-w-6xl mx-auto border border-gray-100">
+        <div class="bg-white shadow-2xl rounded-[3rem] p-8 max-w-6xl mx-auto border border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-                
-                <div class="md:col-span-4 space-y-2">
-                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">نوع الخدمة المطلوبة</label>
-                    <select id="mainService" class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl font-bold text-[#002349] focus:border-[#D4AF37] outline-none transition-all">
-                        <option value="">-- اختر من خدماتنا --</option>
-                        <option value="personal">🚗 تأجير سيارة شخصية</option>
-                        <option value="wedding">🎁 سيارات مزينة (أعراس)</option>
-                        <option value="training">🎓 تعليم قيادة (مع مدرب)</option>
+                <div class="md:col-span-3 space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">نوع الخدمة</label>
+                    <select id="mainService" onchange="checkCargo()" class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl font-bold focus:border-[#D4AF37] outline-none">
+                        <option value="">-- اختر الخدمة --</option>
+                        <option value="personal">🚗 سيارة شخصية</option>
+                        <option value="wedding">🎁 أعراس وحفلات</option>
+                        <option value="training">🎓 تعليم قيادة</option>
                         <option value="cargo">🚛 سيارة حمل ونقل</option>
-                        <option value="water">💧 تنكر ماء (حوضي)</option>
+                        <option value="water">💧 تنكر ماء</option>
                     </select>
                 </div>
 
-                <div class="md:col-span-3 space-y-2">
-                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">التاريخ</label>
-                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold focus:border-[#D4AF37] outline-none">
+                <div id="cargoTypeDiv" class="md:col-span-2 space-y-2 hidden">
+                    <label class="block text-sm font-bold text-yellow-600 mr-2">نوع المركبة</label>
+                    <select id="cargoType" class="w-full p-4 bg-yellow-50 border-2 border-yellow-200 rounded-2xl font-bold outline-none">
+                        <option value="ستوتة">ستوتة 📦</option>
+                        <option value="سيارة حمل كبيرة">سيارة كبيرة 🚛</option>
+                    </select>
                 </div>
 
                 <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">الوقت</label>
-                    <input type="time" id="searchTime" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold focus:border-[#D4AF37] outline-none">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">التاريخ</label>
+                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold outline-none">
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">الوقت</label>
+                    <input type="time" id="searchTime" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold outline-none">
                 </div>
 
                 <div class="md:col-span-3">
-                    <button onclick="processSearch()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2">
-                        استمر الآن <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <button onclick="processSearch()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-[#b8962d] transition-all">استمر الآن</button>
                 </div>
-            </div>
-        </div>
-
-        <div class="mt-24 text-center mb-10">
-            <h2 class="text-3xl font-black text-[#002349]">لماذا تختار <span class="text-[#D4AF37]">الحوت؟</span></h2>
-            <p class="text-gray-500 mt-2">نحن نهتم بأدق التفاصيل لراحتك</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="feature-card bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-blue-50 text-[#002349] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <h3 class="text-xl font-black mb-3">أسطول ملكي</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">أحدث الموديلات لتناسب كل احتياجاتك ومناسباتك في كركوك.</p>
-            </div>
-
-            <div class="feature-card bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-yellow-50 text-[#D4AF37] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <h3 class="text-xl font-black mb-3">احترافية تامة</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">كادر مدرب لتقديم خدمات النقل والتعليم بأعلى معايير الجودة.</p>
-            </div>
-
-            <div class="feature-card bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-green-50 text-green-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <h3 class="text-xl font-black mb-3">دقة المواعيد</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">نصل إليك أينما كنت وفي الموعد المحدد تماماً.</p>
             </div>
         </div>
     </main>
 
     <script>
+        function checkCargo() {
+            const service = document.getElementById('mainService').value;
+            document.getElementById('cargoTypeDiv').classList.toggle('hidden', service !== 'cargo');
+        }
+
         function processSearch() {
             const service = document.getElementById('mainService').value;
             const date = document.getElementById('searchDate').value;
             const time = document.getElementById('searchTime').value;
+            const cargoType = document.getElementById('cargoType').value;
 
-            if (!service || !date || !time) {
-                alert("⚠️ يرجى اختيار الخدمة والتاريخ والوقت");
-                return;
-            }
-
+            if (!service || !date || !time) return alert("اكمل البيانات");
             const query = `?date=${date}&time=${time}`;
 
-            // التوجيه الذكي حسب نوع الخدمة
-            switch(service) {
-                case 'personal':
-                    window.location.href = 'fleet.html' + query + '&type=personal';
-                    break;
-                case 'wedding':
-                    window.location.href = 'booking_wedding.html' + query;
-                    break;
-                case 'training':
-                    window.location.href = 'booking_training.html' + query;
-                    break;
-                case 'cargo':
-                    window.location.href = 'booking_cargo.html' + query;
-                    break;
-                case 'water':
-                    window.location.href = 'booking_water.html' + query;
-                    break;
-                default:
-                    alert("الخدمة قيد التطوير");
-            }
+            if(service === 'cargo') window.location.href = `booking_cargo.html${query}&vehicle=${encodeURIComponent(cargoType)}`;
+            else if(service === 'water') window.location.href = `booking_water.html${query}`;
+            else if(service === 'training') window.location.href = `booking_training.html${query}`;
+            else if(service === 'personal') window.location.href = `fleet.html${query}&type=personal`;
+            else if(service === 'wedding') window.location.href = `booking_wedding.html${query}`;
         }
     </script>
 </body>
