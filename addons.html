@@ -49,6 +49,132 @@
                     </div>
                     <i class="fas fa-check-circle text-gray-200 text-2xl check-icon"></i>
                 </div>
+            </div>
+
+            <div id="weddingAddons" class="hidden space-y-4">
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border-2 border-gray-50 text-center mb-6">
+                    <p class="font-bold mb-4 text-gray-500 text-sm">كم عدد السيارات المطلوبة للموكب؟</p>
+                    <div class="flex items-center justify-center gap-8">
+                        <button onclick="changeQty(-1)" class="w-12 h-12 bg-gray-100 rounded-full text-2xl shadow-inner">-</button>
+                        <span id="carQty" class="text-4xl font-black">1</span>
+                        <button onclick="changeQty(1)" class="w-12 h-12 bg-[#002349] text-white rounded-full text-2xl shadow-lg">+</button>
+                    </div>
+                </div>
+
+                <div onclick="toggleAddon(this, 'زينة كاملة (50 ألف)')" class="addon-card bg-white p-5 rounded-[2rem] shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-ribbon"></i></div>
+                        <div>
+                            <span class="font-bold block">إضافة زينة كاملة</span>
+                            <span class="text-xs text-red-500 font-bold">+ 50,000 د.ع / للسيارة</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle text-gray-200 text-2xl check-icon"></i>
+                </div>
+
+                <div onclick="toggleAddon(this, 'سائق بمظهر رسمي (مجانًا)')" class="addon-card bg-white p-5 rounded-[2rem] shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-user-check"></i></div>
+                        <div>
+                            <span class="font-bold block">سائق بمظهر رسمي</span>
+                            <span class="text-xs text-purple-600 font-bold">مجـانًا مع الحفلات</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle text-gray-200 text-2xl check-icon"></i>
+                </div>
+            </div>
+
+            <button onclick="nextStep()" class="w-full bg-[#002349] text-white py-5 rounded-[2rem] font-black text-xl mt-8 shadow-xl hover:bg-[#D4AF37] hover:text-[#002349] transition-all">
+                متابعة الحجز <i class="fas fa-arrow-left mr-2"></i>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const service = params.get('service');
+        let selectedAddons = [];
+        let qty = 1;
+
+        if(service === 'personal') document.getElementById('personalAddons').classList.remove('hidden');
+        if(service === 'wedding') document.getElementById('weddingAddons').classList.remove('hidden');
+
+        function toggleAddon(el, name) {
+            el.classList.toggle('active');
+            const icon = el.querySelector('.check-icon');
+            if(el.classList.contains('active')) {
+                icon.classList.replace('text-gray-200', 'text-[#D4AF37]');
+                selectedAddons.push(name);
+            } else {
+                icon.classList.replace('text-[#D4AF37]', 'text-gray-200');
+                selectedAddons = selectedAddons.filter(a => a !== name);
+            }
+        }
+
+        function changeQty(val) {
+            qty = Math.max(1, qty + val);
+            document.getElementById('carQty').innerText = qty;
+        }
+
+        function nextStep() {
+            const target = (service === 'wedding') ? 'booking_wedding.html' : 'booking_vip.html';
+            const finalUrl = `${target}?${params.toString()}&addons=${encodeURIComponent(selectedAddons.join(' + '))}&qty=${qty}`;
+            window.location.href = finalUrl;
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تخصيص الحجز | الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
+        .addon-card { transition: 0.3s; border: 2px solid #eee; cursor: pointer; }
+        .addon-card.active { border-color: #D4AF37; background-color: #fffbeb; }
+        .whale-float { display: inline-block; animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body class="text-[#002349]">
+
+    <header class="hero-bg text-white pt-10 pb-24 text-center">
+        <div class="whale-float text-4xl mb-2">🐋</div>
+        <h1 class="text-2xl font-black text-[#D4AF37]">تخصيص طلبك</h1>
+        <p class="text-xs opacity-80 mt-1">أضف لمساتك الخاصة لرحلة مثالية</p>
+    </header>
+
+    <main class="container mx-auto px-4 -mt-12 relative z-10 pb-10">
+        <div class="max-w-2xl mx-auto space-y-4">
+            
+            <div id="personalAddons" class="hidden space-y-3">
+                <div onclick="toggleAddon(this, 'سائق خاص (25 ألف)')" class="addon-card bg-white p-5 rounded-[2rem] shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-user-tie"></i></div>
+                        <div>
+                            <span class="font-bold block">سائق خاص محترف</span>
+                            <span class="text-xs text-blue-500 font-bold">+ 25,000 د.ع / يوم</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle text-gray-200 text-2xl check-icon"></i>
+                </div>
+
+                <div onclick="toggleAddon(this, 'كرسي أطفال (5 آلاف)')" class="addon-card bg-white p-5 rounded-[2rem] shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-baby"></i></div>
+                        <div>
+                            <span class="font-bold block">كرسي أطفال آمن</span>
+                            <span class="text-xs text-pink-500 font-bold">+ 5,000 د.ع / يوم</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle text-gray-200 text-2xl check-icon"></i>
+                </div>
 
                 <div onclick="toggleAddon(this, 'نظام GPS (مجانًا)')" class="addon-card bg-white p-5 rounded-[2rem] shadow-sm flex items-center justify-between">
                     <div class="flex items-center gap-4">
