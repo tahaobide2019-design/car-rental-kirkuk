@@ -7,10 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
         .glass-card { background: rgba(255, 255, 255, 0.98); }
-        .input-training { border: 2px solid #ddd6fe; transition: 0.3s; }
+        #map { height: 180px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
+        .input-training { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
         .input-training:focus { border-color: #7c3aed; background: white; }
     </style>
 </head>
@@ -22,22 +25,31 @@
             <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-sm font-bold text-indigo-700 shadow-sm inline-block border border-indigo-100"></div>
         </div>
 
-        <div class="p-8 space-y-5">
+        <div class="p-8 space-y-5 text-right">
             <div>
                 <label class="block text-xs font-black text-gray-400 mb-2 mr-2">اسم المتدرب</label>
-                <input type="text" id="tName" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-50 rounded-2xl outline-none input-training font-bold text-[#4338ca]">
+                <input type="text" id="tName" placeholder="الاسم الكامل" class="input-training">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <input type="text" id="tID" placeholder="رقم الهوية" class="w-full p-4 bg-gray-50 rounded-2xl outline-none input-training font-bold">
-                <input type="text" id="tAge" placeholder="العمر" class="w-full p-4 bg-gray-50 rounded-2xl outline-none input-training font-bold">
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">رقم الهوية</label>
+                    <input type="text" id="tID" placeholder="رقم الهوية" class="input-training">
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">العمر</label>
+                    <input type="text" id="tAge" placeholder="العمر" class="input-training">
+                </div>
             </div>
 
-            <div class="bg-indigo-50 p-5 rounded-2xl border-r-8 border-[#7c3aed]">
-                <p class="text-indigo-900 font-black text-sm mb-1">ℹ️ معلومات الكورس:</p>
-                <p class="text-indigo-700 text-xs font-bold leading-relaxed">
-                    سيقوم المدرب بالتواصل معك لتحديد نقطة اللقاء. يرجى إحضار الهوية الأصلية في أول موعد.
-                </p>
+            <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
+                <label class="block font-black mb-3 text-sm text-indigo-900 mr-2 flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt"></i> تحديد موقع اللقاء:
+                </label>
+                <div id="map" class="mb-4"></div>
+                <button type="button" onclick="getGPS()" class="w-full py-4 bg-[#7c3aed] text-white rounded-2xl font-black text-sm shadow-lg hover:bg-[#6d28d9] transition-all">
+                    تحديد موقعي الحالي 🛰️
+                </button>
             </div>
 
             <button onclick="goToReviewTraining()" class="w-full bg-[#7c3aed] text-white py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-[#6d28d9] transition-all flex items-center justify-center gap-3">
@@ -47,17 +59,33 @@
     </div>
 
     <script>
+        let map, marker;
         const p = new URLSearchParams(window.location.search);
         const date = p.get('date'); const time = p.get('time');
         document.getElementById('summary').innerHTML = `📅 يبدأ في: ${date} <span class="mx-2">|</span> ⏰ الساعة: ${time}`;
+
+        window.onload = function() {
+            map = L.map('map').setView([35.4687, 44.3921], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
+        };
+
+        function getGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const coords = [pos.coords.latitude, pos.coords.longitude];
+                    map.setView(coords, 17); marker.setLatLng(coords);
+                });
+            }
+        }
 
         function goToReviewTraining() {
             const name = document.getElementById('tName').value;
             const id = document.getElementById('tID').value;
             const age = document.getElementById('tAge').value;
+            const latlng = marker.getLatLng();
             if(!name || !id || !age) { alert("⚠️ يرجى إكمال البيانات"); return; }
-
-            window.location.href = `review.html?service=training&car=كورس تعليم قيادة&date=${date}&time=${encodeURIComponent(time)}&name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}&age=${age}&emoji=🎓`;
+            window.location.href = `review.html?service=training&car=كورس تعليم قيادة&date=${date}&time=${encodeURIComponent(time)}&name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}&age=${age}&lat=${latlng.lat}&lng=${latlng.lng}&emoji=🎓`;
         }
     </script>
 </body>
