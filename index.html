@@ -3,149 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحوت لخدمات السيارات | كركوك</title>
+    <title>شركة الحوت 🐋 | كركوك</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
+        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         
-        .whale-float {
-            display: inline-block;
-            font-size: 5rem;
-            animation: floating 4s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        .service-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* تحسين شكل المدخلات */
+        .smart-input {
+            width: 100%;
+            padding: 1rem;
+            background-color: #f1f5f9;
             border: 2px solid transparent;
+            border-radius: 1.25rem;
+            font-weight: 700;
+            color: #002349;
+            transition: all 0.3s;
+            outline: none;
         }
-        .service-btn:hover { transform: translateY(-5px); border-color: #D4AF37; }
-        .service-btn.active { background: #fffcf0; border-color: #D4AF37; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2); }
+        .smart-input:focus {
+            background-color: #fff;
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+        .card-container {
+            background: white;
+            border-radius: 3.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body class="text-[#002349]">
 
     <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
-        <div class="whale-float mb-4">🐋</div>
+        <div class="whale-float mb-4 text-7xl">🐋</div>
         <h1 class="text-6xl font-black text-[#D4AF37] mb-2">الحـوت</h1>
-        <p id="smartGreeting" class="text-xl opacity-90 font-light italic">جاري التحميل...</p>
+        <p id="dynamicGreeting" class="text-xl opacity-90 font-light">جاري التحميل...</p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-28 relative z-10 pb-20">
-        <div class="bg-white shadow-2xl rounded-[3rem] p-8 md:p-10 max-w-6xl mx-auto border border-gray-100">
+    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
+        <div class="card-container p-8 md:p-12 max-w-6xl mx-auto">
             
-            <div class="text-center mb-8">
-                <h3 class="font-black text-gray-400 text-sm uppercase tracking-widest mb-4">اختر نوع الخدمة</h3>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    <button onclick="selectService('personal', '🚗')" id="btn-personal" class="service-btn bg-gray-50 p-4 rounded-2xl flex flex-col items-center gap-2">
-                        <span class="text-3xl">🚗</span> <span class="text-xs font-bold">شخصية</span>
-                    </button>
-                    <button onclick="selectService('wedding', '🎁')" id="btn-wedding" class="service-btn bg-gray-50 p-4 rounded-2xl flex flex-col items-center gap-2">
-                        <span class="text-3xl">🎁</span> <span class="text-xs font-bold">أعراس</span>
-                    </button>
-                    <button onclick="selectService('training', '🎓')" id="btn-training" class="service-btn bg-gray-50 p-4 rounded-2xl flex flex-col items-center gap-2">
-                        <span class="text-3xl">🎓</span> <span class="text-xs font-bold">تعليم</span>
-                    </button>
-                    <button onclick="selectService('cargo', '🚛')" id="btn-cargo" class="service-btn bg-gray-50 p-4 rounded-2xl flex flex-col items-center gap-2">
-                        <span class="text-3xl">🚛</span> <span class="text-xs font-bold">حمل</span>
-                    </button>
-                    <button onclick="selectService('water', '💧')" id="btn-water" class="service-btn bg-gray-50 p-4 rounded-2xl flex flex-col items-center gap-2">
-                        <span class="text-3xl">💧</span> <span class="text-xs font-bold">ماء</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end border-t pt-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
                 
-                <div id="cargoDiv" class="md:col-span-4 space-y-2 hidden transition-all">
-                    <label class="block text-sm font-bold text-[#D4AF37] mr-2 text-right">نوع مركبة الحمل</label>
-                    <select id="cargoType" class="w-full p-4 bg-yellow-50 border-2 border-[#D4AF37] rounded-2xl font-bold">
-                        <option value="ستوتة">ستوتة 📦</option>
-                        <option value="سيارة حمل كبيرة">سيارة حمل كبيرة 🚛</option>
+                <div class="md:col-span-3 space-y-2">
+                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase tracking-wide">الخدمة المطلوبة</label>
+                    <select id="mainService" onchange="toggleCargo()" class="smart-input appearance-none">
+                        <option value="">-- اختر الخدمة --</option>
+                        <option value="personal">🚗 تأجير سيارة شخصية</option>
+                        <option value="wedding">🎁 سيارات أعراس ومناسبات</option>
+                        <option value="training">🎓 تعليم قيادة (مدربين)</option>
+                        <option value="cargo">🚛 سيارة حمل ونقل</option>
+                        <option value="water">💧 تنكر ماء (حوضي)</option>
                     </select>
                 </div>
 
-                <div class="md:col-span-3 space-y-2">
-                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">التاريخ</label>
-                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold focus:border-[#D4AF37] outline-none">
+                <div id="cargoExtra" class="md:col-span-2 space-y-2 hidden">
+                    <label class="block text-sm font-black text-yellow-600 mr-2">نوع المركبة</label>
+                    <select id="cargoType" class="smart-input border-yellow-200 bg-yellow-50">
+                        <option value="ستوتة">ستوتة 📦</option>
+                        <option value="سيارة حمل كبيرة">سيارة كبيرة 🚛</option>
+                    </select>
                 </div>
 
                 <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-bold text-gray-400 mr-2 text-right">الوقت</label>
-                    <input type="time" id="searchTime" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent font-bold focus:border-[#D4AF37] outline-none">
+                    <label class="block text-sm font-black text-slate-400 mr-2">التاريخ</label>
+                    <input type="date" id="dateInput" class="smart-input">
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-sm font-black text-slate-400 mr-2">الوقت</label>
+                    <input type="time" id="timeInput" class="smart-input">
                 </div>
 
                 <div class="md:col-span-3">
-                    <button onclick="processSearch()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2">
+                    <button onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all transform active:scale-95 flex items-center justify-center gap-2">
                         استمر الآن <i class="fas fa-arrow-left"></i>
                     </button>
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-20">
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-blue-50 text-[#002349] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6"><i class="fas fa-gem"></i></div>
-                <h3 class="text-xl font-black mb-3">أسطول ملكي</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">أحدث الموديلات لتناسب كل احتياجاتك ومناسباتك.</p>
-            </div>
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-yellow-50 text-[#D4AF37] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6"><i class="fas fa-user-shield"></i></div>
-                <h3 class="text-xl font-black mb-3">احترافية تامة</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">كادر مدرب لتقديم أفضل خدمات النقل والتعليم.</p>
-            </div>
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-green-50 text-green-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6"><i class="fas fa-clock"></i></div>
-                <h3 class="text-xl font-black mb-3">دقة المواعيد</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">نصل إليك أينما كنت وفي الموعد المحدد تماماً.</p>
+            <div class="mt-10 pt-6 border-t border-slate-100 flex flex-wrap justify-center gap-8 opacity-60">
+                <div class="flex items-center gap-2 text-xs font-bold"><i class="fas fa-check-circle text-green-500"></i> تأكيد فوري</div>
+                <div class="flex items-center gap-2 text-xs font-bold"><i class="fas fa-map-marker-alt text-blue-500"></i> نظام GPS دقيق</div>
+                <div class="flex items-center gap-2 text-xs font-bold"><i class="fas fa-shield-alt text-yellow-600"></i> خدمة موثوقة</div>
             </div>
         </div>
     </main>
 
     <script>
-        let currentService = "";
-
-        // ذكاء الترحيب حسب الوقت
+        // ذكاء الترحيب
         const hour = new Date().getHours();
-        const greetElement = document.getElementById('smartGreeting');
-        if (hour < 12) greetElement.innerText = "صباح الخير.. أهلاً بك في الحوت ☀️";
-        else if (hour < 18) greetElement.innerText = "طاب يومك.. أهلاً بك في الحوت 🌤️";
-        else greetElement.innerText = "مساء الخير.. أهلاً بك في الحوت ✨";
+        const greetElement = document.getElementById('dynamicGreeting');
+        if (hour < 12) greetElement.innerText = "صباح الخير.. أهلاً بك في منصة الحوت الذكية ☀️";
+        else if (hour < 18) greetElement.innerText = "طاب يومك.. أهلاً بك في منصة الحوت الذكية 🌤️";
+        else greetElement.innerText = "مساء الخير.. أهلاً بك في منصة الحوت الذكية ✨";
 
-        function selectService(service, emoji) {
-            currentService = service;
-            // تمييز الزر المختار
-            document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + service).classList.add('active');
-            
-            // إظهار خيارات الحمل إذا تم اختيارها
-            document.getElementById('cargoDiv').classList.toggle('hidden', service !== 'cargo');
+        // إظهار/إخفاء نوع الحمل
+        function toggleCargo() {
+            const s = document.getElementById('mainService').value;
+            document.getElementById('cargoExtra').classList.toggle('hidden', s !== 'cargo');
         }
 
-        function processSearch() {
-            const date = document.getElementById('searchDate').value;
-            const time = document.getElementById('searchTime').value;
-            const cargoType = document.getElementById('cargoType').value;
+        // معالجة الحجز
+        function startBooking() {
+            const s = document.getElementById('mainService').value;
+            const d = document.getElementById('dateInput').value;
+            const t = document.getElementById('timeInput').value;
+            const ct = document.getElementById('cargoType').value;
 
-            if (!currentService || !date || !time) {
-                alert("⚠️ يرجى اختيار الخدمة والتاريخ والوقت");
+            if(!s || !d || !t) {
+                alert("يرجى ملء جميع الحقول للمتابعة 🐋");
                 return;
             }
 
-            const query = `?date=${date}&time=${time}`;
+            const query = `?date=${d}&time=${encodeURIComponent(t)}`;
 
-            if(currentService === 'cargo') window.location.href = `booking_cargo.html${query}&vehicle=${encodeURIComponent(cargoType)}`;
-            else if(currentService === 'water') window.location.href = `booking_water.html${query}`;
-            else if(currentService === 'training') window.location.href = `booking_training.html${query}`;
-            else if(currentService === 'personal') window.location.href = `fleet.html${query}&type=personal`;
-            else if(currentService === 'wedding') window.location.href = `booking_wedding.html${query}`;
+            if(s === 'cargo') window.location.href = `booking_cargo.html${query}&vehicle=${encodeURIComponent(ct)}`;
+            else if(s === 'water') window.location.href = `booking_water.html${query}`;
+            else if(s === 'training') window.location.href = `booking_training.html${query}`;
+            else if(s === 'personal') window.location.href = `fleet.html${query}&type=personal`;
+            else if(s === 'wedding') window.location.href = `booking_wedding.html${query}`;
         }
     </script>
 </body>
