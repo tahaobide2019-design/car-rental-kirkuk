@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأكيد طلب الحمل | الحوت</title>
+    <title>تأكيد طلب الشحن | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,55 +16,62 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
         .glass-card { background: rgba(255, 255, 255, 0.98); }
-        .map-box { height: 180px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
-        .input-training { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
-        .input-training:focus { border-color: #7c3aed; background: white; }
+        .map-box { height: 200px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
+        .input-style { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
+        .input-style:focus { border-color: #7c3aed; background: white; border-width: 2.5px; }
+        
+        /* جعل شريط البحث في الخريطة بارزاً جداً */
+        .leaflet-control-geocoder { 
+            border: 3px solid #7c3aed !important; 
+            border-radius: 15px !important; 
+            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.4) !important;
+            min-width: 250px !important;
+            margin-top: 10px !important;
+        }
+        .leaflet-control-geocoder-form input { font-family: 'Tajawal', sans-serif; font-weight: bold; padding: 10px; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8 text-right">
+<body class="p-4 md:p-8">
     <div class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] border-[#7c3aed]">
         
         <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
             <div class="text-5xl mb-3">🚛</div>
-            <h2 class="text-3xl font-black text-[#4338ca]">تأكيد طلب نقل حمل</h2>
-            <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-sm font-bold text-indigo-700 shadow-sm inline-block border border-indigo-100 italic">خدمة نقل الحوت 🐋</div>
+            <h2 class="text-3xl font-black text-[#4338ca]">تأكيد مسار النقل</h2>
+            <div class="mt-4 p-2 bg-white rounded-2xl text-xs font-bold text-indigo-700 shadow-sm inline-block border border-indigo-100">خدمة النقل اللوجستي المتطور 🐋</div>
         </div>
 
-        <div class="p-8 space-y-5">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-8 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">اسم الزبون</label>
-                    <input type="text" id="cName" placeholder="الاسم الكامل" class="input-training">
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">👤 اسم الزبون</label>
+                    <input type="text" id="cName" placeholder="الاسم الكامل" class="input-style">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">رقم التواصل</label>
-                    <input type="tel" id="cPhone" placeholder="077..." class="input-training text-left" dir="ltr">
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">📞 هاتف التواصل</label>
+                    <input type="tel" id="cPhone" placeholder="077..." class="input-style text-left" dir="ltr">
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-black text-gray-400 mb-2 mr-2">📦 ماذا سننقل؟</label>
-                <input type="text" id="cNotes" placeholder="مثلاً: أثاث منزل، بضاعة.." class="input-training">
-            </div>
-
-            <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label class="block font-black mb-3 text-sm text-indigo-900 mr-2 flex items-center gap-2">
-                    <i class="fas fa-arrow-up text-green-600"></i> تحديد موقع الاستلام (منين؟):
+            <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner space-y-4">
+                <label class="block font-black text-sm text-indigo-900 flex items-center gap-2">
+                    <i class="fas fa-arrow-up text-green-600"></i> 1. موقع الاستلام (الخارطة + كتابة)
                 </label>
-                <div id="mapStart" class="map-box mb-4"></div>
-                <button onclick="getStartGPS()" class="w-full py-4 bg-[#7c3aed] text-white rounded-2xl font-black text-sm shadow-lg">تحديد موقعي الحالي 🛰️</button>
+                <div id="mapStart" class="map-box"></div>
+                <button onclick="getStartGPS()" class="w-full py-3 bg-[#7c3aed] text-white rounded-2xl font-black text-xs shadow-lg">بث موقعي الحالي 🛰️</button>
+                <input type="text" id="startDesc" placeholder="مثلاً: قرب جامع كركوك الكبير، شارع 15" class="input-style bg-white border-green-200">
             </div>
 
-            <div class="bg-purple-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label class="block font-black mb-3 text-sm text-purple-900 mr-2 flex items-center gap-2">
-                    <i class="fas fa-arrow-down text-red-600"></i> تحديد موقع التسليم (لوين؟):
+            <div class="bg-purple-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner space-y-4">
+                <label class="block font-black text-sm text-purple-900 flex items-center gap-2">
+                    <i class="fas fa-arrow-down text-red-600"></i> 2. موقع التسليم (ابحث عن الوجهة)
                 </label>
-                <div id="mapEnd" class="map-box mb-4"></div>
-                <p class="text-[10px] text-center text-purple-400 font-bold">* استخدم زر البحث 🔍 داخل الخريطة للوجهة</p>
+                <div id="mapEnd" class="map-box"></div>
+                <p class="text-[10px] text-purple-500 font-bold text-center">💡 ابحث عن المنطقة في الخريطة أعلاه 🔍</p>
+                <input type="text" id="endDesc" placeholder="وصف وجهة التسليم (اسم المنطقة، رقم الدار..)" class="input-style bg-white border-red-200">
             </div>
 
-            <button onclick="confirmCargo()" class="w-full bg-[#7c3aed] text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3">
-                مراجعة البيانات <i class="fas fa-chevron-left"></i>
+            <button onclick="confirmCargo()" class="w-full bg-[#7c3aed] text-white py-5 rounded-[2rem] font-black text-xl shadow-2xl flex items-center justify-center gap-3">
+                مراجعة بيانات الشحن <i class="fas fa-chevron-left"></i>
             </button>
         </div>
     </div>
@@ -74,20 +81,20 @@
         const u = new URLSearchParams(window.location.search);
 
         window.onload = function() {
-            // الخريطة 1
+            // تهيئة خريطة البداية
             mapStart = L.map('mapStart', {zoomControl: false}).setView([35.4687, 44.3921], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStart);
             markerStart = L.marker([35.4687, 44.3921], {draggable: true}).addTo(mapStart);
 
-            // الخريطة 2
+            // تهيئة خريطة النهاية مع البحث
             mapEnd = L.map('mapEnd', {zoomControl: false}).setView([35.4687, 44.3921], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapEnd);
             markerEnd = L.marker([35.4687, 44.3921], {draggable: true}).addTo(mapEnd);
 
-            // إضافة البحث للخريطة الثانية
+            // تفعيل البحث البارز
             L.Control.geocoder({
                 defaultMarkGeocode: false,
-                placeholder: "ابحث عن وجهة التسليم...",
+                placeholder: "🔍 ابحث عن منطقة التسليم...",
             }).on('markgeocode', function(e) {
                 const latlng = e.geocode.center;
                 mapEnd.setView(latlng, 16); markerEnd.setLatLng(latlng);
@@ -104,10 +111,11 @@
         function confirmCargo() {
             const name = document.getElementById('cName').value;
             const phone = document.getElementById('cPhone').value;
-            if(!name || !phone) { alert("⚠️ يرجى إكمال البيانات"); return; }
+            if(!name || !phone) { alert("⚠️ لطفاً أكمل بيانات التواصل"); return; }
             
             u.set('name', name); u.set('phone', phone);
-            u.set('notes', document.getElementById('cNotes').value);
+            u.set('start_desc', document.getElementById('startDesc').value);
+            u.set('end_desc', document.getElementById('endDesc').value);
             u.set('slat', markerStart.getLatLng().lat); u.set('slng', markerStart.getLatLng().lng);
             u.set('elat', markerEnd.getLatLng().lat); u.set('elng', markerEnd.getLatLng().lng);
             u.set('emoji', '🚛');
