@@ -1,34 +1,84 @@
-<script>
-    let uprice = 0, map, marker;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الحجز | الحوت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        #map { height: 220px; border-radius: 1.5rem; z-index: 1; }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-xl mx-auto bg-white rounded-[2.5rem] shadow-xl overflow-hidden border-t-8 border-[#002349] p-8">
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-2">🐋</div>
+            <h2 class="text-2xl font-black text-[#002349]">إكمال حجز النقل / الماء</h2>
+        </div>
 
-    window.onload = function() {
-        const p = new URLSearchParams(window.location.search);
-        uprice = parseInt(p.get('price')) || 0;
-        document.getElementById('stype').innerText = p.get('vehicle') || "غير محدد";
-        recalc();
+        <div class="space-y-4">
+            <input type="text" id="sName" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold">
+            <input type="tel" id="sPhone" placeholder="رقم الهاتف (0770XXXXXXX)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold text-right">
 
+            <div class="bg-gray-50 p-4 rounded-[2rem] border-2 border-gray-100 shadow-sm">
+                <label class="block font-black mb-3 text-sm text-gray-600 mr-2 text-right">📍 حدد موقع سكنك على الخريطة:</label>
+                <div id="map" class="mb-3 border-4 border-white shadow-inner"></div>
+                
+                <button type="button" onclick="getLocation()" class="w-full mb-3 py-3 bg-white border-2 border-blue-100 text-blue-600 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all">
+                    <i class="fas fa-crosshairs"></i> تحديد موقعي الحالي عبر GPS
+                </button>
+
+                <textarea id="sAddress" placeholder="وصف إضافي للعنوان أو أقرب نقطة دالة" class="w-full p-4 bg-white border-2 border-gray-100 rounded-2xl outline-none text-sm font-medium" rows="2"></textarea>
+                <input type="hidden" id="sCoords">
+            </div>
+
+            <button onclick="sendSimpleOrder()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-xl shadow-lg hover:bg-green-600 transition-all">
+                تأكيد عبر واتساب <i class="fab fa-whatsapp mr-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let map, marker;
         const kirkuk = [35.4687, 44.3921];
-        map = L.map('map').setView(kirkuk, 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        marker = L.marker(kirkuk, {draggable: true}).addTo(map);
-        
-        // تفعيل الـ GPS التلقائي فوراً
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-                map.setView([lat, lng], 16);
-                marker.setLatLng([lat, lng]);
-                document.getElementById('scoords').value = lat + "," + lng;
+
+        window.onload = function() {
+            map = L.map('map').setView(kirkuk, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            marker = L.marker(kirkuk, {draggable: true}).addTo(map);
+            marker.on('dragend', () => {
+                const p = marker.getLatLng();
+                document.getElementById('sCoords').value = p.lat + "," + p.lng;
             });
+            document.getElementById('sCoords').value = kirkuk[0] + "," + kirkuk[1];
+        };
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((p) => {
+                    const pos = [p.coords.latitude, p.coords.longitude];
+                    map.setView(pos, 17);
+                    marker.setLatLng(pos);
+                    document.getElementById('sCoords').value = pos[0] + "," + pos[1];
+                }, () => alert("يرجى تفعيل الـ GPS"));
+            }
         }
 
-        marker.on('dragend', function() {
-            const pos = marker.getLatLng();
-            document.getElementById('scoords').value = pos.lat + "," + pos.lng;
-        });
-        document.getElementById('scoords').value = kirkuk[0] + "," + kirkuk[1];
-    };
-    
-    // ... باقي دالة الحساب والإرسال كما هي ...
-</script>
+        function sendSimpleOrder() {
+            const name = document.getElementById('sName').value;
+            const phone = document.getElementById('sPhone').value;
+            const addr = document.getElementById('sAddress').value;
+            const coords = document.getElementById('sCoords').value;
+            if(!name || !phone) { alert("يرجى ملء البيانات"); return; }
+            
+            const msg = `*طلب حجز (نقل/ماء)*%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالوصف: ${addr}%0Aالموقع: https://www.google.com/maps?q=${coords}`;
+            window.open(`https://wa.me/9647713225471?text=${msg}`);
+        }
+    </script>
+</body>
+</html>
