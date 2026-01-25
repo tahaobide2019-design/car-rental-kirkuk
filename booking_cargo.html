@@ -20,24 +20,35 @@
         .input-style { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
         .input-style:focus { border-color: #7c3aed; background: white; border-width: 2.5px; }
         
-        /* جعل شريط البحث في الخريطة بارزاً جداً */
+        /* شريط البحث البارز */
         .leaflet-control-geocoder { 
             border: 3px solid #7c3aed !important; 
             border-radius: 15px !important; 
             box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.4) !important;
             min-width: 250px !important;
-            margin-top: 10px !important;
         }
-        .leaflet-control-geocoder-form input { font-family: 'Tajawal', sans-serif; font-weight: bold; padding: 10px; border-radius: 10px; }
+
+        /* حقل السعر العائم */
+        .price-tag {
+            position: sticky;
+            bottom: 20px;
+            z-index: 50;
+            background: #7c3aed;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.4);
+            text-align: center;
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
-    <div class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] border-[#7c3aed]">
+    <div class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] border-[#7c3aed] mb-20">
         
         <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
             <div class="text-5xl mb-3">🚛</div>
             <h2 class="text-3xl font-black text-[#4338ca]">تأكيد مسار النقل</h2>
-            <div class="mt-4 p-2 bg-white rounded-2xl text-xs font-bold text-indigo-700 shadow-sm inline-block border border-indigo-100">خدمة النقل اللوجستي المتطور 🐋</div>
+            <p class="text-[10px] font-bold text-indigo-400 mt-2 tracking-widest uppercase">سعر الكيلومتر الواحد: 2,000 د.ع</p>
         </div>
 
         <div class="p-8 space-y-6">
@@ -54,50 +65,64 @@
 
             <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner space-y-4">
                 <label class="block font-black text-sm text-indigo-900 flex items-center gap-2">
-                    <i class="fas fa-arrow-up text-green-600"></i> 1. موقع الاستلام (الخارطة + كتابة)
+                    <i class="fas fa-arrow-up text-green-600"></i> 1. موقع الاستلام (منين؟)
                 </label>
                 <div id="mapStart" class="map-box"></div>
                 <button onclick="getStartGPS()" class="w-full py-3 bg-[#7c3aed] text-white rounded-2xl font-black text-xs shadow-lg">بث موقعي الحالي 🛰️</button>
-                <input type="text" id="startDesc" placeholder="مثلاً: قرب جامع كركوك الكبير، شارع 15" class="input-style bg-white border-green-200">
+                <input type="text" id="startDesc" placeholder="وصف مكان الاستلام كتابةً" class="input-style bg-white">
             </div>
 
             <div class="bg-purple-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner space-y-4">
                 <label class="block font-black text-sm text-purple-900 flex items-center gap-2">
-                    <i class="fas fa-arrow-down text-red-600"></i> 2. موقع التسليم (ابحث عن الوجهة)
+                    <i class="fas fa-arrow-down text-red-600"></i> 2. موقع التسليم (لوين؟)
                 </label>
                 <div id="mapEnd" class="map-box"></div>
                 <p class="text-[10px] text-purple-500 font-bold text-center">💡 ابحث عن المنطقة في الخريطة أعلاه 🔍</p>
-                <input type="text" id="endDesc" placeholder="وصف وجهة التسليم (اسم المنطقة، رقم الدار..)" class="input-style bg-white border-red-200">
+                <input type="text" id="endDesc" placeholder="وصف وجهة التسليم كتابةً" class="input-style bg-white">
             </div>
 
-            <button onclick="confirmCargo()" class="w-full bg-[#7c3aed] text-white py-5 rounded-[2rem] font-black text-xl shadow-2xl flex items-center justify-center gap-3">
-                مراجعة بيانات الشحن <i class="fas fa-chevron-left"></i>
+            <div class="bg-yellow-50 p-6 rounded-[2.5rem] border-2 border-yellow-200 text-center">
+                <p class="text-xs font-black text-yellow-700 uppercase mb-1">المسافة المقدرة</p>
+                <div id="distanceInfo" class="text-2xl font-black text-indigo-900 mb-2">0 كم</div>
+                <hr class="border-yellow-200 my-2">
+                <p class="text-xs font-black text-yellow-700 uppercase mb-1">السعر الكلي (تقريبي)</p>
+                <div id="totalPrice" class="text-3xl font-black text-green-600">0 د.ع</div>
+            </div>
+
+            <button onclick="confirmCargo()" class="w-full bg-[#7c3aed] text-white py-6 rounded-[2.5rem] font-black text-xl shadow-2xl flex items-center justify-center gap-3">
+                تأكيد ومراجعة الطلب <i class="fas fa-chevron-left"></i>
             </button>
         </div>
     </div>
 
     <script>
         let mapStart, markerStart, mapEnd, markerEnd;
+        const PRICE_PER_KM = 2000;
         const u = new URLSearchParams(window.location.search);
 
         window.onload = function() {
-            // تهيئة خريطة البداية
+            // خريطة البداية
             mapStart = L.map('mapStart', {zoomControl: false}).setView([35.4687, 44.3921], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStart);
             markerStart = L.marker([35.4687, 44.3921], {draggable: true}).addTo(mapStart);
 
-            // تهيئة خريطة النهاية مع البحث
+            // خريطة النهاية
             mapEnd = L.map('mapEnd', {zoomControl: false}).setView([35.4687, 44.3921], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapEnd);
             markerEnd = L.marker([35.4687, 44.3921], {draggable: true}).addTo(mapEnd);
 
-            // تفعيل البحث البارز
+            // تحديث السعر عند تحريك أي ماركر
+            markerStart.on('dragend', calculateCost);
+            markerEnd.on('dragend', calculateCost);
+
+            // البحث
             L.Control.geocoder({
                 defaultMarkGeocode: false,
-                placeholder: "🔍 ابحث عن منطقة التسليم...",
+                placeholder: "🔍 ابحث عن وجهة التسليم...",
             }).on('markgeocode', function(e) {
                 const latlng = e.geocode.center;
                 mapEnd.setView(latlng, 16); markerEnd.setLatLng(latlng);
+                calculateCost();
             }).addTo(mapEnd);
         };
 
@@ -105,7 +130,23 @@
             navigator.geolocation.getCurrentPosition(pos => {
                 const coords = [pos.coords.latitude, pos.coords.longitude];
                 mapStart.setView(coords, 17); markerStart.setLatLng(coords);
+                calculateCost();
             });
+        }
+
+        function calculateCost() {
+            const start = markerStart.getLatLng();
+            const end = markerEnd.getLatLng();
+            
+            // حساب المسافة الهوائية (بالمتر) وتحويلها لكم
+            const distance = (start.distanceTo(end) / 1000).toFixed(1);
+            const price = Math.round(distance * PRICE_PER_KM);
+
+            document.getElementById('distanceInfo').innerText = `${distance} كم`;
+            document.getElementById('totalPrice').innerText = `${price.toLocaleString()} د.ع`;
+            
+            u.set('final_price', price);
+            u.set('dist', distance);
         }
 
         function confirmCargo() {
@@ -118,7 +159,6 @@
             u.set('end_desc', document.getElementById('endDesc').value);
             u.set('slat', markerStart.getLatLng().lat); u.set('slng', markerStart.getLatLng().lng);
             u.set('elat', markerEnd.getLatLng().lat); u.set('elng', markerEnd.getLatLng().lng);
-            u.set('emoji', '🚛');
             
             window.location.href = `review.html?${u.toString()}`;
         }
