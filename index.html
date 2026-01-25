@@ -8,120 +8,127 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-        
-        /* تأثير الحوت العائم الاحترافي */
-        .alhut-master-logo {
-            width: 320px; /* حجم كبير وواضح */
-            filter: drop-shadow(0 25px 35px rgba(0,35,73,0.3));
-            animation: whaleFloat 5s ease-in-out infinite;
-            mix-blend-mode: multiply; /* يدمجه مع الخلفية ويخفي البياض */
-            cursor: pointer;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
         }
-        .alhut-master-logo:hover { transform: scale(1.1) rotate(-2deg); }
-
-        @keyframes whaleFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-25px) scale(1.02); }
-        }
-
-        .company-title {
-            font-size: 5rem;
-            font-weight: 900;
-            background: linear-gradient(180deg, #002349 0%, #D4AF37 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-            letter-spacing: -2px;
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.15);
+        .hero-bg {
+            background-color: #002349;
+            background-image: radial-gradient(circle at 20% 30%, #003366 0%, #002349 100%);
         }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <header class="pt-12 pb-24 text-center relative overflow-hidden">
-        <div class="container mx-auto">
-            <div class="relative inline-block mb-4">
-                <img src="logo.jpg" alt="Alhut Logo" class="alhut-master-logo">
-            </div>
-            
-            <div class="relative z-10">
-                <h1 class="company-title mb-2">الحـوت</h1>
-                <div class="flex justify-center items-center gap-3 mb-4">
-                    <span class="h-[2px] w-12 bg-[#D4AF37]"></span>
-                    <p class="text-xl font-bold text-[#002349] tracking-widest">AL-HUT AUTOMOTIVE</p>
-                    <span class="h-[2px] w-12 bg-[#D4AF37]"></span>
-                </div>
-                <p class="text-gray-400 font-medium">الريادة في كركوك .. تميز يتوارثه الحوت</p>
+    <header class="hero-bg text-white pt-20 pb-44 text-center relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-6xl font-black mb-4 text-[#D4AF37] tracking-tighter">الحـوت</h1>
+            <p class="text-xl opacity-90 font-light">الريادة في خدمات السيارات بمدينة كركوك</p>
+            <div class="mt-6 flex justify-center gap-2">
+                <span class="h-1 w-12 bg-[#D4AF37] rounded-full"></span>
+                <span class="h-1 w-4 bg-white/30 rounded-full"></span>
             </div>
         </div>
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
     </header>
 
-    <main class="container mx-auto px-4 -mt-16 relative z-20">
-        <div class="glass-panel rounded-[3.5rem] p-10 max-w-5xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
+    <main class="container mx-auto px-4 -mt-28 relative z-20">
+        <div class="bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[3rem] p-8 md:p-12 max-w-5xl mx-auto border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                 
-                <div class="space-y-3">
-                    <label class="block text-xs font-black text-[#D4AF37] uppercase tracking-tighter mr-2">ما هي خدمتك؟</label>
-                    <select id="mainService" onchange="checkService()" class="w-full p-4 bg-white border-2 border-gray-100 rounded-2xl outline-none font-bold text-[#002349] focus:border-[#D4AF37] shadow-sm transition-all">
-                        <option value="">اختر من القائمة...</option>
-                        <option value="personal">🚗 تأجير شخصي</option>
-                        <option value="wedding">🎁 سيارات أعراس</option>
-                        <option value="training">🎓 تعليم قيادة</option>
-                        <option value="cargo">🚛 نقل ثقيل (حمل)</option>
-                        <option value="water">💧 تنكر ماء</option>
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">نوع الخدمة</label>
+                    <select id="mainService" onchange="checkService()" class="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none font-bold text-[#002349] transition-all focus:border-[#D4AF37] focus:bg-white">
+                        <option value="">-- اختر الخدمة --</option>
+                        <option value="personal">🚗 تأجير سيارة شخصية</option>
+                        <option value="wedding">🎁 سيارات مزينة (أعراس)</option>
+                        <option value="training">🎓 تعليم قيادة (كورس)</option>
+                        <option value="cargo">🚛 سيارة حمل ونقل</option>
+                        <option value="water">💧 تنكر ماء (20 ألف)</option>
                     </select>
                 </div>
 
-                <div id="cargoDiv" class="hidden space-y-3">
-                    <label class="block text-xs font-black text-[#D4AF37] uppercase mr-2">نوع المركبة</label>
-                    <select id="cargoType" class="w-full p-4 bg-white border-2 border-[#D4AF37] rounded-2xl font-bold shadow-sm">
+                <div id="cargoDiv" class="space-y-2 hidden">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">نوع المركبة</label>
+                    <select id="cargoType" class="w-full p-4 bg-gray-50 border-2 border-[#D4AF37] rounded-2xl font-bold">
                         <option value="ستوتة">ستوتة (10 آلاف)</option>
-                        <option value="سيارة كبيرة">سيارة حمل (20 ألف)</option>
+                        <option value="سيارة كبيرة">سيارة حمل كبيرة (20 ألف)</option>
                     </select>
                 </div>
 
-                <div class="space-y-3">
-                    <label class="block text-xs font-black text-[#D4AF37] uppercase mr-2">تاريخ الحجز</label>
-                    <input type="date" id="searchDate" class="w-full p-4 bg-white border-2 border-gray-100 rounded-2xl outline-none font-bold focus:border-[#D4AF37] shadow-sm">
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-400 mr-2">تاريخ الحجز</label>
+                    <input type="date" id="searchDate" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent font-bold focus:border-[#D4AF37] focus:bg-white transition-all">
                 </div>
 
-                <button onclick="processSearch()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-xl shadow-xl hover:bg-[#D4AF37] hover:text-[#002349] transform hover:scale-105 transition-all duration-300">
-                    استمر للحجز <i class="fas fa-chevron-left mr-2 text-sm"></i>
+                <button onclick="processSearch()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+                    احجز الآن <i class="fas fa-arrow-left mr-2"></i>
                 </button>
-
             </div>
         </div>
 
-        <div class="flex justify-center gap-10 mt-12 text-gray-400">
-            <div class="text-center"><i class="fas fa-shield-alt block text-2xl mb-2 text-[#D4AF37]"></i> <span class="text-xs font-bold">حجز آمن</span></div>
-            <div class="text-center"><i class="fas fa-clock block text-2xl mb-2 text-[#D4AF37]"></i> <span class="text-xs font-bold">دقة بالمواعيد</span></div>
-            <div class="text-center"><i class="fas fa-map-marker-alt block text-2xl mb-2 text-[#D4AF37]"></i> <span class="text-xs font-bold">تغطية كركوك</span></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
+            <div class="text-center p-4">
+                <i class="fas fa-check-circle text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">تأكيد فوري</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-shield-alt text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">دعم 24 ساعة</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-map-marker-alt text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">تغطية كركوك</p>
+            </div>
+            <div class="text-center p-4">
+                <i class="fas fa-star text-[#D4AF37] text-2xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-500 uppercase">أفضل الأسعار</p>
+            </div>
         </div>
     </main>
 
     <script>
+        // وظيفة إظهار خيارات الحمل
         function checkService() {
-            const s = document.getElementById('mainService').value;
-            document.getElementById('cargoDiv').style.display = (s === 'cargo') ? 'block' : 'none';
+            const service = document.getElementById('mainService').value;
+            const cargoDiv = document.getElementById('cargoDiv');
+            if (service === 'cargo') {
+                cargoDiv.style.display = 'block';
+            } else {
+                cargoDiv.style.display = 'none';
+            }
         }
+
+        // وظيفة التوجيه لصفحات الحجز
         function processSearch() {
-            const s = document.getElementById('mainService').value;
-            const d = document.getElementById('searchDate').value;
-            if (!s || !d) { alert("⚠️ يرجى اختيار الخدمة والتاريخ"); return; }
-            if (s === 'personal' || s === 'wedding') window.location.href = `booking_vip.html?type=${s}&date=${d}`;
-            else if (s === 'training') window.location.href = `booking_training.html?type=training&date=${d}`;
-            else {
-                let v = (s === 'water') ? 'تنكر ماء' : document.getElementById('cargoType').value;
-                let p = (s === 'water') ? '20000' : (v === 'ستوتة' ? '10000' : '20000');
-                window.location.href = `booking_simple.html?type=${s}&vehicle=${v}&date=${d}&price=${p}`;
+            const service = document.getElementById('mainService').value;
+            const date = document.getElementById('searchDate').value;
+
+            if (!service || !date) {
+                alert("⚠️ يرجى تحديد نوع الخدمة وتاريخ الحجز أولاً");
+                return;
+            }
+
+            // التوجيه حسب نوع الخدمة
+            if (service === 'personal' || service === 'wedding') {
+                window.location.href = `booking_vip.html?type=${service}&date=${date}`;
+            } 
+            else if (service === 'training') {
+                window.location.href = `booking_training.html?type=training&date=${date}`;
+            } 
+            else if (service === 'cargo' || service === 'water') {
+                let vehicle = "";
+                let price = "";
+
+                if (service === 'water') {
+                    vehicle = "تنكر ماء";
+                    price = "20000";
+                } else {
+                    vehicle = document.getElementById('cargoType').value;
+                    price = (vehicle === 'ستوتة') ? "10000" : "20000";
+                }
+
+                window.location.href = `booking_simple.html?type=${service}&vehicle=${vehicle}&date=${date}&price=${price}`;
             }
         }
     </script>
