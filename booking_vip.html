@@ -1,40 +1,115 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><title>تأكيد الحجز | الحوت</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الحجز الشخصي | الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style> body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; } #map { height: 200px; border-radius: 1.5rem; } </style>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; }
+        #map { height: 200px; border-radius: 1.5rem; z-index: 1; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    </style>
 </head>
 <body class="p-4">
-    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl p-8 border-t-8 border-[#002349]">
-        <h2 class="text-2xl font-black text-center mb-6">المعلومات الرسمية للحجز</h2>
+
+    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-t-8 border-[#002349] p-8">
+        <div class="text-center mb-6">
+            <div class="text-5xl mb-3">🚗</div>
+            <h2 class="text-2xl font-black text-[#002349]">تأكيد حجز سيارة شخصية</h2>
+            <div id="summary" class="mt-4 p-4 bg-blue-50 rounded-2xl border border-blue-100 text-sm text-[#002349] font-bold space-y-1">
+                </div>
+        </div>
+
         <div class="space-y-4">
-            <input type="text" id="name" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-50 rounded-2xl border-2 font-bold outline-none">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="id" placeholder="رقم الهوية أو الجواز" class="w-full p-4 bg-gray-50 rounded-2xl border-2 font-bold outline-none">
-                <input type="text" id="license" placeholder="رقم إجازة السوق" class="w-full p-4 bg-gray-50 rounded-2xl border-2 font-bold outline-none">
+            <div class="space-y-3">
+                <label class="block text-xs font-bold text-gray-400 mr-2">بيانات المستأجر الرسمية</label>
+                <input type="text" id="vName" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#002349] font-bold transition-all">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="vID" placeholder="رقم الهوية أو الجواز" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#002349] font-bold transition-all">
+                    <input type="text" id="vLicense" placeholder="رقم إجازة السوق" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#002349] font-bold transition-all">
+                </div>
             </div>
-            <div id="map" class="border"></div>
-            <button onclick="send()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-lg">إرسال الطلب عبر واتساب</button>
+
+            <div class="bg-gray-50 p-4 rounded-[2rem] border border-blue-50">
+                <label class="block font-black mb-2 text-sm text-gray-600 mr-2 text-right">📍 حدد موقع استلام السيارة:</label>
+                <div id="map" class="mb-3"></div>
+                <button type="button" onclick="getGPS()" class="w-full py-3 bg-white border-2 border-blue-100 text-[#002349] rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all">
+                    <i class="fas fa-location-arrow"></i> تحديد موقعي الحالي عبر GPS
+                </button>
+            </div>
+
+            <button onclick="sendPersonalOrder()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-green-700 transition-all flex items-center justify-center gap-3">
+                تأكيد الحجز والإرسال <i class="fab fa-whatsapp text-2xl"></i>
+            </button>
         </div>
     </div>
+
     <script>
         let map, marker;
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // استلام البيانات من المراحل السابقة (المعرض والإضافات)
+        const car = urlParams.get('car') || "غير محدد";
+        const date = urlParams.get('date') || "غير محدد";
+        const addons = urlParams.get('addons') || "بدون إضافات";
+
+        // عرض الملخص الذكي في أعلى الصفحة
+        document.getElementById('summary').innerHTML = `
+            <div class="flex justify-between border-b border-blue-100 pb-1 mb-1">
+                <span>🚘 السيارة:</span> <span>${car}</span>
+            </div>
+            <div class="flex justify-between border-b border-blue-100 pb-1 mb-1">
+                <span>📅 التاريخ:</span> <span>${date}</span>
+            </div>
+            <div class="flex justify-between">
+                <span>🛠️ الإضافات:</span> <span class="text-xs">${addons}</span>
+            </div>
+        `;
+
         window.onload = function() {
+            // إعداد الخريطة على موقع كركوك كافتراضي
             map = L.map('map').setView([35.4687, 44.3921], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
         };
-        function send() {
-            const p = new URLSearchParams(window.location.search);
-            const n = document.getElementById('name').value;
-            const i = document.getElementById('id').value;
-            const l = document.getElementById('license').value;
-            if(!n || !i || !l) { alert("⚠️ أكمل البيانات"); return; }
-            const msg = `*طلب حجز الحوت*%0Aالسيارة: ${p.get('car')}%0Aالتاريخ: ${p.get('date')}%0Aالإضافات: ${p.get('addons')}%0Aالعدد: ${p.get('qty')}%0Aالاسم: ${n}%0Aالهوية: ${i}%0Aالإجازة: ${l}%0Aالموقع: http://google.com/maps?q=${marker.getLatLng().lat},${marker.getLatLng().lng}`;
-            window.open(`https://wa.me/9647713225471?text=${msg}`);
+
+        function getGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(p => {
+                    const pos = [p.coords.latitude, p.coords.longitude];
+                    map.setView(pos, 17);
+                    marker.setLatLng(pos);
+                }, () => alert("يرجى تفعيل الـ GPS"));
+            }
+        }
+
+        function sendPersonalOrder() {
+            const name = document.getElementById('vName').value;
+            const idNum = document.getElementById('vID').value;
+            const license = document.getElementById('vLicense').value;
+            const latlng = marker.getLatLng();
+
+            if(!name || !idNum || !license) {
+                alert("⚠️ يرجى تعبئة كافة البيانات الرسمية للمستأجر");
+                return;
+            }
+
+            const message = `*طلب حجز شخصي (الحوت)*%0A` +
+                            `--------------------------%0A` +
+                            `🚗 السيارة: ${car}%0A` +
+                            `📅 التاريخ: ${date}%0A` +
+                            `🛠️ الإضافات: ${addons}%0A` +
+                            `👤 الاسم: ${name}%0A` +
+                            `🆔 الهوية: ${idNum}%0A` +
+                            `🪪 الإجازة: ${license}%0A` +
+                            `📍 الموقع: http://googleusercontent.com/maps.google.com/q=${latlng.lat},${latlng.lng}`;
+
+            window.open(`https://wa.me/9647713225471?text=${message}`);
         }
     </script>
 </body>
