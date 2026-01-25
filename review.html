@@ -3,56 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المراجعة | الحوت</title>
+    <title>تأكيد الطلب | الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
+        .confirm-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.1); overflow: hidden; border-top: 10px solid #002349; }
+        .data-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .data-label { color: #94a3b8; font-weight: bold; font-size: 0.8rem; }
+        .data-value { color: #002349; font-weight: 900; }
+    </style>
 </head>
-<body class="p-4 bg-gray-100 text-right font-['Tajawal']">
-    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-t-[10px] border-[#002349]">
-        <div class="bg-[#002349] p-8 text-center text-[#D4AF37] text-2xl font-black">تأكيد الطلب 🐋</div>
+<body class="p-4 md:p-10">
+    <div class="max-w-xl mx-auto confirm-card">
+        <div class="bg-[#002349] p-8 text-center">
+            <h2 class="text-[#D4AF37] text-2xl font-black italic">تأكيد حجز الحوت 🐋</h2>
+        </div>
         
         <div class="p-8 space-y-4">
-            <div class="bg-gray-50 p-6 rounded-3xl space-y-3">
-                <div class="flex justify-between border-b pb-2"><span>الاسم:</span> <span id="rN" class="font-bold"></span></div>
-                <div class="flex justify-between border-b pb-2"><span>الخدمة:</span> <span id="rC" class="font-bold"></span></div>
-                <div id="rCargo" class="hidden space-y-2 pt-2">
-                    <div class="text-green-700 font-bold text-xs">من: <span id="rSD" class="text-black"></span></div>
-                    <div class="text-blue-700 font-bold text-xs">إلى: <span id="rED" class="text-black"></span></div>
-                    <div class="flex justify-between bg-yellow-100 p-3 rounded-xl font-black"><span>السعر:</span> <span id="rP"></span></div>
-                </div>
+            <div class="data-row"><span class="data-label">الاسم الكامل:</span> <span id="rName" class="data-value"></span></div>
+            <div class="data-row"><span class="data-label">السيارة/الخدمة:</span> <span id="rCar" class="data-value text-blue-600"></span></div>
+            <div class="data-row"><span class="data-label">التاريخ والوقت:</span> <span id="rDateTime" class="data-value"></span></div>
+            
+            <div id="addonBox" class="bg-yellow-50 p-4 rounded-2xl hidden">
+                <p class="text-[10px] font-black text-yellow-600 mb-1">الإضافات والخيارات:</p>
+                <p id="rAddons" class="text-sm font-black text-yellow-900"></p>
+                <p id="rColors" class="text-[10px] text-yellow-700 mt-1"></p>
             </div>
 
-            <button onclick="send()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-xl">إرسال للواتساب</button>
+            <div id="locBox" class="bg-slate-50 p-4 rounded-2xl">
+                <p class="text-[10px] font-black text-slate-400 mb-1">وصف الموقع:</p>
+                <p id="rLocDesc" class="text-xs font-bold"></p>
+            </div>
+
+            <div class="bg-slate-900 p-6 rounded-[2rem] text-center mt-6">
+                <p class="text-slate-400 text-xs mb-1">إجمالي المبلغ المطلوب</p>
+                <p id="rTotalPrice" class="text-3xl font-black text-[#D4AF37]"></p>
+            </div>
+
+            <button onclick="sendToWhatsApp()" class="w-full bg-[#25D366] text-white py-5 rounded-[2rem] font-black text-xl shadow-xl hover:bg-[#1eb956] transition-all mt-4">إرسال عبر واتساب ✅</button>
+            <button onclick="window.location.href='index.html'" class="w-full text-slate-400 font-bold py-2">إلغاء الطلب</button>
         </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        document.getElementById('rN').innerText = u.get('name');
-        document.getElementById('rC').innerText = u.get('car');
         
-        if(u.get('price')) {
-            document.getElementById('rCargo').classList.remove('hidden');
-            document.getElementById('rSD').innerText = u.get('sDesc');
-            document.getElementById('rED').innerText = u.get('eDesc');
-            document.getElementById('rP').innerText = parseInt(u.get('price')).toLocaleString() + " د.ع";
+        // تعبئة البيانات
+        document.getElementById('rName').innerText = u.get('name') || 'غير مسجل';
+        document.getElementById('rCar').innerText = u.get('car') || u.get('vehicle') || 'خدمة عامة';
+        document.getElementById('rDateTime').innerText = `${u.get('date')} | ${u.get('time')}`;
+        document.getElementById('rTotalPrice').innerText = parseInt(u.get('total_price') || u.get('price')).toLocaleString() + " د.ع";
+
+        // إظهار الإضافات
+        if(u.get('addons') || u.get('colors')) {
+            document.getElementById('addonBox').classList.remove('hidden');
+            document.getElementById('rAddons').innerText = u.get('addons') || '';
+            document.getElementById('rColors').innerText = u.get('colors') || '';
         }
 
-        function send() {
-            let loc = `📍 البداية: https://www.google.com/maps?q=${u.get('slat')},${u.get('slng')}\n🏁 النهاية: https://www.google.com/maps?q=${u.get('elat')},${u.get('elng')}`;
-            if(!u.get('slat')) loc = `📍 الموقع: https://www.google.com/maps?q=${u.get('lat')},${u.get('lng')}`;
+        // إظهار وصف الموقع
+        if(u.get('sDesc')) {
+            document.getElementById('rLocDesc').innerText = `من: ${u.get('sDesc')} \nإلى: ${u.get('eDesc') || 'نفس الموقع'}`;
+        }
 
-            const msg = `*طلب حجز شركة الحوت ${u.get('emoji') || '🐋'}*
+        function sendToWhatsApp() {
+            const phone = "9647713225471";
+            let mapLink = u.get('slat') ? 
+                `📍 الانطلاق: https://www.google.com/maps?q=${u.get('slat')},${u.get('slng')}\n🏁 التسليم: https://www.google.com/maps?q=${u.get('elat')},${u.get('elng')}` :
+                `📍 الموقع: https://www.google.com/maps?q=${u.get('lat')},${u.get('lng')}`;
+
+            const message = `*طلب جديد - شركة الحوت 🐋*
 --------------------------
-👤 الاسم: ${u.get('name')}
-🚗 الخدمة: ${u.get('car')}
+👤 الزبون: ${u.get('name')}
+🚗 الخدمة: ${u.get('car') || u.get('vehicle')}
+📅 الموعد: ${u.get('date')} | ${u.get('time')}
 --------------------------
-${u.get('sDesc') ? '📤 من: ' + u.get('sDesc') : ''}
-${u.get('eDesc') ? '📥 إلى: ' + u.get('eDesc') : ''}
-${u.get('price') ? '💰 السعر: ' + parseInt(u.get('price')).toLocaleString() + ' د.ع' : ''}
+${u.get('addons') ? '✨ الإضافات: ' + u.get('addons') : ''}
+${u.get('colors') ? '🎨 ' + u.get('colors') : ''}
+${u.get('sDesc') ? '📝 الوصف: ' + u.get('sDesc') : ''}
+💰 السعر النهائي: ${document.getElementById('rTotalPrice').innerText}
 --------------------------
-${loc}`;
-            window.open(`https://wa.me/9647713225471?text=${encodeURIComponent(msg)}`);
+${mapLink}`;
+
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
         }
     </script>
 </body>
