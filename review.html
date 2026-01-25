@@ -20,16 +20,16 @@
         </div>
 
         <div class="p-8 space-y-6">
-            <div class="bg-gray-50 p-6 rounded-[2.5rem] space-y-3 text-sm border border-gray-100">
+            <div class="bg-gray-50 p-6 rounded-[2.5rem] space-y-3 text-sm border border-gray-100 shadow-inner">
                 <div class="flex justify-between border-b border-dashed pb-2"><span class="text-gray-400">الاسم:</span> <span id="rName" class="font-bold text-[#002349]"></span></div>
-                <div class="flex justify-between border-b border-dashed pb-2"><span class="text-gray-400">الخدمة:</span> <span id="rCar" class="font-bold"></span></div>
+                <div class="flex justify-between border-b border-dashed pb-2"><span class="text-gray-400">الخدمة:</span> <span id="rCar" class="font-bold text-blue-800"></span></div>
                 <div class="flex justify-between border-b border-dashed pb-2"><span class="text-gray-400">الموعد:</span> <span id="rTime" class="font-bold text-blue-600"></span></div>
                 <div class="flex justify-between"><span class="text-gray-400">المستندات:</span> <span id="rDocs" class="font-bold"></span></div>
             </div>
 
             <div id="warningBox" class="bg-red-50 p-5 rounded-2xl border-r-8 border-red-500">
                 <p class="text-red-800 text-[11px] font-bold leading-relaxed">
-                    ⚠️ تنبيه: يرجى التأكد من صحة البيانات. بضغطك على "إرسال" سيتم توجيهك للواتساب لإتمام الحجز مع شركة الحوت.
+                    ⚠️ تأكد من دقة موقع الخريطة والبيانات أعلاه. بضغطك على "إرسال" سيتم فتح الواتساب فوراً لإرسال الطلب.
                 </p>
             </div>
 
@@ -44,10 +44,7 @@
 
     <script>
         const p = new URLSearchParams(window.location.search);
-        const service = p.get('service');
-        const emoji = p.get('emoji') || (service === 'personal' ? '🚗' : '💍');
-
-        // تحديث الواجهة بناءً على البيانات
+        const emoji = p.get('emoji') || '🐋';
         document.getElementById('reviewEmoji').innerText = emoji;
         document.getElementById('rName').innerText = p.get('name');
         document.getElementById('rCar').innerText = p.get('car') + (p.get('qty') ? ` (العدد: ${p.get('qty')})` : "");
@@ -57,8 +54,8 @@
         document.getElementById('rDocs').innerText = docText;
 
         function finalSubmit() {
-            const msg = `*طلب جديد من شركة الحوت ${emoji}*%0A--------------------------%0A👤 الاسم: ${p.get('name')}%0A🚗 الخدمة: ${p.get('car')}%0A📅 التاريخ: ${p.get('date')}%0A⏰ الوقت: ${p.get('time')}%0A🆔 الهوية: ${p.get('id')}%0A${p.get('lic') ? '🪪 الإجازة: ' + p.get('lic') : ''}${p.get('age') ? '🎂 العمر: ' + p.get('age') : ''}%0A📍 الموقع: http://maps.google.com/?q=${p.get('lat')},${p.get('lng')}%0A--------------------------%0A✅ تم مراجعة الطلب من قبل العميل.`;
-            
+            const mapLink = `https://www.google.com/maps?q=${p.get('lat')},${p.get('lng')}`;
+            const msg = `*طلب جديد من شركة الحوت ${emoji}*%0A--------------------------%0A👤 الاسم: ${p.get('name')}%0A🚗 الخدمة: ${p.get('car')}%0A📅 التاريخ: ${p.get('date')}%0A⏰ الوقت: ${p.get('time')}%0A🆔 الهوية: ${p.get('id')}%0A${p.get('lic') ? '🪪 الإجازة: ' + p.get('lic') : ''}${p.get('age') ? '🎂 العمر: ' + p.get('age') : ''}%0A📍 الموقع الجغرافي:%0A${mapLink}%0A--------------------------%0A✅ تم مراجعة وتأكيد الموقع والبيانات.`;
             window.open(`https://wa.me/9647713225471?text=${msg}`);
         }
     </script>
