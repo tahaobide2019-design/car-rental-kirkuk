@@ -3,80 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز VIP | الحوت</title>
+    <title>حجز سيارة شخصية | الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        #map { height: 220px; border-radius: 1.5rem; z-index: 1; }
-    </style>
+    <style> body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; } #map { height: 200px; border-radius: 1.5rem; } </style>
 </head>
 <body class="p-4">
-    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-t-8 border-[#D4AF37] p-8">
-        <div class="text-center mb-6">
-            <div class="text-5xl mb-3">🐋</div>
-            <h2 class="text-2xl font-black text-[#002349]">حجز الخدمة الملكية VIP</h2>
-        </div>
-
+    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl border-t-8 border-[#002349] p-8">
+        <h2 class="text-2xl font-black text-[#002349] text-center mb-6">🚗 حجز سيارة شخصية</h2>
+        
         <div class="space-y-4">
             <input type="text" id="vName" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold">
-            <input type="tel" id="vPhone" placeholder="رقم الواتساب (0770XXXXXXX)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold text-right">
-
-            <div class="bg-gray-50 p-4 rounded-[2rem] border-2 border-gray-100 shadow-sm">
-                <label class="block font-black mb-3 text-sm text-gray-600 mr-2 text-right">📍 حدد موقع الاستلام على الخريطة:</label>
-                <div id="map" class="mb-3 border-4 border-white shadow-inner"></div>
-                
-                <button type="button" onclick="getVipLocation()" class="w-full mb-3 py-3 bg-white border-2 border-blue-100 text-blue-600 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all">
-                    <i class="fas fa-crosshairs"></i> تحديد موقعي الحالي عبر GPS
-                </button>
-
-                <textarea id="vAddress" placeholder="وصف إضافي للعنوان أو أقرب نقطة دالة" class="w-full p-4 bg-white border-2 border-gray-100 rounded-2xl outline-none text-sm font-medium" rows="2"></textarea>
-                <input type="hidden" id="vCoords">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="vID" placeholder="رقم الهوية/الجواز" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold">
+                <input type="text" id="vLicense" placeholder="رقم إجازة السوق" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#D4AF37] font-bold">
             </div>
 
-            <button onclick="sendVipOrder()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-green-700 transition-all">
-                إرسال الطلب الملكي <i class="fab fa-whatsapp mr-2"></i>
-            </button>
+            <label class="block font-bold mr-2">اختر نوع السيارة:</label>
+            <select id="vCarType" class="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[#D4AF37] font-bold">
+                <option value="تويوتا كورولا">تويوتا كورولا</option>
+                <option value="هيونداي إلنترا">هيونداي إلنترا</option>
+                <option value="كيا سيراتو">كيا سيراتو</option>
+                <option value="نيسان صني">نيسان صني</option>
+            </select>
+
+            <div class="bg-gray-50 p-4 rounded-[2rem] border">
+                <div id="map" class="mb-3"></div>
+                <button type="button" onclick="getLoc()" class="w-full py-2 bg-white border text-blue-600 rounded-xl font-bold mb-2">📍 تحديد موقعي</button>
+                <textarea id="vAddr" placeholder="أقرب نقطة دالة" class="w-full p-3 rounded-xl border-none text-sm"></textarea>
+            </div>
+            <input type="hidden" id="vCoords">
+
+            <button onclick="sendOrder()" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black text-lg">تأكيد الحجز الشخصي 🐋</button>
         </div>
     </div>
-
     <script>
         let map, marker;
-        const kirkuk = [35.4687, 44.3921];
-
         window.onload = function() {
-            map = L.map('map').setView(kirkuk, 13);
+            map = L.map('map').setView([35.4687, 44.3921], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            marker = L.marker(kirkuk, {draggable: true}).addTo(map);
-            marker.on('dragend', () => {
-                const p = marker.getLatLng();
-                document.getElementById('vCoords').value = p.lat + "," + p.lng;
-            });
-            document.getElementById('vCoords').value = kirkuk[0] + "," + kirkuk[1];
+            marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
         };
-
-        function getVipLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((p) => {
-                    const pos = [p.coords.latitude, p.coords.longitude];
-                    map.setView(pos, 17);
-                    marker.setLatLng(pos);
-                    document.getElementById('vCoords').value = pos[0] + "," + pos[1];
-                }, () => alert("يرجى تفعيل الـ GPS"));
-            }
+        function getLoc() {
+            navigator.geolocation.getCurrentPosition(p => {
+                const pos = [p.coords.latitude, p.coords.longitude];
+                map.setView(pos, 16); marker.setLatLng(pos);
+                document.getElementById('vCoords').value = pos[0] + "," + pos[1];
+            });
         }
-
-        function sendVipOrder() {
-            const name = document.getElementById('vName').value;
-            const phone = document.getElementById('vPhone').value;
-            const addr = document.getElementById('vAddress').value;
-            const coords = document.getElementById('vCoords').value;
-            if(!name || !phone) { alert("يرجى ملء البيانات"); return; }
-            
-            const msg = `*طلب حجز VIP جديد*%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالوصف: ${addr}%0Aالموقع: https://www.google.com/maps?q=${coords}`;
+        function sendOrder() {
+            const msg = `*طلب حجز شخصي*%0Aالاسم: ${document.getElementById('vName').value}%0Aالسيارة: ${document.getElementById('vCarType').value}%0Aالهوية: ${document.getElementById('vID').value}%0Aالإجازة: ${document.getElementById('vLicense').value}%0Aالموقع: https://www.google.com/maps?q=${document.getElementById('vCoords').value}`;
             window.open(`https://wa.me/9647713225471?text=${msg}`);
         }
     </script>
