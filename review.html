@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المراجعة النهائية | الحوت 🐋</title>
+    <title>مراجعة الطلب | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
-        .data-row { border-bottom: 1px solid #f1f5f9; padding: 1.1rem 0; display: flex; justify-content: space-between; align-items: center; }
+        .data-row { border-bottom: 1px solid #f1f5f9; padding: 1rem 0; display: flex; justify-content: space-between; }
         .data-label { color: #94a3b8; font-weight: 800; font-size: 0.85rem; }
         .data-value { color: #1e293b; font-weight: 900; text-align: left; }
     </style>
@@ -18,81 +18,72 @@
     <div class="max-w-lg mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-t-[12px] border-indigo-600">
         <div class="bg-indigo-50 p-8 text-center">
             <div id="emoji" class="text-6xl mb-2">📋</div>
-            <h2 class="text-2xl font-black text-indigo-900">مراجعة بيانات الطلب</h2>
-            <p class="text-xs text-indigo-400 font-bold">يرجى التأكد من كافة التفاصيل</p>
+            <h2 class="text-2xl font-black">مراجعة بيانات الطلب</h2>
         </div>
         
         <div class="p-8 space-y-1" id="list">
             </div>
 
         <div class="p-8 bg-gray-50">
-            <button onclick="send()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-black text-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
-                تأكيد وإرسال للواتساب <i class="fab fa-whatsapp"></i>
-            </button>
-            <button onclick="window.history.back()" class="w-full mt-4 text-gray-400 font-bold hover:text-red-500">تعديل البيانات</button>
+            <button onclick="sendToWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-black text-xl shadow-lg active:scale-95 transition-all">إرسال للواتساب 🟢</button>
+            <button onclick="window.history.back()" class="w-full mt-4 text-gray-400 font-bold">تعديل البيانات</button>
         </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
         const list = document.getElementById('list');
+        
+        // تعيين الإيموجي
         document.getElementById('emoji').innerText = u.get('emoji') || '📋';
 
-        function addRow(label, key, isPrice = false) {
-            const val = u.get(key);
-            if (!val || val === 'null' || val === 'undefined') return;
-            
-            const decodedVal = decodeURIComponent(val);
-            if(isPrice) {
-                list.innerHTML += `<div class="data-row bg-yellow-50 p-4 rounded-2xl mt-4 border-2 border-yellow-200">
-                    <span class="font-black text-yellow-700">${label}</span>
-                    <span class="text-2xl font-black text-green-600">${Number(decodedVal).toLocaleString()} د.ع</span>
-                </div>`;
-            } else {
-                list.innerHTML += `<div class="data-row">
-                    <span class="data-label">${label}</span>
-                    <span class="data-value">${decodedVal}</span>
-                </div>`;
-            }
+        // دالة لإضافة سطر بيانات
+        function add(label, value) {
+            if (!value || value === 'null') return;
+            const decoded = decodeURIComponent(value);
+            list.innerHTML += `<div class="data-row"><span class="data-label">${label}</span><span class="data-value">${decoded}</span></div>`;
         }
 
-        // عرض البيانات بالترتيب
-        addRow('👤 الاسم الكامل', 'name');
-        addRow('📞 رقم الهاتف', 'phone');
-        addRow('📍 المحافظة', 'province'); // تظهر هنا الآن
+        // 1. عرض البيانات الأساسية
+        add('👤 الاسم', u.get('name'));
+        add('📞 الهاتف', u.get('phone'));
+        add('📍 المحافظة', u.get('province'));
 
-        if(u.get('service') === 'cargo'){
-            addRow('📦 نوع الحمولة', 'notes');
-            addRow('🏠 من (الوصف)', 'start_desc');
-            addRow('🏁 إلى (الوصف)', 'end_desc');
-            addRow('📏 المسافة', 'dist');
-            addRow('💰 السعر المقدر', 'final_price', true);
-        } else {
-            addRow('🏠 وصف الموقع', 'location_desc');
+        // 2. عرض بيانات سيارات الحمل
+        if (u.get('service') === 'cargo') {
+            add('📦 الحمولة', u.get('notes'));
+            add('🏠 من (وصف)', u.get('start_desc'));
+            add('🏁 إلى (وصف)', u.get('end_desc'));
+            add('📏 المسافة', u.get('dist') + " كم");
+            const price = u.get('final_price');
+            if(price) list.innerHTML += `<div class="data-row bg-yellow-50 p-3 rounded-xl"><span class="data-label">💰 السعر</span><span class="data-value text-green-600">${Number(price).toLocaleString()} د.ع</span></div>`;
+        } 
+        // 3. عرض بيانات تنكر الماء
+        else {
+            add('🏠 وصف الموقع', u.get('location_desc'));
         }
 
-        function send() {
+        function sendToWhatsApp() {
             const myNumber = "9647713225471";
-            const serviceName = u.get('service') === 'cargo' ? 'سيارة حمل' : 'تنكر ماء';
-            
-            let m = `*طلب جديد من تطبيق الحوت 🐋*\n------------------\n`;
-            m += `*الخدمة:* ${u.get('emoji')} ${serviceName}\n`;
-            m += `*المحافظة:* ${decodeURIComponent(u.get('province') || 'غير محدد')}\n`;
-            m += `*الزبون:* ${decodeURIComponent(u.get('name') || '')}\n`;
-            m += `*الهاتف:* ${u.get('phone') || ''}\n`;
-            
-            if(u.get('service') === 'cargo') {
-                m += `*الحمولة:* ${decodeURIComponent(u.get('notes') || 'غير محدد')}\n`;
-                m += `*المسافة:* ${u.get('dist')} كم\n`;
-                m += `*السعر:* ${Number(u.get('final_price')).toLocaleString()} د.ع\n\n`;
-                m += `📍 *موقع الاستلام:* https://www.google.com/maps?q=${u.get('slat')},${u.get('slng')}\n`;
-                m += `🏁 *موقع التسليم:* https://www.google.com/maps?q=${u.get('elat')},${u.get('elng')}`;
+            let msg = `*طلب جديد من تطبيق الحوت 🐋*\n------------------\n`;
+            msg += `*الخدمة:* ${u.get('emoji') || '📋'}\n`;
+            msg += `*المحافظة:* ${decodeURIComponent(u.get('province') || 'غير محدد')}\n`;
+            msg += `*الاسم:* ${decodeURIComponent(u.get('name') || '')}\n`;
+            msg += `*الهاتف:* ${u.get('phone') || ''}\n`;
+
+            if (u.get('service') === 'cargo') {
+                msg += `*الحمولة:* ${decodeURIComponent(u.get('notes') || 'غير محدد')}\n`;
+                msg += `*المسافة:* ${u.get('dist')} كم\n`;
+                msg += `*السعر:* ${u.get('final_price')} د.ع\n\n`;
+                // إصلاح روابط الخرائط
+                msg += `📍 *موقع الاستلام:* https://www.google.com/maps?q=${u.get('slat')},${u.get('slng')}\n`;
+                msg += `🏁 *موقع التسليم:* https://www.google.com/maps?q=${u.get('elat')},${u.get('elng')}`;
             } else {
-                m += `*الوصف:* ${decodeURIComponent(u.get('location_desc') || '')}\n\n`;
-                m += `📍 *الموقع على الخريطة:* https://www.google.com/maps?q=${u.get('lat')},${u.get('lng')}`;
+                msg += `*الوصف:* ${decodeURIComponent(u.get('location_desc') || u.get('start_desc') || '')}\n\n`;
+                msg += `📍 *الموقع:* https://www.google.com/maps?q=${u.get('lat') || u.get('slat')},${u.get('lng') || u.get('slng')}`;
             }
 
-            window.location.href = `https://wa.me/${myNumber}?text=${encodeURIComponent(m)}`;
+            window.location.href = `https://wa.me/${myNumber}?text=${encodeURIComponent(msg)}`;
         }
     </script>
 </body>
