@@ -3,139 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مراجعة الطلب النهائي | الحوت</title>
+    <title>مراجعة الطلب | الحوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        .info-card { border-radius: 2.5rem; background: #ffffff; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-    </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-xl mx-auto info-card overflow-hidden">
-        <div id="headerColor" class="hero-bg p-8 text-center text-white border-b-4 border-[#D4AF37]">
+<body class="p-4 bg-slate-50 text-right">
+    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-t-[10px] border-[#002349]">
+        <div class="bg-slate-900 p-8 text-center">
             <div id="rEmoji" class="text-6xl mb-2">🐋</div>
-            <h2 class="text-2xl font-black text-[#D4AF37]">مراجعة تفاصيل الطلب</h2>
-            <p class="text-xs opacity-80 mt-1 text-white">يرجى التأكد من البيانات قبل الإرسال للواتساب</p>
+            <h2 class="text-2xl font-black text-[#D4AF37]">تأكيد تفاصيل الحجز</h2>
         </div>
 
-        <div class="p-8 space-y-6 text-right">
-            <div class="space-y-4 bg-gray-50 p-6 rounded-[2rem]">
-                <div class="flex justify-between border-b border-dashed pb-2">
-                    <span class="text-gray-400 font-bold text-xs">الاسم الكامل:</span>
-                    <span id="rName" class="font-black text-[#002349]"></span>
-                </div>
-                <div class="flex justify-between border-b border-dashed pb-2">
-                    <span class="text-gray-400 font-bold text-xs">الخدمة المطلوبة:</span>
-                    <span id="rCar" class="font-black text-blue-700"></span>
-                </div>
+        <div class="p-8 space-y-6">
+            <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 space-y-4">
+                <div class="flex justify-between border-b pb-2"><span class="text-gray-400">الاسم:</span> <span id="rName" class="font-bold text-slate-800"></span></div>
+                <div class="flex justify-between border-b pb-2"><span class="text-gray-400">الخدمة:</span> <span id="rCar" class="font-bold text-blue-700"></span></div>
                 
-                <div id="genderSection" class="hidden flex justify-between border-b border-dashed pb-2">
-                    <span class="text-gray-400 font-bold text-xs">الجنس المختار:</span>
-                    <span id="rGender" class="font-black text-purple-700"></span>
-                </div>
+                <div id="genderRow" class="hidden flex justify-between border-b pb-2"><span class="text-gray-400">الجنس:</span> <span id="rGender" class="font-bold text-purple-700"></span></div>
 
-                <div class="flex justify-between border-b border-dashed pb-2">
-                    <span class="text-gray-400 font-bold text-xs">الموعد:</span>
-                    <span id="rDateTime" class="font-black text-gray-700"></span>
-                </div>
-
-                <div id="cargoSection" class="hidden space-y-3 pt-2">
-                    <div class="flex justify-between text-green-700">
-                        <span class="font-bold text-xs">المسافة:</span>
-                        <span id="rDist" class="font-black"></span>
-                    </div>
-                    <div class="flex justify-between bg-yellow-100 p-3 rounded-xl border-2 border-yellow-200">
-                        <span class="font-black text-yellow-800 text-xs">السعر الإجمالي:</span>
+                <div id="cargoInfo" class="hidden space-y-3 pt-2">
+                    <div class="flex justify-between text-green-700"><span class="font-bold text-xs">المسافة:</span> <span id="rDist" class="font-black"></span></div>
+                    <div class="flex justify-between bg-yellow-100 p-4 rounded-2xl border-2 border-yellow-300">
+                        <span class="font-black text-yellow-800">السعر الإجمالي:</span>
                         <span id="rPrice" class="font-black text-yellow-900 text-xl"></span>
                     </div>
                 </div>
 
-                <div class="pt-2">
-                    <span class="text-gray-400 font-bold text-xs block mb-1">المستندات / إضافات:</span>
-                    <p id="rDocs" class="font-bold text-sm text-gray-600 leading-relaxed"></p>
-                </div>
+                <div class="flex justify-between"><span class="text-gray-400">الموعد:</span> <span id="rDateTime" class="font-bold"></span></div>
             </div>
 
-            <div class="bg-blue-50 p-4 rounded-2xl border-r-8 border-blue-500 flex items-start gap-3">
-                <i class="fas fa-map-marked-alt text-blue-600 mt-1"></i>
-                <p class="text-[11px] font-bold text-blue-900 leading-relaxed">
-                    تم حفظ إحداثيات موقعك الجغرافي بدقة. سيتم إرسال رابط الخريطة تلقائياً مع الرسالة لتسهيل الوصول إليك.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 gap-3">
-                <button onclick="sendToWhatsApp()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-xl shadow-xl hover:shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
-                    تأكيد الطلب وإرسال <i class="fab fa-whatsapp text-2xl"></i>
-                </button>
-                <button onclick="history.back()" class="w-full bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all">
-                    تعديل البيانات
-                </button>
-            </div>
+            <button onclick="sendToWhatsApp()" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                إرسال الطلب للواتساب <i class="fab fa-whatsapp"></i>
+            </button>
+            
+            <button onclick="history.back()" class="w-full text-gray-400 font-bold text-sm">تعديل البيانات</button>
         </div>
     </div>
 
     <script>
-        const p = new URLSearchParams(window.location.search);
+        // قراءة الروابط (URL)
+        const params = new URLSearchParams(window.location.search);
         
-        // تعبئة البيانات الأساسية
-        document.getElementById('rEmoji').innerText = p.get('emoji') || '🐋';
-        document.getElementById('rName').innerText = p.get('name');
-        document.getElementById('rCar').innerText = p.get('car');
-        document.getElementById('rDateTime').innerText = `${p.get('date') || ''} | ${p.get('time') || ''}`;
+        // عرض البيانات الأساسية
+        document.getElementById('rEmoji').innerText = params.get('emoji') || '🐋';
+        document.getElementById('rName').innerText = params.get('name') || 'غير معروف';
+        document.getElementById('rCar').innerText = params.get('car') || 'خدمة الحوت';
+        document.getElementById('rDateTime').innerText = (params.get('date') || '') + " | " + (params.get('time') || '');
 
-        // معالجة بيانات كورس التعليم
-        if(p.get('gender')) {
-            document.getElementById('genderSection').classList.remove('hidden');
-            document.getElementById('rGender').innerText = p.get('gender');
+        // فحص كورس التعليم (الجنس)
+        if(params.get('gender')) {
+            document.getElementById('genderRow').classList.remove('hidden');
+            document.getElementById('rGender').innerText = params.get('gender');
         }
 
-        // معالجة بيانات سيارات الحمل (السعر والمسافة)
-        if(p.get('price')) {
-            document.getElementById('cargoSection').classList.remove('hidden');
-            document.getElementById('rDist').innerText = p.get('dist') + " كيلومتر";
-            document.getElementById('rPrice').innerText = parseInt(p.get('price')).toLocaleString() + " د.ع";
+        // فحص سيارات الحمل (السعر والمسافة)
+        if(params.get('price')) {
+            document.getElementById('cargoInfo').classList.remove('hidden');
+            document.getElementById('rDist').innerText = params.get('dist') + " كم";
+            document.getElementById('rPrice').innerText = parseInt(params.get('price')).toLocaleString() + " د.ع";
         }
-
-        // معالجة المستندات
-        let docInfo = "";
-        if(p.get('id')) docInfo += `🆔 الهوية: ${p.get('id')} `;
-        if(p.get('lic')) docInfo += `| 🪪 الإجازة: ${p.get('lic')} `;
-        if(p.get('age')) docInfo += `| 🎂 العمر: ${p.get('age')} `;
-        if(p.get('addons')) docInfo += `| ✨ الإضافات: ${p.get('addons')}`;
-        document.getElementById('rDocs').innerText = docInfo || "لا توجد مستندات إضافية";
 
         function sendToWhatsApp() {
-            const phone = "9647713225471";
-            let locationLink = "";
+            const name = params.get('name');
+            const car = params.get('car');
+            const date = params.get('date');
+            const time = params.get('time');
+            const emoji = params.get('emoji') || '🐋';
             
-            // رابط الموقع (حسب الخدمة: حمل نقطتين، أو خدمة عادية نقطة واحدة)
-            if(p.get('slat')) {
-                locationLink = `📍 مكان الانطلاق: https://www.google.com/maps?q=${p.get('slat')},${p.get('slng')}\n🏁 مكان التوصيل: https://www.google.com/maps?q=${p.get('elat')},${p.get('elng')}`;
+            let locationPart = "";
+            // إذا كانت سيارة حمل (نقطتين)
+            if(params.get('slat')) {
+                locationPart = `📍 مكان الانطلاق: https://www.google.com/maps?q=${params.get('slat')},${params.get('slng')}
+🏁 مكان التوصيل: https://www.google.com/maps?q=${params.get('elat')},${params.get('elng')}`;
             } else {
-                locationLink = `📍 الموقع الجغرافي: https://www.google.com/maps?q=${p.get('lat')},${p.get('lng')}`;
+                locationPart = `📍 الموقع: https://www.google.com/maps?q=${params.get('lat')},${params.get('lng')}`;
             }
 
-            const message = `*طلب جديد من شركة الحوت ${p.get('emoji') || '🐋'}*
---------------------------
-👤 الاسم: ${p.get('name')}
-🚗 الخدمة: ${p.get('car')}
-${p.get('gender') ? '👫 الجنس: ' + p.get('gender') : ''}
-📅 الموعد: ${p.get('date')} | ${p.get('time')}
-${p.get('id') ? '🆔 الهوية: ' + p.get('id') : ''}
-${p.get('lic') ? '🪪 الإجازة: ' + p.get('lic') : ''}
-${p.get('age') ? '🎂 العمر: ' + p.get('age') : ''}
---------------------------
-${p.get('dist') ? '📏 المسافة: ' + p.get('dist') + ' كم' : ''}
-${p.get('price') ? '💰 السعر المحتسب: ' + parseInt(p.get('price')).toLocaleString() + ' د.ع' : ''}
---------------------------
-${locationLink}
---------------------------
-✅ تم تأكيد البيانات والموقع من قبل الزبون.`;
+            let pricePart = params.get('price') ? `📏 المسافة: ${params.get('dist')} كم\n💰 السعر: ${parseInt(params.get('price')).toLocaleString()} د.ع` : "";
+            let genderPart = params.get('gender') ? `👫 الجنس: ${params.get('gender')}` : "";
 
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+            const finalMsg = `*طلب جديد من شركة الحوت ${emoji}*
+--------------------------
+👤 الاسم: ${name}
+🚗 الخدمة: ${car}
+${genderPart}
+📅 الموعد: ${date} | ${time}
+--------------------------
+${pricePart}
+--------------------------
+${locationPart}
+--------------------------
+✅ تم التأكيد من قبل العميل.`;
+
+            window.open(`https://wa.me/9647713225471?text=${encodeURIComponent(finalMsg)}`);
         }
     </script>
 </body>
