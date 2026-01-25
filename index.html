@@ -3,83 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق الحوت 🐋 | الخدمات</title>
+    <title>تطبيق الحوت 🐋 | الرئيسية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
         .glass-card { background: rgba(255, 255, 255, 0.98); }
-        .service-btn { transition: 0.3s; cursor: pointer; border: 2px solid #ddd6fe; border-radius: 2rem; background: white; }
-        .service-btn:hover { border-color: #7c3aed; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(124, 58, 237, 0.1); }
-        .select-prov { border: 3px solid #7c3aed; border-radius: 1.5rem; padding: 1rem; width: 100%; font-weight: 900; color: #4338ca; outline: none; background: white; }
+        .input-box { border: 2px solid #ddd6fe; border-radius: 1.25rem; padding: 1rem; width: 100%; font-weight: bold; outline: none; background: white; transition: 0.3s; color: #4338ca; }
+        .input-box:focus { border-color: #7c3aed; box-shadow: 0 0 15px rgba(124, 58, 237, 0.1); }
+        label { display: block; font-weight: 900; font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem; margin-right: 0.5rem; text-transform: uppercase; }
     </style>
 </head>
 <body class="p-4 md:p-8 text-right">
     <div class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] border-[#7c3aed]">
         
-        <div class="bg-indigo-50 p-10 text-center border-b border-indigo-100">
-            <div class="text-6xl mb-4">🐋</div>
-            <h1 class="text-4xl font-black text-[#4338ca]">تطبيق الحوت</h1>
-            <p class="text-indigo-400 font-bold mt-2">خيارك الأفضل للنقل والخدمات في العراق</p>
+        <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
+            <div class="text-6xl mb-3">🐋</div>
+            <h2 class="text-3xl font-black text-[#4338ca]">تطبيق الحوت</h2>
+            <p class="text-indigo-400 font-bold mt-1">احجز خدمتك الآن بسهولة</p>
         </div>
 
         <div class="p-8 space-y-6">
             
-            <div class="bg-white p-6 rounded-[2.5rem] border-2 border-indigo-50 shadow-sm">
-                <label class="block text-xs font-black text-gray-400 mb-3 mr-2 uppercase tracking-widest">📍 أولاً: اختر المحافظة</label>
-                <select id="provinceSelect" class="select-prov text-xl">
-                    <option value="كركوك">كركوك</option>
-                    <option value="بغداد">بغداد</option>
-                    <option value="ديالى">ديالى</option>
-                    <option value="البصرة">البصرة</option>
-                </select>
-            </div>
-
-            <label class="block text-xs font-black text-gray-400 mr-2 uppercase tracking-widest">🛠️ ثانياً: اختر نوع الخدمة</label>
-
             <div class="space-y-4">
                 
-                <div onclick="go('booking_cargo.html')" class="service-btn p-6 flex items-center gap-6 group">
-                    <div class="text-4xl bg-indigo-100 p-4 rounded-2xl group-hover:bg-indigo-600 group-hover:text-white transition-all">🚛</div>
-                    <div class="flex-1">
-                        <h3 class="text-xl font-black text-gray-800">سيارات حمل</h3>
-                        <p class="text-sm text-gray-400 font-bold">نقل أثاث وبضائع بأسعار تنافسية</p>
-                    </div>
-                    <i class="fas fa-chevron-left text-indigo-200"></i>
+                <div>
+                    <label>📍 اختر المحافظة</label>
+                    <select id="province" class="input-box text-lg">
+                        <option value="كركوك">كركوك</option>
+                        <option value="بغداد">بغداد</option>
+                        <option value="ديالى">ديالى</option>
+                        <option value="البصرة">البصرة</option>
+                    </select>
                 </div>
 
-                <div onclick="go('booking_water.html')" class="service-btn p-6 flex items-center gap-6 group">
-                    <div class="text-4xl bg-blue-100 p-4 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all">💧</div>
-                    <div class="flex-1">
-                        <h3 class="text-xl font-black text-gray-800">توصيل ماء (تنكر)</h3>
-                        <p class="text-sm text-gray-400 font-bold">مياه صافية تصلك أينما كنت</p>
-                    </div>
-                    <i class="fas fa-chevron-left text-blue-200"></i>
+                <div>
+                    <label>🛠️ نوع الخدمة</label>
+                    <select id="service" class="input-box text-lg">
+                        <option value="booking_cargo.html">سيارة حمل 🚛</option>
+                        <option value="booking_water.html">تنكر ماء 💧</option>
+                        <option value="booking_training.html">تعليم قيادة 🎓</option>
+                    </select>
                 </div>
 
-                <div onclick="go('booking_training.html')" class="service-btn p-6 flex items-center gap-6 group">
-                    <div class="text-4xl bg-purple-100 p-4 rounded-2xl group-hover:bg-purple-600 group-hover:text-white transition-all">🎓</div>
-                    <div class="flex-1">
-                        <h3 class="text-xl font-black text-gray-800">تعليم قيادة</h3>
-                        <p class="text-sm text-gray-400 font-bold">تدريب احترافي مع أمهر المدربين</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label>📅 التاريخ</label>
+                        <input type="date" id="date" class="input-box">
                     </div>
-                    <i class="fas fa-chevron-left text-purple-200"></i>
+                    <div>
+                        <label>⏰ الساعة</label>
+                        <input type="time" id="time" class="input-box">
+                    </div>
                 </div>
 
             </div>
 
-            <div class="pt-6 text-center">
-                <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest">تطبيق الحوت - جميع الحقوق محفوظة 2026</p>
-            </div>
+            <button onclick="startBooking()" class="w-full bg-[#7c3aed] text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                دخول للنظام <i class="fas fa-sign-in-alt"></i>
+            </button>
+
+            <p class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">تطبيق الحوت اللوجستي 2026</p>
         </div>
     </div>
 
     <script>
-        // دالة الانتقال التي تضمن حمل "المحافظة" معها في الرابط
-        function go(page) {
-            const province = document.getElementById('provinceSelect').value;
-            window.location.href = page + "?province=" + encodeURIComponent(province);
+        function startBooking() {
+            const province = document.getElementById('province').value;
+            const servicePage = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            // التأكد من اختيار التاريخ والوقت
+            if(!date || !time) {
+                alert("⚠️ يرجى تحديد التاريخ والوقت قبل الدخول");
+                return;
+            }
+
+            // بناء الرابط ونقل كل البيانات للصفحة التالية
+            const query = `?province=${encodeURIComponent(province)}&date=${date}&time=${encodeURIComponent(time)}`;
+            window.location.href = servicePage + query;
+        }
+
+        // تعيين تاريخ اليوم تلقائياً كخيار افتراضي
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
         }
     </script>
 </body>
