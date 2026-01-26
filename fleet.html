@@ -3,83 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أسطول الحوت | اختر سيارتك</title>
+    <title>أسطول الحوت 🐋 | اختر سيارتك</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        .car-card { transition: all 0.4s ease; border-radius: 3rem; overflow: hidden; background: white; border: 1px solid #eee; }
-        .car-card:hover { transform: translateY(-10px); border-color: #D4AF37; box-shadow: 0 20px 40px rgba(0,35,73,0.1); }
-        .price-badge { background: linear-gradient(45deg, #D4AF37, #fde047); color: #002349; padding: 8px 20px; border-radius: 1.5rem; font-weight: 900; }
+        .car-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 3px solid transparent; }
+        .car-card:hover { transform: translateY(-10px); shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .car-card.selected { border-color: #D4AF37; background-color: #fffdf5; }
+        .glass-nav { background: rgba(0, 35, 73, 0.95); backdrop-filter: blur(10px); }
+        .sticky-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 1.25rem; box-shadow: 0 -10px 20px rgba(0,0,0,0.05); z-index: 50; }
     </style>
 </head>
-<body class="text-[#002349]">
+<body class="pb-32">
 
-    <header class="hero-bg text-white pt-16 pb-40 text-center relative overflow-hidden">
-        <div class="text-6xl mb-4">🐋</div>
-        <h1 class="text-4xl font-black text-[#D4AF37]">أسطول سيارات الحوت</h1>
-        <p id="serviceLabel" class="text-lg opacity-80 mt-2 font-bold uppercase"></p>
-    </header>
+    <nav class="glass-nav text-white py-6 px-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🐋</span>
+                <div>
+                    <h1 class="font-black text-lg leading-none">أسطول السيارات</h1>
+                    <p id="serviceSubtitle" class="text-[10px] text-[#D4AF37] font-bold mt-1 uppercase tracking-widest">جاري تحديد النوع...</p>
+                </div>
+            </div>
+            <button onclick="window.history.back()" class="text-xs font-bold opacity-70 hover:opacity-100">تغيير الموعد <i class="fas fa-chevron-left mr-1"></i></button>
+        </div>
+    </nav>
 
-    <main class="container mx-auto px-4 -mt-24 relative z-10 pb-20">
-        <div class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-[3rem] p-6 max-w-5xl mx-auto mb-12 border border-white flex flex-wrap gap-4 justify-center items-center">
-            <select id="engineFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none">
-                <option value="all">كل أنواع المحركات</option>
-                <option value="hybrid">هايبرد (هجين)</option>
-                <option value="auto">أوتوماتيك</option>
-            </select>
-            <select id="categoryFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none">
-                <option value="all">كل الفئات</option>
-                <option value="economy">اقتصادية</option>
-                <option value="family">عائلية / SUV</option>
-                <option value="luxury">فاخرة VIP</option>
-            </select>
+    <main class="container mx-auto px-4 mt-8 max-w-5xl">
+        
+        <div class="bg-white rounded-[2.5rem] p-6 mb-8 shadow-sm border border-gray-100">
+            <h3 class="font-black text-[#002349] mb-4 flex items-center gap-2 italic"><i class="fas fa-id-card text-[#D4AF37]"></i> معلومات الحجز</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="custName" placeholder="الاسم الكامل" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold">
+                <input type="tel" id="custPhone" placeholder="رقم الهاتف" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold text-left" dir="ltr">
+            </div>
         </div>
 
-        <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto"></div>
+        <h3 class="font-black text-xl text-[#002349] mb-6 flex items-center gap-2 uppercase">
+            <i class="fas fa-check-circle text-[#D4AF37]"></i> اختر الموديل المفضل
+        </h3>
+
+        <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            </div>
+
+        <div id="weddingAddons" class="mt-10 hidden">
+            <h3 class="font-black text-[#002349] mb-4">🎁 إضافات الزينة</h3>
+            <div class="flex flex-wrap gap-3">
+                <button onclick="toggleAddon(this)" class="addon-btn px-6 py-3 rounded-full border-2 border-gray-200 font-bold text-sm hover:border-[#D4AF37]">تزيين ملكي 🎀</button>
+                <button onclick="toggleAddon(this)" class="addon-btn px-6 py-3 rounded-full border-2 border-gray-200 font-bold text-sm hover:border-[#D4AF37]">باقة ورد طبيعي 💐</button>
+                <button onclick="toggleAddon(this)" class="addon-btn px-6 py-3 rounded-full border-2 border-gray-200 font-bold text-sm hover:border-[#D4AF37]">سائق بزي رسمي 👨‍✈️</button>
+            </div>
+        </div>
     </main>
 
-    <script>
-        const u = new URLSearchParams(window.location.search);
-        const type = u.get('type');
-        document.getElementById('serviceLabel').innerText = type === 'wedding' ? '✨ قسم سيارات الحفلات والأعراس' : '🚗 قسم السيارات الشخصية';
+    <div class="sticky-footer">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div>
+                <p class="text-[10px] text-gray-400 font-black">السيارة المختارة:</p>
+                <p id="selectionText" class="font-black text-[#002349]">يرجى التحديد...</p>
+            </div>
+            <button onclick="proceedToReview()" class="bg-[#D4AF37] text-[#002349] px-8 py-4 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
+                استمر للمراجعة <i class="fas fa-arrow-left ml-2"></i>
+            </button>
+        </div>
+    </div>
 
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type'); // personal or wedding
+        let selectedCar = "";
+        let selectedEmoji = "";
+        let addons = [];
+
+        // بيانات الأسطول
         const fleet = [
-            { name: "تويوتا كورولا 2025", engine: "hybrid", cat: "economy", price: "45000", img: "Cars/corolla.jpg" },
-            { name: "دودج جارجر SRT", engine: "auto", cat: "luxury", price: "85000", img: "Cars/charger.jpg" },
-            { name: "هيونداي توسان", engine: "auto", cat: "family", price: "60000", img: "Cars/tucson.jpg" },
-            { name: "مرسيدس S-Class", engine: "auto", cat: "luxury", price: "150000", img: "Cars/mercedes.jpg" }
+            { name: "تويوتا كامري 2024", type: "personal", emoji: "🚗", img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400" },
+            { name: "مرسيدس S-Class", type: "wedding", emoji: "✨", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400" },
+            { name: "هيونداي سوناتا", type: "personal", emoji: "🚘", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400" },
+            { name: "رولز رويس (زفاف)", type: "wedding", emoji: "👑", img: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400" },
+            { name: "لاند كروزر VXR", type: "personal", emoji: "🚜", img: "https://images.unsplash.com/photo-1594563703937-fdc640497dcd?w=400" }
         ];
 
+        // تهيئة الصفحة بناءً على الخدمة
+        window.onload = () => {
+            document.getElementById('serviceSubtitle').innerText = type === 'wedding' ? 'خدمات المناسبات والأعراس' : 'تأجير سيارات شخصية';
+            if(type === 'wedding') document.getElementById('weddingAddons').classList.remove('hidden');
+            renderFleet();
+        };
+
         function renderFleet() {
-            const eng = document.getElementById('engineFilter').value;
-            const cat = document.getElementById('categoryFilter').value;
             const grid = document.getElementById('fleetGrid');
-            grid.innerHTML = '';
-
-            fleet.filter(car => (eng === 'all' || car.engine === eng) && (cat === 'all' || car.cat === cat))
-                 .forEach(car => {
-                grid.innerHTML += `
-                    <div class="car-card p-4">
-                        <img src="${car.img}" class="w-full h-52 object-cover rounded-[2.5rem] mb-4" onerror="this.src='https://via.placeholder.com/400x250?text=Al-Hut+Car'">
-                        <div class="px-2">
-                            <h3 class="text-2xl font-black mb-2">${car.name}</h3>
-                            <div class="price-badge inline-block mb-6">${parseInt(car.price).toLocaleString()} د.ع / يوم</div>
-                            <button onclick="selectCar('${car.name}', '${car.price}')" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black hover:bg-[#D4AF37] hover:text-black transition-all">اختيار السيارة</button>
-                        </div>
+            const filtered = fleet.filter(car => car.type === type || type === 'all');
+            
+            grid.innerHTML = filtered.map(car => `
+                <div class="car-card bg-white p-4 rounded-[2.5rem] shadow-sm border-2 border-transparent" onclick="selectCar(this, '${car.name}', '${car.emoji}')">
+                    <img src="${car.img}" class="w-full h-44 object-cover rounded-[2rem] mb-4 shadow-inner">
+                    <div class="flex justify-between items-center px-2">
+                        <span class="font-black text-[#002349]">${car.name}</span>
+                        <span class="text-2xl">${car.emoji}</span>
                     </div>
-                `;
-            });
+                </div>
+            `).join('');
         }
 
-        function selectCar(name, price) {
-            u.set('car', name);
-            u.set('price', price);
-            window.location.href = `addons.html?${u.toString()}`;
+        function selectCar(el, name, emoji) {
+            document.querySelectorAll('.car-card').forEach(c => c.classList.remove('selected', 'shadow-2xl'));
+            el.classList.add('selected', 'shadow-2xl');
+            selectedCar = name;
+            selectedEmoji = emoji;
+            document.getElementById('selectionText').innerText = name;
         }
-        window.onload = renderFleet;
+
+        function toggleAddon(btn) {
+            btn.classList.toggle('bg-[#002349]');
+            btn.classList.toggle('text-white');
+            btn.classList.toggle('border-[#002349]');
+            const text = btn.innerText;
+            if(addons.includes(text)) addons = addons.filter(a => a !== text);
+            else addons.push(text);
+        }
+
+        function proceedToReview() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+
+            if(!name || !phone || !selectedCar) return alert("فضلاً، اختر سيارتك وأكمل اسمك ورقمك 🐋");
+
+            // بناء الرابط لصفحة review.html
+            const reviewUrl = `review.html?service=${type}&` +
+                `province=${params.get('province')}&` +
+                `date=${params.get('date')}&` +
+                `time=${params.get('time')}&` +
+                `name=${encodeURIComponent(name)}&` +
+                `phone=${encodeURIComponent(phone)}&` +
+                `vehicle=${encodeURIComponent(selectedCar)}&` +
+                `notes=${encodeURIComponent(addons.join(' - '))}&` +
+                `emoji=${encodeURIComponent(selectedEmoji)}`;
+
+            window.location.href = reviewUrl;
+        }
     </script>
 </body>
 </html>
