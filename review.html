@@ -18,55 +18,47 @@
             background: linear-gradient(135deg, #002349 0%, #004488 100%); 
             clip-path: ellipse(150% 100% at 50% 0%);
         }
-        .data-card { 
-            background: white; 
-            border-radius: 2.5rem; 
-            border: 1px solid rgba(212, 175, 55, 0.2); 
-        }
+        .data-card { background: white; border-radius: 2.5rem; overflow: hidden; }
         .info-pill {
             background: #f8fafc;
             border-right: 4px solid #D4AF37;
             display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
         }
-        /* الشريط السفلي العائم */
         .sticky-footer {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             padding: 1.25rem;
             border-top: 1px solid rgba(0,0,0,0.05);
             z-index: 100;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.05);
         }
         .btn-confirm { 
             background: linear-gradient(90deg, #D4AF37, #f1c40f); 
             color: #002349; 
             box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-            animation: pulse-gold 2s infinite;
-        }
-        @keyframes pulse-gold {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
         }
     </style>
 </head>
-<body class="pb-32"> <div class="hero-review pt-12 pb-36 text-center text-white">
+<body class="pb-32">
+
+    <div class="hero-review pt-12 pb-36 text-center text-white">
         <div class="text-5xl mb-3">🐋</div>
         <h1 class="text-2xl font-black text-[#D4AF37]">مراجعة الطلب</h1>
-        <p class="opacity-70 text-xs">راجع معلوماتك بدقة قبل الإرسال</p>
+        <p class="opacity-70 text-xs">تأكد من دقة المعلومات قبل الإرسال</p>
     </div>
 
     <main class="container mx-auto px-4 -mt-24">
         <div class="max-w-xl mx-auto space-y-4">
             
-            <div class="data-card shadow-xl p-6 relative">
+            <div class="data-card shadow-xl p-6">
                 <div class="flex items-center gap-4 mb-6 border-b pb-4">
                     <div id="serviceEmoji" class="text-3xl bg-slate-50 w-16 h-16 flex items-center justify-center rounded-2xl shadow-inner border border-gray-100">🐋</div>
                     <div>
                         <h2 id="serviceName" class="text-xl font-black text-[#002349]">جاري التحميل...</h2>
-                        <span id="displayCity" class="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-lg font-black uppercase tracking-widest">📍 كركوك</span>
+                        <span id="displayCity" class="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-lg font-black tracking-widest uppercase"></span>
                     </div>
                 </div>
 
@@ -75,23 +67,23 @@
             </div>
 
             <div class="data-card shadow-lg p-5">
-                <h3 class="font-black text-[11px] mb-3 text-slate-400 flex items-center gap-2">
-                    <i class="fas fa-map-marker-alt text-[#D4AF37]"></i> تفاصيل العنوان والموقع
+                <h3 class="font-black text-[11px] mb-3 text-slate-400 flex items-center gap-2 uppercase">
+                    <i class="fas fa-map-marker-alt text-[#D4AF37]"></i> تفاصيل الموقع
                 </h3>
-                <div id="locationSummary" class="text-xs font-bold text-slate-700 space-y-2">
+                <div id="locationSummary" class="text-xs font-bold text-slate-700">
                     </div>
             </div>
 
             <button onclick="window.history.back()" class="w-full py-2 text-slate-400 font-bold text-[11px] flex items-center justify-center gap-2">
-                <i class="fas fa-edit"></i> هل تريد تعديل شيء؟ ارجع للخلف
+                <i class="fas fa-edit"></i> تعديل البيانات السابقة
             </button>
         </div>
     </main>
 
     <div class="sticky-footer">
         <div class="max-w-xl mx-auto">
-            <button onclick="sendToWhatsApp()" class="btn-confirm w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all">
-                تأكيد الحجز الآن <i class="fab fa-whatsapp text-2xl"></i>
+            <button onclick="sendToWhatsApp()" class="btn-confirm w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                تأكيد وإرسال عبر واتساب <i class="fab fa-whatsapp text-2xl"></i>
             </button>
         </div>
     </div>
@@ -100,7 +92,7 @@
         const params = new URLSearchParams(window.location.search);
         const service = params.get('service');
         const city = params.get('province') || params.get('city') || 'كركوك';
-        const myNum = "+9647713225471";
+        const myWhatsAppNumber = "+9647713225471";
 
         const serviceMap = {
             'personal': { name: 'سيارة شخصية (Personal)', emoji: '🚗' },
@@ -118,86 +110,55 @@
         function addInfo(label, val) {
             if (!val || val === 'undefined') return;
             document.getElementById('dataContainer').innerHTML += `
-                <div class="info-pill p-3 rounded-xl border border-gray-100 shadow-sm">
+                <div class="info-pill">
                     <span class="text-[10px] text-slate-400 font-black">${label}</span>
                     <span class="text-sm text-[#002349] font-black">${decodeURIComponent(val)}</span>
                 </div>`;
         }
 
+        // إضافة المعلومات الأساسية
         addInfo("الاسم", params.get('name'));
         addInfo("الهاتف", params.get('phone'));
         addInfo("التاريخ", params.get('date'));
         addInfo("الوقت", params.get('time'));
 
+        // معالجة الموقع
+        const locBox = document.getElementById('locationSummary');
         if(service === 'cargo') {
             addInfo("الحمولة", params.get('notes'));
-            addInfo("السعر", params.get('final_price') + " د.ع");
-            document.getElementById('locationSummary').innerHTML = `
-                <div class="bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200">
-                    <p class="text-blue-700">🚩 من: ${decodeURIComponent(params.get('start_desc'))}</p>
-                    <p class="text-green-700 mt-1">🏁 إلى: ${decodeURIComponent(params.get('end_desc'))}</p>
+            addInfo("المركبة", params.get('vehicle'));
+            locBox.innerHTML = `
+                <div class="bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200 space-y-2">
+                    <p class="text-blue-700">🚩 من: ${decodeURIComponent(params.get('start_desc') || 'غير محدد')}</p>
+                    <p class="text-green-700">🏁 إلى: ${decodeURIComponent(params.get('end_desc') || 'غير محدد')}</p>
                 </div>`;
         } else {
-            document.getElementById('locationSummary').innerHTML = `
-                <div class="bg-gray-50 p-3 rounded-xl text-center border border-gray-200">
-                    ${decodeURIComponent(params.get('location_desc') || 'موقع محدد عبر الخريطة ✅')}
+            locBox.innerHTML = `
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-center italic">
+                    ${decodeURIComponent(params.get('location_desc') || 'الموقع محدد عبر الخريطة ✅')}
                 </div>`;
         }
 
         function sendToWhatsApp() {
-            let msg = `*طلب جديد | منصة الحوت 🐋*\n`;
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `🛠️ *الخدمة:* ${current.name}\n`;
-            msg += `👤 *الزبون:* ${decodeURIComponent(params.get('name'))}\n`;
-            msg += `📞 *الهاتف:* ${params.get('phone')}\n`;
-            msg += `📅 *الموعد:* ${params.get('date')} | ${params.get('time')}\n`;
+            let message = `*طلب جديد | منصة الحوت 🐋*\n`;
+            message += `━━━━━━━━━━━━━━━\n`;
+            message += `🛠️ *الخدمة:* ${current.name}\n`;
+            message += `👤 *الزبون:* ${decodeURIComponent(params.get('name') || 'غير مسمى')}\n`;
+            message += `📞 *الهاتف:* ${params.get('phone') || 'غير متوفر'}\n`;
+            message += `📅 *الموعد:* ${params.get('date')} | ${params.get('time')}\n`;
 
+            // إرسال الإحداثيات إن وجدت
             const lat = params.get('lat') || params.get('slat');
             const lng = params.get('lng') || params.get('slng');
-            if(lat) msg += `📍 *الموقع:* http://maps.google.com/maps?q=${lat},${lng}\n`;
+            if(lat && lng) {
+                message += `📍 *الموقع:* https://www.google.com/maps?q=${lat},${lng}\n`;
+            }
 
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `_شكراً لاختياركم الحوت_`;
+            message += `━━━━━━━━━━━━━━━\n`;
+            message += `_تم الإرسال عبر تطبيق الحوت الذكي_`;
 
-            window.open(`https://wa.me/${myNum}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-    </script>
-</body>
-</html>
-                </div>`;
-        } else if(service === 'training') {
-            createPill("رقم الهوية", params.get('id'));
-            createPill("العمر", params.get('age'));
-            createPill("الجنس", params.get('gender'));
-            locSummary.innerHTML = `<div class="p-4 bg-slate-50 rounded-3xl text-sm font-bold">📍 العنوان: ${decodeURIComponent(params.get('location_desc'))}</div>`;
-        } else {
-            locSummary.innerHTML = `<div class="p-4 bg-slate-50 rounded-3xl text-sm font-bold">📍 العنوان: ${decodeURIComponent(params.get('location_desc') || 'محدد عبر الخريطة')}</div>`;
-        }
-
-        function sendToWhatsApp() {
-            let msg = `*طلب جديد من منصة الحوت 🐋*\n`;
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `🛠️ *الخدمة:* ${current.name}\n`;
-            msg += `🏙️ *المدينة:* ${city}\n`;
-            msg += `👤 *الزبون:* ${decodeURIComponent(params.get('name'))}\n`;
-            msg += `📞 *الهاتف:* ${params.get('phone')}\n`;
-            msg += `📅 *الموعد:* ${params.get('date')} | ${params.get('time')}\n`;
-
-            // إضافة كل البيانات الإضافية تلقائياً للرسالة
-            params.forEach((value, key) => {
-                if(!['service','province','city','name','phone','date','time','lat','lng','slat','slng','elat','elng'].includes(key)) {
-                    msg += `📝 *${key.toUpperCase()}:* ${decodeURIComponent(value)}\n`;
-                }
-            });
-
-            const lat = params.get('lat') || params.get('slat');
-            const lng = params.get('lng') || params.get('slng');
-            if(lat) msg += `📍 *الموقع:* http://maps.google.com/maps?q=${lat},${lng}\n`;
-
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `_تم الإرسال عبر تطبيق الحوت الذكي_`;
-
-            window.open(`https://wa.me/${myNum}?text=${encodeURIComponent(msg)}`, '_blank');
+            const finalLink = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+            window.open(finalLink, '_blank');
         }
     </script>
 </body>
