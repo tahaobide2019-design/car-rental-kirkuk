@@ -8,54 +8,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; color: #002349; overflow-x: hidden; }
-        .hero-review { background: linear-gradient(135deg, #002349 0%, #003366 100%); padding: 1.5rem 0 4.5rem 0; }
-        .data-card { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; overflow: hidden; }
-        .info-row { display: flex; justify-content: space-between; padding: 0.65rem 1rem; border-bottom: 1px dashed #e2e8f0; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; color: #002349; }
+        .hero-review { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
+        .data-card { background: white; border-radius: 2.5rem; border: 1px solid #e2e8f0; overflow: hidden; }
+        .info-row { display: flex; justify-content: space-between; padding: 1rem; border-bottom: 1px dashed #e2e8f0; }
         .info-row:last-child { border: none; }
-        .label { font-weight: 900; color: #64748b; font-size: 0.75rem; }
-        .value { font-weight: 900; color: #002349; font-size: 0.85rem; }
-        .btn-confirm { background: #D4AF37; color: #002349; transition: 0.3s; box-shadow: 0 8px 15px rgba(212, 175, 55, 0.3); }
+        .label { font-weight: 900; color: #64748b; font-size: 0.8rem; }
+        .value { font-weight: 900; color: #002349; }
+        .btn-confirm { background: #D4AF37; color: #002349; transition: 0.3s; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2); }
+        .btn-confirm:hover { background: #b8962d; transform: translateY(-2px); }
     </style>
 </head>
-<body class="pb-4">
+<body class="pb-10">
 
-    <div class="hero-review text-center text-white">
-        <div class="text-3xl mb-1">📋</div>
-        <h1 class="text-xl font-black text-[#D4AF37]">مراجعة الطلب النهائي</h1>
-        <p class="text-[10px] opacity-70">تأكد من المعلومات قبل الإرسال</p>
+    <div class="hero-review pt-12 pb-32 text-center text-white">
+        <div class="text-5xl mb-3">📋</div>
+        <h1 class="text-3xl font-black text-[#D4AF37]">مراجعة الطلب النهائي</h1>
+        <p class="opacity-80">يرجى التأكد من صحة المعلومات قبل الإرسال</p>
     </div>
 
-    <main class="container mx-auto px-4 -mt-12">
-        <div class="max-w-xl mx-auto space-y-3">
+    <main class="container mx-auto px-4 -mt-20">
+        <div class="max-w-2xl mx-auto space-y-6">
             
-            <div class="data-card shadow-xl p-4 border-t-8 border-[#D4AF37]">
-                <div class="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
-                    <div id="serviceEmoji" class="text-3xl bg-gray-50 w-12 h-12 flex items-center justify-center rounded-2xl">🐋</div>
+            <div class="data-card shadow-xl p-6 border-t-8 border-[#D4AF37]">
+                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-100">
+                    <div id="serviceEmoji" class="text-4xl bg-gray-100 w-16 h-16 flex items-center justify-center rounded-2xl">🐋</div>
                     <div>
-                        <h2 id="serviceName" class="text-md font-black">جاري التحميل...</h2>
-                        <p id="displayCity" class="text-[11px] text-blue-600 font-black"></p>
+                        <h2 id="serviceName" class="text-xl font-black">جاري التحليل...</h2>
+                        <p id="displayCity" class="text-sm text-indigo-500 font-bold"></p>
                     </div>
                 </div>
 
-                <div id="dataContainer" class="space-y-0.5">
+                <div id="dataContainer" class="space-y-1">
                     </div>
             </div>
 
-            <div class="data-card shadow-md p-3">
-                <h3 class="font-black text-[11px] mb-2 flex items-center gap-2">
-                    <i class="fas fa-map-marked-alt text-[#D4AF37]"></i> الموقع المحدد:
+            <div class="data-card shadow-lg p-5">
+                <h3 class="font-black text-sm mb-4 flex items-center gap-2">
+                    <i class="fas fa-map-marked-alt text-[#D4AF37]"></i> تفاصيل الموقع
                 </h3>
-                <div id="locationSummary" class="text-[11px] text-slate-600 font-bold bg-slate-50 p-2 rounded-xl">
+                <div id="locationSummary" class="text-sm space-y-2">
                     </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-2 pt-1">
-                <button onclick="sendToWhatsApp()" class="btn-confirm w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
-                    تأكيد وإرسال واتساب <i class="fab fa-whatsapp text-2xl"></i>
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="sendToWhatsApp()" class="btn-confirm w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3">
+                    تأكيد الطلب عبر واتساب <i class="fab fa-whatsapp text-2xl"></i>
                 </button>
-                <button onclick="window.history.back()" class="w-full py-2 text-gray-400 font-bold text-[10px]">
-                    <i class="fas fa-edit"></i> تعديل المعلومات
+                
+                <button onclick="window.history.back()" class="w-full py-4 text-gray-400 font-bold hover:text-red-500 transition-all">
+                    تعديل البيانات <i class="fas fa-edit mr-1"></i>
                 </button>
             </div>
 
@@ -65,25 +67,27 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const service = params.get('service');
-        const city = params.get('province') || params.get('city') || 'غير محدد';
-        const myPhone = "+9647713225471";
+        const province = params.get('province') || params.get('city') || 'غير محدد';
+        const phone = "+9647713225471"; // رقمك المسجل
 
+        // 1. تحليل الخدمة وعرضها
         const serviceMap = {
-            'cargo': { name: 'شحن ونقل بضائع', emoji: '🚛' },
-            'water': { name: 'توصيل صهريج ماء', emoji: '💧' },
-            'training': { name: 'كورس تعليم قيادة', emoji: '🎓' }
+            'cargo': { name: 'شحن ونقل بضائع', emoji: '🚛', color: '#4338ca' },
+            'water': { name: 'توصيل صهريج ماء', emoji: '💧', color: '#0ea5e9' },
+            'training': { name: 'كورس تعليم قيادة', emoji: '🎓', color: '#7c3aed' }
         };
 
-        const current = serviceMap[service] || { name: 'خدمة عامة', emoji: '📦' };
-        document.getElementById('serviceEmoji').innerText = current.emoji;
-        document.getElementById('serviceName').innerText = current.name;
-        document.getElementById('displayCity').innerText = `📍 المدينة: ${city}`;
+        const currentService = serviceMap[service] || { name: 'خدمة عامة', emoji: '📦' };
+        document.getElementById('serviceEmoji').innerText = currentService.emoji;
+        document.getElementById('serviceName').innerText = currentService.name;
+        document.getElementById('displayCity').innerText = `📍 المنطقة: ${province}`;
 
+        // 2. عرض البيانات ديناميكياً بناءً على ما وصل من الصفحات السابقة
         const container = document.getElementById('dataContainer');
         const locSummary = document.getElementById('locationSummary');
 
         function addRow(label, value) {
-            if (!value || value === 'undefined') return;
+            if (!value) return;
             container.innerHTML += `
                 <div class="info-row">
                     <span class="label">${label}</span>
@@ -91,49 +95,70 @@
                 </div>`;
         }
 
-        // البيانات الأساسية
+        // إضافة البيانات العامة
         addRow("الاسم", params.get('name'));
         addRow("الهاتف", params.get('phone'));
+        addRow("التاريخ", params.get('date'));
+        addRow("الوقت", params.get('time'));
 
+        // بيانات مخصصة للتدريب
         if(service === 'training') {
             addRow("رقم الهوية", params.get('id'));
+            addRow("العمر", params.get('age'));
             addRow("الجنس", params.get('gender'));
-            addRow("الموعد", params.get('date') + " | " + params.get('time'));
-            locSummary.innerText = "📍 الموقع محدد عبر الخريطة";
-        } else if(service === 'cargo') {
-            addRow("الحمولة", params.get('notes'));
-            addRow("السعر", params.get('final_price') + " د.ع");
-            locSummary.innerHTML = `
-                <p>🚩 <b>من:</b> ${decodeURIComponent(params.get('start_desc'))}</p>
-                <p class="mt-1">🏁 <b>إلى:</b> ${decodeURIComponent(params.get('end_desc'))}</p>
-            `;
-        } else if(service === 'water') {
-            addRow("الموعد", params.get('date') + " | " + params.get('time'));
-            locSummary.innerText = decodeURIComponent(params.get('location_desc') || "محدد عبر الخريطة");
         }
 
+        // بيانات مخصصة للحمل
+        if(service === 'cargo') {
+            addRow("نوع الحمولة", params.get('notes'));
+            addRow("نوع المركبة", params.get('vehicle'));
+            addRow("المسافة التقديرية", params.get('dist') + " كم");
+            addRow("السعر التقريبي", params.get('final_price') + " د.ع");
+            
+            locSummary.innerHTML = `
+                <div class="p-3 bg-gray-50 rounded-xl text-xs">
+                    <p><b>🚩 الانطلاق:</b> ${decodeURIComponent(params.get('start_desc'))}</p>
+                    <p class="mt-2"><b>🏁 التسليم:</b> ${decodeURIComponent(params.get('end_desc'))}</p>
+                </div>
+            `;
+        } else {
+            locSummary.innerHTML = `
+                <div class="p-3 bg-gray-50 rounded-xl text-xs">
+                    <p><b>📍 العنوان:</b> ${decodeURIComponent(params.get('location_desc') || 'محدد عبر الخريطة')}</p>
+                </div>
+            `;
+        }
+
+        // 3. ذكاء الإرسال لواتساب
         function sendToWhatsApp() {
             let msg = `*طلب جديد من تطبيق الحوت 🐋*\n`;
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `🛠️ *الخدمة:* ${current.name}\n`;
-            msg += `🏙️ *المدينة:* ${city}\n`;
+            msg += `--------------------------\n`;
+            msg += `🛠️ *الخدمة:* ${currentService.name}\n`;
+            msg += `📍 *المنطقة:* ${province}\n`;
             msg += `👤 *الزبون:* ${decodeURIComponent(params.get('name'))}\n`;
-            msg += `📞 *الهاتف:* ${params.get('phone')}\n`;
-
-            if(service === 'cargo') {
-                msg += `🚩 *من:* ${decodeURIComponent(params.get('start_desc'))}\n`;
-                msg += `🏁 *إلى:* ${decodeURIComponent(params.get('end_desc'))}\n`;
-                msg += `💰 *السعر:* ${params.get('final_price')} د.ع\n`;
+            msg += `📞 *الهاتف:* ${params.get('phone') || 'غير متوفر'}\n`;
+            msg += `📅 *الموعد:* ${params.get('date')} | ⏰ ${params.get('time')}\n`;
+            
+            if(service === 'training') {
+                msg += `🪪 *الهوية:* ${params.get('id')}\n`;
+                msg += `👤 *الجنس:* ${decodeURIComponent(params.get('gender'))}\n`;
             }
 
-            const lat = params.get('lat') || params.get('slat');
-            const lng = params.get('lng') || params.get('slng');
-            if(lat) msg += `📍 *الموقع:* http://maps.google.com/maps?q=${lat},${lng}\n`;
+            if(service === 'cargo') {
+                msg += `📦 *الحمولة:* ${decodeURIComponent(params.get('notes'))}\n`;
+                msg += `📏 *المسافة:* ${params.get('dist')} كم\n`;
+                msg += `💰 *السعر:* ${params.get('final_price')} د.ع\n`;
+                msg += `📍 *من:* https://www.google.com/maps?q=${params.get('slat')},${params.get('slng')}\n`;
+                msg += `🏁 *إلى:* https://www.google.com/maps?q=${params.get('elat')},${params.get('elng')}\n`;
+            } else {
+                msg += `📍 *الموقع:* https://www.google.com/maps?q=${params.get('lat')},${params.get('lng')}\n`;
+            }
 
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `_عبر منصة الحوت الذكية_`;
+            msg += `--------------------------\n`;
+            msg += `🐋 _تم الإرسال عبر منصة الحوت الذكية_`;
 
-            window.open(`https://wa.me/${myPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+            const waLink = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            window.open(waLink, '_blank');
         }
     </script>
 </body>
