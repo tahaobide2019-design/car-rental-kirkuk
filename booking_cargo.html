@@ -3,49 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز سيارة حمل 🚛</title>
+    <title>طلب سيارة حمل | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>body { font-family: 'Tajawal', sans-serif; } #mS, #mE { height: 180px; border-radius: 1.5rem; margin: 10px 0; }</style>
-</head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-md mx-auto bg-white rounded-[2.5rem] shadow-xl p-6">
-        <h2 class="text-2xl font-black text-center mb-6 text-indigo-900">بيانات النقل 🚛</h2>
-        <div class="space-y-4">
-            <input type="text" id="n" placeholder="الاسم الكامل" class="w-full p-4 border-2 rounded-2xl outline-none font-bold">
-            <input type="tel" id="ph" placeholder="رقم الهاتف" class="w-full p-4 border-2 rounded-2xl outline-none font-bold text-left" dir="ltr">
-            <input type="text" id="nt" placeholder="📦 ماذا سننقل؟" class="w-full p-4 border-2 rounded-2xl outline-none font-bold">
-            
-            <p class="font-bold text-sm text-gray-400">📍 حدد موقع الاستلام</p>
-            <div id="mS"></div>
-            <p class="font-bold text-sm text-gray-400">🏁 حدد موقع التسليم</p>
-            <div id="mE"></div>
 
-            <button onclick="rev()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black text-xl shadow-lg">مراجعة الحجز</button>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
+        .glass-card { background: white; border-radius: 3.5rem; }
+        .map-box { height: 220px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.1); z-index: 1; }
+        .input-style { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
+        .input-style:focus { border-color: #6366f1; background: white; border-width: 2.5px; }
+        .required-label::after { content: " *"; color: #ef4444; }
+        .section-title { font-size: 0.75rem; font-weight: 900; color: #6366f1; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-xl mx-auto glass-card shadow-2xl overflow-hidden border-t-[12px] border-[#6366f1]">
+        
+        <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
+            <div class="text-5xl mb-3">🚛</div>
+            <h2 class="text-3xl font-black text-[#4338ca]">طلب سيارة حمل</h2>
+            <p id="provTag" class="text-xs font-bold text-indigo-400 mt-2 tracking-widest uppercase">جاري تحديد المحافظة... 🐋</p>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2 required-label">الاسم الكامل</label>
+                    <input type="text" id="cName" placeholder="اسمك الكامل" class="input-style">
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2 required-label">رقم الهاتف</label>
+                    <input type="tel" id="cPhone" placeholder="077..." class="input-style text-left" dir="ltr">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-black text-gray-400 mb-2 mr-2 required-label">ماذا تريد أن تنقل؟</label>
+                <input type="text" id="cNotes" placeholder="مثلاً: أثاث منزل، بضاعة تجارية..." class="input-style">
+            </div>
+
+            <hr class="border-indigo-50">
+
+            <div class="space-y-3">
+                <span class="section-title"><i class="fas fa-map-marker-alt"></i> 1. موقع الانطلاق (الاستلام)</span>
+                <div id="mapStart" class="map-box"></div>
+                <input type="text" id="startDesc" placeholder="وصف دقيق لمكان الاستلام (المنطقة، الدالة)" class="input-style bg-white">
+            </div>
+
+            <div class="space-y-3 pt-4">
+                <span class="section-title"><i class="fas fa-flag-checkered"></i> 2. موقع التسليم (الوجهة)</span>
+                <div id="mapEnd" class="map-box"></div>
+                <input type="text" id="endDesc" placeholder="وصف دقيق لمكان التسليم (المنطقة، الدالة)" class="input-style bg-white">
+            </div>
+
+            <button onclick="confirmCargo()" class="w-full bg-[#4338ca] text-white py-5 rounded-[2rem] font-black text-xl shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all mt-4">
+                مراجعة الطلب وحساب السعر <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
     </div>
 
     <script>
-        let mS, mkS, mE, mkE;
-        const urlP = new URLSearchParams(window.location.search);
-        const prov = urlP.get('province') || 'غير محدد';
+        let mapStart, markerStart, mapEnd, markerEnd;
+        const urlParams = new URLSearchParams(window.location.search);
+        const province = urlParams.get('province') || 'كركوك';
 
         window.onload = function() {
-            mS = L.map('mS').setView([33.3152, 44.3661], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mS);
-            mkS = L.marker([33.3152, 44.3661], {draggable:true}).addTo(mS);
+            document.getElementById('provTag').innerText = "منطقة العمل: " + province + " 🐋";
 
-            mE = L.map('mE').setView([33.3152, 44.3661], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mE);
-            mkE = L.marker([33.3152, 44.3661], {draggable:true}).addTo(mE);
+            // خريطة البداية
+            mapStart = L.map('mapStart', {zoomControl: false}).setView([35.4687, 44.3921], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapStart);
+            markerStart = L.marker([35.4687, 44.3921], {draggable: true}).addTo(mapStart);
+
+            // خريطة النهاية
+            mapEnd = L.map('mapEnd', {zoomControl: false}).setView([35.4700, 44.4000], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapEnd);
+            markerEnd = L.marker([35.4700, 44.4000], {draggable: true}).addTo(mapEnd);
         };
 
-        function rev() {
-            const d = (mkS.getLatLng().distanceTo(mkE.getLatLng()) / 1000).toFixed(1);
-            const pr = Math.round(d * 1500);
-            const q = `service=cargo&province=${encodeURIComponent(prov)}&name=${encodeURIComponent(document.getElementById('n').value)}&phone=${document.getElementById('ph').value}&notes=${encodeURIComponent(document.getElementById('nt').value)}&dist=${d}&price=${pr}&slat=${mkS.getLatLng().lat}&slng=${mkS.getLatLng().lng}&elat=${mkE.getLatLng().lat}&elng=${mkE.getLatLng().lng}&emoji=🚛`;
-            window.location.href = "review.html?" + q;
+        function confirmCargo() {
+            const name = document.getElementById('cName').value;
+            const phone = document.getElementById('cPhone').value;
+            const notes = document.getElementById('cNotes').value;
+            const sDesc = document.getElementById('startDesc').value;
+            const eDesc = document.getElementById('endDesc').value;
+
+            if(!name || !phone || !notes || !sDesc || !eDesc) {
+                alert("⚠️ يرجى ملء كافة البيانات ووصف العناوين بدقة.");
+                return;
+            }
+
+            // حساب المسافة والسعر (تلقائي)
+            const posS = markerStart.getLatLng();
+            const posE = markerEnd.getLatLng();
+            const dist = (posS.distanceTo(posE) / 1000).toFixed(1);
+            const price = Math.round(dist * 1500); // سعر الكيلو 1500 دينار
+
+            const query = `service=cargo&emoji=🚛&province=${encodeURIComponent(province)}&name=${encodeURIComponent(name)}&phone=${phone}&notes=${encodeURIComponent(notes)}&start_desc=${encodeURIComponent(sDesc)}&end_desc=${encodeURIComponent(eDesc)}&dist=${dist}&final_price=${price}&slat=${posS.lat}&slng=${posS.lng}&elat=${posE.lat}&elng=${posE.lng}`;
+            
+            window.location.href = `review.html?${query}`;
         }
     </script>
 </body>
