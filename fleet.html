@@ -3,99 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أسطول الحوت الفاخر | اختر رحلتك</title>
+    <title>أسطول الحوت | اختر سيارتك</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="prices.js"></script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7fa; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #004080 100%); position: relative; }
-        
-        /* تأثيرات البطاقة المطورة */
-        .car-card { 
-            perspective: 1000px;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .card-inner {
-            background: white; border-radius: 2.5rem; overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,35,73,0.05);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: all 0.4s ease;
-        }
-        .car-card:hover .card-inner {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 60px rgba(0,35,73,0.15);
-            border-color: #D4AF37;
-        }
-        
-        /* تأثير الصورة */
-        .img-container { overflow: hidden; position: relative; height: 220px; }
-        .car-img { transition: transform 0.6s ease; width: 100%; height: 100%; object-fit: cover; }
-        .car-card:hover .car-img { transform: scale(1.1); }
-        
-        /* شارات المعلومات */
-        .spec-badge {
-            background: #f8fafc; padding: 6px 12px; border-radius: 12px;
-            font-size: 0.7rem; font-weight: 800; color: #64748b;
-            display: flex; align-items: center; gap: 6px;
-        }
-
-        /* أنيميشن الظهور */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-card { animation: fadeInUp 0.6s ease forwards; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
+        .car-card { transition: all 0.4s ease; border-radius: 3rem; overflow: hidden; background: white; border: 1px solid #eee; }
+        .car-card:hover { transform: translateY(-10px); border-color: #D4AF37; box-shadow: 0 20px 40px rgba(0,35,73,0.1); }
+        .price-badge { background: linear-gradient(45deg, #D4AF37, #fde047); color: #002349; padding: 8px 20px; border-radius: 1.5rem; font-weight: 900; }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <header class="hero-bg text-white pt-20 pb-48 text-center overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-        <div class="relative z-10">
-            <span class="bg-[#D4AF37] text-[#002349] px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">VIP Fleet</span>
-            <h1 class="text-5xl font-black mt-4">أسطول الحوت <span class="text-[#D4AF37]">2026</span></h1>
-            <p id="serviceLabel" class="text-lg opacity-70 mt-3 font-light italic"></p>
-        </div>
+    <header class="hero-bg text-white pt-16 pb-40 text-center relative overflow-hidden">
+        <div class="text-6xl mb-4">🐋</div>
+        <h1 class="text-4xl font-black text-[#D4AF37]">أسطول سيارات الحوت</h1>
+        <p id="serviceLabel" class="text-lg opacity-80 mt-2 font-bold uppercase"></p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
-        <div class="bg-white/90 backdrop-blur-md shadow-2xl rounded-[3rem] p-4 max-w-4xl mx-auto mb-16 flex flex-wrap md:flex-nowrap gap-4 items-center justify-between border border-white">
-            <div class="flex items-center gap-3 w-full">
-                <div class="flex-1">
-                    <select id="engineFilter" onchange="renderFleet()" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-sm outline-none border-none cursor-pointer">
-                        <option value="all">🔋 كل المحركات</option>
-                        <option value="hybrid">هايبرد (هجين)</option>
-                        <option value="auto">بنزين / أوتوماتيك</option>
-                    </select>
-                </div>
-                <div class="flex-1">
-                    <select id="categoryFilter" onchange="renderFleet()" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-sm outline-none border-none cursor-pointer">
-                        <option value="all">💎 كل الفئات</option>
-                        <option value="economy">اقتصادية</option>
-                        <option value="family">عائلية / SUV</option>
-                        <option value="luxury">فاخرة VIP</option>
-                    </select>
-                </div>
-            </div>
-            <div class="hidden md:block h-10 w-px bg-slate-200 mx-2"></div>
-            <div class="text-xs font-black text-slate-400 px-4">
-                عرض: <span id="carCount" class="text-[#002349]">0</span> سيارة
-            </div>
+    <main class="container mx-auto px-4 -mt-24 relative z-10 pb-20">
+        <div class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-[3rem] p-6 max-w-5xl mx-auto mb-12 border border-white flex flex-wrap gap-4 justify-center items-center">
+            <select id="engineFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none">
+                <option value="all">كل أنواع المحركات</option>
+                <option value="hybrid">هايبرد (هجين)</option>
+                <option value="auto">أوتوماتيك</option>
+            </select>
+            <select id="categoryFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none">
+                <option value="all">كل الفئات</option>
+                <option value="economy">اقتصادية</option>
+                <option value="family">عائلية / SUV</option>
+                <option value="luxury">فاخرة VIP</option>
+            </select>
         </div>
 
-        <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
-            </div>
+        <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto"></div>
     </main>
 
     <script>
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type');
-        
-        // ضبط نصوص الخدمة
-        document.getElementById('serviceLabel').innerText = 
-            type === 'wedding' ? 'نقدم لك أفخم السيارات ليومك الاستثنائي ✨' : 'اختر سيارتك المفضلة وانطلق بكل راحة 🚗';
+        document.getElementById('serviceLabel').innerText = type === 'wedding' ? '✨ قسم سيارات الحفلات والأعراس' : '🚗 قسم السيارات الشخصية';
+
+        const fleet = [
+            { name: "تويوتا كورولا 2025", engine: "hybrid", cat: "economy", price: "45000", img: "Cars/corolla.jpg" },
+            { name: "دودج جارجر SRT", engine: "auto", cat: "luxury", price: "85000", img: "Cars/charger.jpg" },
+            { name: "هيونداي توسان", engine: "auto", cat: "family", price: "60000", img: "Cars/tucson.jpg" },
+            { name: "مرسيدس S-Class", engine: "auto", cat: "luxury", price: "150000", img: "Cars/mercedes.jpg" }
+        ];
 
         function renderFleet() {
             const eng = document.getElementById('engineFilter').value;
@@ -103,50 +59,15 @@
             const grid = document.getElementById('fleetGrid');
             grid.innerHTML = '';
 
-            // استيراد البيانات من ملف الأسعار المركزي
-            const filteredCars = AL_HUT_DATA.fleet.filter(car => 
-                (eng === 'all' || car.engine === eng) && 
-                (cat === 'all' || car.cat === cat)
-            );
-
-            document.getElementById('carCount').innerText = filteredCars.length;
-
-            filteredCars.forEach((car, index) => {
+            fleet.filter(car => (eng === 'all' || car.engine === eng) && (cat === 'all' || car.cat === cat))
+                 .forEach(car => {
                 grid.innerHTML += `
-                    <div class="car-card animate-card" style="animation-delay: ${index * 0.1}s">
-                        <div class="card-inner">
-                            <div class="img-container">
-                                <div class="absolute top-4 right-4 z-20">
-                                    <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-[10px] font-black shadow-sm">
-                                        ⭐ 4.9
-                                    </span>
-                                </div>
-                                <img src="${car.img}" class="car-img" onerror="this.src='https://via.placeholder.com/400x250?text=Al-Hut+Luxury'">
-                            </div>
-                            
-                            <div class="p-8">
-                                <h3 class="text-2xl font-black mb-4 flex justify-between items-center">
-                                    ${car.name}
-                                    <i class="fas fa-check-circle text-blue-500 text-sm"></i>
-                                </h3>
-                                
-                                <div class="flex flex-wrap gap-2 mb-6">
-                                    <div class="spec-badge"><i class="fas fa-gas-pump"></i> ${car.engine === 'hybrid' ? 'هجين' : 'بنزين'}</div>
-                                    <div class="spec-badge"><i class="fas fa-users"></i> 5 ركاب</div>
-                                    <div class="spec-badge"><i class="fas fa-cog"></i> Auto</div>
-                                </div>
-
-                                <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-50">
-                                    <div>
-                                        <span class="text-[10px] font-bold text-slate-400 block uppercase">السعر اليومي</span>
-                                        <span class="text-xl font-black text-[#002349]">${car.price.toLocaleString()} <small class="text-xs">د.ع</small></span>
-                                    </div>
-                                    <button onclick="selectCar('${car.name}', '${car.price}')" 
-                                        class="bg-[#002349] hover:bg-[#D4AF37] text-white hover:text-[#002349] px-6 py-3 rounded-2xl font-black transition-all shadow-lg active:scale-90">
-                                        حجز الآن
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="car-card p-4">
+                        <img src="${car.img}" class="w-full h-52 object-cover rounded-[2.5rem] mb-4" onerror="this.src='https://via.placeholder.com/400x250?text=Al-Hut+Car'">
+                        <div class="px-2">
+                            <h3 class="text-2xl font-black mb-2">${car.name}</h3>
+                            <div class="price-badge inline-block mb-6">${parseInt(car.price).toLocaleString()} د.ع / يوم</div>
+                            <button onclick="selectCar('${car.name}', '${car.price}')" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black hover:bg-[#D4AF37] hover:text-black transition-all">اختيار السيارة</button>
                         </div>
                     </div>
                 `;
@@ -158,7 +79,6 @@
             u.set('price', price);
             window.location.href = `addons.html?${u.toString()}`;
         }
-
         window.onload = renderFleet;
     </script>
 </body>
