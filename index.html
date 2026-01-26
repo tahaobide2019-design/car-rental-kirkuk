@@ -77,27 +77,10 @@
                 </div>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
-            <div class="feature-card">
-                <i class="fas fa-bolt text-3xl text-yellow-500 mb-3"></i>
-                <h3 class="font-black">استجابة فورية</h3>
-                <p class="text-sm text-gray-500">نصل إليك في أسرع وقت ممكن</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-shield-alt text-3xl text-yellow-500 mb-3"></i>
-                <h3 class="font-black">أمان وموثوقية</h3>
-                <p class="text-sm text-gray-500">خدمة مضمونة بأسعار شفافة</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-headset text-3xl text-yellow-500 mb-3"></i>
-                <h3 class="font-black">دعم 24/7</h3>
-                <p class="text-sm text-gray-500">نحن معك في أي وقت تحتاجنا</p>
-            </div>
-        </div>
     </main>
 
     <script>
+        // ... (كود الترحيب كما هو)
         const hour = new Date().getHours();
         const greet = document.getElementById('dynamicGreeting');
         if (hour < 12) greet.innerText = "صباح الخير.. أهلاً بك في منصة الحوت الذكية ☀️";
@@ -114,28 +97,30 @@
             const service = document.getElementById('mainService').value;
             const date = document.getElementById('dateInput').value;
             const time = document.getElementById('timeInput').value;
-            const vehicle = document.getElementById('cargoType').value;
 
             if(!service || !date || !time) {
                 alert("أكمل جميع الحقول فضلاً 🐋");
                 return;
             }
 
-            const query = `?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}`;
+            // بناء الرابط الأساسي
+            const query = `?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}&service=${service}`;
 
-            // التوجيه الذكي
-            const routes = {
-                'personal': 'booking_personal.html',
-                'wedding': 'booking_wedding.html',
-                'cargo': 'booking_cargo.html',
-                'water': 'booking_water.html',
-                'training': 'booking_training.html'
-            };
-
-            let finalPath = routes[service] + query;
-            if(service === 'cargo') finalPath += `&vehicle=${encodeURIComponent(vehicle)}`;
-            
-            window.location.href = finalPath;
+            // نظام التوجيه الذكي مع القفز للأقسام (Anchors)
+            if (service === 'personal' || service === 'wedding') {
+                // يحولك لصفحة السيارات الشخصية ويقفز لخانة "الأسطول"
+                window.location.href = `booking_personal.html${query}#fleet-section`;
+            } 
+            else if (service === 'cargo') {
+                const v = document.getElementById('cargoType').value;
+                window.location.href = `booking_cargo.html${query}&vehicle=${encodeURIComponent(v)}`;
+            } 
+            else if (service === 'water') {
+                window.location.href = `booking_water.html${query}`;
+            } 
+            else if (service === 'training') {
+                window.location.href = `booking_training.html${query}`;
+            }
         }
 
         window.onload = function() {
