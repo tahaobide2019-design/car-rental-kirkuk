@@ -47,7 +47,7 @@
                 <h3 class="font-black text-sm mb-4 flex items-center gap-2">
                     <i class="fas fa-map-marked-alt text-[#D4AF37]"></i> تفاصيل الموقع
                 </h3>
-                <div id="locationSummary" class="text-sm space-y-2 font-bold text-gray-600 bg-gray-50 p-4 rounded-2xl">
+                <div id="locationSummary" class="text-sm space-y-2">
                     </div>
             </div>
 
@@ -67,10 +67,10 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const service = params.get('service');
-        const province = params.get('province') || params.get('city') || 'كركوك';
+        const province = params.get('province') || params.get('city') || 'غير محدد';
         const phone = "+9647713225471"; 
 
-        // 1. تحليل الخدمة وعرضها (محدث بالخدمات الجديدة)
+        // 1. تحديث قائمة الخدمات لتشمل Personal و Wedding
         const serviceMap = {
             'personal': { name: 'سيارة شخصية (Personal)', emoji: '🚗' },
             'wedding': { name: 'سيارة مزينة (حفلات)', emoji: '✨' },
@@ -84,7 +84,6 @@
         document.getElementById('serviceName').innerText = currentService.name;
         document.getElementById('displayCity').innerText = `📍 المدينة: ${province}`;
 
-        // 2. عرض البيانات
         const container = document.getElementById('dataContainer');
         const locSummary = document.getElementById('locationSummary');
 
@@ -97,33 +96,43 @@
                 </div>`;
         }
 
+        // البيانات العامة
         addRow("الاسم", params.get('name'));
         addRow("الهاتف", params.get('phone'));
         addRow("التاريخ", params.get('date'));
         addRow("الوقت", params.get('time'));
 
+        // تخصيص العرض بناءً على الخدمة
         if(service === 'cargo') {
             addRow("نوع الحمولة", params.get('notes'));
             addRow("نوع المركبة", params.get('vehicle'));
             addRow("السعر التقريبي", params.get('final_price') + " د.ع");
-            locSummary.innerHTML = `<p>🚩 من: ${decodeURIComponent(params.get('start_desc'))}</p><p>🏁 إلى: ${decodeURIComponent(params.get('end_desc'))}</p>`;
+            locSummary.innerHTML = `<div class="p-3 bg-gray-50 rounded-xl text-xs">
+                <p><b>🚩 الانطلاق:</b> ${decodeURIComponent(params.get('start_desc') || 'غير محدد')}</p>
+                <p class="mt-2"><b>🏁 التسليم:</b> ${decodeURIComponent(params.get('end_desc') || 'غير محدد')}</p>
+            </div>`;
         } else {
-            locSummary.innerText = decodeURIComponent(params.get('location_desc') || 'الموقع محدد عبر الخريطة 📍');
+            locSummary.innerHTML = `<div class="p-3 bg-gray-50 rounded-xl text-xs">
+                <p><b>📍 العنوان:</b> ${decodeURIComponent(params.get('location_desc') || 'محدد عبر الخريطة')}</p>
+            </div>`;
         }
 
-        // 3. الإرسال لواتساب
+        // 3. ذكاء الإرسال لواتساب
         function sendToWhatsApp() {
             let msg = `*طلب جديد من تطبيق الحوت 🐋*\n`;
             msg += `━━━━━━━━━━━━━━━\n`;
             msg += `🛠️ *الخدمة:* ${currentService.name}\n`;
             msg += `🏙️ *المدينة:* ${province}\n`;
             msg += `👤 *الزبون:* ${decodeURIComponent(params.get('name'))}\n`;
-            msg += `📞 *الهاتف:* ${params.get('phone')}\n`;
-            msg += `📅 *الموعد:* ${params.get('date')} | ${params.get('time')}\n`;
+            msg += `📞 *الهاتف:* ${params.get('phone') || 'غير متوفر'}\n`;
+            msg += `📅 *الموعد:* ${params.get('date')} | ⏰ ${params.get('time')}\n`;
             
-            const lat = params.get('lat') || params.get('slat');
-            const lng = params.get('lng') || params.get('slng');
-            if(lat) msg += `📍 *الموقع:* http://maps.google.com/maps?q=${lat},${lng}\n`;
+            if(service === 'cargo') {
+                msg += `💰 *السعر:* ${params.get('final_price')} د.ع\n`;
+                msg += `📍 *الموقع:* https://www.google.com/maps?q=${params.get('slat')},${params.get('slng')}\n`;
+            } else {
+                msg += `📍 *الموقع:* https://www.google.com/maps?q=${params.get('lat')},${params.get('lng')}\n`;
+            }
 
             msg += `━━━━━━━━━━━━━━━\n`;
             msg += `_تم الإرسال عبر منصة الحوت الذكية_`;
