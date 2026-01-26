@@ -3,129 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحوت الذكية | الرئيسية 🐋</title>
+    <title>شركة الحوت 🐋 | منصة الخدمات الذكية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Tajawal', sans-serif; 
-            background: #002349; 
-            background-image: radial-gradient(rgba(212, 175, 55, 0.2) 0.5px, transparent 0.5px);
-            background-size: 30px 30px;
-        }
-        .main-card { 
-            background: white; 
-            border-radius: 4rem; 
-            position: relative;
-            margin-top: 50px;
-        }
-        /* تصميم الحوت العائم الإبداعي */
-        .floating-whale {
-            width: 100px; height: 100px;
-            background: white;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem;
-            position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            border: 8px solid #002349;
-            z-index: 20;
-            animation: floatWhale 3s ease-in-out infinite;
-        }
-        @keyframes floatWhale {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, -15px); }
-        }
-        .input-group { background: #f8fafc; border-radius: 1.5rem; padding: 1rem; border: 2px solid transparent; transition: 0.3s; }
-        .input-group:focus-within { border-color: #D4AF37; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .label-style { font-size: 0.7rem; color: #94a3b8; font-weight: 900; margin-right: 0.5rem; display: block; margin-bottom: 4px; }
-        .btn-whale { background: #D4AF37; color: #002349; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3); }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
+        .whale-float { display: inline-block; animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .smart-input { width: 100%; padding: 1rem; background-color: #f1f5f9; border: 2px solid transparent; border-radius: 1.25rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
+        .smart-input:focus { background-color: #fff; border-color: #D4AF37; }
+        .feature-card { background: white; padding: 1.5rem; border-radius: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #D4AF37; }
     </style>
 </head>
-<body class="p-4 pt-20">
+<body class="text-[#002349]">
 
-    <div class="max-w-xl mx-auto main-card shadow-2xl pb-10">
-        
-        <div class="floating-whale">🐋</div>
+    <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
+        <div class="whale-float mb-4 text-7xl">🐋</div>
+        <h1 class="text-6xl font-black text-[#D4AF37] mb-2">الحـوت</h1>
+        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic">جاري التحميل...</p>
+    </header>
 
-        <div class="p-8 pt-16 text-center">
-            <h1 class="text-4xl font-black text-[#002349] tracking-tighter">الحوت</h1>
-            <p class="text-sm font-bold text-slate-400 mt-1 uppercase tracking-widest">أهلاً بك في منصة الحوت الذكية ☀️</p>
-        </div>
-
-        <div class="px-6 space-y-4">
-            
-            <div>
-                <span class="label-style">المدينة</span>
-                <div class="input-group flex items-center gap-3">
-                    <i class="fas fa-city text-[#D4AF37]"></i>
-                    <input type="text" id="cityInput" value="كركوك" class="bg-transparent w-full font-black outline-none text-[#002349]">
-                </div>
-            </div>
-
-            <div>
-                <span class="label-style">الخدمة المطلوبة</span>
-                <div class="input-group flex items-center gap-3">
-                    <i class="fas fa-th-large text-[#D4AF37]"></i>
-                    <select id="serviceSelect" class="bg-transparent w-full font-black outline-none text-[#002349] appearance-none cursor-pointer">
-                        <option value="" disabled selected>-- اختر الخدمة --</option>
-                        <option value="taxi">🚗 سيارات شخصية (تكسي)</option>
-                        <option value="wedding">🎉 سيارات حفلات ومناسبات</option>
-                        <option value="cargo">🚛 شحن ونقل بضائع</option>
-                        <option value="water">💧 توصيل صهريج ماء</option>
-                        <option value="training">🎓 كورس تعليم قيادة</option>
+    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
+        <div class="bg-white shadow-2xl rounded-[3.5rem] p-8 md:p-12 max-w-7xl mx-auto border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase">المدينة</label>
+                    <select id="citySelect" class="smart-input appearance-none">
+                        <option value="كركوك">كركوك</option>
+                        <option value="بغداد">بغداد</option>
+                        <option value="الموصل">الموصل</option>
+                        <option value="ديالى">ديالى</option>
+                        <option value="البصرة">البصرة</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <span class="label-style">التاريخ</span>
-                    <div class="input-group flex items-center gap-2">
-                        <i class="fas fa-calendar-day text-[#D4AF37] text-xs"></i>
-                        <input type="date" id="dateInput" value="2026-01-26" class="bg-transparent w-full font-black text-xs outline-none text-[#002349]">
-                    </div>
+                <div class="md:col-span-3 space-y-2">
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase">الخدمة المطلوبة</label>
+                    <select id="mainService" onchange="toggleCargo()" class="smart-input appearance-none text-sm">
+                        <option value="">-- اختر الخدمة --</option>
+                        <option value="training">🎓 تعليم قيادة (مدربين)</option>
+                        <option value="cargo">🚛 سيارة حمل ونقل</option>
+                        <option value="water">💧 تنكر ماء (حوضي)</option>
+                    </select>
                 </div>
-                <div>
-                    <span class="label-style">الوقت</span>
-                    <div class="input-group flex items-center gap-2">
-                        <i class="fas fa-clock text-[#D4AF37] text-xs"></i>
-                        <input type="time" id="timeInput" class="bg-transparent w-full font-black text-xs outline-none text-[#002349]">
-                    </div>
+
+                <div id="cargoExtra" class="md:col-span-2 space-y-2 hidden">
+                    <label class="block text-xs font-black text-yellow-600 mr-2">نوع المركبة</label>
+                    <select id="cargoType" class="smart-input border-yellow-200 bg-yellow-50">
+                        <option value="ستوتة">ستوتة 📦</option>
+                        <option value="سيارة حمل كبيرة">سيارة كبيرة 🚛</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-xs font-black text-slate-400 mr-2">التاريخ</label>
+                    <input type="date" id="dateInput" class="smart-input">
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-xs font-black text-slate-400 mr-2">الوقت</label>
+                    <input type="time" id="timeInput" class="smart-input">
+                </div>
+
+                <div class="md:col-span-3">
+                    <button onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2">
+                        استمر الآن <i class="fas fa-arrow-left"></i>
+                    </button>
                 </div>
             </div>
-
-            <div class="pt-4">
-                <button onclick="navigate()" class="btn-whale w-full py-5 rounded-[2.5rem] font-black text-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                    استمر الآن <i class="fas fa-arrow-left"></i>
-                </button>
-            </div>
-
         </div>
-    </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
+            <div class="feature-card">
+                <i class="fas fa-bolt text-3xl text-yellow-500 mb-3"></i>
+                <h3 class="font-black">استجابة فورية</h3>
+                <p class="text-sm text-gray-500">نصل إليك في أسرع وقت ممكن</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt text-3xl text-yellow-500 mb-3"></i>
+                <h3 class="font-black">أمان وموثوقية</h3>
+                <p class="text-sm text-gray-500">خدمة مضمونة بأسعار شفافة</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-headset text-3xl text-yellow-500 mb-3"></i>
+                <h3 class="font-black">دعم 24/7</h3>
+                <p class="text-sm text-gray-500">نحن معك في أي وقت تحتاجنا</p>
+            </div>
+        </div>
+    </main>
 
     <script>
-        function navigate() {
-            const service = document.getElementById('serviceSelect').value;
-            const city = document.getElementById('cityInput').value;
+        // التحية الديناميكية بناءً على الوقت
+        const hour = new Date().getHours();
+        const greet = document.getElementById('dynamicGreeting');
+        if (hour < 12) greet.innerText = "صباح الخير.. أهلاً بك في منصة الحوت الذكية ☀️";
+        else if (hour < 18) greet.innerText = "طاب يومك.. أهلاً بك في منصة الحوت الذكية 🌤️";
+        else greet.innerText = "مساء الخير.. أهلاً بك في منصة الحوت الذكية ✨";
+
+        // إظهار خيارات الحمل عند اختيارها
+        function toggleCargo() {
+            const s = document.getElementById('mainService').value;
+            document.getElementById('cargoExtra').classList.toggle('hidden', s !== 'cargo');
+        }
+
+        // دالة الدخول الذكية
+        function startBooking() {
+            const city = document.getElementById('citySelect').value;
+            const service = document.getElementById('mainService').value;
             const date = document.getElementById('dateInput').value;
             const time = document.getElementById('timeInput').value;
+            const vehicle = document.getElementById('cargoType').value;
 
-            if (!service || !city || !date || !time) {
-                alert("يرجى ملء جميع البيانات 🐋");
+            if(!service || !date || !time) {
+                alert("أكمل جميع الحقول فضلاً 🐋");
                 return;
             }
 
-            const pages = {
-                'taxi': 'booking_taxi.html',
-                'wedding': 'booking_wedding.html',
-                'cargo': 'booking_cargo.html',
-                'water': 'booking_water.html',
-                'training': 'booking_training.html'
-            };
+            // أهم جزء: تمرير المدينة بكلمة province ليتعرف عليها ملف المراجعة لاحقاً
+            const query = `?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}`;
 
-            window.location.href = `${pages[service]}?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}`;
+            if(service === 'cargo') {
+                window.location.href = `booking_cargo.html${query}&vehicle=${encodeURIComponent(vehicle)}`;
+            } else if(service === 'water') {
+                window.location.href = `booking_water.html${query}`;
+            } else if(service === 'training') {
+                window.location.href = `booking_training.html${query}`;
+            }
+        }
+
+        // ضبط التاريخ الافتراضي لليوم
+        window.onload = function() {
+            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
         }
     </script>
 </body>
