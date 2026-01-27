@@ -3,91 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تخصيص الرفاهية | الحوت 🐋</title>
+    <title>مرحباً بك | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #002349; --accent: #D4AF37; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: all 0.5s ease; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.8s ease; overflow-x: hidden; }
         
-        /* كبسولة الخيارات */
+        /* حركة الأنيميشن عند الدخول */
+        .fade-up { animation: fadeUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) forwards; opacity: 0; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* كبسولة الخيارات الذكية */
         .option-capsule { 
-            background: white; border-radius: 2rem; border: 2px solid transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+            background: white; border-radius: 2.2rem; border: 2px solid transparent;
+            transition: all 0.4s ease; cursor: pointer;
         }
         .option-capsule.selected { 
-            border-color: var(--accent); background: #fffdf5; transform: scale(1.03);
-            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.1);
+            border-color: var(--accent); background: #fffdf5; transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.12);
         }
 
-        /* تفاعل الإيموجي */
-        .emoji-box { font-size: 1.8rem; transition: 0.3s; }
-        .option-capsule.selected .emoji-box { transform: rotate(-15deg) scale(1.2); }
-
-        /* البار السفلي العائم */
+        /* البار السفلي الذكي */
         .floating-bar { 
-            position: fixed; bottom: 20px; left: 20px; right: 20px; 
+            position: fixed; bottom: 25px; left: 20px; right: 20px; 
             background: var(--primary); color: white; border-radius: 2.5rem;
-            padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 100;
+            padding: 1.2rem 1.8rem; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3); z-index: 100; transform: translateY(150%);
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .floating-bar.active { transform: translateY(0); }
+
+        .city-badge { background: rgba(212, 175, 55, 0.1); color: var(--accent); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <header class="text-center mb-10 pt-10">
-        <div id="bigEmoji" class="text-7xl mb-4 transition-all duration-500">🐋</div>
-        <h1 id="mainTitle" class="text-3xl font-black text-[#002349]">إضافات الحوت</h1>
-        <p class="text-gray-400 font-bold text-sm mt-1 uppercase tracking-widest">ارتقِ بتجربتك بلمسة واحدة</p>
+    <header class="text-center mb-12 pt-10 fade-up">
+        <div id="bigEmoji" class="text-8xl mb-6 drop-shadow-xl transition-all duration-500">🐋</div>
+        <div class="flex justify-center mb-2"><span id="cityTag" class="city-badge">...</span></div>
+        <h1 id="welcomeTitle" class="text-3xl font-black text-[#002349] leading-tight">مرحباً بك في عالم الحوت</h1>
+        <p id="welcomeSub" class="text-gray-400 font-bold text-sm mt-2 px-6">نحن نجهز لك الأفضل، هل تود إضافة لمسات خاصة لرحلتك؟</p>
     </header>
 
-    <main class="max-w-md mx-auto space-y-4" id="addonsList">
-        </main>
+    <main class="max-w-md mx-auto space-y-4 pb-32 fade-up" style="animation-delay: 0.2s;">
+        <div id="addonsList" class="space-y-4">
+            </div>
+    </main>
 
-    <div class="floating-bar max-w-md mx-auto">
+    <div id="priceBar" class="floating-bar max-w-md mx-auto">
         <div class="text-right">
-            <span class="text-[10px] text-[#D4AF37] font-black uppercase block">السعر النهائي</span>
+            <span class="text-[10px] text-[#D4AF37] font-black uppercase block tracking-widest">إجمالي الحجز</span>
             <div class="flex items-center gap-1">
                 <span id="totalPrice" class="text-2xl font-black">0</span>
-                <span class="text-[10px] opacity-60">د.ع</span>
+                <span class="text-[10px] opacity-50">د.ع</span>
             </div>
         </div>
-        <button onclick="finishAddons()" class="bg-[#D4AF37] text-[#002349] px-8 py-3 rounded-2xl font-black flex items-center gap-2 hover:bg-white transition-all active:scale-90">
-            تم <i class="fas fa-check"></i>
+        <button onclick="finishAddons()" class="bg-[#D4AF37] text-[#002349] px-10 py-4 rounded-2xl font-black flex items-center gap-2 active:scale-90 transition-all shadow-lg">
+            تأكيد <i class="fas fa-chevron-left text-xs"></i>
         </button>
     </div>
 
     <script>
         const p = new URLSearchParams(window.location.search);
+        const city = p.get('province') || 'العراق';
         const type = p.get('type') || 'personal';
         const basePrice = parseInt(p.get('price') || 0);
         let selectedAddons = [];
 
-        // بيانات الإضافات الذكية
+        // تخصيص الترحيب بناءً على المدينة والنوع
+        window.onload = function() {
+            document.getElementById('cityTag').innerText = `📍 فرع ${city}`;
+            if(type === 'wedding') {
+                document.getElementById('welcomeTitle').innerText = "ليلة العمر مع الحوت 🌸";
+                document.getElementById('welcomeSub').innerText = `أهلاً بك في ${city}.. نتشرف بأن نكون جزءاً من فرحتكم.`;
+                document.getElementById('bigEmoji').innerText = "🎁";
+            } else {
+                document.getElementById('welcomeTitle').innerText = `مرحباً بك في ${city} 🐋`;
+            }
+            render();
+            // إظهار بار السعر بتأثير ناعم
+            setTimeout(() => document.getElementById('priceBar').classList.add('active'), 1000);
+        };
+
         const addonsData = [
-            { id: 'driver', name: 'سائق خاص', price: 25000, emoji: '👔', bg: '#f1f5f9' },
-            { id: 'baby', name: 'كرسي أطفال', price: 10000, emoji: '👶', bg: '#ecfeff' },
-            { id: 'home', name: 'توصيل للبيت', price: 15000, emoji: '🏠', bg: '#f0fdf4' }
+            { id: 'driver', name: 'سائق خاص محترف', price: 25000, emoji: '👔' },
+            { id: 'baby', name: 'مقعد أمان للأطفال', price: 10000, emoji: '👶' },
+            { id: 'home', name: 'توصيل لباب المنزل', price: 15000, emoji: '🏠' }
         ];
 
         if(type === 'wedding') {
-            addonsData.push({ id: 'wedding', name: 'تزيين ملكي', price: 50000, emoji: '🌸', bg: '#fdf2f8' });
+            addonsData.push({ id: 'wedding', name: 'باقة التزيين الملكية', price: 50000, emoji: '🌸' });
         }
 
         function render() {
             const list = document.getElementById('addonsList');
             list.innerHTML = addonsData.map(item => `
                 <div onclick="toggleAddon('${item.id}', ${item.price}, '${item.emoji}', this)" 
-                     class="option-capsule p-5 flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="emoji-box">${item.emoji}</div>
+                     class="option-capsule p-6 flex items-center justify-between border-2">
+                    <div class="flex items-center gap-5">
+                        <span class="text-3xl">${item.emoji}</span>
                         <div>
-                            <h4 class="font-black text-[#002349]">${item.name}</h4>
+                            <h4 class="font-black text-[#002349] text-lg">${item.name}</h4>
                             <span class="text-xs font-bold text-[#D4AF37]">+ ${item.price.toLocaleString()} د.ع</span>
                         </div>
                     </div>
-                    <div class="w-6 h-6 rounded-full border-2 border-gray-100 flex items-center justify-center transition-all check-circle">
+                    <div class="w-7 h-7 rounded-full border-2 border-gray-100 flex items-center justify-center transition-all check-circle">
                         <i class="fas fa-check text-[10px] text-white opacity-0"></i>
                     </div>
                 </div>
@@ -109,9 +131,10 @@
                 selectedAddons.push({id, price, emoji, name: el.querySelector('h4').innerText});
                 el.classList.add('selected');
                 circle.style.background = '#D4AF37';
+                circle.style.borderColor = '#D4AF37';
                 check.style.opacity = '1';
                 
-                // تفاعل ذكي: تغيير الإيموجي الكبير في الهيدر
+                // تفاعل الإيموجي الكبير
                 document.getElementById('bigEmoji').innerText = emoji;
             }
             updateTotal();
@@ -121,14 +144,13 @@
             const addonsSum = selectedAddons.reduce((sum, a) => sum + a.price, 0);
             const total = basePrice + addonsSum;
             document.getElementById('totalPrice').innerText = total.toLocaleString();
-            
-            // تغيير لون الخلفية إذا تم اختيار تزيين عرس
+
+            // تفاعل لوني ذكي
             if(selectedAddons.some(a => a.id === 'wedding')) {
-                document.body.style.backgroundColor = '#fdf2f8';
-                document.getElementById('mainTitle').innerText = "تجهيزات العرس 🌸";
+                document.body.style.backgroundColor = '#fff1f2';
+                document.getElementById('bigEmoji').innerText = "💍";
             } else {
                 document.body.style.backgroundColor = '#f8fafc';
-                document.getElementById('mainTitle').innerText = "إضافات الحوت";
             }
         }
 
@@ -142,8 +164,6 @@
             const target = (type === 'wedding') ? 'booking_wedding.html' : 'booking_personal.html';
             window.location.href = `${target}?${p.toString()}`;
         }
-
-        window.onload = render;
     </script>
 </body>
 </html>
