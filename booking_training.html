@@ -11,16 +11,13 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
         .hero-training { background: linear-gradient(135deg, #002349 0%, #0c4a6e 100%); }
-        .plan-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 2px solid transparent; }
-        .plan-card:hover { transform: translateY(-10px); }
-        .plan-card.active { border-color: #D4AF37; background: #fffdf5; box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.2); }
-        .instructor-tag { background: rgba(212, 175, 55, 0.1); color: #b48a04; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 900; }
+        .plan-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 3px solid transparent; background: white; }
+        .plan-card.active { border-color: #D4AF37; background: #fffdf5; transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.2); }
     </style>
 </head>
 <body class="pb-20">
 
-    <header class="hero-training text-white pt-16 pb-32 text-center relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl"><i class="fas fa-graduation-cap"></i></div>
+    <header class="hero-training text-white pt-16 pb-32 text-center relative">
         <h1 class="text-3xl font-black text-[#D4AF37]">أكاديمية الحوت لتعليم القيادة</h1>
         <p class="opacity-70 mt-2">احترافية، أمان، وثقة خلف المقود</p>
     </header>
@@ -28,109 +25,80 @@
     <main class="container mx-auto px-4 -mt-20 relative z-10 max-w-4xl">
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div onclick="selectPlan('manual', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center">
-                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
-                    <i class="fas fa-cog"></i>
-                </div>
+            <div id="card-manual" onclick="selectPlan('manual', this)" class="plan-card p-6 rounded-[2.5rem] shadow-sm text-center">
+                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-cog"></i></div>
                 <h4 class="font-black text-lg">قير عادي</h4>
-                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Manual Course</p>
-                <div id="price-manual" class="text-[#002349] font-black text-xl">0 د.ع</div>
+                <div id="price-manual" class="text-[#002349] font-black text-xl mt-2">0 د.ع</div>
             </div>
 
-            <div onclick="selectPlan('automatic', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center active">
-                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
-                    <i class="fas fa-bolt"></i>
-                </div>
+            <div id="card-automatic" onclick="selectPlan('automatic', this)" class="plan-card p-6 rounded-[2.5rem] shadow-sm text-center active">
+                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-bolt"></i></div>
                 <h4 class="font-black text-lg">أوتوماتيك</h4>
-                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Auto Course</p>
-                <div id="price-automatic" class="text-[#002349] font-black text-xl">0 د.ع</div>
+                <div id="price-automatic" class="text-[#002349] font-black text-xl mt-2">0 د.ع</div>
             </div>
 
-            <div onclick="selectPlan('vip_fast', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center">
-                <div class="w-16 h-16 bg-amber-50 text-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
-                    <i class="fas fa-crown"></i>
-                </div>
+            <div id="card-vip" onclick="selectPlan('vip_fast', this)" class="plan-card p-6 rounded-[2.5rem] shadow-sm text-center">
+                <div class="w-16 h-16 bg-amber-50 text-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-crown"></i></div>
                 <h4 class="font-black text-lg">كورس VIP</h4>
-                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Intensive Training</p>
-                <div id="price-vip" class="text-[#002349] font-black text-xl">0 د.ع</div>
+                <div id="price-vip" class="text-[#002349] font-black text-xl mt-2">0 د.ع</div>
             </div>
         </div>
 
         <section class="bg-white rounded-[3rem] p-8 shadow-xl border border-white space-y-6">
-            <h3 class="font-black text-[#002349] flex items-center gap-2 mb-4">
-                <i class="fas fa-user-edit text-[#D4AF37]"></i> بيانات المتدرب
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="stdName" placeholder="الاسم الكامل" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold">
-                <input type="tel" id="stdPhone" placeholder="رقم الهاتف" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold text-left" dir="ltr">
-            </div>
+            <h3 class="font-black text-[#002349] flex items-center gap-2 mb-4 italic">بيانات المتدرب</h3>
+            <input type="text" id="stdName" placeholder="الاسم الكامل" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold">
+            <input type="tel" id="stdPhone" placeholder="رقم الهاتف" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold text-left" dir="ltr">
             
-            <div class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                <i class="fas fa-info-circle text-blue-500 text-xl"></i>
-                <p class="text-xs text-blue-800 font-bold">سيقوم أحد مدربينا بالتواصل معكم لتحديد موعد الحصة الأولى فور إكمال الحجز.</p>
-            </div>
-
-            <button onclick="finishTrainingBooking()" class="w-full bg-[#002349] text-white py-5 rounded-[2rem] font-black text-xl shadow-lg hover:bg-[#D4AF37] hover:text-[#002349] transition-all flex items-center justify-center gap-3 active:scale-95">
+            <button onclick="finishTrainingBooking()" class="w-full bg-[#002349] text-white py-5 rounded-[2rem] font-black text-xl shadow-lg hover:bg-[#D4AF37] hover:text-[#002349] transition-all flex items-center justify-center gap-3">
                 تأكيد التسجيل <i class="fas fa-check-double"></i>
             </button>
         </section>
-
     </main>
 
     <script>
-        const u = new URLSearchParams(window.location.search);
-        let selectedPlan = "automatic";
-        let planName = "أوتوماتيك";
+        // نظام الحماية: إذا لم يجد ملف الأسعار، يستخدم هذه القيم تلقائياً
+        const defaultPrices = { manual: 150000, automatic: 200000, vip_fast: 300000 };
+        let currentPrices = defaultPrices;
 
-        window.onload = () => {
-            // جلب الأسعار من ملف prices.js
-            const p = AL_HUT_DATA.training;
-            document.getElementById('price-manual').innerText = p.manual.toLocaleString() + " د.ع";
-            document.getElementById('price-automatic').innerText = p.automatic.toLocaleString() + " د.ع";
-            document.getElementById('price-vip').innerText = p.vip_fast.toLocaleString() + " د.ع";
+        let selectedPlanKey = "automatic";
+        let planNameText = "أوتوماتيك";
+
+        window.onload = function() {
+            // التحقق إذا كان AL_HUT_DATA موجوداً من ملف prices.js
+            if (typeof AL_HUT_DATA !== 'undefined' && AL_HUT_DATA.training) {
+                currentPrices = AL_HUT_DATA.training;
+            }
+
+            // عرض الأسعار
+            document.getElementById('price-manual').innerText = currentPrices.manual.toLocaleString() + " د.ع";
+            document.getElementById('price-automatic').innerText = currentPrices.automatic.toLocaleString() + " د.ع";
+            document.getElementById('price-vip').innerText = currentPrices.vip_fast.toLocaleString() + " د.ع";
         };
 
         function selectPlan(plan, el) {
             document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            selectedPlan = plan;
-            planName = el.querySelector('h4').innerText;
+            selectedPlanKey = plan;
+            planNameText = el.querySelector('h4').innerText;
         }
 
         function finishTrainingBooking() {
             const name = document.getElementById('stdName').value;
             const phone = document.getElementById('stdPhone').value;
 
-            if(!name || !phone) return alert("يرجى تزويدنا باسمك ورقم هاتفك يا بطل 🐋");
-
-            u.set('name', name);
-            u.set('phone', phone);
-            u.set('vehicle', `كورس تدريب: ${planName}`);
-            u.set('final_price', AL_HUT_DATA.training[selectedPlan]);
-            u.set('service', 'training');
-
-            window.location.href = `review.html?${u.toString()}`;
-        }
-    </script>
-</body>
-</html>
-
-        function confirmTraining() {
-            const name = document.getElementById('tName').value;
-            const id = document.getElementById('tID').value;
-            const age = document.getElementById('tAge').value;
-            
-            if(!name || !id || !age) {
-                alert("⚠️ يرجى إكمال جميع الحقول 🐋");
+            if(!name || !phone) {
+                alert("يرجى تزويدنا باسمك ورقم هاتفك 🐋");
                 return;
             }
 
-            const pos = marker.getLatLng();
-            
-            // بناء الرابط لصفحة المراجعة
-            const q = `service=training&emoji=🎓&province=${encodeURIComponent(p)}&name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}&age=${age}&gender=${encodeURIComponent(selectedGender)}&lat=${pos.lat}&lng=${pos.lng}&date=${date}&time=${encodeURIComponent(time)}`;
-            
-            window.location.href = `review.html?${q}`;
+            const u = new URLSearchParams(window.location.search);
+            u.set('name', name);
+            u.set('phone', phone);
+            u.set('vehicle', `كورس تدريب: ${planNameText}`);
+            u.set('final_price', currentPrices[selectedPlanKey]);
+            u.set('service', 'training');
+
+            window.location.href = `review.html?${u.toString()}`;
         }
     </script>
 </body>
