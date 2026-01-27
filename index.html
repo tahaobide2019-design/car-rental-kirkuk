@@ -8,20 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; }
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); transition: 1s; }
+        .whale-float { display: inline-block; animation: floating 4s ease-in-out infinite; transition: 0.5s; cursor: pointer; }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
         .smart-input { width: 100%; padding: 1rem; background-color: #f1f5f9; border: 2px solid transparent; border-radius: 1.25rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
-        .smart-input:focus { background-color: #fff; border-color: #D4AF37; }
+        .smart-input:focus { background-color: #fff; border-color: #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        .service-active { border-color: #D4AF37 !important; background-color: white !important; }
+        
+        /* تأثيرات خاصة عند اختيار التدريب */
+        .training-mode { background: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%) !important; }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
-        <div class="whale-float mb-4 text-7xl">🐋</div>
-        <h1 class="text-6xl font-black text-[#D4AF37] mb-2">الحـوت</h1>
-        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic"></p>
+    <header id="mainHero" class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
+        <div onclick="whaleTalk()" class="whale-float mb-4 text-7xl" id="whaleIcon">🐋</div>
+        <h1 class="text-6xl font-black text-[#D4AF37] mb-2 tracking-tighter">الحـوت</h1>
+        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic h-8 transition-all duration-500"></p>
     </header>
 
     <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
@@ -29,26 +33,26 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                 
                 <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase">المدينة</label>
-                    <select id="citySelect" class="smart-input appearance-none">
-                        <option value="بغداد">بغداد</option>
-                        <option value="كركوك">كركوك</option>
-                        <option value="أربيل">أربيل</option>
-                        <option value="السليمانية">السليمانية</option>
-                        <option value="الموصل">الموصل</option>
-                        <option value="البصرة">البصرة</option>
-                        <option value="الأنبار">الأنبار</option>
-                        <option value="ديالى">ديالى</option>
+                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase tracking-widest">المدينة</label>
+                    <select id="citySelect" class="smart-input appearance-none cursor-pointer">
+                        <option value="بغداد">📍 بغداد</option>
+                        <option value="كركوك" selected>📍 كركوك</option>
+                        <option value="أربيل">📍 أربيل</option>
+                        <option value="السليمانية">📍 السليمانية</option>
+                        <option value="الموصل">📍 الموصل</option>
+                        <option value="البصرة">📍 البصرة</option>
+                        <option value="الأنبار">📍 الأنبار</option>
+                        <option value="ديالى">📍 ديالى</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-3 space-y-2">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase">الخدمة المطلوبة</label>
-                    <select id="mainService" class="smart-input appearance-none text-sm">
-                        <option value="">-- اختر الخدمة --</option>
+                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase tracking-widest">الخدمة المطلوبة</label>
+                    <select id="mainService" onchange="adaptUI()" class="smart-input appearance-none text-sm cursor-pointer">
+                        <option value="">-- ماذا تحتاج اليوم؟ --</option>
                         <option value="personal">🚗 تأجير سيارة شخصية</option>
                         <option value="wedding">🎁 سيارات أعراس ومناسبات</option>
-                        <option value="training">🎓 تعليم قيادة (مدربين)</option>
+                        <option value="training">🎓 كورس تعليم قيادة</option>
                     </select>
                 </div>
 
@@ -63,21 +67,70 @@
                 </div>
 
                 <div class="md:col-span-3">
-                    <button onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
-                        استمر الآن <i class="fas fa-arrow-left"></i>
+                    <button id="ctaBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <span id="btnText">استمر الآن</span> <i class="fas fa-arrow-left"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <div id="smartHint" class="max-w-xl mx-auto mt-8 text-center bg-indigo-50 p-4 rounded-2xl border-2 border-dashed border-indigo-200 hidden animate-bounce">
+            <p class="text-sm font-bold text-indigo-700" id="hintText"></p>
+        </div>
     </main>
 
     <script>
-        // الترحيب الذكي
-        const hour = new Date().getHours();
-        const greet = document.getElementById('dynamicGreeting');
-        if (hour < 12) greet.innerText = "صباح الخير.. أهلاً بك في منصة الحوت الذكية ☀️";
-        else if (hour < 18) greet.innerText = "طاب يومك.. أهلاً بك في منصة الحوت الذكية 🌤️";
-        else greet.innerText = "مساء الخير.. أهلاً بك في منصة الحوت الذكية ✨";
+        // 1. الترحيب الذكي المتغير
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const greet = document.getElementById('dynamicGreeting');
+            let text = "";
+            if (hour < 12) text = "صباح الخير.. منصة الحوت تتمنى لك يوماً سعيداً ☀️";
+            else if (hour < 18) text = "طاب يومك.. نحن هنا لخدمتك بأفضل السيارات 🌤️";
+            else text = "مساء الخير.. اختر خدمتك ودع الباقي على الحوت ✨";
+            greet.innerText = text;
+        }
+
+        // 2. واجهة ذكية تتكيف مع نوع الخدمة
+        function adaptUI() {
+            const service = document.getElementById('mainService').value;
+            const hero = document.getElementById('mainHero');
+            const whale = document.getElementById('whaleIcon');
+            const hint = document.getElementById('smartHint');
+            const hintText = document.getElementById('hintText');
+            const btnText = document.getElementById('btnText');
+
+            if (service === 'training') {
+                hero.classList.add('training-mode');
+                whale.innerText = "👨‍🏫";
+                hint.classList.remove('hidden');
+                hintText.innerText = "🎓 خيار ممتاز! لدينا أفضل المدربين والمدربات في كركوك وكافة المحافظات.";
+                btnText.innerText = "احجز كورس التعليم";
+            } else if (service === 'wedding') {
+                hero.classList.remove('training-mode');
+                whale.innerText = "👰";
+                hint.classList.remove('hidden');
+                hintText.innerText = "🎁 مبارك مقدماً! سياراتنا الفاخرة جاهزة لتجعل ليلتك لا تُنسى.";
+                btnText.innerText = "اختر سيارة الزفاف";
+            } else {
+                hero.classList.remove('training-mode');
+                whale.innerText = "🐋";
+                hint.classList.add('hidden');
+                btnText.innerText = "استمر الآن";
+            }
+        }
+
+        // 3. حركة تفاعلية للحوت
+        function whaleTalk() {
+            const whale = document.getElementById('whaleIcon');
+            whale.classList.add('scale-150');
+            const originalText = document.getElementById('dynamicGreeting').innerText;
+            document.getElementById('dynamicGreeting').innerText = "أهلاً بك! أنا الحوت، دليلك لأفضل الخدمات في العراق 🐋💙";
+            setTimeout(() => {
+                whale.classList.remove('scale-150');
+                document.getElementById('dynamicGreeting').innerText = originalText;
+            }, 3000);
+        }
 
         function startBooking() {
             const city = document.getElementById('citySelect').value;
@@ -85,16 +138,13 @@
             const date = document.getElementById('dateInput').value;
             const time = document.getElementById('timeInput').value;
 
-            // التحقق من الحقول
             if(!service || !date || !time) {
-                alert("يرجى ملء جميع الحقول للمتابعة 🐋");
+                alert("يرجى ملء جميع الحقول لنتمكن من خدمتك بشكل صحيح 🐋");
                 return;
             }
 
-            // تجميع المعاملات في رابط
             const query = `?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}&type=${service}`;
 
-            // التوجيه الصحيح
             if(service === 'personal' || service === 'wedding') {
                 window.location.href = `fleet.html${query}`;
             } 
@@ -103,9 +153,13 @@
             }
         }
 
-        // ضبط التاريخ التلقائي لليوم
         window.onload = function() {
-            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+            updateGreeting();
+            // ضبط التاريخ ليكون غداً تلقائياً (خيار أذكى)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('dateInput').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('timeInput').value = "10:00";
         }
     </script>
 </body>
