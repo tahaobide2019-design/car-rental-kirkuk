@@ -8,33 +8,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #4f46e5; --bg-soft: #f5f3ff; }
+        :root { --main-color: #002349; --bg-soft: #f1f5f9; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
         .glass-card { background: rgba(255, 255, 255, 0.98); border-radius: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
         .data-row { border-bottom: 1px solid #f1f5f9; padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; }
         .data-label { color: #94a3b8; font-size: 0.85rem; font-weight: 800; }
         .data-value { color: #1e293b; font-weight: 900; }
-        [dir="ltr"] .data-value { text-align: right; }
-        [dir="rtl"] .data-value { text-align: left; }
-        .btn-send { background: #25D366; color: white; transition: 0.3s; }
-        .btn-send:hover { background: #128C7E; transform: translateY(-3px); }
-        .dynamic-text { color: var(--main-color); transition: 0.5s; }
+        .btn-confirm { background: var(--main-color); color: #D4AF37; transition: 0.3s; }
+        .btn-confirm:hover { transform: translateY(-3px); filter: brightness(1.2); }
     </style>
 </head>
 <body class="p-4 md:p-8">
     <div id="mainCard" class="max-w-lg mx-auto glass-card overflow-hidden border-t-[12px] transition-all duration-500" style="border-color: var(--main-color);">
-        
-        <div id="headerBox" class="p-8 text-center transition-all duration-500" style="background-color: rgba(0,0,0,0.02);">
+        <div class="p-8 text-center" style="background-color: rgba(0,0,0,0.02);">
             <div id="serviceEmoji" class="text-6xl mb-3">📋</div>
-            <h2 id="pageTitle" class="text-2xl font-black dynamic-text">مراجعة بيانات الطلب</h2>
+            <h2 id="pageTitle" class="text-2xl font-black">مراجعة بيانات الطلب</h2>
             <p id="pageSub" class="text-xs text-gray-400 font-bold mt-1 uppercase tracking-widest">تأكيد المعلومات النهائية</p>
         </div>
 
         <div class="p-8 space-y-1" id="detailsList"></div>
 
         <div class="p-8 bg-gray-50 text-center">
-            <button onclick="sendToWhatsApp()" class="btn-send w-full py-5 rounded-2xl font-black text-xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                <span id="btnText">إرسال عبر واتساب</span> <i class="fab fa-whatsapp text-2xl"></i>
+            <button onclick="confirmAndSubmit()" class="btn-confirm w-full py-5 rounded-2xl font-black text-xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <span id="btnText">تأكيد وإرسال الطلب</span> <i class="fas fa-paper-plane"></i>
             </button>
             <button onclick="window.history.back()" class="mt-6 text-gray-400 font-black text-sm hover:text-red-500 flex items-center justify-center gap-2 mx-auto">
                 <i class="fas fa-edit"></i> <span id="btnEdit">تعديل البيانات</span>
@@ -45,90 +41,38 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         const currentLang = u.get('lang') || 'ar';
-        const myNumber = "9647713225471";
-
-        const translations = {
-            ar: { dir: 'rtl', font: 'Tajawal', title: 'مراجعة بيانات الطلب', sub: 'تأكيد المعلومات النهائية', btn: 'إرسال عبر واتساب', edit: 'تعديل البيانات', footer: 'تم عبر تطبيق الحوت', whatsappHead: 'طلب جديد من منصة الحوت 🐋',
-                  province: '📍 المدينة', name: '👤 الاسم', phone: '📞 الهاتف', id_no: '🆔 الهوية', age: '🎂 العمر', gender: '👫 الجنس', date: '📅 التاريخ', time: '⏰ الوقت', car: '🚗 المركبة/الخدمة', license: '🪪 الإجازة' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'پێداچوونەوەی داواکاری', sub: 'تەواوکردنی زانیارییەکان', btn: 'ناردن بۆ واتسئەپ', edit: 'دەستکاری زانیاری', footer: 'لە ڕێگەی ئەپڵیکەیشنی حوت', whatsappHead: 'داواکاری نوێ لە سەکۆی حوت 🐋',
-                  province: '📍 شار', name: '👤 ناو', phone: '📞 مۆبایل', id_no: '🆔 ناسنامە', age: '🎂 تەمەن', gender: '👫 ڕەگەز', date: '📅 بەروار', time: '⏰ کات', car: '🚗 ئۆتۆمبێل', license: '🪪 مۆڵەت' },
-            tr: { dir: 'ltr', font: 'Poppins', title: 'Siparişi İncele', sub: 'Son Bilgileri Onayla', btn: 'WhatsApp ile Gönder', edit: 'Bilgileri Düzenle', footer: 'Al-Hut Uygulaması ile', whatsappHead: 'Al-Hut Platformundan Yeni Sipariş 🐋',
-                  province: '📍 Şehir', name: '👤 İsim', phone: '📞 Telefon', id_no: '🆔 Kimlik No', age: '🎂 Yaş', gender: '👫 Cinsiyet', date: '📅 Tarih', time: '⏰ Saat', car: '🚗 Araç/Servis', license: '🪪 Ehliyet' },
-            en: { dir: 'ltr', font: 'Poppins', title: 'Review Order', sub: 'Confirm Final Information', btn: 'Send via WhatsApp', edit: 'Edit Details', footer: 'Via Al-Hut App', whatsappHead: 'New Order from Al-Hut Platform 🐋',
-                  province: '📍 City', name: '👤 Name', phone: '📞 Phone', id_no: '🆔 ID Number', age: '🎂 Age', gender: '👫 Gender', date: '📅 Date', time: '⏰ Time', car: '🚗 Vehicle/Service', license: '🪪 License' }
+        const trans = {
+            ar: { dir:'rtl', font:'Tajawal', title:'مراجعة البيانات', sub:'تأكيد المعلومات', btn:'تأكيد وإرسال الطلب', edit:'تعديل', province:'📍 المدينة', name:'👤 الاسم', phone:'📞 الهاتف', id_no:'🆔 الهوية', age:'🎂 العمر', gender:'👫 الجنس', date:'📅 التاريخ', time:'⏰ الوقت', car:'🚗 الخدمة' },
+            ku: { dir:'rtl', font:'Tajawal', title:'پێداچوونەوە', sub:'تەواوکردنی زانیاری', btn:'تەواوکردن و ناردن', edit:'دەستکاری', province:'📍 شار', name:'👤 ناو', phone:'📞 مۆبایل', id_no:'🆔 ناسنامە', age:'🎂 تەمەن', gender:'👫 ڕەگەز', date:'📅 بەروار', time:'⏰ کات', car:'🚗 ئۆتۆمبێل' },
+            tr: { dir:'ltr', font:'Poppins', title:'Sipariş İnceleme', sub:'Bilgileri Onayla', btn:'Onayla ve Gönder', edit:'Düzenle', province:'📍 Şehir', name:'👤 İsim', phone:'📞 Telefon', id_no:'🆔 Kimlik', age:'🎂 Yaş', gender:'👫 Cinsiyet', date:'📅 Tarih', time:'⏰ Saat', car:'🚗 Araç' },
+            en: { dir:'ltr', font:'Poppins', title:'Order Review', sub:'Confirm Details', btn:'Confirm & Submit', edit:'Edit', province:'📍 City', name:'👤 Name', phone:'📞 Phone', id_no:'🆔 ID Number', age:'🎂 Age', gender:'👫 Gender', date:'📅 Date', time:'⏰ Time', car:'🚗 Service' }
         };
 
-        function applyBranding() {
-            const l = translations[currentLang];
+        window.onload = () => {
+            const l = trans[currentLang];
             document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = l.font + ', sans-serif';
+            document.body.style.fontFamily = l.font;
             document.getElementById('pageTitle').innerText = l.title;
             document.getElementById('pageSub').innerText = l.sub;
             document.getElementById('btnText').innerText = l.btn;
             document.getElementById('btnEdit').innerText = l.edit;
-
-            const gender = u.get('gender');
-            const emoji = u.get('emoji');
-            if(emoji) document.getElementById('serviceEmoji').innerText = emoji;
-
-            const root = document.documentElement;
-            if(gender && (gender.includes('أنثى') || gender.includes('Female') || gender.includes('Kadın') || gender.includes('مێ'))) {
-                root.style.setProperty('--main-color', '#db2777');
-                root.style.setProperty('--bg-soft', '#fdf2f8');
-            } else if(u.get('service') === 'training') {
-                root.style.setProperty('--main-color', '#7c3aed');
-                root.style.setProperty('--bg-soft', '#f5f3ff');
-            } else {
-                root.style.setProperty('--main-color', '#002349');
-                root.style.setProperty('--bg-soft', '#f1f5f9');
-            }
-        }
-
-        function renderDetails() {
-            const l = translations[currentLang];
-            const container = document.getElementById('detailsList');
-            // ترتيب الحقول المحدث
-            const order = ['province', 'name', 'phone', 'id_no', 'age', 'gender', 'license', 'car', 'date', 'time'];
-            let html = '';
-
-            order.forEach(key => {
-                const val = u.get(key);
-                if(val && val !== 'null') {
-                    html += `
-                    <div class="data-row">
-                        <span class="data-label">${l[key] || key}</span>
-                        <span class="data-value">${decodeURIComponent(val)}</span>
-                    </div>`;
-                }
-            });
-            container.innerHTML = html;
-        }
-
-        function sendToWhatsApp() {
-            const l = translations[currentLang];
-            let msg = `*${l.whatsappHead}*\n`;
-            msg += `--------------------------\n`;
             
-            const order = ['province', 'name', 'phone', 'id_no', 'age', 'gender', 'license', 'car', 'date', 'time'];
+            if(u.get('emoji')) document.getElementById('serviceEmoji').innerText = u.get('emoji');
+
+            let html = '';
+            const order = ['province', 'name', 'phone', 'id_no', 'age', 'gender', 'car', 'date', 'time'];
             order.forEach(key => {
-                const val = u.get(key);
-                if(val && val !== 'null') {
-                    msg += `*${l[key] || key}:* ${decodeURIComponent(val)}\n`;
+                if(u.get(key)) {
+                    html += `<div class="data-row"><span class="data-label">${l[key]||key}</span><span class="data-value">${decodeURIComponent(u.get(key))}</span></div>`;
                 }
             });
-
-            if(u.get('lat') && u.get('lng')) {
-                msg += `\n📍 *الموقع:* https://www.google.com/maps?q=${u.get('lat')},${u.get('lng')}\n`;
-            }
-
-            msg += `\n🐋 _${l.footer}_`;
-            window.location.href = `https://wa.me/${myNumber}?text=${encodeURIComponent(msg)}`;
-        }
-
-        window.onload = () => {
-            applyBranding();
-            renderDetails();
+            document.getElementById('detailsList').innerHTML = html;
         };
+
+        function confirmAndSubmit() {
+            // التحويل لصفحة النجاح مع نقل كل البيانات
+            window.location.href = `success.html?${u.toString()}`;
+        }
     </script>
 </body>
 </html>
