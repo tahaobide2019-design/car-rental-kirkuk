@@ -3,114 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز كورس تعليم | الحوت 🐋</title>
+    <title>أكاديمية الحوت للتعليم | 🎓</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
+    <script src="prices.js"></script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f5f3ff; }
-        .glass-card { background: white; border-radius: 3.5rem; }
-        .map-box { height: 220px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
-        .input-style { border: 2px solid #ddd6fe; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; transition: 0.3s; }
-        .input-style:focus { border-color: #7c3aed; background: white; }
-        .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
-        .gender-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .btn-gps { background: #7c3aed; color: white; padding: 0.8rem; border-radius: 1.25rem; font-weight: 900; width: 100%; margin-top: 10px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2); }
-        .leaflet-control-geocoder { border-radius: 12px !important; border: 2px solid #ddd6fe !important; overflow: hidden; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
+        .hero-training { background: linear-gradient(135deg, #002349 0%, #0c4a6e 100%); }
+        .plan-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 2px solid transparent; }
+        .plan-card:hover { transform: translateY(-10px); }
+        .plan-card.active { border-color: #D4AF37; background: #fffdf5; box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.2); }
+        .instructor-tag { background: rgba(212, 175, 55, 0.1); color: #b48a04; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 900; }
     </style>
 </head>
-<body class="p-4">
-    <div class="max-w-xl mx-auto glass-card shadow-2xl overflow-hidden border-t-[12px] border-[#7c3aed]">
+<body class="pb-20">
+
+    <header class="hero-training text-white pt-16 pb-32 text-center relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl"><i class="fas fa-graduation-cap"></i></div>
+        <h1 class="text-3xl font-black text-[#D4AF37]">أكاديمية الحوت لتعليم القيادة</h1>
+        <p class="opacity-70 mt-2">احترافية، أمان، وثقة خلف المقود</p>
+    </header>
+
+    <main class="container mx-auto px-4 -mt-20 relative z-10 max-w-4xl">
         
-        <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
-            <div class="text-5xl mb-3">🎓</div>
-            <h2 class="text-3xl font-black text-[#4338ca]">كورس تعليم قيادة</h2>
-            <p id="provTag" class="text-xs font-bold text-indigo-400 mt-2 tracking-widest uppercase text-center">جاري التحميل... 🐋</p>
-        </div>
-
-        <div class="p-8 space-y-5">
-            <input type="text" id="tName" placeholder="الاسم الكامل للمتدرب" class="input-style">
-            
-            <div class="grid grid-cols-2 gap-4">
-                <input type="text" id="tID" placeholder="رقم الهوية" class="input-style">
-                <input type="text" id="tAge" placeholder="العمر" class="input-style">
-            </div>
-
-            <div class="space-y-3">
-                <label class="block text-xs font-black text-gray-400 mr-2 uppercase tracking-wide">جنس المتدرب (لتوفير مدرب مناسب)</label>
-                <div class="flex gap-4">
-                    <div id="maleBtn" onclick="setGender('ذكر 👨')" class="gender-btn active">👨 ذكر</div>
-                    <div id="femaleBtn" onclick="setGender('أنثى 👩')" class="gender-btn">👩 أنثى</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div onclick="selectPlan('manual', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center">
+                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-cog"></i>
                 </div>
+                <h4 class="font-black text-lg">قير عادي</h4>
+                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Manual Course</p>
+                <div id="price-manual" class="text-[#002349] font-black text-xl">0 د.ع</div>
             </div>
 
-            <div class="bg-purple-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label class="block font-black text-sm text-indigo-900 mb-3 flex items-center gap-2">
-                    <i class="fas fa-map-marker-alt"></i> تحديد موقع اللقاء:
-                </label>
-                <div id="map" class="map-box"></div>
-                <button onclick="getGPS()" class="btn-gps active:scale-95 transition-all">
-                    <i class="fas fa-crosshairs"></i> تحديد موقعي الحالي 🛰️
-                </button>
+            <div onclick="selectPlan('automatic', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center active">
+                <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h4 class="font-black text-lg">أوتوماتيك</h4>
+                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Auto Course</p>
+                <div id="price-automatic" class="text-[#002349] font-black text-xl">0 د.ع</div>
             </div>
 
-            <button onclick="confirmTraining()" class="w-full bg-[#4338ca] text-white py-5 rounded-[2rem] font-black text-xl shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all mt-2">
-                مراجعة البيانات <i class="fas fa-chevron-left"></i>
-            </button>
+            <div onclick="selectPlan('vip_fast', this)" class="plan-card bg-white p-6 rounded-[2.5rem] shadow-sm text-center">
+                <div class="w-16 h-16 bg-amber-50 text-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h4 class="font-black text-lg">كورس VIP</h4>
+                <p class="text-[10px] text-gray-400 font-bold mb-4 uppercase">Intensive Training</p>
+                <div id="price-vip" class="text-[#002349] font-black text-xl">0 د.ع</div>
+            </div>
         </div>
-    </div>
+
+        <section class="bg-white rounded-[3rem] p-8 shadow-xl border border-white space-y-6">
+            <h3 class="font-black text-[#002349] flex items-center gap-2 mb-4">
+                <i class="fas fa-user-edit text-[#D4AF37]"></i> بيانات المتدرب
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="stdName" placeholder="الاسم الكامل" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold">
+                <input type="tel" id="stdPhone" placeholder="رقم الهاتف" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-[#D4AF37] font-bold text-left" dir="ltr">
+            </div>
+            
+            <div class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+                <p class="text-xs text-blue-800 font-bold">سيقوم أحد مدربينا بالتواصل معكم لتحديد موعد الحصة الأولى فور إكمال الحجز.</p>
+            </div>
+
+            <button onclick="finishTrainingBooking()" class="w-full bg-[#002349] text-white py-5 rounded-[2rem] font-black text-xl shadow-lg hover:bg-[#D4AF37] hover:text-[#002349] transition-all flex items-center justify-center gap-3 active:scale-95">
+                تأكيد التسجيل <i class="fas fa-check-double"></i>
+            </button>
+        </section>
+
+    </main>
 
     <script>
-        let map, marker, selectedGender = 'ذكر 👨';
-        
-        // جلب البيانات من الرابط (URL)
-        const params = new URLSearchParams(window.location.search);
-        const p = params.get('province') || 'كركوك'; // المحافظة
-        const date = params.get('date');
-        const time = params.get('time');
+        const u = new URLSearchParams(window.location.search);
+        let selectedPlan = "automatic";
+        let planName = "أوتوماتيك";
 
-        window.onload = function() {
-            document.getElementById('provTag').innerText = "منطقة التدريب: " + p + " 🐋";
-            
-            // إعداد الخريطة
-            map = L.map('map', {zoomControl: false}).setView([35.4687, 44.3921], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
-
-            // إضافة خاصية البحث الصغير
-            L.Control.geocoder({ 
-                defaultMarkGeocode: false, 
-                placeholder: "🔍 ابحث عن منطقتك...", 
-                collapsed: true 
-            })
-            .on('markgeocode', function(e) { 
-                map.setView(e.geocode.center, 16); 
-                marker.setLatLng(e.geocode.center); 
-            })
-            .addTo(map);
+        window.onload = () => {
+            // جلب الأسعار من ملف prices.js
+            const p = AL_HUT_DATA.training;
+            document.getElementById('price-manual').innerText = p.manual.toLocaleString() + " د.ع";
+            document.getElementById('price-automatic').innerText = p.automatic.toLocaleString() + " د.ع";
+            document.getElementById('price-vip').innerText = p.vip_fast.toLocaleString() + " د.ع";
         };
 
-        function setGender(g) {
-            selectedGender = g;
-            document.getElementById('maleBtn').classList.toggle('active', g === 'ذكر 👨');
-            document.getElementById('femaleBtn').classList.toggle('active', g === 'أنثى 👩');
+        function selectPlan(plan, el) {
+            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            selectedPlan = plan;
+            planName = el.querySelector('h4').innerText;
         }
 
-        function getGPS() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const coords = [pos.coords.latitude, pos.coords.longitude];
-                    map.setView(coords, 17);
-                    marker.setLatLng(coords);
-                });
-            }
+        function finishTrainingBooking() {
+            const name = document.getElementById('stdName').value;
+            const phone = document.getElementById('stdPhone').value;
+
+            if(!name || !phone) return alert("يرجى تزويدنا باسمك ورقم هاتفك يا بطل 🐋");
+
+            u.set('name', name);
+            u.set('phone', phone);
+            u.set('vehicle', `كورس تدريب: ${planName}`);
+            u.set('final_price', AL_HUT_DATA.training[selectedPlan]);
+            u.set('service', 'training');
+
+            window.location.href = `review.html?${u.toString()}`;
         }
+    </script>
+</body>
+</html>
 
         function confirmTraining() {
             const name = document.getElementById('tName').value;
