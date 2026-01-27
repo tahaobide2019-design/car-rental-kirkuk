@@ -12,102 +12,41 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; transition: 0.5s; }
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        .glass-input {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 1.5rem;
-            padding: 1rem 1.25rem;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            outline: none;
-            width: 100%;
-        }
-        .glass-input:focus {
-            border-color: #D4AF37;
-            background: white;
-            box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.1);
-            transform: translateY(-2px);
-        }
-        .section-card {
-            background: white;
-            border-radius: 3.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255,255,255,0.7);
-        }
+        .glass-input { width: 100%; padding: 1rem 1.25rem; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 1.5rem; font-weight: 700; outline: none; transition: 0.3s; }
+        .glass-input:focus { border-color: #D4AF37; background: white; transform: translateY(-2px); }
+        .section-card { background: white; border-radius: 3.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
         #map { height: 220px; border-radius: 2.5rem; border: 4px solid #f1f5f9; z-index: 1; }
-        .icon-box {
-            width: 40px; height: 40px; background: #f1f5f9; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; color: #002349;
-        }
+        .icon-box { width: 40px; height: 40px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #002349; }
         [dir="rtl"] .icon-box { margin-left: 12px; }
         [dir="ltr"] .icon-box { margin-right: 12px; }
     </style>
 </head>
 <body class="text-[#002349]">
-
     <header class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
-        <div class="absolute top-0 right-0 opacity-10 text-[20rem] font-black -rotate-12 pointer-events-none">🐋</div>
-        <h1 id="pageTitle" class="text-4xl font-black text-[#D4AF37] mb-2">إكمال بيانات الرحلة</h1>
+        <h1 id="pageTitle" class="text-4xl font-black text-[#D4AF37] mb-2">إكمال البيانات</h1>
         <p id="carSub" class="text-lg opacity-80 font-light italic px-4"></p>
     </header>
 
     <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
         <div class="section-card p-8 md:p-12 max-w-4xl mx-auto">
             <div id="formGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
                 <div class="space-y-6">
-                    <div class="flex items-center mb-2">
-                        <div class="icon-box"><i class="fas fa-user-tie"></i></div>
-                        <h3 id="section1Title" class="font-black text-xl">المعلومات الشخصية</h3>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label id="lblCustName" class="block text-[10px] font-black text-slate-400 mr-4 mb-1 uppercase tracking-widest">الاسم الكامل</label>
-                            <input type="text" id="custName" class="glass-input">
-                        </div>
-                        <div>
-                            <label id="lblCustPhone" class="block text-[10px] font-black text-slate-400 mr-4 mb-1 uppercase tracking-widest">رقم الهاتف</label>
-                            <input type="tel" id="custPhone" placeholder="077XXXXXXXX" class="glass-input text-left" dir="ltr">
-                        </div>
-                    </div>
+                    <div class="flex items-center mb-2"><div class="icon-box"><i class="fas fa-user-tie"></i></div><h3 id="sec1" class="font-black text-xl">المعلومات الشخصية</h3></div>
+                    <input type="text" id="custName" class="glass-input" placeholder="Name">
+                    <input type="tel" id="custPhone" class="glass-input text-left" dir="ltr" placeholder="077XXXXXXXX">
                 </div>
-
                 <div class="space-y-6">
-                    <div class="flex items-center mb-2">
-                        <div class="icon-box"><i class="fas fa-id-card"></i></div>
-                        <h3 id="section2Title" class="font-black text-xl">الوثائق القانونية</h3>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label id="lblID" class="block text-[10px] font-black text-slate-400 mr-4 mb-1 uppercase tracking-widest">رقم البطاقة الوطنية / الجواز</label>
-                            <input type="text" id="idNumber" class="glass-input">
-                        </div>
-                        <div>
-                            <label id="lblLicense" class="block text-[10px] font-black text-slate-400 mr-4 mb-1 uppercase tracking-widest">رقم إجازة السوق</label>
-                            <input type="text" id="drivingLicense" class="glass-input">
-                        </div>
-                    </div>
+                    <div class="flex items-center mb-2"><div class="icon-box"><i class="fas fa-id-card"></i></div><h3 id="sec2" class="font-black text-xl">الوثائق القانونية</h3></div>
+                    <input type="text" id="idNumber" class="glass-input" placeholder="ID">
+                    <input type="text" id="drivingLicense" class="glass-input" placeholder="License">
                 </div>
-
-                <div class="md:col-span-2 space-y-4 pt-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center">
-                            <div class="icon-box"><i class="fas fa-map-marked-alt"></i></div>
-                            <h3 id="section3Title" class="font-black text-xl">موقع التسليم</h3>
-                        </div>
-                        <button onclick="getLocation()" class="text-blue-600 font-black text-xs hover:underline flex items-center gap-1">
-                             <i class="fas fa-location-arrow"></i> <span id="btnGPS">تحديد موقعي الحالي</span>
-                        </button>
-                    </div>
+                <div class="md:col-span-2 pt-4">
+                    <div class="flex justify-between mb-2"><h3 id="sec3" class="font-black text-xl">موقع التسليم</h3><button onclick="getLocation()" id="btnGPS" class="text-blue-600 font-black text-xs">تحديد موقعي</button></div>
                     <div id="map"></div>
                 </div>
-
-                <div class="md:col-span-2 pt-6">
-                    <button onclick="confirmBooking()" class="w-full bg-[#002349] text-[#D4AF37] py-6 rounded-[2rem] font-black text-2xl shadow-2xl hover:bg-black transition-all transform active:scale-95 flex items-center justify-center gap-4 group">
-                        <span id="btnSubmit">مراجعة الطلب النهائي</span>
-                        <i id="btnIcon" class="fas fa-chevron-left group-hover:-translate-x-2 transition-transform"></i>
-                    </button>
-                </div>
+                <button onclick="confirmBooking()" class="md:col-span-2 w-full bg-[#002349] text-[#D4AF37] py-6 rounded-[2rem] font-black text-2xl shadow-xl">
+                    <span id="btnSubmit">استمر</span>
+                </button>
             </div>
         </div>
     </main>
@@ -116,76 +55,42 @@
         let map, marker;
         const u = new URLSearchParams(window.location.search);
         const currentLang = u.get('lang') || 'ar';
-
-        const data = {
-            ar: { dir: 'rtl', font: 'Tajawal', title: 'إكمال بيانات الرحلة', sub: 'طلب حجز:', sec1: 'المعلومات الشخصية', name: 'الاسم الكامل', phone: 'رقم الهاتف', sec2: 'الوثائق القانونية', id: 'رقم البطاقة الوطنية', license: 'رقم إجازة السوق', sec3: 'موقع التسليم', gps: 'تحديد موقعي الحالي', submit: 'مراجعة الطلب النهائي', alert: 'لطفاً حوتنا العزيز، جميع البيانات مطلوبة 🐋' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'تەواوکردنی زانیاری گەشت', sub: 'داواکاری حیجز:', sec1: 'زانیاری کەسی', name: 'ناوی تەواو', phone: 'ژمارەی مۆبایل', sec2: 'بەڵگەنامە یاساییەکان', id: 'ژمارەی ناسنامە', license: 'ژمارەی مۆڵەتی شۆفێری', sec3: 'شوێنی وەرگرتن', gps: 'شوێنی ئێستام دیاری بکە', submit: 'پێداچوونەوەی کۆتایی', alert: 'تکایە هەموو خانەکان پڕبکەرەوە 🐋' },
-            tr: { dir: 'ltr', font: 'Poppins', title: 'Yolculuk Bilgilerini Tamamla', sub: 'Rezervasyon Talebi:', sec1: 'Kişisel Bilgiler', name: 'Ad Soyad', phone: 'Telefon Numarası', sec2: 'Yasal Belgeler', id: 'Kimlik / Pasaport No', license: 'Ehliyet Numarası', sec3: 'Teslimat Konumu', gps: 'Mevcut Konumumu Belirle', submit: 'Son İnceleme', alert: 'Lütfen tüm alanları doldurun 🐋' },
-            en: { dir: 'ltr', font: 'Poppins', title: 'Complete Trip Details', sub: 'Booking Request:', sec1: 'Personal Information', name: 'Full Name', phone: 'Phone Number', sec2: 'Legal Documents', id: 'National ID / Passport', license: 'Driving License No', sec3: 'Delivery Location', gps: 'Get My Current Location', submit: 'Final Review', alert: 'Please fill all fields to continue 🐋' }
+        const trans = {
+            ar: { dir: 'rtl', font: 'Tajawal', title: 'إكمال بيانات الرحلة', sub: 'طلب حجز:', sec1: 'المعلومات الشخصية', name: 'الاسم الكامل', phone: 'رقم الهاتف', sec2: 'الوثائق القانونية', id: 'رقم الهوية', license: 'رقم الإجازة', sec3: 'موقع التسليم', gps: 'تحديد موقعي 🛰️', submit: 'مراجعة الطلب النهائي', alert: 'يرجى ملء الحقول 🐋' },
+            ku: { dir: 'rtl', font: 'Tajawal', title: 'تەواوکردنی زانیاری', sub: 'داواکاری حیجز:', sec1: 'زانیاری کەسی', name: 'ناوی تەواو', phone: 'ژمارەی مۆبایل', sec2: 'بەڵگەنامەکان', id: 'ژمارەی ناسنامە', license: 'ژمارەی مۆڵەت', sec3: 'شوێنی وەرگرتن', gps: 'شوێنەکەم دیاری بکە 🛰️', submit: 'پێداچوونەوە', alert: 'خانەکان پڕبکەرەوە 🐋' },
+            tr: { dir: 'ltr', font: 'Poppins', title: 'Bilgileri Tamamla', sub: 'Rezervasyon:', sec1: 'Kişisel Bilgiler', name: 'Ad Soyad', phone: 'Telefon', sec2: 'Yasal Belgeler', id: 'Kimlik No', license: 'Ehliyet No', sec3: 'Teslimat Konumu', gps: 'Konumu Belirle 🛰️', submit: 'Son İnceleme', alert: 'Lütfen alanları doldurun 🐋' },
+            en: { dir: 'ltr', font: 'Poppins', title: 'Complete Details', sub: 'Booking:', sec1: 'Personal Info', name: 'Full Name', phone: 'Phone', sec2: 'Documents', id: 'ID Number', license: 'License No', sec3: 'Delivery Location', gps: 'Get Location 🛰️', submit: 'Final Review', alert: 'Please fill all fields 🐋' }
         };
 
-        function initLang() {
-            const l = data[currentLang];
+        window.onload = function() {
+            const l = trans[currentLang];
             document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = l.font + ', sans-serif';
+            document.body.style.fontFamily = l.font;
             document.getElementById('pageTitle').innerText = l.title;
-            document.getElementById('section1Title').innerText = l.sec1;
-            document.getElementById('lblCustName').innerText = l.name;
-            document.getElementById('lblCustPhone').innerText = l.phone;
-            document.getElementById('section2Title').innerText = l.sec2;
-            document.getElementById('lblID').innerText = l.id;
-            document.getElementById('lblLicense').innerText = l.license;
-            document.getElementById('section3Title').innerText = l.sec3;
+            document.getElementById('sec1').innerText = l.sec1;
+            document.getElementById('custName').placeholder = l.name;
+            document.getElementById('custPhone').placeholder = l.phone;
+            document.getElementById('sec2').innerText = l.sec2;
+            document.getElementById('idNumber').placeholder = l.id;
+            document.getElementById('drivingLicense').placeholder = l.license;
+            document.getElementById('sec3').innerText = l.sec3;
             document.getElementById('btnGPS').innerText = l.gps;
             document.getElementById('btnSubmit').innerText = l.submit;
-            
-            const carName = u.get('car') || 'AL-HUT CAR';
-            document.getElementById('carSub').innerText = `${l.sub} ${carName}`;
+            document.getElementById('carSub').innerText = `${l.sub} ${u.get('car') || ''}`;
 
-            if(l.dir === 'ltr') {
-                document.getElementById('formGrid').classList.remove('text-right');
-                document.getElementById('formGrid').classList.add('text-left');
-                document.getElementById('btnIcon').className = "fas fa-chevron-right group-hover:translate-x-2 transition-transform";
-            }
-        }
-
-        window.onload = function() {
-            initLang();
-            map = L.map('map', {zoomControl: false}).setView([35.4687, 44.3921], 12);
+            map = L.map('map').setView([35.4687, 44.3921], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
         };
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const c = [pos.coords.latitude, pos.coords.longitude];
-                    map.setView(c, 16); marker.setLatLng(c);
-                });
-            }
-        }
-
+        function getLocation() { navigator.geolocation.getCurrentPosition(p => { const c=[p.coords.latitude, p.coords.longitude]; map.setView(c,16); marker.setLatLng(c); }); }
         function confirmBooking() {
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const idNo = document.getElementById('idNumber').value;
-            const license = document.getElementById('drivingLicense').value;
-            const pos = marker.getLatLng();
-
-            if(!name || !phone || !idNo || !license) {
-                alert(data[currentLang].alert);
-                return;
-            }
-
-            u.set('name', name);
-            u.set('phone', phone);
-            u.set('id_no', idNo);
-            u.set('license', license);
-            u.set('lat', pos.lat);
-            u.set('lng', pos.lng);
-            u.set('emoji', '🚗');
-            u.set('lang', currentLang);
-
+            if(!document.getElementById('custName').value) { alert(trans[currentLang].alert); return; }
+            u.set('name', document.getElementById('custName').value);
+            u.set('phone', document.getElementById('custPhone').value);
+            u.set('id_no', document.getElementById('idNumber').value);
+            u.set('license', document.getElementById('drivingLicense').value);
+            const pos = marker.getLatLng(); u.set('lat', pos.lat); u.set('lng', pos.lng); u.set('lang', currentLang);
             window.location.href = `review.html?${u.toString()}`;
         }
     </script>
