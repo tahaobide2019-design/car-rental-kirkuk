@@ -23,6 +23,7 @@
         .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
         .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .dynamic-text { color: var(--main-color); transition: 0.5s; }
+        .gender-note { font-size: 0.65rem; font-weight: bold; opacity: 0.7; margin-inline-start: 5px; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -58,7 +59,10 @@
             </div>
 
             <div class="space-y-3">
-                <label id="lblGender" class="block text-xs font-black text-gray-400 mr-2 uppercase">جنس المتدرب</label>
+                <div class="flex items-center mr-2">
+                    <label id="lblGender" class="text-xs font-black text-gray-400 uppercase">جنس المتدرب</label>
+                    <span id="genderNote" class="genderNote text-indigo-500 gender-note">(يساعدنا في اختيار جنس المدرب)</span>
+                </div>
                 <div class="flex gap-4">
                     <div id="maleBtn" onclick="setGender('male')" class="gender-btn active">👨 ذكر</div>
                     <div id="femaleBtn" onclick="setGender('female')" class="gender-btn">👩 أنثى</div>
@@ -85,10 +89,10 @@
         const currentLang = p.get('lang') || 'ar';
 
         const translations = {
-            ar: { dir: 'rtl', font: 'Tajawal', title: 'كورس تعليم قيادة', city: 'المدينة', date: 'التاريخ', name: 'اسم المتدرب', phone: 'رقم الهاتف', age: 'العمر', id: 'رقم الهوية', gender: 'الجنس', male: '👨 ذكر', female: '👩 أنثى', map: 'تحديد الموقع:', gps: 'تحديد موقعي الحالي 🛰️', submit: 'مراجعة البيانات', alert: '⚠️ يرجى إكمال البيانات', search: 'ابحث عن منطقة...' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'کۆرسی فێربوونی شۆفێری', city: 'شار', date: 'بەروار', name: 'ناوی فێرخواز', phone: 'ژمارەی مۆبایل', age: 'تەمەن', id: 'ژمارەی ناسنامە', gender: 'ڕەگەز', male: '👨 نێر', female: '👩 مێ', map: 'دیاریکردنی شوێن:', gps: 'شوێنی ئێستام دیاری بکە 🛰️', submit: 'پێداچوونەوەی زانیارییەکان', alert: '⚠️ تکایە زانیارییەکان تەواو بکە', search: 'بگەرێ بۆ شوێنێک...' },
-            tr: { dir: 'ltr', font: 'Poppins', title: 'Sürüş Eğitimi Kursu', city: 'Şehir', date: 'Tarih', name: 'Öğrenci Adı', phone: 'Telefon', age: 'Yaş', id: 'Kimlik No', gender: 'Cinsiyet', male: '👨 Erkek', female: '👩 Kadın', map: 'Konum Belirle:', gps: 'Konumumu Bul 🛰️', submit: 'Verileri İncele', alert: '⚠️ Lütfen tüm alanları doldurun', search: 'Bölge ara...' },
-            en: { dir: 'ltr', font: 'Poppins', title: 'Driving Training Course', city: 'City', date: 'Date', name: 'Student Name', phone: 'Phone Number', age: 'Age', id: 'National ID', gender: 'Gender', male: '👨 Male', female: '👩 Female', map: 'Location:', gps: 'Get My Location 🛰️', submit: 'Review Details', alert: '⚠️ Please fill all fields', search: 'Search area...' }
+            ar: { dir: 'rtl', font: 'Tajawal', title: 'كورس تعليم قيادة', city: 'المدينة', date: 'التاريخ', name: 'اسم المتدرب', phone: 'رقم الهاتف', age: 'العمر', id: 'رقم الهوية', gender: 'جنس المتدرب', genderNote: '(لتحديد جنس المدرب المناسب)', male: '👨 ذكر', female: '👩 أنثى', map: 'تحديد الموقع:', gps: 'تحديد موقعي الحالي 🛰️', submit: 'مراجعة البيانات', alert: '⚠️ يرجى إكمال البيانات', search: 'ابحث عن منطقة...' },
+            ku: { dir: 'rtl', font: 'Tajawal', title: 'کۆرسی فێربوونی شۆفێری', city: 'شار', date: 'بەروار', name: 'ناوی فێرخواز', phone: 'ژمارەی مۆبایل', age: 'تەمەن', id: 'ژمارەی ناسنامە', gender: 'ڕەگەز', genderNote: '(بۆ دیاریکردنی ڕەگەزی ڕاهێنەر)', male: '👨 نێر', female: '👩 مێ', map: 'دیاریکردنی شوێن:', gps: 'شوێنی ئێستام دیاری بکە 🛰️', submit: 'پێداچوونەوەی زانیارییەکان', alert: '⚠️ تکایە زانیارییەکان تەواو بکە', search: 'بگەرێ بۆ شوێنێک...' },
+            tr: { dir: 'ltr', font: 'Poppins', title: 'Sürüş Eğitimi Kursu', city: 'Şehir', date: 'Tarih', name: 'Öğrenci Adı', phone: 'Telefon', age: 'Yaş', id: 'Kimlik No', gender: 'Cinsiyet', genderNote: '(Eğitmen cinsiyetini seçmek için)', male: '👨 Erkek', female: '👩 Kadın', map: 'Konum Belirle:', gps: 'Konumumu Bul 🛰️', submit: 'Verileri İncele', alert: '⚠️ Lütfen tüm alanları doldurun', search: 'Bölge ara...' },
+            en: { dir: 'ltr', font: 'Poppins', title: 'Driving Training Course', city: 'City', date: 'Date', name: 'Student Name', phone: 'Phone Number', age: 'Age', id: 'National ID', gender: 'Gender', genderNote: '(Helps choose trainer gender)', male: '👨 Male', female: '👩 Female', map: 'Location:', gps: 'Get My Location 🛰️', submit: 'Review Details', alert: '⚠️ Please fill all fields', search: 'Search area...' }
         };
 
         function initLang() {
@@ -101,15 +105,16 @@
             document.getElementById('lblInputAge').innerText = l.age;
             document.getElementById('lblInputID').innerText = l.id;
             document.getElementById('lblGender').innerText = l.gender;
+            document.getElementById('genderNote').innerText = l.genderNote;
             document.getElementById('maleBtn').innerText = l.male;
             document.getElementById('femaleBtn').innerText = l.female;
             document.getElementById('lblMap').innerHTML = `<i class="fas fa-map-marker-alt dynamic-text"></i> ${l.map}`;
             document.getElementById('btnGPS').innerText = l.gps;
             document.getElementById('btnSubmit').querySelector('span').innerText = l.submit;
             
-            const province = p.get('province') || p.get('city') || '---';
-            const date = p.get('date') || '---';
-            document.getElementById('summary').innerHTML = `📍 ${l.city}: ${province} <span class="mx-2">|</span> 📅 ${l.date}: ${date}`;
+            const cityParam = p.get('city') || p.get('province') || '---';
+            const dateParam = p.get('date') || '---';
+            document.getElementById('summary').innerHTML = `📍 ${l.city}: ${cityParam} <span class="mx-2">|</span> 📅 ${l.date}: ${dateParam}`;
             
             if(l.dir === 'ltr') {
                 document.getElementById('formContainer').classList.remove('text-right');
@@ -165,7 +170,8 @@
             if(!name || !phone || !nationalID || !age) { alert(l.alert); return; }
             
             const genderText = selectedGender === 'male' ? l.male : l.female;
-            window.location.href = `review.html?service=training&province=${encodeURIComponent(p.get('city'))}&car=${encodeURIComponent(l.title)}&date=${p.get('date')}&time=${p.get('time')}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&nationalID=${encodeURIComponent(nationalID)}&age=${age}&gender=${encodeURIComponent(genderText)}&lat=${latlng.lat}&lng=${latlng.lng}&emoji=🎓&lang=${currentLang}`;
+            const cityVal = p.get('city') || p.get('province');
+            window.location.href = `review.html?service=training&province=${encodeURIComponent(cityVal)}&car=${encodeURIComponent(l.title)}&date=${p.get('date')}&time=${p.get('time')}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&nationalID=${encodeURIComponent(nationalID)}&age=${age}&gender=${encodeURIComponent(genderText)}&lat=${latlng.lat}&lng=${latlng.lng}&emoji=🎓&lang=${currentLang}`;
         }
     </script>
 </body>
