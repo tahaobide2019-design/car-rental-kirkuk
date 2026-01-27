@@ -24,7 +24,6 @@
         .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .dynamic-text { color: var(--main-color); transition: 0.5s; }
         .dynamic-border { border-color: var(--main-color); transition: 0.5s; }
-        /* تحسين مظهر صندوق البحث داخل الخريطة */
         .leaflet-control-geocoder { border-radius: 10px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     </style>
 </head>
@@ -41,15 +40,21 @@
         </div>
 
         <div class="p-8 space-y-5">
-            <div>
-                <label class="block text-xs font-black text-gray-400 mb-2 mr-2">اسم المتدرب</label>
-                <input type="text" id="tName" placeholder="الاسم الكامل" class="input-training">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">اسم المتدرب</label>
+                    <input type="text" id="tName" placeholder="الاسم الكامل" class="input-training">
+                </div>
                 <div>
                     <label class="block text-xs font-black text-gray-400 mb-2 mr-2">رقم الهاتف</label>
-                    <input type="text" id="tID" placeholder="077XXXXXXXX" class="input-training">
+                    <input type="text" id="tPhone" placeholder="077XXXXXXXX" class="input-training">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2">رقم الهوية الوطنية</label>
+                    <input type="text" id="tNationalID" placeholder="رقم الهوية" class="input-training">
                 </div>
                 <div>
                     <label class="block text-xs font-black text-gray-400 mb-2 mr-2">العمر</label>
@@ -88,12 +93,10 @@
         document.getElementById('summary').innerHTML = `📅 التاريخ: ${params.get('date') || 'قيد الاختيار'} <span class="mx-2">|</span> ⏰ الوقت: ${params.get('time') || 'قيد الاختيار'}`;
 
         window.onload = function() {
-            // تهيئة الخريطة
             map = L.map('map').setView([35.4687, 44.3921], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
 
-            // إضافة شريط البحث
             L.Control.geocoder({
                 defaultMarkGeocode: false,
                 placeholder: "ابحث عن منطقة...",
@@ -113,7 +116,6 @@
             const header = document.getElementById('headerBox');
             
             if(g === 'أنثى 👩') {
-                // الألوان الخاصة بالإناث (زهري فخم)
                 root.style.setProperty('--main-color', '#db2777'); 
                 root.style.setProperty('--bg-soft', '#fdf2f8');
                 root.style.setProperty('--border-soft', '#fbcfe8');
@@ -121,7 +123,6 @@
                 document.getElementById('femaleBtn').classList.add('active');
                 document.getElementById('maleBtn').classList.remove('active');
             } else {
-                // الألوان الخاصة بالذكور (الأرجواني الأصلي)
                 root.style.setProperty('--main-color', '#7c3aed');
                 root.style.setProperty('--bg-soft', '#f5f3ff');
                 root.style.setProperty('--border-soft', '#ddd6fe');
@@ -140,6 +141,25 @@
 
         function goToReviewTraining() {
             const name = document.getElementById('tName').value;
+            const phone = document.getElementById('tPhone').value;
+            const nationalID = document.getElementById('tNationalID').value;
+            const age = document.getElementById('tAge').value;
+            const latlng = marker.getLatLng();
+
+            if(!name || !phone || !nationalID || !age) return alert("يرجى إكمال جميع البيانات 🐋");
+
+            const reviewUrl = `review.html?service=training&car=كورس تعليم قيادة` +
+                `&date=${params.get('date')}&time=${params.get('time')}` +
+                `&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}` +
+                `&nationalID=${encodeURIComponent(nationalID)}&age=${age}` +
+                `&gender=${encodeURIComponent(selectedGender)}` +
+                `&lat=${latlng.lat}&lng=${latlng.lng}&emoji=🎓`;
+
+            window.location.href = reviewUrl;
+        }
+    </script>
+</body>
+</html>
             const id = document.getElementById('tID').value;
             const age = document.getElementById('tAge').value;
             const latlng = marker.getLatLng();
