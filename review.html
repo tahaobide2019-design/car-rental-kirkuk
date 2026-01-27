@@ -2,116 +2,134 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأكيد الحجز | الحوت 🐋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مراجعة الطلب | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        .receipt-line { border-bottom: 2px dashed #e2e8f0; padding: 12px 0; }
+        :root { --main-color: #4f46e5; --bg-soft: #f5f3ff; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.98); border-radius: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+        .data-row { border-bottom: 1px solid #f1f5f9; padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; }
+        .data-label { color: #94a3b8; font-size: 0.85rem; font-weight: 800; }
+        .data-value { color: #1e293b; font-weight: 900; text-align: left; }
+        .btn-send { background: #25D366; color: white; transition: 0.3s; }
+        .btn-send:hover { background: #128C7E; transform: translateY(-3px); }
+        .dynamic-text { color: var(--main-color); transition: 0.5s; }
     </style>
 </head>
 <body class="p-4 md:p-8">
-
-    <div class="max-w-xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border-b-[12px] border-[#002349]">
+    <div id="mainCard" class="max-w-lg mx-auto glass-card overflow-hidden border-t-[12px] transition-all duration-500" style="border-color: var(--main-color);">
         
-        <div class="bg-[#002349] p-8 text-center text-white">
-            <div class="text-5xl mb-3">🐋</div>
-            <h2 class="text-2xl font-black text-[#D4AF37]">مراجعة تفاصيل الحجز</h2>
-            <p class="opacity-70 text-sm mt-1">يرجى التأكد من البيانات قبل الإرسال</p>
+        <div id="headerBox" class="p-8 text-center transition-all duration-500" style="background-color: rgba(0,0,0,0.02);">
+            <div id="serviceEmoji" class="text-6xl mb-3">📋</div>
+            <h2 class="text-2xl font-black dynamic-text">مراجعة بيانات الطلب</h2>
+            <p class="text-xs text-gray-400 font-bold mt-1 uppercase tracking-widest">تأكيد المعلومات النهائية</p>
         </div>
 
-        <div class="p-8 space-y-2" id="reviewContent">
+        <div class="p-8 space-y-1" id="detailsList">
             </div>
 
-        <div class="p-8 bg-slate-50">
-            <button onclick="sendToWhatsApp()" class="w-full bg-[#25D366] text-white py-5 rounded-2xl font-black text-xl shadow-xl flex items-center justify-center gap-3 hover:scale-95 transition-all">
-                تأكيد وإرسال عبر واتساب <i class="fab fa-whatsapp text-2xl"></i>
+        <div class="p-8 bg-gray-50 text-center">
+            <button onclick="sendToWhatsApp()" class="btn-send w-full py-5 rounded-2xl font-black text-xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                إرسال الطلب عبر واتساب <i class="fab fa-whatsapp text-2xl"></i>
             </button>
-            <p class="text-center text-[10px] text-gray-400 mt-4 font-bold uppercase italic">منصة الحوت - الخيار الأول في العراق</p>
+            <button onclick="window.history.back()" class="mt-6 text-gray-400 font-black text-sm hover:text-red-500 flex items-center justify-center gap-2 mx-auto">
+                <i class="fas fa-edit"></i> تعديل البيانات
+            </button>
         </div>
     </div>
 
     <script>
-        const p = new URLSearchParams(window.location.search);
-        const service = p.get('service');
-        const reviewContent = document.getElementById('reviewContent');
+        const u = new URLSearchParams(window.location.search);
+        const detailsContainer = document.getElementById('detailsList');
+        const myNumber = "9647713225471";
 
-        // دالة لعرض السطور في الوصل
-        function createLine(label, value, icon) {
-            if(!value) return '';
+        // القاموس المحدث ليشمل حقول التدريب والمدينة
+        const labelsDict = {
+            'province': '📍 المدينة',
+            'name': '👤 الاسم الكامل',
+            'phone': '📞 رقم الهاتف',
+            'nationalID': '🆔 الهوية الوطنية',
+            'age': '🎂 العمر',
+            'gender': '👫 جنس المتدرب',
+            'date': '📅 التاريخ',
+            'time': '⏰ الوقت',
+            'vehicle': '🚗 نوع الخدمة',
+            'addons': '➕ الإضافات'
+        };
+
+        // ضبط الألوان والوجوه التعبيرية حسب الجنس والخدمة
+        function applyBranding() {
+            const gender = u.get('gender');
+            const emoji = u.get('emoji');
+            const root = document.documentElement;
+
+            if(emoji) document.getElementById('serviceEmoji').innerText = emoji;
+
+            if(gender && gender.includes('أنثى')) {
+                root.style.setProperty('--main-color', '#db2777'); // زهري
+                root.style.setProperty('--bg-soft', '#fdf2f8');
+            } else if(u.get('service') === 'training') {
+                root.style.setProperty('--main-color', '#7c3aed'); // أرجواني للتدريب (ذكور)
+                root.style.setProperty('--bg-soft', '#f5f3ff');
+            } else {
+                root.style.setProperty('--main-color', '#002349'); // كحلي للخدمات العامة
+                root.style.setProperty('--bg-soft', '#f8fafc');
+            }
+        }
+
+        function createRow(label, value) {
+            if(!value || value === 'null' || value === 'undefined') return '';
             return `
-                <div class="receipt-line flex justify-between items-center">
-                    <span class="text-gray-400 text-sm font-bold flex items-center gap-2">
-                        <i class="fas ${icon} text-[#002349]"></i> ${label}
-                    </span>
-                    <span class="text-[#002349] font-black">${decodeURIComponent(value)}</span>
+                <div class="data-row">
+                    <span class="data-label">${label}</span>
+                    <span class="data-value">${decodeURIComponent(value)}</span>
                 </div>`;
         }
 
-        // بناء محتوى المراجعة بناءً على نوع الخدمة
+        // بناء المحتوى
         let html = '';
-        
-        // 1. معلومات أساسية (لكل الخدمات)
-        html += createLine('الخدمة', p.get('car') || 'خدمة عامة', 'fa-car');
-        html += createLine('التاريخ', p.get('date'), 'fa-calendar');
-        html += createLine('الوقت', p.get('time'), 'fa-clock');
+        applyBranding();
 
-        // 2. إذا كانت الخدمة "تدريب" اعرض بيانات إضافية
-        if (service === 'training') {
-            html += `<h3 class="font-black text-[#D4AF37] pt-4 pb-2 border-b-2 border-[#D4AF37] inline-block mb-4">بيانات المتدرب</h3>`;
-            html += createLine('اسم المتدرب', p.get('name'), 'fa-user');
-            html += createLine('رقم الهاتف', p.get('phone'), 'fa-phone');
-            html += createLine('الهوية الوطنية', p.get('nationalID'), 'fa-id-card');
-            html += createLine('الجنس', p.get('gender'), 'fa-venus-mars');
-            html += createLine('العمر', p.get('age'), 'fa-birthday-cake');
-            
-            // إضافة رابط الموقع الجغرافي (المنطقة)
-            const mapLink = `https://www.google.com/maps?q=${p.get('lat')},${p.get('lng')}`;
+        // عرض البيانات بالترتيب المفضل
+        const order = ['province', 'name', 'phone', 'nationalID', 'age', 'gender', 'vehicle', 'date', 'time', 'addons'];
+        order.forEach(key => {
+            if(u.has(key)) {
+                html += createRow(labelsDict[key] || key, u.get(key));
+            }
+        });
+
+        // السعر
+        const price = u.get('final_price') || u.get('total');
+        if(price) {
             html += `
-                <div class="receipt-line flex justify-between items-center">
-                    <span class="text-gray-400 text-sm font-bold flex items-center gap-2">
-                        <i class="fas fa-map-marker-alt text-[#002349]"></i> منطقة اللقاء
-                    </span>
-                    <a href="${mapLink}" target="_blank" class="text-blue-600 font-black underline text-sm">فتح الخريطة 📍</a>
-                </div>`;
-        } else {
-            // بيانات حجز السيارات العادي
-            html += createLine('الاسم', p.get('name'), 'fa-user');
-            html += createLine('الإضافات', p.get('addons'), 'fa-plus-circle');
-            html += `<div class="receipt-line flex justify-between items-center bg-yellow-50 p-4 rounded-xl mt-4">
-                        <span class="font-black text-[#002349]">السعر الكلي</span>
-                        <span class="text-2xl font-black text-[#002349]">${p.get('total') || 'حسب الاتفاق'} د.ع</span>
-                    </div>`;
+            <div class="data-row bg-yellow-50 p-4 rounded-2xl mt-4 border-2 border-yellow-100">
+                <span class="font-black text-yellow-700">💰 التكلفة المقدرة</span>
+                <span class="text-2xl font-black text-green-600">${Number(price).toLocaleString()} د.ع</span>
+            </div>`;
         }
 
-        reviewContent.innerHTML = html;
+        detailsContainer.innerHTML = html;
 
         function sendToWhatsApp() {
-            let message = `🐋 *طلب حجز جديد من منصة الحوت* \n\n`;
-            message += `🗂 *الخدمة:* ${p.get('car')} \n`;
-            message += `📅 *التاريخ:* ${p.get('date')} \n`;
-            message += `⏰ *الوقت:* ${p.get('time')} \n`;
+            let msg = `*طلب جديد من منصة الحوت 🐋*\n`;
+            msg += `--------------------------\n`;
+            
+            order.forEach(key => {
+                if(u.has(key)) {
+                    msg += `*${labelsDict[key] || key}:* ${decodeURIComponent(u.get(key))}\n`;
+                }
+            });
 
-            if (service === 'training') {
-                message += `\n👤 *بيانات المتدرب:* \n`;
-                message += `• الاسم: ${p.get('name')} \n`;
-                message += `• الهاتف: ${p.get('phone')} \n`;
-                message += `• الهوية: ${p.get('nationalID')} \n`;
-                message += `• الجنس: ${p.get('gender')} \n`;
-                message += `• العمر: ${p.get('age')} \n`;
-                message += `📍 *موقع اللقاء:* https://www.google.com/maps?q=${p.get('lat')},${p.get('lng')} \n`;
-            } else {
-                message += `👤 *الزبون:* ${p.get('name')} \n`;
-                message += `➕ *الإضافات:* ${p.get('addons') || 'لا يوجد'} \n`;
-                message += `💰 *السعر الكلي:* ${p.get('total')} د.ع \n`;
+            // رابط الخريطة
+            if(u.get('lat') && u.get('lng')) {
+                msg += `\n📍 *موقع اللقاء:* https://www.google.com/maps?q=${u.get('lat')},${u.get('lng')}\n`;
             }
 
-            message += `\n🐋 تم الطلب عبر منصة الحوت الذكية.`;
-
-            const whatsappUrl = `https://wa.me/9647713225471?text=${encodeURIComponent(message)}`;
-            window.location.href = whatsappUrl;
+            msg += `\n🐋 _تم عبر تطبيق الحوت_`;
+            window.location.href = `https://wa.me/${myNumber}?text=${encodeURIComponent(msg)}`;
         }
     </script>
 </body>
