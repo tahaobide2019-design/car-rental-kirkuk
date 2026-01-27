@@ -5,92 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تم الطلب بنجاح | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
-        .success-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.12); border-top: 12px solid #002349; }
-        .badge { background: #f1f5f9; padding: 10px 20px; border-radius: 1rem; font-weight: 800; font-size: 0.8rem; color: #64748b; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .success-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.1); border-top: 12px solid #002349; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <div class="max-w-md w-full success-card p-8 md:p-12 text-center relative overflow-hidden">
+    <div class="max-w-md w-full success-card p-8 text-center">
         <div class="flex justify-center mb-4">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1" style="width: 180px; height: 180px;" loop autoplay></dotlottie-player>
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
         </div>
 
-        <h1 id="msgTitle" class="text-3xl font-black text-[#002349] mb-4">تم استلام طلبك!</h1>
-        <p id="msgBody" class="text-gray-500 font-bold mb-8 leading-relaxed px-2"></p>
+        <h1 class="text-2xl font-black text-[#002349] mb-4">تم إرسال طلبك للحوت!</h1>
+        <p class="text-gray-500 font-bold mb-6">شكراً لك، سيتم توجيه طلبك فوراً للمكاتب المختصة في منطقتك وسنتواصل معك قريباً.</p>
 
-        <div class="grid grid-cols-2 gap-3 mb-8">
-            <div class="badge"><i class="fas fa-map-marker-alt ml-1"></i> <span id="resCity"></span></div>
-            <div class="badge"><i class="fas fa-calendar-alt ml-1"></i> <span id="resDate"></span></div>
-            <div class="col-span-2 badge text-[#002349] border border-blue-100">
-                <i class="fas fa-clock ml-1"></i> <span id="resTime"></span>
-            </div>
+        <div class="bg-slate-50 p-4 rounded-2xl mb-6">
+            <p class="text-[10px] font-black opacity-50 uppercase">رقم الطلب</p>
+            <p id="orderIDDisplay" class="text-xl font-black text-[#002349]">#HUT-0000</p>
         </div>
 
-        <div class="bg-[#002349] text-[#D4AF37] p-5 rounded-[2rem] mb-8 shadow-lg">
-            <p id="lblOrder" class="text-[10px] uppercase font-black opacity-70 mb-1">رقم الطلب المرجعي</p>
-            <p id="orderID" class="text-2xl font-black tracking-widest">#ALHUT-0000</p>
-        </div>
-
-        <a href="index.html" id="btnBack" class="block w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all">العودة للرئيسية</a>
+        <a href="index.html" class="block w-full py-4 bg-[#002349] text-white rounded-2xl font-black hover:opacity-90 transition-all">العودة للرئيسية</a>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const currentLang = u.get('lang') || 'ar';
-        const googleScriptURL = "https://script.google.com/macros/s/AKfycbyWczdiWH7eFWgrD7g--bBmAEmrsR43JlvPdc2zPz0j6UobP-FHnED9-LxL9QF3IE_eqA/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwAVmtBJwIF5TuXuVnz2ifBsuCl9Tj6jJnDdvOxhh1BtIlvb6Csv-uGkuLleYErVk6LUw/exec";
         
-        const trans = {
-            ar: { title: 'تم استلام طلبك بنجاح!', body: 'حوتنا العزيز، يتم الآن توجيه طلبك لأقرب مكتب في منطقة (CITY) وسيتم التواصل معك لتأكيد الحجز.', back: 'العودة للرئيسية', order: 'رقم الطلب المرجعي', dir: 'rtl', font: 'Tajawal' },
-            ku: { title: 'داواکارییەکەت وەرگیرا!', body: 'حوتی ئازیز، داواکارییەکەت ئاڕاستەی نزیکترین نووسینگە دەکرێت لە (CITY) و بەم زووانە پەیوەندیت پێوە دەکەین.', back: 'گەڕانەوە بۆ سەرەتا', order: 'ژمارەی داواکاری', dir: 'rtl', font: 'Tajawal' },
-            tr: { title: 'Siparişiniz Alındı!', body: 'Değerli müşterimiz, talebiniz (CITY) bölgesindeki en yakın ofise iletiliyor. Onay için sizinle iletişime geçeceğiz.', back: 'Ana Sayfaya Dön', order: 'SİPARİŞ NUMARASI', dir: 'ltr', font: 'Poppins' },
-            en: { title: 'Order Received!', body: 'Dear Whale, your request is being routed to the nearest office in (CITY). We will contact you shortly.', back: 'Back to Home', order: 'ORDER REFERENCE', dir: 'ltr', font: 'Poppins' }
-        };
-
         window.onload = () => {
-            const l = trans[currentLang];
-            document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = l.font;
-            document.getElementById('msgTitle').innerText = l.title;
-            document.getElementById('btnBack').innerText = l.back;
-            document.getElementById('lblOrder').innerText = l.order;
+            const randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            const city = decodeURIComponent(u.get('province') || u.get('city') || '...');
-            document.getElementById('msgBody').innerText = l.body.replace('(CITY)', city);
-            document.getElementById('resCity').innerText = city;
-            document.getElementById('resDate').innerText = u.get('date') || '--/--';
-            document.getElementById('resTime').innerText = u.get('time') || '--:--';
-            
-            const randomID = '#ALHUT-' + Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('orderID').innerText = randomID;
-
-            // إرسال البيانات فوراً لجدول جوجل
-            submitToGoogle(u, randomID);
-        };
-
-        function submitToGoogle(params, orderID) {
+            // تجميع البيانات
             const data = {
-                order_id: orderID,
-                timestamp: new Date().toLocaleString()
+                order_id: randomID,
+                name: u.get('name'),
+                phone: u.get('phone'),
+                province: u.get('province'),
+                car: u.get('car'),
+                date: u.get('date'),
+                time: u.get('time')
             };
-            // تحويل كل المعاملات في الرابط إلى كائن بيانات
-            params.forEach((value, key) => { data[key] = decodeURIComponent(value); });
 
-            // إرسال الطلب لـ Google Apps Script
-            fetch(googleScriptURL, {
+            // الإرسال السري لـ Google Sheets و Telegram
+            fetch(scriptURL, {
                 method: 'POST',
-                mode: 'no-cors', // لتجنب مشاكل CORS مع جوجل
-                cache: 'no-cache',
-                body: JSON.stringify(data),
-                headers: { 'Content-Type': 'application/json' }
-            }).then(() => {
-                console.log("Data sent to Google Sheet successfully!");
-            }).catch(err => console.error("Error sending data:", err));
-        }
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            }).then(() => console.log("Success!"))
+              .catch(err => console.error("Error:", err));
+        };
     </script>
 </body>
 </html>
