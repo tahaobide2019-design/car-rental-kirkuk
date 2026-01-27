@@ -2,170 +2,194 @@
 <html lang="ar" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>حجز كورس تعليم | الحوت 🐋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الحوت 🐋 | Al-Hut Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
     <style>
-        :root { --main-color: #7c3aed; --bg-soft: #f5f3ff; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
-        .glass-card { background: rgba(255, 255, 255, 0.98); }
-        #map { height: 180px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
-        .input-training { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
-        .input-training:focus { border-color: var(--main-color); background: white; }
-        .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
-        .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .dynamic-text { color: var(--main-color); transition: 0.5s; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); transition: 1s; position: relative; }
+        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; transition: 0.5s; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .smart-input { width: 100%; padding: 1rem; background-color: #f1f5f9; border: 2px solid transparent; border-radius: 1.25rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
+        .smart-input:focus { background-color: #fff; border-color: #D4AF37; }
+        .city-overlay { position: absolute; inset: 0; opacity: 0.4; transition: 1s; pointer-events: none; }
+        .lang-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 12px; font-size: 0.75rem; color: white; cursor: pointer; transition: 0.3s; }
+        .lang-btn:hover { background: #D4AF37; color: #002349; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="text-[#002349]">
 
-    <div id="mainCard" class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] transition-all duration-500" style="border-color: var(--main-color);">
-        
-        <div id="headerBox" class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
-            <div class="text-5xl mb-3">🎓</div>
-            <h2 id="pageTitle" class="text-3xl font-black dynamic-text">كورس تعليم قيادة</h2>
-            <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-sm font-bold dynamic-text shadow-sm inline-block border border-indigo-100"></div>
-        </div>
-
-        <div class="p-8 space-y-5 text-right" id="formContainer">
-            <div>
-                <label id="lblInputName" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">اسم المتدرب</label>
-                <input type="text" id="tName" class="input-training">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label id="lblInputPhone" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهاتف</label>
-                    <input type="tel" id="tPhone" class="input-training text-left" dir="ltr">
-                </div>
-                <div>
-                    <label id="lblInputAge" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">العمر</label>
-                    <input type="number" id="tAge" class="input-training">
-                </div>
-            </div>
-
-            <div>
-                <label id="lblInputID" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهوية الوطنية</label>
-                <input type="text" id="tNationalID" class="input-training">
-            </div>
-
-            <div class="space-y-3">
-                <label id="lblGender" class="block text-xs font-black text-gray-400 mr-2 uppercase">جنس المتدرب</label>
-                <div class="flex gap-4">
-                    <div id="maleBtn" onclick="setGender('male')" class="gender-btn active">👨 ذكر</div>
-                    <div id="femaleBtn" onclick="setGender('female')" class="gender-btn">👩 أنثى</div>
-                </div>
-            </div>
-
-            <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label id="lblMap" class="block font-black mb-3 text-sm text-indigo-900 mr-2 flex items-center gap-2">
-                    <i class="fas fa-map-marker-alt dynamic-text"></i> تحديد الموقع:
-                </label>
-                <div id="map" class="mb-4"></div>
-                <button type="button" id="btnGPS" onclick="getGPS()" class="w-full py-4 text-white rounded-2xl font-black text-sm shadow-lg transition-all" style="background-color: var(--main-color);">تحديد موقعي الحالي 🛰️</button>
-            </div>
-
-            <button id="btnSubmit" onclick="goToReviewTraining()" class="w-full text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95" style="background-color: var(--main-color);">
-                <span>مراجعة البيانات</span> <i class="fas fa-chevron-left"></i>
-            </button>
-        </div>
+    <div class="absolute top-4 left-4 right-4 z-50 flex justify-center gap-2">
+        <button onclick="changeLang('ar')" class="lang-btn">العربية</button>
+        <button onclick="changeLang('ku')" class="lang-btn">کوردی</button>
+        <button onclick="changeLang('tr')" class="lang-btn">Türkçe</button>
+        <button onclick="changeLang('en')" class="lang-btn">English</button>
     </div>
 
-    <script>
-        let map, marker, selectedGender = 'male';
-        const p = new URLSearchParams(window.location.search);
-        const currentLang = p.get('lang') || 'ar';
+    <header id="mainHero" class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
+        <div id="cityOverlay" class="city-overlay"></div>
+        <div class="whale-float mb-4 text-7xl" id="whaleIcon">🐋</div>
+        <h1 class="text-6xl font-black text-[#D4AF37] mb-2 tracking-tighter" id="brandName">الحـوت</h1>
+        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic px-4 h-8 transition-all duration-500"></p>
+    </header>
 
-        const translations = {
-            ar: { dir: 'rtl', font: 'Tajawal', title: 'كورس تعليم قيادة', city: 'المدينة', date: 'التاريخ', name: 'اسم المتدرب', phone: 'رقم الهاتف', age: 'العمر', id: 'رقم الهوية', gender: 'الجنس', male: '👨 ذكر', female: '👩 أنثى', map: 'تحديد الموقع:', gps: 'تحديد موقعي الحالي 🛰️', submit: 'مراجعة البيانات', alert: '⚠️ يرجى إكمال البيانات', search: 'ابحث عن منطقة...' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'کۆرسی فێربوونی شۆفێری', city: 'شار', date: 'بەروار', name: 'ناوی فێرخواز', phone: 'ژمارەی مۆبایل', age: 'تەمەن', id: 'ژمارەی ناسنامە', gender: 'ڕەگەز', male: '👨 نێر', female: '👩 مێ', map: 'دیاریکردنی شوێن:', gps: 'شوێنی ئێستام دیاری بکە 🛰️', submit: 'پێداچوونەوەی زانیارییەکان', alert: '⚠️ تکایە زانیارییەکان تەواو بکە', search: 'بگەرێ بۆ شوێنێک...' },
-            tr: { dir: 'ltr', font: 'Poppins', title: 'Sürüş Eğitimi Kursu', city: 'Şehir', date: 'Tarih', name: 'Öğrenci Adı', phone: 'Telefon', age: 'Yaş', id: 'Kimlik No', gender: 'Cinsiyet', male: '👨 Erkek', female: '👩 Kadın', map: 'Konum Belirle:', gps: 'Konumumu Bul 🛰️', submit: 'Verileri İncele', alert: '⚠️ Lütfen tüm alanları doldurun', search: 'Bölge ara...' },
-            en: { dir: 'ltr', font: 'Poppins', title: 'Driving Training Course', city: 'City', date: 'Date', name: 'Student Name', phone: 'Phone Number', age: 'Age', id: 'National ID', gender: 'Gender', male: '👨 Male', female: '👩 Female', map: 'Location:', gps: 'Get My Location 🛰️', submit: 'Review Details', alert: '⚠️ Please fill all fields', search: 'Search area...' }
+    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
+        <div class="bg-white shadow-2xl rounded-[3.5rem] p-8 md:p-12 max-w-7xl mx-auto border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                
+                <div class="md:col-span-2 space-y-2 text-right">
+                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelCity">المدينة</label>
+                    <select id="citySelect" onchange="adaptToCity()" class="smart-input appearance-none cursor-pointer"></select>
+                </div>
+
+                <div class="md:col-span-3 space-y-2 text-right">
+                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelService">الخدمة المطلوبة</label>
+                    <select id="mainService" class="smart-input appearance-none text-sm cursor-pointer"></select>
+                </div>
+
+                <div class="md:col-span-2 space-y-2 text-right">
+                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelDate">التاريخ</label>
+                    <input type="date" id="dateInput" class="smart-input">
+                </div>
+
+                <div class="md:col-span-2 space-y-2 text-right">
+                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelTime">الوقت</label>
+                    <input type="time" id="timeInput" class="smart-input" onchange="validateTime()">
+                </div>
+
+                <div class="md:col-span-3">
+                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <span id="btnText">استمر الآن</span> <i id="btnIcon" class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentLang = 'ar';
+
+        const data = {
+            ar: {
+                dir: 'rtl', font: 'Tajawal', brand: 'الحـوت', labelCity: 'المدينة', labelService: 'الخدمة المطلوبة',
+                labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول للمتابعة 🐋',
+                timeAlert: 'عذراً، أوقات العمل من 8 صباحاً حتى 11 مساءً 🐋', pastTimeAlert: 'لا يمكن اختيار وقت قد مضى!',
+                morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
+                services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس ومناسبات', training: '🎓 تعليم قيادة (مدربين)' },
+                cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
+                msgs: { 'كركوك': 'يا أهل كركوك.. الحوت يحييكم في مدينة التآخي والجمال 💎', 'بغداد': 'من بغداد دار السلام.. الحوت يرافقكم في كل شوارعها العريقة 🏰', 'أربيل': 'بخير ببن لـ أربيل.. استمتع بجمال القلعة مع خدماتنا المتميزة 🏔️', 'السليمانية': 'سليماني جوان.. تمتع بأجواء السليمانية الرائعة مع سياراتنا 🌲', 'الموصل': 'أهلاً بالموصل الحدباء.. الحوت في خدمة نينوى وأهلها الكرام 🏹', 'البصرة': 'حي الله أهلنا بالبصرة الفيحاء.. الحوت يرسو في ثغر العراق ⚓', 'الأنبار': 'أهلاً بالأنبار العزيزة.. الحوت يصل لقلب الكرم العراقي الأصيل 🌴', 'ديالى': 'نورتم ديالى.. الحوت في مدينة البرتقال والجمال 🍊' }
+            },
+            ku: {
+                dir: 'rtl', font: 'Tajawal', brand: 'ئەلحووت', labelCity: 'شار', labelService: 'جۆری خزمەتگوزاری',
+                labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
+                timeAlert: 'ببورە، کاتی کارکردن لە ٨ی بەیانی تا ١١ی شەو دەبێت 🐋', pastTimeAlert: 'ناتوانی کاتێکی ڕابردوو هەڵبژێریت!',
+                morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
+                services: { placeholder: '-- خزمەتگوزاری هەڵبژێرە --', personal: '🚗 بەکرێگرتنی ئۆتۆمبێل', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
+                cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
+                msgs: { 'كركوك': 'سڵاو بۆ کەرکوکی دڵی کوردستان.. ئەلحووت خزمەتتان دەکات 💎', 'بغداد': 'سڵاو لە بەغدای پایتەخت.. ئەلحووت لەگەڵتاندایە 🏰', 'أربيل': 'بەخێربێن بۆ هەولێری قەڵا و منارە.. 🏔️', 'السليمانية': 'سلێمانی جوان.. چێژ لە کەشوهەوای سلێمانی وەربگرە 🌲', 'الموصل': 'سڵاو بۆ مووسڵ.. 🏹', 'البصرة': 'سڵاو بۆ بەسرە.. ⚓', 'الأنبار': 'بەخێربێن بۆ ئەنبار.. 🌴', 'ديالى': 'سڵاو بۆ دیالە.. 🍊' }
+            },
+            tr: {
+                dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'Şehir', labelService: 'Hizmet Türü',
+                labelDate: 'Tarih', labelTime: 'Saat', btnText: 'Devam Et', alert: 'Lütfen alanları doldurun 🐋',
+                timeAlert: 'Çalışma saatleri 08:00 - 23:00 arasıdır 🐋', pastTimeAlert: 'Geçmiş bir zamanı seçemezsiniz!',
+                morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
+                services: { placeholder: '-- Hizmet Seçin --', personal: '🚗 Araç Kiralama', wedding: '🎁 Düğün Araçları', training: '🎓 Sürüş Eğitimi' },
+                cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Baغdaت 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
+                msgs: { 'كركوك': 'Selam Kerkük.. Al-Hut yanınızda 💎', 'بغداد': 'Bağdat\'a hoş geldiniz.. 🏰', 'أربيل': 'Erbil\'e hoş geldiniz.. 🏔️', 'السليمانية': 'Güzel Süleymaniye.. 🌲', 'الموصل': 'Selam Musul.. 🏹', 'البصرة': 'Basra\'ya selamlar.. ⚓', 'الأنبار': 'Enbar\'a hoş geldiniz.. 🌴', 'ديالى': 'Diyala\'ya selamlar.. 🍊' }
+            },
+            en: {
+                dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'City', labelService: 'Required Service',
+                labelDate: 'Date', labelTime: 'Time', btnText: 'Continue Now', alert: 'Please fill all fields 🐋',
+                timeAlert: 'Working hours: 8 AM to 11 PM 🐋', pastTimeAlert: 'You cannot select a past time!',
+                morning: 'Good Morning', day: 'Have a nice day', evening: 'Good Evening',
+                services: { placeholder: '-- Select Service --', personal: '🚗 Personal Car Rental', wedding: '🎁 Wedding & Events Cars', training: '🎓 Driving Training' },
+                cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Slemani 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
+                msgs: { 'كركوك': 'Welcome Kirkuk.. Al-Hut greets you 💎', 'بغداد': 'From Baghdad, the city of peace.. 🏰', 'أربيل': 'Welcome to Erbil.. 🏔️', 'السليمانية': 'Slemani Jwan.. 🌲', 'الموصل': 'Welcome to Mosul.. 🏹', 'البصرة': 'Greetings to Basra.. ⚓', 'الأنبار': 'Welcome to Anbar.. 🌴', 'ديالى': 'Welcome to Diyala.. 🍊' }
+            }
         };
 
-        function initLang() {
-            const l = translations[currentLang];
+        function validateTime() {
+            const timeInput = document.getElementById('timeInput');
+            const dateInput = document.getElementById('dateInput');
+            const selectedTime = timeInput.value;
+            const selectedDate = dateInput.value;
+            const l = data[currentLang];
+            if (!selectedTime) return;
+            const hour = parseInt(selectedTime.split(':')[0]);
+            const minutes = parseInt(selectedTime.split(':')[1]);
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            if (hour < 8 || hour >= 23) { alert(l.timeAlert); timeInput.value = ""; return; }
+            if (selectedDate === today) {
+                if (hour < now.getHours() || (hour === now.getHours() && minutes < now.getMinutes())) {
+                    alert(l.pastTimeAlert); timeInput.value = "";
+                }
+            }
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            const l = data[lang];
             document.getElementById('htmlTag').dir = l.dir;
             document.body.style.fontFamily = l.font + ', sans-serif';
-            document.getElementById('pageTitle').innerText = l.title;
-            document.getElementById('lblInputName').innerText = l.name;
-            document.getElementById('lblInputPhone').innerText = l.phone;
-            document.getElementById('lblInputAge').innerText = l.age;
-            document.getElementById('lblInputID').innerText = l.id;
-            document.getElementById('lblGender').innerText = l.gender;
-            document.getElementById('maleBtn').innerText = l.male;
-            document.getElementById('femaleBtn').innerText = l.female;
-            document.getElementById('lblMap').innerHTML = `<i class="fas fa-map-marker-alt dynamic-text"></i> ${l.map}`;
-            document.getElementById('btnGPS').innerText = l.gps;
-            document.getElementById('btnSubmit').querySelector('span').innerText = l.submit;
-            
-            const province = p.get('province') || p.get('city') || '---';
-            const date = p.get('date') || '---';
-            document.getElementById('summary').innerHTML = `📍 ${l.city}: ${province} <span class="mx-2">|</span> 📅 ${l.date}: ${date}`;
-            
-            if(l.dir === 'ltr') {
-                document.getElementById('formContainer').classList.remove('text-right');
-                document.getElementById('formContainer').classList.add('text-left');
-                document.getElementById('btnSubmit').querySelector('i').className = "fas fa-chevron-right";
+            document.getElementById('brandName').innerText = l.brand;
+            document.getElementById('labelCity').innerText = l.labelCity;
+            document.getElementById('labelService').innerText = l.labelService;
+            document.getElementById('labelDate').innerText = l.labelDate;
+            document.getElementById('labelTime').innerText = l.labelTime;
+            document.getElementById('btnText').innerText = l.btnText;
+            document.getElementById('btnIcon').className = `fas fa-arrow-${l.dir === 'rtl' ? 'left' : 'right'}`;
+            const citySelect = document.getElementById('citySelect');
+            const currentCity = citySelect.value || 'كركوك';
+            citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}" ${key === currentCity ? 'selected' : ''}>${val}</option>`).join('');
+            const serviceSelect = document.getElementById('mainService');
+            serviceSelect.innerHTML = `<option value="">${l.services.placeholder}</option><option value="personal">${l.services.personal}</option><option value="wedding">${l.services.wedding}</option><option value="training">${l.services.training}</option>`;
+            adaptToCity();
+        }
+
+        function adaptToCity() {
+            const city = document.getElementById('citySelect').value;
+            const greet = document.getElementById('dynamicGreeting');
+            const overlay = document.getElementById('cityOverlay');
+            const l = data[currentLang];
+            const hour = new Date().getHours();
+            let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
+            const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
+            greet.style.opacity = 0;
+            setTimeout(() => {
+                greet.innerText = `${timeText}.. ${l.msgs[city] || ''}`;
+                greet.style.opacity = 1;
+                overlay.style.backgroundColor = styleColor[city] || '#002349';
+            }, 300);
+        }
+
+        function startBooking() {
+            const service = document.getElementById('mainService').value;
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+            const city = document.getElementById('citySelect').value;
+
+            if(!service || !date || !time) {
+                alert(data[currentLang].alert);
+                return;
             }
-        }
 
-        window.onload = function() {
-            initLang();
-            map = L.map('map').setView([35.4687, 44.3921], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            marker = L.marker([35.4687, 44.3921], {draggable: true}).addTo(map);
-
-            L.Control.geocoder({ defaultMarkGeocode: false, placeholder: translations[currentLang].search })
-            .on('markgeocode', function(e) {
-                map.setView(e.geocode.center, 16);
-                marker.setLatLng(e.geocode.center);
-            }).addTo(map);
-        };
-
-        function setGender(g) {
-            selectedGender = g;
-            const root = document.documentElement;
-            if(g === 'female') {
-                root.style.setProperty('--main-color', '#db2777');
-                root.style.setProperty('--bg-soft', '#fdf2f8');
-                document.getElementById('femaleBtn').classList.add('active');
-                document.getElementById('maleBtn').classList.remove('active');
-            } else {
-                root.style.setProperty('--main-color', '#7c3aed');
-                root.style.setProperty('--bg-soft', '#f5f3ff');
-                document.getElementById('maleBtn').classList.add('active');
-                document.getElementById('femaleBtn').classList.remove('active');
+            // التحويل الذكي حسب الخدمة
+            let targetPage = "fleet.html"; // الافتراضي
+            if (service === "training") {
+                targetPage = "training.html"; // صفحة التعليم
             }
+
+            window.location.href = `${targetPage}?type=${service}&lang=${currentLang}&date=${date}&time=${time}&city=${city}`;
         }
 
-        function getGPS() {
-            navigator.geolocation.getCurrentPosition(pos => {
-                const coords = [pos.coords.latitude, pos.coords.longitude];
-                map.setView(coords, 17); marker.setLatLng(coords);
-            });
-        }
-
-        function goToReviewTraining() {
-            const name = document.getElementById('tName').value;
-            const phone = document.getElementById('tPhone').value;
-            const nationalID = document.getElementById('tNationalID').value;
-            const age = document.getElementById('tAge').value;
-            const latlng = marker.getLatLng();
-            const l = translations[currentLang];
-
-            if(!name || !phone || !nationalID || !age) { alert(l.alert); return; }
-            
-            const genderText = selectedGender === 'male' ? l.male : l.female;
-            window.location.href = `review.html?service=training&province=${encodeURIComponent(p.get('city'))}&car=${encodeURIComponent(l.title)}&date=${p.get('date')}&time=${p.get('time')}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&nationalID=${encodeURIComponent(nationalID)}&age=${age}&gender=${encodeURIComponent(genderText)}&lat=${latlng.lat}&lng=${latlng.lng}&emoji=🎓&lang=${currentLang}`;
+        window.onload = () => {
+            const dateInput = document.getElementById('dateInput');
+            dateInput.min = new Date().toISOString().split('T')[0];
+            dateInput.value = dateInput.min;
+            changeLang('ar');
         }
     </script>
 </body>
