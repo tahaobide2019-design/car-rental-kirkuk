@@ -31,12 +31,12 @@
                 <div class="md:col-span-2 space-y-2">
                     <label class="block text-sm font-black text-slate-400 mr-2 uppercase">المدينة</label>
                     <select id="citySelect" class="smart-input appearance-none">
-                        <option value="كركوك">كركوك</option>
                         <option value="بغداد">بغداد</option>
+                        <option value="كركوك">كركوك</option>
                         <option value="أربيل">أربيل</option>
-                        <option value="البصرة">البصرة</option>
-                        <option value="الموصل">الموصل</option>
                         <option value="السليمانية">السليمانية</option>
+                        <option value="الموصل">الموصل</option>
+                        <option value="البصرة">البصرة</option>
                         <option value="الأنبار">الأنبار</option>
                         <option value="ديالى">ديالى</option>
                     </select>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="md:col-span-3">
-                    <button onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2">
+                    <button onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
                         استمر الآن <i class="fas fa-arrow-left"></i>
                     </button>
                 </div>
@@ -72,6 +72,7 @@
     </main>
 
     <script>
+        // الترحيب الذكي
         const hour = new Date().getHours();
         const greet = document.getElementById('dynamicGreeting');
         if (hour < 12) greet.innerText = "صباح الخير.. أهلاً بك في منصة الحوت الذكية ☀️";
@@ -80,22 +81,29 @@
 
         function startBooking() {
             const city = document.getElementById('citySelect').value;
-            const s = document.getElementById('mainService').value;
-            const d = document.getElementById('dateInput').value;
-            const t = document.getElementById('timeInput').value;
+            const service = document.getElementById('mainService').value;
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
 
-            if(!s || !d || !t) return alert("يرجى ملء جميع الحقول 🐋");
+            // التحقق من الحقول
+            if(!service || !date || !time) {
+                alert("يرجى ملء جميع الحقول للمتابعة 🐋");
+                return;
+            }
 
-            const q = `?province=${encodeURIComponent(city)}&date=${d}&time=${encodeURIComponent(t)}`;
+            // تجميع المعاملات في رابط
+            const query = `?province=${encodeURIComponent(city)}&date=${date}&time=${encodeURIComponent(time)}&type=${service}`;
 
-            if(s === 'personal' || s === 'wedding') {
-                window.location.href = `fleet.html${q}&type=${s}`;
+            // التوجيه الصحيح
+            if(service === 'personal' || service === 'wedding') {
+                window.location.href = `fleet.html${query}`;
             } 
-            else if(s === 'training') {
-                window.location.href = `booking_training.html${q}`;
+            else if(service === 'training') {
+                window.location.href = `booking_training.html${query}`;
             }
         }
 
+        // ضبط التاريخ التلقائي لليوم
         window.onload = function() {
             document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
         }
