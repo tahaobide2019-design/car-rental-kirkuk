@@ -33,29 +33,22 @@
                     <select id="citySelect" class="smart-input appearance-none">
                         <option value="كركوك">كركوك</option>
                         <option value="بغداد">بغداد</option>
-                        <option value="الموصل">الموصل</option>
-                        <option value="ديالى">ديالى</option>
+                        <option value="أربيل">أربيل</option>
                         <option value="البصرة">البصرة</option>
+                        <option value="الموصل">الموصل</option>
+                        <option value="السليمانية">السليمانية</option>
+                        <option value="الأنبار">الأنبار</option>
+                        <option value="ديالى">ديالى</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-3 space-y-2">
                     <label class="block text-sm font-black text-slate-400 mr-2 uppercase">الخدمة المطلوبة</label>
-                    <select id="mainService" onchange="toggleCargo()" class="smart-input appearance-none text-sm">
+                    <select id="mainService" class="smart-input appearance-none text-sm">
                         <option value="">-- اختر الخدمة --</option>
                         <option value="personal">🚗 تأجير سيارة شخصية</option>
                         <option value="wedding">🎁 سيارات أعراس ومناسبات</option>
                         <option value="training">🎓 تعليم قيادة (مدربين)</option>
-                        <option value="cargo">🚛 سيارة حمل ونقل</option>
-                        <option value="water">💧 تنكر ماء (حوضي)</option>
-                    </select>
-                </div>
-
-                <div id="cargoExtra" class="md:col-span-2 space-y-2 hidden">
-                    <label class="block text-sm font-black text-yellow-600 mr-2">نوع المركبة</label>
-                    <select id="cargoType" class="smart-input border-yellow-200 bg-yellow-50">
-                        <option value="ستوتة">ستوتة 📦</option>
-                        <option value="سيارة حمل كبيرة">سيارة كبيرة 🚛</option>
                     </select>
                 </div>
 
@@ -85,39 +78,24 @@
         else if (hour < 18) greet.innerText = "طاب يومك.. أهلاً بك في منصة الحوت الذكية 🌤️";
         else greet.innerText = "مساء الخير.. أهلاً بك في منصة الحوت الذكية ✨";
 
-        function toggleCargo() {
-            const s = document.getElementById('mainService').value;
-            document.getElementById('cargoExtra').classList.toggle('hidden', s !== 'cargo');
-        }
-
         function startBooking() {
             const city = document.getElementById('citySelect').value;
             const s = document.getElementById('mainService').value;
             const d = document.getElementById('dateInput').value;
             const t = document.getElementById('timeInput').value;
-            const ct = document.getElementById('cargoType').value;
 
             if(!s || !d || !t) return alert("يرجى ملء جميع الحقول 🐋");
 
-            // بناء الرابط مع المدينة المختارة
             const q = `?province=${encodeURIComponent(city)}&date=${d}&time=${encodeURIComponent(t)}`;
 
-            // التوجيه الذكي كما في طلبك
             if(s === 'personal' || s === 'wedding') {
                 window.location.href = `fleet.html${q}&type=${s}`;
             } 
-            else if(s === 'cargo') {
-                window.location.href = `booking_cargo.html${q}&vehicle=${encodeURIComponent(ct)}`;
-            }
-            else if(s === 'water') {
-                window.location.href = `booking_water.html${q}`;
-            }
             else if(s === 'training') {
                 window.location.href = `booking_training.html${q}`;
             }
         }
 
-        // تعيين تاريخ اليوم تلقائياً
         window.onload = function() {
             document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
         }
