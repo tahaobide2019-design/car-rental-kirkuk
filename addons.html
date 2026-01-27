@@ -8,171 +8,113 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #002349; --accent-color: #D4AF37; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; overflow-x: hidden; }
+        :root { --main: #002349; --accent: #D4AF37; --soft: #f8fafc; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--soft); overflow-x: hidden; }
         
-        .hero-gradient { 
-            background: linear-gradient(135deg, var(--main-color) 0%, #003366 100%); 
-            position: relative; overflow: hidden; transition: 0.8s;
-        }
-        
-        /* تأثير البطاقة الذكية */
+        /* تصميم الهيدر ليكون متطابقاً مع ملف التدريب */
+        .hero-box { background: var(--main); border-radius: 0 0 4rem 4rem; position: relative; }
+        .hero-box::after { content: '🐋'; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 2.5rem; background: white; border-radius: 50%; padding: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* بطاقات الإضافات الماركة */
         .addon-card { 
-            position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent; background: white; border-radius: 2.5rem;
-            cursor: pointer;
+            background: white; border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent; cursor: pointer; position: relative;
         }
-        .addon-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
         .addon-card.selected { 
-            border-color: var(--accent-color); 
-            background: #fffdf5; 
-            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.15); 
+            border-color: var(--accent); transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
         }
+        .addon-card.selected .check-box { background: var(--accent); color: white; }
         
-        .check-mark { 
-            position: absolute; top: 1.2rem; left: 1.2rem; 
-            color: var(--accent-color); opacity: 0; transform: scale(0); transition: 0.3s; 
-        }
-        .addon-card.selected .check-mark { opacity: 1; transform: scale(1.3); }
-
-        .color-chip { 
-            width: 50px; height: 50px; border-radius: 50%; border: 3px solid white; 
-            cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-        }
-        .color-chip.active { transform: scale(1.2); border-color: var(--accent-color); box-shadow: 0 0 20px rgba(212,175,55,0.4); }
-
-        .glass-summary { 
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); 
-            border-top: 2px solid #eee; box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+        .check-box { 
+            width: 30px; height: 30px; border-radius: 50%; border: 2px solid #eee; 
+            display: flex; items-center; justify-center; transition: 0.3s;
         }
 
-        /* أنيميشن الأيقونات */
-        .addon-card:hover i.main-icon { animation: bounce 0.6s ease infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+        /* شريط السعر السفلي الفاخر */
+        .bottom-bar { 
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0,0,0,0.05); box-shadow: 0 -10px 50px rgba(0,0,0,0.1);
+        }
 
-        .dynamic-text { color: var(--main-color); transition: 0.5s; }
-        .dynamic-accent { color: var(--accent-color); transition: 0.5s; }
+        .price-badge { background: var(--main); color: white; padding: 5px 15px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; }
     </style>
 </head>
-<body class="text-[#002349] pb-44">
+<body class="pb-48">
 
-    <header id="pageHero" class="hero-gradient text-white pt-20 pb-44 text-center">
-        <div id="badge" class="inline-block px-5 py-2 rounded-full bg-white/10 backdrop-blur-md text-[#D4AF37] text-[10px] font-black mb-4 tracking-[0.2em] uppercase">
-            AL-HUT PREMIUM
-        </div>
-        <h1 id="pageTitle" class="text-4xl md:text-5xl font-black mb-3">تخصيص الرفاهية 🐋</h1>
-        <p id="pageDesc" class="opacity-80 text-sm max-w-xs mx-auto font-medium">ارتقِ برحلتك مع خدماتنا المصممة خصيصاً لك</p>
+    <header class="hero-box pt-16 pb-24 text-center text-white">
+        <h1 id="title" class="text-3xl font-black mb-2">إضافات الحوت الملكية</h1>
+        <p id="desc" class="text-sm opacity-60">خصص رحلتك بما يناسب احتياجاتك</p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-28 relative z-10">
-        <div class="max-w-4xl mx-auto space-y-8">
-            
-            <div id="addonsList" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                </div>
-
-            <div id="weddingSection" class="hidden bg-white p-10 rounded-[3.5rem] shadow-2xl border-b-8 border-[#D4AF37] text-center animate-fade-in">
-                <div class="mb-8">
-                    <span class="text-4xl">🎁</span>
-                    <h3 class="text-2xl font-black mt-2">طابع الموكب الخاص</h3>
-                    <p class="text-xs text-gray-400 font-bold uppercase mt-1">اختر لون تزيين السيارة</p>
-                </div>
-                
-                <div class="flex justify-center items-center gap-8">
-                    <div class="flex flex-col items-center gap-3">
-                        <div onclick="selectColor('أبيض ملكي', this)" class="color-chip bg-white active border-gray-100"></div>
-                        <span class="text-[10px] font-black text-gray-500 uppercase">White</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-3">
-                        <div onclick="selectColor('أحمر كلاسيك', this)" class="color-chip bg-red-600"></div>
-                        <span class="text-[10px] font-black text-gray-500 uppercase">Red</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-3">
-                        <div onclick="selectColor('ذهبي فاخر', this)" class="color-chip bg-yellow-400"></div>
-                        <span class="text-[10px] font-black text-gray-500 uppercase">Gold</span>
-                    </div>
-                </div>
+    <main class="max-w-xl mx-auto px-5 -mt-12">
+        
+        <div id="addonsContainer" class="space-y-4">
             </div>
 
+        <div id="weddingSection" class="hidden mt-10 bg-white p-8 rounded-[3rem] shadow-xl text-center border-t-4 border-[#D4AF37]">
+            <h3 class="font-black text-lg mb-4">🎨 اختر لون تزيين الموكب</h3>
+            <div class="flex justify-center gap-6">
+                <div onclick="selectColor('أبيض', this)" class="w-12 h-12 rounded-full border-4 border-[#D4AF37] bg-white cursor-pointer transition-all active:scale-90"></div>
+                <div onclick="selectColor('أحمر', this)" class="w-12 h-12 rounded-full border-4 border-white bg-red-600 cursor-pointer transition-all active:scale-90"></div>
+                <div onclick="selectColor('ذهبي', this)" class="w-12 h-12 rounded-full border-4 border-white bg-yellow-400 cursor-pointer transition-all active:scale-90"></div>
+            </div>
+            <p id="colorLabel" class="mt-3 text-xs font-black text-gray-400">اللون المختار: أبيض</p>
         </div>
+
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 glass-summary p-6 z-50">
-        <div class="max-w-4xl mx-auto flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-[10px] text-gray-400 font-black tracking-widest uppercase block">التكلفة الإجمالية</span>
+    <div class="fixed bottom-0 left-0 right-0 bottom-bar p-6 z-50 rounded-t-[3rem]">
+        <div class="max-w-xl mx-auto flex items-center justify-between">
+            <div>
+                <div class="price-badge mb-1">المجموع الكلي</div>
                 <div class="flex items-baseline gap-1">
-                    <h2 id="totalDisplay" class="text-4xl font-black dynamic-text">0</h2>
-                    <span class="text-xs font-black opacity-40">د.ع</span>
+                    <span id="totalPrice" class="text-4xl font-black text-[#002349]">0</span>
+                    <span class="text-xs font-bold text-gray-400 text-right">د.ع</span>
                 </div>
             </div>
-            <button onclick="proceedToBooking()" class="bg-[#D4AF37] text-[#002349] px-12 py-5 rounded-[2rem] font-black text-xl shadow-xl hover:shadow-[0_15px_30px_rgba(212,175,55,0.3)] transition-all flex items-center gap-3 active:scale-95">
-                تأكيد <i class="fas fa-chevron-left text-sm"></i>
+            <button onclick="saveAndNext()" class="bg-[#D4AF37] text-[#002349] px-10 py-5 rounded-[2rem] font-black text-xl shadow-lg active:scale-95 transition-all flex items-center gap-3">
+                تأكيد <i class="fas fa-arrow-left"></i>
             </button>
         </div>
     </div>
 
     <script>
-        const AL_HUT_DATA = {
-            addons: { driver: 25000, baby_seat: 10000, delivery: 15000, wedding_pack: 50000 }
-        };
-
-        const u = new URLSearchParams(window.location.search);
-        const basePrice = parseInt(u.get('price') || 0);
-        const type = u.get('type');
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'personal';
+        const basePrice = parseInt(params.get('price') || 0);
         let selectedAddons = [];
-        let selectedColorVal = type === 'wedding' ? "أبيض ملكي" : "";
+        let selectedColor = "أبيض";
 
-        window.onload = function() {
-            applyBranding();
-            renderAddons();
-            updateTotal();
-        };
+        // قاعدة بيانات الإضافات
+        const addonData = [
+            { id: 'driver', name: 'سائق خاص', price: 25000, icon: 'fa-user-tie' },
+            { id: 'baby', name: 'كرسي أطفال', price: 10000, icon: 'fa-baby' },
+            { id: 'delivery', name: 'توصيل للمنزل', price: 15000, icon: 'fa-home' }
+        ];
 
-        // دالة الذكاء البصري: تغير ألوان الصفحة حسب نوع الحجز
-        function applyBranding() {
-            const hero = document.getElementById('pageHero');
-            const title = document.getElementById('pageTitle');
-            const desc = document.getElementById('pageDesc');
-
-            if(type === 'wedding') {
-                document.documentElement.style.setProperty('--main-color', '#db2777'); // زهري للأعراس
-                document.documentElement.style.setProperty('--accent-color', '#db2777');
-                hero.style.background = "linear-gradient(135deg, #db2777 0%, #9d174d 100%)";
-                title.innerText = "عرس الأحلام مع الحوت 🎁";
-                desc.innerText = "اختر لمسات الرفاهية لليلتك الكبيرة";
-                document.getElementById('weddingSection').classList.remove('hidden');
-            } else {
-                document.documentElement.style.setProperty('--main-color', '#002349'); // كحلي ملكي للشخصي
-                document.documentElement.style.setProperty('--accent-color', '#D4AF37');
-            }
+        // إضافة باقة العرس إذا كان النوع زفاف
+        if(type === 'wedding') {
+            addonData.push({ id: 'wedding_pack', name: 'باقة التزيين الكاملة', price: 50000, icon: 'fa-ring' });
+            document.getElementById('weddingSection').classList.remove('hidden');
+            document.getElementById('title').innerText = "تجهيزات العرس الملكية";
         }
 
-        function renderAddons() {
-            const list = document.getElementById('addonsList');
-            const data = AL_HUT_DATA.addons;
-
-            const options = [
-                { id: 'driver', name: 'سائق خاص', price: data.driver, icon: 'fa-user-tie', desc: 'سائق محترف بزي رسمي' },
-                { id: 'baby_seat', name: 'كرسي أطفال', price: data.baby_seat, icon: 'fa-baby', desc: 'أمان وراحة لصغاركم' },
-                { id: 'delivery', name: 'توصيل للمنزل', price: data.delivery, icon: 'fa-map-marked-alt', desc: 'نسلمك السيارة عند بابك' }
-            ];
-
-            if(type === 'wedding') {
-                options.push({ id: 'wedding_pack', name: 'باقة التزيين الملكية', price: data.wedding_pack, icon: 'fa-gem', desc: 'تزيين ورد طبيعي واحترافي' });
-            }
-
-            list.innerHTML = options.map(opt => `
-                <div onclick="toggleAddon('${opt.id}', ${opt.price}, this)" class="addon-card p-7">
-                    <i class="fas fa-check-circle check-mark"></i>
-                    <div class="flex items-center gap-5">
-                        <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl dynamic-text">
-                            <i class="fas ${opt.icon} main-icon"></i>
+        function render() {
+            const container = document.getElementById('addonsContainer');
+            container.innerHTML = addonData.map(item => `
+                <div onclick="toggleAddon('${item.id}', ${item.price}, this)" class="addon-card p-6 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-xl text-[#002349]">
+                            <i class="fas ${item.icon}"></i>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="font-black text-lg text-slate-800">${opt.name}</h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">${opt.desc}</p>
-                            <div class="dynamic-accent font-black text-sm mt-1">+ ${opt.price.toLocaleString()} د.ع</div>
+                        <div>
+                            <h4 class="font-black">${item.name}</h4>
+                            <span class="text-xs text-[#D4AF37] font-bold">+ ${item.price.toLocaleString()} د.ع</span>
                         </div>
+                    </div>
+                    <div class="check-box">
+                        <i class="fas fa-check text-xs"></i>
                     </div>
                 </div>
             `).join('');
@@ -184,66 +126,38 @@
                 selectedAddons.splice(index, 1);
                 el.classList.remove('selected');
             } else {
-                selectedAddons.push({id, price, name: el.querySelector('h4').innerText});
+                const name = el.querySelector('h4').innerText;
+                selectedAddons.push({ id, price, name });
                 el.classList.add('selected');
             }
-            updateTotal();
+            calculate();
+        }
+
+        function calculate() {
+            const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+            const final = basePrice + addonsTotal;
+            document.getElementById('totalPrice').innerText = final.toLocaleString();
+            params.set('final_price', final);
         }
 
         function selectColor(color, el) {
-            selectedColorVal = color;
-            document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
+            selectedColor = color;
+            document.querySelectorAll('#weddingSection div.rounded-full').forEach(d => d.style.borderColor = 'white');
+            el.style.borderColor = '#D4AF37';
+            document.getElementById('colorLabel').innerText = "اللون المختار: " + color;
         }
 
-        function updateTotal() {
-            const addonsSum = selectedAddons.reduce((sum, a) => sum + a.price, 0);
-            const total = basePrice + addonsSum;
-            document.getElementById('totalDisplay').innerText = total.toLocaleString();
-            u.set('final_price', total);
-        }
+        function saveAndNext() {
+            const names = selectedAddons.map(a => a.name).join(' + ');
+            params.set('addons', names || 'بدون إضافات');
+            if(type === 'wedding') params.set('wedding_color', selectedColor);
 
-        function proceedToBooking() {
-            const addonNames = selectedAddons.map(a => a.name).join(' + ');
-            u.set('addons', addonNames || 'لا توجد إضافات');
-            if(selectedColorVal) u.set('color', selectedColorVal);
-            
-            // التوجيه الذكي
+            // التوجيه لصفحة معلومات الزبون
             const target = (type === 'wedding') ? 'booking_wedding.html' : 'booking_personal.html';
-            window.location.href = `${target}?${u.toString()}`;
-        }
-    </script>
-</body>
-</html>
-                el.classList.remove('selected');
-            } else {
-                selectedAddons.push({id, price, name: el.querySelector('h4').innerText});
-                el.classList.add('selected');
-            }
-            updateTotal();
+            window.location.href = target + '?' + params.toString();
         }
 
-        function selectColor(color, el) {
-            selectedColorVal = color;
-            document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function updateTotal() {
-            const addonsSum = selectedAddons.reduce((sum, a) => sum + a.price, 0);
-            const total = basePrice + addonsSum;
-            document.getElementById('totalDisplay').innerText = total.toLocaleString();
-            u.set('final_price', total);
-        }
-
-        function proceedToBooking() {
-            const addonNames = selectedAddons.map(a => a.name).join(' + ');
-            u.set('notes', addonNames || 'لا توجد إضافات');
-            if(selectedColorVal) u.set('color', selectedColorVal);
-            
-            const target = (type === 'wedding') ? 'booking_wedding.html' : 'booking_personal.html';
-            window.location.href = `${target}?${u.toString()}`;
-        }
+        window.onload = render;
     </script>
 </body>
 </html>
