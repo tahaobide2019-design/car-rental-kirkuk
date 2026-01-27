@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم الطلب بنجاح | الحوت 🐋</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
+        .success-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.12); border-top: 12px solid #002349; }
+        .badge { background: #f1f5f9; padding: 10px 20px; border-radius: 1rem; font-weight: 800; font-size: 0.8rem; color: #64748b; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full success-card p-8 md:p-12 text-center relative overflow-hidden">
+        <div class="flex justify-center mb-4">
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1" style="width: 180px; height: 180px;" loop autoplay></dotlottie-player>
+        </div>
+
+        <h1 id="msgTitle" class="text-3xl font-black text-[#002349] mb-4">تم استلام طلبك!</h1>
+        <p id="msgBody" class="text-gray-500 font-bold mb-8 leading-relaxed px-2"></p>
+
+        <div class="grid grid-cols-2 gap-3 mb-8">
+            <div class="badge"><i class="fas fa-map-marker-alt ml-1"></i> <span id="resCity"></span></div>
+            <div class="badge"><i class="fas fa-calendar-alt ml-1"></i> <span id="resDate"></span></div>
+            <div class="col-span-2 badge text-[#002349] border border-blue-100">
+                <i class="fas fa-clock ml-1"></i> <span id="resTime"></span>
+            </div>
+        </div>
+
+        <div class="bg-[#002349] text-[#D4AF37] p-5 rounded-[2rem] mb-8 shadow-lg">
+            <p id="lblOrder" class="text-[10px] uppercase font-black opacity-70 mb-1">رقم الطلب المرجعي</p>
+            <p id="orderID" class="text-2xl font-black tracking-widest">#ALHUT-0000</p>
+        </div>
+
+        <a href="index.html" id="btnBack" class="block w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all">العودة للرئيسية</a>
+    </div>
+
+    <script>
+        const u = new URLSearchParams(window.location.search);
+        const currentLang = u.get('lang') || 'ar';
+        
+        const trans = {
+            ar: { title: 'تم استلام طلبك بنجاح!', body: 'حوتنا العزيز، يتم الآن توجيه طلبك لأقرب مكتب في منطقة (CITY) وسيتم التواصل معك لتأكيد الحجز.', back: 'العودة للرئيسية', order: 'رقم الطلب المرجعي', dir: 'rtl', font: 'Tajawal' },
+            ku: { title: 'داواکارییەکەت وەرگیرا!', body: 'حوتی ئازیز، داواکارییەکەت ئاڕاستەی نزیکترین نووسینگە دەکرێت لە (CITY) و بەم زووانە پەیوەندیت پێوە دەکەین.', back: 'گەڕانەوە بۆ سەرەتا', order: 'ژمارەی داواکاری', dir: 'rtl', font: 'Tajawal' },
+            tr: { title: 'Siparişiniz Alındı!', body: 'Değerli müşterimiz, talebiniz (CITY) bölgesindeki en yakın ofise iletiliyor. Onay için sizinle iletişime geçeceğiz.', back: 'Ana Sayfaya Dön', order: 'SİPARİŞ NUMARASI', dir: 'ltr', font: 'Poppins' },
+            en: { title: 'Order Received!', body: 'Dear Whale, your request is being routed to the nearest office in (CITY). We will contact you shortly.', back: 'Back to Home', order: 'ORDER REFERENCE', dir: 'ltr', font: 'Poppins' }
+        };
+
+        window.onload = () => {
+            const l = trans[currentLang];
+            document.getElementById('htmlTag').dir = l.dir;
+            document.body.style.fontFamily = l.font;
+            document.getElementById('msgTitle').innerText = l.title;
+            document.getElementById('btnBack').innerText = l.back;
+            document.getElementById('lblOrder').innerText = l.order;
+            
+            // تخصيص الرسالة بالمدينة
+            const city = decodeURIComponent(u.get('province') || '...');
+            document.getElementById('msgBody').innerText = l.body.replace('(CITY)', city);
+            
+            // عرض الملخص
+            document.getElementById('resCity').innerText = city;
+            document.getElementById('resDate').innerText = u.get('date') || '--/--';
+            document.getElementById('resTime').innerText = u.get('time') || '--:--';
+            
+            // رقم طلب عشوائي
+            document.getElementById('orderID').innerText = '#ALHUT-' + Math.floor(1000 + Math.random() * 9000);
+
+            // ميزة متقدمة: إرسال البيانات فوراً لجدول بيانات جوجل (اختياري لاحقاً)
+            submitToSystem(u);
+        };
+
+        function submitToSystem(params) {
+            console.log("النظام جاهز لإرسال البيانات آلياً...");
+            // هنا سنضع رابط الـ Webhook الخاص بك لاحقاً
+        }
+    </script>
+</body>
+</html>
+
