@@ -42,6 +42,7 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         const currentLang = u.get('lang') || 'ar';
+        const googleScriptURL = "https://script.google.com/macros/s/AKfycbyWczdiWH7eFWgrD7g--bBmAEmrsR43JlvPdc2zPz0j6UobP-FHnED9-LxL9QF3IE_eqA/exec";
         
         const trans = {
             ar: { title: 'تم استلام طلبك بنجاح!', body: 'حوتنا العزيز، يتم الآن توجيه طلبك لأقرب مكتب في منطقة (CITY) وسيتم التواصل معك لتأكيد الحجز.', back: 'العودة للرئيسية', order: 'رقم الطلب المرجعي', dir: 'rtl', font: 'Tajawal' },
@@ -58,27 +59,38 @@
             document.getElementById('btnBack').innerText = l.back;
             document.getElementById('lblOrder').innerText = l.order;
             
-            // تخصيص الرسالة بالمدينة
-            const city = decodeURIComponent(u.get('province') || '...');
+            const city = decodeURIComponent(u.get('province') || u.get('city') || '...');
             document.getElementById('msgBody').innerText = l.body.replace('(CITY)', city);
-            
-            // عرض الملخص
             document.getElementById('resCity').innerText = city;
             document.getElementById('resDate').innerText = u.get('date') || '--/--';
             document.getElementById('resTime').innerText = u.get('time') || '--:--';
             
-            // رقم طلب عشوائي
-            document.getElementById('orderID').innerText = '#ALHUT-' + Math.floor(1000 + Math.random() * 9000);
+            const randomID = '#ALHUT-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('orderID').innerText = randomID;
 
-            // ميزة متقدمة: إرسال البيانات فوراً لجدول بيانات جوجل (اختياري لاحقاً)
-            submitToSystem(u);
+            // إرسال البيانات فوراً لجدول جوجل
+            submitToGoogle(u, randomID);
         };
 
-        function submitToSystem(params) {
-            console.log("النظام جاهز لإرسال البيانات آلياً...");
-            // هنا سنضع رابط الـ Webhook الخاص بك لاحقاً
+        function submitToGoogle(params, orderID) {
+            const data = {
+                order_id: orderID,
+                timestamp: new Date().toLocaleString()
+            };
+            // تحويل كل المعاملات في الرابط إلى كائن بيانات
+            params.forEach((value, key) => { data[key] = decodeURIComponent(value); });
+
+            // إرسال الطلب لـ Google Apps Script
+            fetch(googleScriptURL, {
+                method: 'POST',
+                mode: 'no-cors', // لتجنب مشاكل CORS مع جوجل
+                cache: 'no-cache',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(() => {
+                console.log("Data sent to Google Sheet successfully!");
+            }).catch(err => console.error("Error sending data:", err));
         }
     </script>
 </body>
 </html>
-
