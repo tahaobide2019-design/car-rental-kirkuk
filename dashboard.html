@@ -3,86 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة مكاتب الحوت 🐋</title>
+    <title>تم الطلب بنجاح | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 </head>
-<body class="bg-slate-100 font-['Tajawal'] min-h-screen p-4">
-    <div class="max-w-4xl mx-auto">
-        <header class="bg-[#002349] text-white p-8 rounded-[2.5rem] mb-6 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-center md:text-right">
-                <h1 class="text-2xl font-black">لوحة المكاتب الذكية 🐋</h1>
-                <p id="cityLabel" class="text-[#D4AF37] font-bold">يرجى اختيار محافظتك لعرض الطلبات</p>
-            </div>
-            <select id="citySelect" onchange="loadOrders()" class="bg-white text-slate-900 px-6 py-3 rounded-2xl font-black shadow-lg outline-none border-2 border-[#D4AF37]">
-                <option value="">اختر المحافظة</option>
-                <option value="كركوك">كركوك</option>
-                <option value="بغداد">بغداد</option>
-                <option value="أربيل">أربيل</option>
-                <option value="الموصل">الموصل</option>
-                <option value="البصرة">البصرة</option>
-                <option value="السليمانية">السليمانية</option>
-                <option value="دهوك">دهوك</option>
-            </select>
-        </header>
-
-        <div id="ordersContainer" class="grid gap-4">
-            <div class="bg-white p-12 rounded-[2.5rem] text-center shadow-sm">
-                <p class="text-gray-400 font-bold">بانتظار اختيار المحافظة...</p>
-            </div>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 font-['Tajawal']">
+    <div class="max-w-md w-full bg-white rounded-[3rem] p-8 text-center shadow-xl border-t-[12px] border-[#002349]">
+        <div class="flex justify-center mb-4">
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
         </div>
+        <h1 class="text-2xl font-black text-[#002349] mb-4">تم إرسال طلبك بنجاح!</h1>
+        <p class="text-gray-500 font-bold mb-6">سيتم عرض طلبك الآن على المكاتب المختصة في منطقتك وسيتواصلون معك فوراً.</p>
+        <div class="bg-slate-50 p-4 rounded-2xl mb-6">
+            <p class="text-[10px] font-black opacity-50 uppercase">رقم الطلب المرجعي</p>
+            <p id="orderIDDisplay" class="text-xl font-black text-[#002349]">#HUT-0000</p>
+        </div>
+        <a href="index.html" class="block w-full py-4 bg-[#002349] text-white rounded-2xl font-black hover:opacity-90 transition-all">العودة للرئيسية</a>
     </div>
 
     <script>
+        const u = new URLSearchParams(window.location.search);
         const scriptURL = "https://script.google.com/macros/s/AKfycbzcDuYDz7t225v-3CoWzJJfoOgW8CEozpx16I7oLG7UIoxZwxOj3xsamdmQIb4Icsphgg/exec";
-
-        async function loadOrders() {
-            const city = document.getElementById('citySelect').value;
-            if(!city) return;
+        
+        // منع الإرسال المتكرر باستخدام sessionStorage
+        window.onload = () => {
+            const hasSent = sessionStorage.getItem('orderSent');
             
-            document.getElementById('cityLabel').innerText = "عرض طلبات: " + city;
-            document.getElementById('ordersContainer').innerHTML = "<p class='text-center py-10 font-bold'>جاري جلب الطلبات من المحافظة...</p>";
-
-            try {
-                const response = await fetch(`${scriptURL}?action=getOrders&city=${encodeURIComponent(city)}`);
-                const orders = await response.json();
-
-                let html = '';
-                if(orders.length === 0) {
-                    html = '<div class="bg-white p-12 rounded-[2.5rem] text-center shadow-sm"><p class="text-gray-400 font-bold">لا توجد طلبات جديدة في ' + city + ' حالياً.</p></div>';
-                } else {
-                    orders.forEach(order => {
-                        html += `
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-md flex flex-col md:flex-row justify-between items-center gap-6 border-r-8 border-[#002349]">
-                            <div class="text-center md:text-right">
-                                <h3 class="font-black text-xl text-slate-800">${order.car}</h3>
-                                <p class="text-slate-500 font-bold">الزبون: ${order.name} | الموعد: ${order.time}</p>
-                                <p class="text-blue-600 text-xs font-black mt-1">ID: ${order.id}</p>
-                            </div>
-                            <button onclick="claim('${order.id}')" class="w-full md:w-auto bg-[#002349] text-[#D4AF37] px-10 py-4 rounded-2xl font-black text-lg hover:scale-105 transition-all shadow-lg">استلام الطلب ✅</button>
-                        </div>`;
-                    });
-                }
-                document.getElementById('ordersContainer').innerHTML = html;
-            } catch(e) {
-                document.getElementById('ordersContainer').innerHTML = "<p class='text-center text-red-500 font-bold'>حدث خطأ أثناء تحميل البيانات.</p>";
+            // إنشاء رقم طلب ثابت لهذه الجلسة
+            let randomID = sessionStorage.getItem('currentOrderID');
+            if (!randomID) {
+                randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
+                sessionStorage.setItem('currentOrderID', randomID);
             }
-        }
-
-        async function claim(id) {
-            const office = prompt("يرجى إدخال اسم مكتبك الرسمي للاستلام:");
-            if(!office) return;
-
-            const response = await fetch(`${scriptURL}?action=claim&id=${id}&office=${encodeURIComponent(office)}`);
-            const result = await response.text();
             
-            if(result === "تم بنجاح") {
-                alert("تهانينا! تم تسجيل الطلب باسم مكتب " + office);
+            document.getElementById('orderIDDisplay').innerText = "#" + randomID;
+            
+            // إذا لم يتم الإرسال مسبقاً، أرسل الآن
+            if (!hasSent) {
+                const data = {
+                    order_id: randomID,
+                    name: u.get('name'),
+                    phone: u.get('phone'),
+                    province: u.get('province'),
+                    car: u.get('car'),
+                    date: u.get('date'),
+                    time: u.get('time')
+                };
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                }).then(() => {
+                    // وضع علامة بأنه تم الإرسال بنجاح
+                    sessionStorage.setItem('orderSent', 'true');
+                });
             } else {
-                alert(result);
+                console.log("الطلب تم إرساله مسبقاً، تم منع التكرار.");
             }
-            loadOrders();
-        }
+        };
     </script>
 </body>
 </html>
