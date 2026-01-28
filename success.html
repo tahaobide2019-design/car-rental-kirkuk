@@ -3,35 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم الطلب بنجاح | الحوت 🐋</title>
+    <title>أهلاً بك في عائلة الحوت 🐋✨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        .bg-gradient-success { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
+    </style>
 </head>
-<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 font-['Tajawal']">
-    <div class="max-w-md w-full bg-white rounded-[3rem] p-8 text-center shadow-xl border-t-[12px] border-[#002349]">
-        <div class="flex justify-center mb-4">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+<body class="bg-gradient-success flex items-center justify-center min-h-screen p-4 font-['Tajawal'] overflow-hidden">
+    
+    <div class="max-w-md w-full bg-white rounded-[3.5rem] p-8 text-center shadow-2xl border-b-[10px] border-[#D4AF37] relative bounce-in">
+        
+        <div class="flex justify-center mb-2">
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 180px; height: 180px;" loop autoplay></dotlottie-player>
         </div>
-        <h1 class="text-2xl font-black text-[#002349] mb-4">تم إرسال طلبك بنجاح!</h1>
-        <p class="text-gray-500 font-bold mb-6">سيتم عرض طلبك الآن على المكاتب المختصة في منطقتك وسيتواصلون معك فوراً.</p>
-        <div class="bg-slate-50 p-4 rounded-2xl mb-6">
-            <p class="text-[10px] font-black opacity-50 uppercase">رقم الطلب المرجعي</p>
-            <p id="orderIDDisplay" class="text-xl font-black text-[#002349]">#HUT-0000</p>
+
+        <h1 class="text-3xl font-black text-[#002349] mb-3">يا هلا بيك! 😍✨</h1>
+        <p class="text-lg font-bold text-slate-700 mb-2">طلبك صار عندنا وبأمانة 🤝</p>
+        <p class="text-gray-500 font-medium mb-8 leading-relaxed">
+            مكاتبنا في <span class="text-blue-600 font-black">المحافظة</span> بدأت الآن بتجهيز أفضل العروض لك. خليك قريب من الموبايل، راح يتصلون بيك بأسرع وقت! 📞🚗
+        </p>
+
+        <div class="bg-blue-50 p-6 rounded-[2rem] mb-8 border-2 border-dashed border-blue-200 relative overflow-hidden">
+            <p class="text-[11px] font-black text-blue-400 uppercase tracking-widest mb-1">رقم رحلتك المميز 🎫</p>
+            <p id="orderIDDisplay" class="text-3xl font-black text-[#002349] drop-shadow-sm">#HUT-0000</p>
+            <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl rotate-12">🐋</div>
         </div>
-        <a href="index.html" class="block w-full py-4 bg-[#002349] text-white rounded-2xl font-black hover:opacity-90 transition-all">العودة للرئيسية</a>
+
+        <div class="space-y-4">
+            <a href="index.html" class="block w-full py-5 bg-[#002349] text-[#D4AF37] rounded-2xl font-black text-xl shadow-lg hover:scale-105 transition-all">
+                العودة للرئيسية 🏠
+            </a>
+            <p class="text-xs font-bold text-slate-400">شكراً لثقتك بـ "الحوت" لتاجير السيارات 🏁</p>
+        </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzcDuYDz7t225v-3CoWzJJfoOgW8CEozpx16I7oLG7UIoxZwxOj3xsamdmQIb4Icsphgg/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzP18ey_neMD-NMnB8YZQIJ5OhH7Val9NwVfn_XWbv9qVFpMKGximwr5hE6MN4NmXY0YQ/exec";
         
-        // منع الإرسال المتكرر باستخدام sessionStorage
+        // تشغيل مفرقعات احتفالية (Confetti) عند التحميل
+        function launchConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#002349', '#D4AF37', '#60a5fa']
+            });
+        }
+
         window.onload = () => {
-            const hasSent = sessionStorage.getItem('orderSent');
+            launchConfetti();
             
-            // إنشاء رقم طلب ثابت لهذه الجلسة
+            const hasSent = sessionStorage.getItem('orderSent');
             let randomID = sessionStorage.getItem('currentOrderID');
+            
             if (!randomID) {
                 randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
                 sessionStorage.setItem('currentOrderID', randomID);
@@ -39,7 +74,6 @@
             
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            // إذا لم يتم الإرسال مسبقاً، أرسل الآن
             if (!hasSent) {
                 const data = {
                     order_id: randomID,
@@ -56,11 +90,8 @@
                     mode: 'no-cors',
                     body: JSON.stringify(data)
                 }).then(() => {
-                    // وضع علامة بأنه تم الإرسال بنجاح
                     sessionStorage.setItem('orderSent', 'true');
                 });
-            } else {
-                console.log("الطلب تم إرساله مسبقاً، تم منع التكرار.");
             }
         };
     </script>
