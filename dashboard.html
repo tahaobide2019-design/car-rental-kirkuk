@@ -1,165 +1,69 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رادار الحوت | الحماية القصوى 🐋</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: 'Tajawal', sans-serif; background: #0f172a; }
-        .order-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .order-card:hover { transform: translateY(-5px); border-color: #D4AF37; }
-    </style>
-</head>
-<body class="text-white min-h-screen pb-20">
+var TELEGRAM_TOKEN = '8378544379:AAEcEPTG8tSq1IC7eQPnn_lfgG_DJjaIfiQ';
+var CHAT_ID = '9647713225471';
 
-    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 hidden">
-        <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full shadow-2xl">
-            <h2 class="text-2xl font-black text-[#002349] text-center mb-6">دخول مكاتب الحوت 🐋</h2>
-            <input type="text" id="regOfficeName" placeholder="اسم المكتب" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl font-bold text-[#002349] outline-none border-2 border-transparent focus:border-[#D4AF37]">
-            <select id="regCity" class="w-full p-4 mb-6 bg-slate-100 rounded-2xl font-bold text-[#002349] outline-none">
-                <option value="">اختر محافظتك</option>
-                <option value="كركوك">كركوك</option>
-                <option value="بغداد">بغداد</option>
-                <option value="أربيل">أربيل</option>
-                <option value="السليمانية">السليمانية</option>
-                <option value="ديالى">ديالى</option>
-                <option value="الأنبار">الأنبار</option>
-                <option value="الموصل">الموصل</option>
-                <option value="البصرة">البصرة</option>
-            </select>
-            <button onclick="saveProfile()" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black text-lg shadow-lg">تفعيل الرادار</button>
-        </div>
-    </div>
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    var orderId = data.order_id || ('HUT-' + Math.floor(1000 + Math.random() * 9000));
+    
+    // الترتيب حسب صورتك (A:التاريخ | B:رقم الطلب | C:اسم الزبون | D:رقم الهاتف | E:المحافظة | F:الخدمة | G:الوقت | H:الحالة | I:المكتب)
+    sheet.appendRow([
+      new Date().toLocaleString(), 
+      orderId, 
+      data.name, 
+      data.phone, 
+      data.province, 
+      (data.car || data.type), 
+      data.time, 
+      "قيد الانتظار", 
+      ""
+    ]);
 
-    <div class="max-w-2xl mx-auto p-4">
-        <header class="flex justify-between items-center py-6 border-b border-white/10 mb-6">
-            <div>
-                <h1 class="text-2xl font-black italic"><span class="text-[#D4AF37]">HUTA</span> RADAR</h1>
-                <p id="profileDisplay" class="text-[10px] text-slate-400 font-bold uppercase"></p>
-            </div>
-            <button onclick="localStorage.clear(); location.reload();" class="bg-red-500/10 text-red-500 px-4 py-2 rounded-xl text-xs font-bold">خروج</button>
-        </header>
+    sendTelegramNotification("🐋 طلب جديد في " + data.province + " لخدمة " + (data.car || data.type));
+    return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
+  } catch (err) {
+    return ContentService.createTextOutput("Error").setMimeType(ContentService.MimeType.TEXT);
+  }
+}
 
-        <div class="flex gap-2 mb-8 bg-slate-800 p-1.5 rounded-2xl">
-            <button onclick="switchTab('new')" id="btnNew" class="flex-1 py-3 rounded-xl font-black text-sm bg-[#D4AF37] text-[#002349]">الطلبات</button>
-            <button onclick="switchTab('mine')" id="btnMine" class="flex-1 py-3 rounded-xl font-black text-sm text-slate-400">حجوزاتي</button>
-        </div>
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sheet.getDataRange().getValues();
+  var action = e.parameter.action;
 
-        <div id="contentArea" class="space-y-4">
-            <div class="text-center py-20 animate-pulse">
-                <p class="text-slate-500 font-bold italic">جاري البحث عن إشارات في المنطقة...</p>
-            </div>
-        </div>
-    </div>
+  if (action == 'getAllOrders') {
+    var orders = [];
+    for (var i = 1; i < rows.length; i++) {
+      orders.push({
+        id: rows[i][1],        // ID في العمود B (Index 1)
+        name: rows[i][2],      // الاسم في العمود C (Index 2)
+        phone: rows[i][3],     // الهاتف في العمود D (Index 3)
+        province: rows[i][4],  // المحافظة في العمود E (Index 4)
+        car: rows[i][5],       // الخدمة في العمود F (Index 5)
+        time: rows[i][6],      // الوقت في العمود G (Index 6)
+        status: rows[i][7],    // الحالة في العمود H (Index 7)
+        claimedBy: rows[i][8]  // المكتب في العمود I (Index 8)
+      });
+    }
+    return ContentService.createTextOutput(JSON.stringify(orders)).setMimeType(ContentService.MimeType.JSON);
+  }
 
-    <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+  var id = e.parameter.id;
+  for (var i = 1; i < rows.length; i++) {
+    if (rows[i][1] == id) { 
+      if (action == 'claim') {
+        sheet.getRange(i + 1, 8).setValue("تم الاستلام");
+        sheet.getRange(i + 1, 9).setValue(e.parameter.office);
+      } else if (action == 'complete') {
+        sheet.getRange(i + 1, 8).setValue("تم الإنجاز ✅");
+      }
+      return ContentService.createTextOutput("Done").setMimeType(ContentService.MimeType.TEXT);
+    }
+  }
+}
 
-    <script>
-        // الرابط الجديد الذي زودتنا به
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxxEjCSyeT5YD6grfVg2BiNXflzf9fdiagUw0WD8YIbuI8M6jufB2nJznW-MqLEdcqWKQ/exec";
-        
-        let currentTab = 'new', office = localStorage.getItem('huta_off_final'), city = localStorage.getItem('huta_cty_final'), lastCount = 0;
-
-        window.onload = () => {
-            if (!office || !city) document.getElementById('loginScreen').classList.remove('hidden');
-            else {
-                document.getElementById('profileDisplay').innerText = `المكتب: ${office} | المدينة: ${city}`;
-                refreshData();
-                setInterval(refreshData, 10000); // تحديث كل 10 ثواني
-            }
-        };
-
-        function saveProfile() {
-            const o = document.getElementById('regOfficeName').value.trim();
-            const c = document.getElementById('regCity').value;
-            if (o && c) {
-                localStorage.setItem('huta_off_final', o);
-                localStorage.setItem('huta_cty_final', c);
-                location.reload();
-            }
-        }
-
-        async function refreshData() {
-            try {
-                // إضافة timestamp لمنع مشاكل التخزين المؤقت
-                const response = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
-                const allOrders = await response.json();
-                
-                if (currentTab === 'new') {
-                    // فلترة تعتمد على مطابقة المدينة تماماً كما يرسلها الـ Index
-                    const news = allOrders.filter(o => {
-                        const oCity = (o.province || o.city || "").toString().trim();
-                        const oStatus = (o.status || "").toString().trim();
-                        return oCity === city && oStatus === "قيد الانتظار";
-                    });
-
-                    if(news.length > lastCount) {
-                        document.getElementById('alertSound').play().catch(()=>{});
-                    }
-                    lastCount = news.length;
-                    renderNew(news);
-                } else {
-                    const mines = allOrders.filter(o => (o.claimedBy || "").trim() === office.trim());
-                    renderMines(mines);
-                }
-            } catch (e) {
-                console.error("Signal Lost");
-            }
-        }
-
-        function renderNew(orders) {
-            let html = orders.length === 0 ? '<div class="text-center py-20 opacity-20 font-black italic">الرادار لا يرصد أي طلبات حالياً في ' + city + '</div>' : '';
-            orders.forEach(o => {
-                html += `
-                <div class="order-card p-6 rounded-[2rem] flex justify-between items-center animate-in fade-in duration-500">
-                    <div>
-                        <h3 class="font-black text-xl text-white">${o.car || o.type || 'طلب حجز'}</h3>
-                        <p class="text-[10px] text-[#D4AF37] font-bold mt-1 uppercase italic">${o.time || 'صباحاً'}</p>
-                    </div>
-                    <button onclick="claim('${o.id}')" class="bg-white text-[#0f172a] px-6 py-3 rounded-2xl font-black text-xs shadow-lg active:scale-90 transition-all">استلام</button>
-                </div>`;
-            });
-            document.getElementById('contentArea').innerHTML = html;
-        }
-
-        function renderMines(orders) {
-            let html = orders.length === 0 ? '<p class="text-center py-20 opacity-20 font-black italic">قائمة حجوزاتك فارغة</p>' : '';
-            orders.forEach(o => {
-                html += `
-                <div class="order-card p-6 rounded-[2.5rem] border-r-8 border-green-500">
-                    <h3 class="font-black text-2xl text-white mb-4">${o.car || o.type}</h3>
-                    <div class="bg-white/5 p-4 rounded-2xl space-y-3 mb-6 font-bold text-sm">
-                        <p class="flex justify-between"><span>👤 الزبون:</span> <span>${o.name}</span></p>
-                        <a href="tel:${o.phone}" class="text-blue-400 flex justify-between underline italic"><span>📞 اتصال:</span> <span>${o.phone}</span></a>
-                    </div>
-                    <button onclick="done('${o.id}')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xs">إتمام الحجز ✅</button>
-                </div>`;
-            });
-            document.getElementById('contentArea').innerHTML = html;
-        }
-
-        async function claim(id) {
-            document.getElementById('contentArea').innerHTML = '<p class="text-center py-20 font-black italic animate-bounce text-[#D4AF37]">جاري الاتصال بالسيرفر...</p>';
-            await fetch(`${scriptURL}?action=claim&id=${id}&office=${encodeURIComponent(office)}`);
-            switchTab('mine');
-        }
-
-        async function done(id) {
-            if(confirm("تأكيد الإتمام؟")) {
-                await fetch(`${scriptURL}?action=complete&id=${id}`);
-                refreshData();
-            }
-        }
-
-        function switchTab(t) {
-            currentTab = t;
-            document.getElementById('btnNew').className = t === 'new' ? 'flex-1 py-3 rounded-xl font-black text-sm bg-[#D4AF37] text-[#002349]' : 'flex-1 py-3 rounded-xl font-black text-sm text-slate-400';
-            document.getElementById('btnMine').className = t === 'mine' ? 'flex-1 py-3 rounded-xl font-black text-sm bg-[#D4AF37] text-[#002349]' : 'flex-1 py-3 rounded-xl font-black text-sm text-slate-400';
-            refreshData();
-        }
-    </script>
-</body>
-</html>
+function sendTelegramNotification(text) {
+  var url = "https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
+  UrlFetchApp.fetch(url);
+}
