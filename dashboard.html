@@ -3,83 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رادار الحوت اللحظي 🐋</title>
+    <title>رادار الحوت المطور 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 font-['Tajawal'] min-h-screen text-[#002349]">
+<body class="bg-[#f0f2f5] font-['Tajawal'] min-h-screen">
 
-    <div id="loginScreen" class="fixed inset-0 bg-[#002349]/90 backdrop-blur-xl z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white p-8 rounded-[3rem] max-w-sm w-full shadow-2xl">
-            <div class="text-center mb-6">
-                <span class="text-5xl">🐋</span>
-                <h2 class="text-2xl font-black mt-4 text-[#002349]">دخول مكاتب الحوت</h2>
-                <p class="text-xs text-slate-400 font-bold uppercase mt-1">HUTA Office Command</p>
-            </div>
-            
-            <input type="text" id="regOfficeName" placeholder="اسم المكتب" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl font-bold border-2 border-transparent focus:border-[#D4AF37] outline-none transition-all">
-            
-            <select id="regCity" class="w-full p-4 mb-6 bg-slate-50 rounded-2xl font-bold border-2 border-transparent focus:border-[#D4AF37] outline-none">
+    <div id="loginScreen" class="fixed inset-0 bg-black/50 backdrop-blur-lg z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white p-8 rounded-[2rem] max-w-sm w-full shadow-2xl">
+            <h2 class="text-xl font-black text-center mb-6 text-[#002349]">دخول مكاتب الحوت 🐋</h2>
+            <input type="text" id="regOfficeName" placeholder="اسم المكتب" class="w-full p-4 mb-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-yellow-500 outline-none font-bold">
+            <select id="regCity" class="w-full p-4 mb-6 bg-gray-50 rounded-xl border-2 border-transparent focus:border-yellow-500 outline-none font-bold">
                 <option value="">اختر محافظتك</option>
                 <option value="كركوك">كركوك</option>
                 <option value="بغداد">بغداد</option>
                 <option value="أربيل">أربيل</option>
                 <option value="السليمانية">السليمانية</option>
-                <option value="الموصل">الموصل</option>
-                <option value="البصرة">البصرة</option>
-                <option value="الأنبار">الأنبار</option>
                 <option value="ديالى">ديالى</option>
+                <option value="الأنبار">الأنبار</option>
+                <option value="البصرة">البصرة</option>
+                <option value="الموصل">الموصل</option>
             </select>
-            
-            <button onclick="saveProfile()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">تفعيل الرادار</button>
+            <button onclick="saveProfile()" class="w-full bg-[#002349] text-white py-4 rounded-xl font-black text-lg">دخول</button>
         </div>
     </div>
 
-    <div class="max-w-2xl mx-auto pb-24">
-        <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 px-6 py-6 border-b flex justify-between items-center shadow-sm">
-            <div>
-                <h1 class="text-xl font-black flex items-center gap-2 italic">
-                    <span class="text-[#D4AF37]">HUTA</span> RADAR 🐋
-                </h1>
-                <p id="profileDisplay" class="text-[10px] font-bold opacity-50"></p>
+    <div class="max-w-md mx-auto min-h-screen flex flex-col">
+        <header class="bg-[#002349] text-white p-6 rounded-b-[2rem] shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-black italic">HUTA RADAR</h1>
+                <button onclick="localStorage.clear(); location.reload();" class="text-xs opacity-50 italic">تسجيل خروج</button>
             </div>
-            <button onclick="logout()" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
-                <i class="fas fa-power-off"></i>
-            </button>
+            <div id="profileBox" class="bg-white/10 p-3 rounded-xl border border-white/10">
+                <p id="profileDisplay" class="text-sm font-bold text-yellow-500 text-center"></p>
+            </div>
         </header>
 
-        <div class="flex bg-white mx-4 mt-6 p-1.5 rounded-2xl shadow-sm border border-slate-100">
-            <button onclick="switchTab('new')" id="btnNew" class="flex-1 py-3 rounded-xl font-black text-sm bg-[#002349] text-white transition-all">الطلبات المتاحة</button>
-            <button onclick="switchTab('mine')" id="btnMine" class="flex-1 py-3 rounded-xl font-black text-sm text-slate-400 transition-all">طلباتي</button>
-        </div>
-
-        <div id="contentArea" class="p-4 space-y-4">
-            <div class="text-center py-20 animate-pulse">
-                <i class="fas fa-spinner fa-spin text-3xl text-[#D4AF37] mb-4"></i>
-                <p class="font-bold opacity-30 italic">جاري البحث عن طلبات الحوت...</p>
+        <div class="flex-1 p-4 space-y-4" id="contentArea">
+            <div class="text-center py-10">
+                <p class="text-slate-400 animate-pulse font-bold italic">جاري البحث عن إشارة...</p>
             </div>
         </div>
+
+        <nav class="bg-white border-t p-4 flex justify-around sticky bottom-0 rounded-t-3xl shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+            <button onclick="switchTab('new')" id="btnNew" class="flex flex-col items-center gap-1 text-blue-600">
+                <i class="fas fa-radar text-xl"></i>
+                <span class="text-[10px] font-black uppercase">الطلبات</span>
+            </button>
+            <button onclick="switchTab('mine')" id="btnMine" class="flex flex-col items-center gap-1 text-slate-300">
+                <i class="fas fa-car text-xl"></i>
+                <span class="text-[10px] font-black uppercase">حجوزاتي</span>
+            </button>
+        </nav>
     </div>
 
-    <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
     <script>
-        // الرابط الجديد الذي أرسلته
         const scriptURL = "https://script.google.com/macros/s/AKfycbwyhdFAqv6VWlQI9Yxf9h8xXq-fmtOTifcZYVGe46DqtvhKTZsom2lDNARVv4A-iCwE-w/exec";
-        
-        let currentTab = 'new';
-        let office = localStorage.getItem('huta_office_v2');
-        let city = localStorage.getItem('huta_city_v2');
-        let lastCount = 0;
+        let currentTab = 'new', office = localStorage.getItem('huta_off'), city = localStorage.getItem('huta_cty'), lastCount = 0;
 
         window.onload = () => {
-            if (!office || !city) {
-                document.getElementById('loginScreen').classList.remove('hidden');
-            } else {
-                document.getElementById('profileDisplay').innerText = `المكتب: ${office} | المدينة: ${city}`;
+            if (!office || !city) document.getElementById('loginScreen').classList.remove('hidden');
+            else {
+                document.getElementById('profileDisplay').innerText = `المكتب: ${office} | ${city}`;
                 refreshData();
-                setInterval(refreshData, 15000); // تحديث كل 15 ثانية
+                setInterval(refreshData, 10000);
             }
         };
 
@@ -87,116 +77,90 @@
             const o = document.getElementById('regOfficeName').value.trim();
             const c = document.getElementById('regCity').value;
             if (o && c) {
-                localStorage.setItem('huta_office_v2', o);
-                localStorage.setItem('huta_city_v2', c);
+                localStorage.setItem('huta_off', o);
+                localStorage.setItem('huta_cty', c);
                 location.reload();
             }
         }
 
-        function logout() { if(confirm("هل تريد الخروج؟")) { localStorage.clear(); location.reload(); } }
-
         async function refreshData() {
             try {
-                const res = await fetch(`${scriptURL}?action=getAllOrders`);
+                // إضافة معامل الوقت لمنع التخزين المؤقت (Cache)
+                const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
                 const all = await res.json();
                 
                 if (currentTab === 'new') {
-                    // الفلترة الذكية جداً: تبحث عن المحافظة في حقل province أو city
+                    // فلترة مبسطة جداً: قارن المدينة والحالة
                     const news = all.filter(o => {
-                        const orderCity = (o.province || o.city || "").toString().trim();
-                        const orderStatus = (o.status || "").toString().trim();
-                        return orderCity === city && orderStatus === "قيد الانتظار";
+                        const oCity = (o.province || o.city || "").toString().trim();
+                        return oCity === city && (o.status === "قيد الانتظار");
                     });
 
-                    if(news.length > lastCount) {
-                        document.getElementById('alertSound').play().catch(()=>{});
-                    }
+                    if(news.length > lastCount) document.getElementById('alertSound').play().catch(()=>{});
                     lastCount = news.length;
                     renderNew(news);
                 } else {
-                    const mines = all.filter(o => (o.claimedBy || "").trim() === office.trim() && (o.status !== "ملغي نهائياً ❌"));
+                    const mines = all.filter(o => (o.claimedBy || "").trim() === office.trim());
                     renderMines(mines);
                 }
             } catch (e) {
-                console.error("Fetch Error");
+                document.getElementById('contentArea').innerHTML = '<p class="text-red-500 text-center text-xs font-bold">فشل في جلب البيانات من السيرفر ⚠️</p>';
             }
         }
 
         function renderNew(orders) {
-            let html = orders.length === 0 ? `
-                <div class="text-center py-20 opacity-30 grayscale">
-                    <i class="fas fa-radar fa-4xl mb-4"></i>
-                    <p class="font-black italic text-sm">الرادار هادئ حالياً في ${city}...</p>
-                </div>` : '';
-            
+            let html = orders.length === 0 ? '<div class="text-center py-20 opacity-20 font-black italic">لا توجد طلبات جديدة في منطقتك حالياً</div>' : '';
             orders.forEach(o => {
-                // دمج اسم السيارة مع نوع الخدمة إن وجد
-                const carDisplay = o.car || o.type || "طلب حجز";
                 html += `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border-r-[10px] border-blue-500 flex justify-between items-center transform transition-all hover:scale-[1.02]">
-                    <div class="space-y-1">
-                        <h3 class="font-black text-lg text-[#002349]">${carDisplay}</h3>
-                        <p class="text-[10px] text-slate-400 font-bold italic"><i class="far fa-clock ml-1"></i>${o.time || 'صباحاً'}</p>
+                <div class="bg-white p-5 rounded-3xl shadow-sm border-r-8 border-blue-500 flex justify-between items-center animate-in slide-in-from-bottom-4 duration-500">
+                    <div>
+                        <h3 class="font-black text-[#002349]">${o.car || o.type || 'سيارة'}</h3>
+                        <p class="text-[10px] text-slate-400 font-bold italic">${o.time || ''} | ${o.date || ''}</p>
                     </div>
-                    <button onclick="claim('${o.id}')" class="bg-[#002349] text-[#D4AF37] px-6 py-3 rounded-2xl font-black text-xs shadow-xl active:scale-95">استلام ✅</button>
+                    <button onclick="claim('${o.id}')" class="bg-[#002349] text-white px-5 py-2 rounded-xl font-black text-xs shadow-lg active:scale-90 transition-all">استلام</button>
                 </div>`;
             });
             document.getElementById('contentArea').innerHTML = html;
         }
 
         function renderMines(orders) {
-            let html = orders.length === 0 ? '<p class="text-center py-20 opacity-30 font-bold italic">لا يوجد لديك حجوزات نشطة حالياً</p>' : '';
-            
+            let html = orders.length === 0 ? '<p class="text-center py-20 opacity-20 font-black italic">قائمة حجوزاتك فارغة</p>' : '';
             orders.forEach(o => {
-                const isCancel = o.status === "مطلوب إلغاء ⚠️";
                 html += `
-                <div class="bg-white p-6 rounded-[3rem] shadow-xl border-r-[12px] ${isCancel ? 'border-orange-500 animate-pulse' : 'border-green-500'}">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="bg-slate-100 text-[9px] font-black px-3 py-1 rounded-full text-slate-500 uppercase italic">ID: ${o.id}</span>
-                        <span class="text-[10px] font-black ${isCancel ? 'text-orange-600' : 'text-green-600'}">${o.status}</span>
+                <div class="bg-white p-6 rounded-[2rem] shadow-xl border-r-8 border-green-500 space-y-4">
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-xs font-black text-green-600">${o.status}</span>
+                        <span class="text-[10px] opacity-30">ID: ${o.id}</span>
                     </div>
-                    <h3 class="font-black text-2xl text-[#002349] mb-4">${o.car || o.type}</h3>
-                    <div class="bg-slate-50 p-5 rounded-[2rem] space-y-3 mb-6">
-                        <p class="text-sm font-bold text-slate-600 flex justify-between italic"><span>👤 الزبون:</span> <span class="text-[#002349]">${o.name || 'غير متوفر'}</span></p>
-                        <a href="tel:${o.phone}" class="text-lg font-black text-blue-600 flex justify-between items-center border-t border-slate-200 pt-3">
-                            <span>📞 اتصال:</span>
-                            <span class="underline decoration-[#D4AF37]">${o.phone || '000'}</span>
-                        </a>
+                    <h3 class="font-black text-xl text-[#002349]">${o.car || o.type}</h3>
+                    <div class="bg-slate-50 p-4 rounded-2xl space-y-2 font-bold text-sm">
+                        <p>👤 ${o.name || 'مجهول'}</p>
+                        <a href="tel:${o.phone}" class="text-blue-600 block underline">📞 ${o.phone}</a>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="done('${o.id}')" class="flex-[2] bg-green-600 text-white py-5 rounded-2xl font-black text-xs shadow-lg active:scale-95">تم الإنجاز ✅</button>
-                        <button onclick="cancel('${o.id}')" class="flex-1 bg-red-50 text-red-500 py-5 rounded-2xl font-black text-xs active:scale-95">إلغاء</button>
-                    </div>
+                    <button onclick="done('${o.id}')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xs">إتمام المهمة ✅</button>
                 </div>`;
             });
             document.getElementById('contentArea').innerHTML = html;
         }
 
         async function claim(id) {
-            document.getElementById('contentArea').innerHTML = '<div class="text-center py-20 font-black italic animate-bounce text-[#D4AF37]">جاري حجز الطلب باسمك...</div>';
+            document.getElementById('contentArea').innerHTML = '<p class="text-center py-20 animate-bounce">جاري الاستلام...</p>';
             await fetch(`${scriptURL}?action=claim&id=${id}&office=${encodeURIComponent(office)}`);
+            refreshData();
             switchTab('mine');
         }
 
         async function done(id) {
-            if(confirm("تأكيد إنجاز الطلب؟")) {
+            if(confirm("تأكيد الإتمام؟")) {
                 await fetch(`${scriptURL}?action=complete&id=${id}`);
-                refreshData();
-            }
-        }
-
-        async function cancel(id) {
-            const r = prompt("ما هو سبب طلب الإلغاء؟");
-            if(r) {
-                await fetch(`${scriptURL}?action=requestCancel&id=${id}&reason=${encodeURIComponent(r)}`);
                 refreshData();
             }
         }
 
         function switchTab(t) {
             currentTab = t;
-            document.getElementById('btnNew').className = t === 'new' ? 'flex-1 py-3 rounded-xl font-black text-sm bg-[#002349] text-white transition-all shadow-md' : 'flex-1 py-3 rounded-xl font-black text-sm text-slate-400 transition-all hover:bg-slate-50';
-            document.getElementById('btnMine').className = t === 'mine' ? 'flex-1 py-3 rounded-xl font-black text-sm bg-[#002349] text-white transition-all shadow-md' : 'flex-1 py-3 rounded-xl font-black text-sm text-slate-400 transition-all hover:bg-slate-50';
+            document.getElementById('btnNew').className = t === 'new' ? 'flex flex-col items-center gap-1 text-blue-600' : 'flex flex-col items-center gap-1 text-slate-300';
+            document.getElementById('btnMine').className = t === 'mine' ? 'flex flex-col items-center gap-1 text-blue-600' : 'flex flex-col items-center gap-1 text-slate-300';
             refreshData();
         }
     </script>
