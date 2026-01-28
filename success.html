@@ -49,8 +49,9 @@
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        // تم تحديث الرابط للرابط الجديد الخاص بك
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwyhdFAqv6VWlQI9Yxf9h8xXq-fmtOTifcZYVGe46DqtvhKTZsom2lDNARVv4A-iCwE-w/exec";
+        
+        // تم التحديث إلى الرابط الجديد الذي زودتنا به [cite: 2026-01-29]
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxxEjCSyeT5YD6grfVg2BiNXflzf9fdiagUw0WD8YIbuI8M6jufB2nJznW-MqLEdcqWKQ/exec";
         
         function launchConfetti() {
             confetti({
@@ -64,8 +65,8 @@
         window.onload = () => {
             launchConfetti();
             
-            // إظهار المحافظة المختارة في النص بشكل ذكي
-            const prov = u.get('province');
+            // قراءة اسم المحافظة من الرابط (city) كما هو موجود في Index الخاص بك [cite: 2026-01-29]
+            const prov = u.get('city') || u.get('province');
             if(prov) document.getElementById('userProvince').innerText = prov;
 
             const hasSent = sessionStorage.getItem('orderSent');
@@ -83,8 +84,8 @@
                     order_id: randomID,
                     name: u.get('name'),
                     phone: u.get('phone'),
-                    province: u.get('province'),
-                    car: u.get('car'),
+                    province: prov, // استخدام المتغير الموحد
+                    car: u.get('car') || u.get('type'), // قراءة السيارة أو نوع الخدمة
                     date: u.get('date'),
                     time: u.get('time')
                 };
