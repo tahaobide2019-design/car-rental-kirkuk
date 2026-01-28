@@ -26,25 +26,42 @@
         const u = new URLSearchParams(window.location.search);
         const scriptURL = "https://script.google.com/macros/s/AKfycbzcDuYDz7t225v-3CoWzJJfoOgW8CEozpx16I7oLG7UIoxZwxOj3xsamdmQIb4Icsphgg/exec";
         
+        // منع الإرسال المتكرر باستخدام sessionStorage
         window.onload = () => {
-            const randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
+            const hasSent = sessionStorage.getItem('orderSent');
+            
+            // إنشاء رقم طلب ثابت لهذه الجلسة
+            let randomID = sessionStorage.getItem('currentOrderID');
+            if (!randomID) {
+                randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
+                sessionStorage.setItem('currentOrderID', randomID);
+            }
+            
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            const data = {
-                order_id: randomID,
-                name: u.get('name'),
-                phone: u.get('phone'),
-                province: u.get('province'),
-                car: u.get('car'),
-                date: u.get('date'),
-                time: u.get('time')
-            };
+            // إذا لم يتم الإرسال مسبقاً، أرسل الآن
+            if (!hasSent) {
+                const data = {
+                    order_id: randomID,
+                    name: u.get('name'),
+                    phone: u.get('phone'),
+                    province: u.get('province'),
+                    car: u.get('car'),
+                    date: u.get('date'),
+                    time: u.get('time')
+                };
 
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data)
-            });
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                }).then(() => {
+                    // وضع علامة بأنه تم الإرسال بنجاح
+                    sessionStorage.setItem('orderSent', 'true');
+                });
+            } else {
+                console.log("الطلب تم إرساله مسبقاً، تم منع التكرار.");
+            }
         };
     </script>
 </body>
