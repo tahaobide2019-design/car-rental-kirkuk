@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة الحوت 🐋 | Control Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-white font-['Tajawal'] p-6">
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
+            <h1 class="text-2xl font-black text-[#D4AF37]">لوحة تحكم المدير 🐋</h1>
+            <button onclick="location.reload()" class="bg-blue-600 px-6 py-2 rounded-xl font-bold">تحديث البيانات</button>
+        </header>
+
+        <div class="grid grid-cols-1 gap-4" id="adminContainer"></div>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
+        
+        async function loadAdminData() {
+            const res = await fetch(`${scriptURL}?action=getAllOrders`);
+            const data = await res.json();
+            document.getElementById('adminContainer').innerHTML = data.map(o => `
+                <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 flex justify-between items-center">
+                    <div>
+                        <p class="text-[#D4AF37] font-black">${o.id} | ${o.status}</p>
+                        <p class="text-sm font-bold">${o.car} - ${o.name}</p>
+                        <p class="text-xs text-slate-400">المكتب المستلم: ${o.claimedBy || 'لم يستلم بعد'}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="manage('${o.id}', 'adminReset')" class="bg-orange-500 text-xs px-4 py-2 rounded-lg font-bold">إعادة طرح</button>
+                        <button onclick="manage('${o.id}', 'adminDelete')" class="bg-red-600 text-xs px-4 py-2 rounded-lg font-bold">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function manage(id, act) {
+            if(confirm('هل أنت متأكد؟')) {
+                await fetch(`${scriptURL}?action=${act}&id=${id}`);
+                loadAdminData();
+            }
+        }
+        loadAdminData();
+    </script>
+</body>
+</html>
