@@ -9,82 +9,61 @@
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; }
+        body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
         .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
         @keyframes bounceIn {
             0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
+            100% { opacity: 1; transform: scale(1); }
         }
-        .bg-gradient-success { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
     </style>
 </head>
-<body class="bg-gradient-success flex items-center justify-center min-h-screen p-4 overflow-hidden">
+<body class="flex items-center justify-center min-h-screen p-4">
     
-    <div class="max-w-md w-full bg-white rounded-[3.5rem] p-8 text-center shadow-2xl border-b-[10px] border-[#D4AF37] relative bounce-in">
+    <div class="max-w-md w-full bg-white rounded-[3rem] p-8 text-center shadow-2xl border-t-8 border-[#D4AF37] bounce-in">
         
         <div class="flex justify-center mb-2">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 180px;" loop autoplay></dotlottie-player>
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 160px;" loop autoplay></dotlottie-player>
         </div>
 
-        <div id="langContainer" class="space-y-4">
-            <div class="lang-block">
-                <h1 class="text-3xl font-black text-[#002349] mb-3">يا هلا بيك! 😍</h1>
-                <p class="text-gray-600 font-bold mb-4">تم استلام طلبك، مكاتبنا في <span class="text-blue-600 underline" id="prov-ar">منطقتك</span> ستتصل بك قريباً.</p>
-            </div>
-            <hr class="opacity-10">
-            <div class="text-[13px] font-bold text-slate-500 space-y-1">
-                <p>Bi xêr hatî! Daxwaza we hat qebûlkirin. ☀️</p>
-                <p>Hoş geldiniz! Talebiniz başarıyla alındı. 🇹🇷</p>
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-black">Success! Your request is being processed. 🇬🇧</p>
-            </div>
+        <h1 class="text-3xl font-black text-[#1e293b] mb-2">يا هلا بيك! 😍</h1>
+        <p class="text-slate-500 font-bold mb-6 italic">تم استلام طلبك بنجاح، فريقنا في <span class="text-[#D4AF37]" id="prov-ar">...</span> سيتصل بك.</p>
+
+        <div class="bg-slate-50 p-6 rounded-[2rem] mb-8 border-2 border-dashed border-slate-200">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1 text-center">رقم الرحلة | Order ID</p>
+            <p id="orderIDDisplay" class="text-2xl font-black text-[#1e293b] tracking-tighter">#HUT-0000</p>
         </div>
 
-        <div class="bg-blue-50 p-6 rounded-[2rem] my-8 border-2 border-dashed border-blue-200 relative overflow-hidden">
-            <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">رقم الرحلة | Order ID</p>
-            <p id="orderIDDisplay" class="text-2xl font-black text-[#002349]">#HUT-0000</p>
-            <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl rotate-12">🐋</div>
-        </div>
-
-        <div class="space-y-4">
-            <a href="index.html" class="block w-full py-5 bg-[#002349] text-[#D4AF37] rounded-2xl font-black text-xl shadow-lg hover:scale-105 transition-all">
-                الرئيسية | Home | Mal
-            </a>
-        </div>
+        <a href="index.html" class="block w-full py-5 bg-[#1e293b] text-[#D4AF37] rounded-2xl font-black text-lg shadow-xl hover:scale-105 transition-all mb-4">
+            العودة للرئيسية
+        </a>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        
-        // الرابط الجديد الخاص بك
         const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
 
         const translationMap = {
             "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
-            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل", 
-            "Anbar": "الأنبار", "Diyala": "ديالى", "Najaf": "النجف", "Karbala": "كربلاء",
-            "Personal Car": "تأجير سيارة شخصية", "Wedding Car": "سيارات أعراس ومناسبات", 
-            "Driving Lessons": "تعليم قيادة (مدربين)"
+            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل",
+            "Male": "ذكر", "Female": "أنثى"
         };
 
-        function translateToArabic(text) {
-            if (!text) return "غير محدد";
-            return translationMap[text] || text;
-        }
+        function trans(text) { return translationMap[text] || text || "غير محدد"; }
 
         window.onload = () => {
-            // تشغيل تأثير الاحتفال
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#002349', '#D4AF37'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#1e293b', '#D4AF37'] });
             
-            const rawProv = u.get('city') || u.get('province');
-            const rawCar = u.get('car') || u.get('type');
-            const rawName = u.get('name') || "زبون مجهول";
-            const rawPhone = u.get('phone') || "0000";
-            const rawTime = u.get('time') || "غير محدد";
-            const rawPrice = u.get('price') || "0";
+            // 1. استخراج كافة البيانات الجديدة من الرابط
+            const city = u.get('city') || u.get('province');
+            const car = u.get('car') || u.get('type');
+            const name = u.get('name') || "زبون مجهول";
+            const phone = u.get('phone') || "0000";
+            const price = u.get('price') || "0";
+            const gender = u.get('gender'); // جديد
+            const service = u.get('service'); // جديد
+            const map = u.get('map'); // جديد (رابط اللوكيشن)
 
-            document.getElementById('prov-ar').innerText = translateToArabic(rawProv);
+            document.getElementById('prov-ar').innerText = trans(city);
 
             let randomID = sessionStorage.getItem('currentOrderID');
             if (!randomID) {
@@ -93,28 +72,27 @@
             }
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            // منع تكرار الإرسال عند تحديث الصفحة
+            // 2. إرسال "الباكيج" الكامل للمحرك
             if (!sessionStorage.getItem('orderSent')) {
                 const data = {
                     order_id: randomID,
-                    name: rawName,
-                    phone: rawPhone,
-                    province: translateToArabic(rawProv),
-                    car: translateToArabic(rawCar),
-                    time: rawTime,
-                    price: rawPrice
+                    name: name,
+                    phone: phone,
+                    province: trans(city),
+                    car: trans(car),
+                    price: price,
+                    gender: trans(gender), // إرسال الجنس
+                    service: service,      // إرسال نوع الخدمة
+                    map: map               // إرسال رابط الخريطة
                 };
 
                 fetch(scriptURL, {
                     method: 'POST',
-                    mode: 'no-cors', 
-                    cache: 'no-cache',
+                    mode: 'no-cors',
                     body: JSON.stringify(data)
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ الطلب أرسل للمحرك الجديد");
-                }).catch(err => {
-                    console.error("❌ خطأ:", err);
+                    console.log("✅ تم إرسال كافة بيانات الزبون للمحرك");
                 });
             }
         };
