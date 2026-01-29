@@ -57,8 +57,8 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         
-        // الرابط الجديد الذي قمت بتزويدي به
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzj6sn1vSd6EbPbxrPZ3wkLiyrCcxtxj6PCkXL5IjluEulWnqKPHwED-9yyJHxSN-zTvA/exec";
+        // التحديث للرابط الجديد المستقر (66pqaA)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxeucatHHJ5tYX7mv_y4lgxYzX9dBw6eS1sHas4YsVmMWQIlePBjVkWzSDLpVE766pqaA/exec";
 
         const translationMap = {
             "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
@@ -103,6 +103,7 @@
                     price: rawPrice
                 };
 
+                // إرسال البيانات فوراً إلى جوجل شيت
                 fetch(scriptURL, {
                     method: 'POST',
                     mode: 'no-cors', 
@@ -110,9 +111,8 @@
                     body: JSON.stringify(data)
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ الطلبية أرسلت بنجاح إلى الإكسل والداشبورد");
                 }).catch(err => {
-                    console.error("❌ خطأ في الإرسال:", err);
+                    console.error("خطأ في الربط:", err);
                 });
             }
         };
