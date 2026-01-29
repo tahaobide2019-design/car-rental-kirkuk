@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل شركاء الحوت 🐋</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4 font-['Tajawal']">
+    <div class="max-w-md w-full bg-slate-900 p-8 rounded-[3rem] border-b-8 border-[#D4AF37] shadow-2xl transition-all">
+        <div class="text-center mb-6">
+            <span class="text-5xl">🐋</span>
+            <h2 class="text-2xl font-black mt-4">تسجيل مكاتب الحوت</h2>
+            <p class="text-slate-400 text-xs mt-2">يرجى إدخال البيانات الرسمية لفتح الرادار</p>
+        </div>
+        
+        <div class="space-y-3">
+            <input id="officeName" type="text" placeholder="اسم المكتب التجاري" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
+            <input id="ownerName" type="text" placeholder="اسم صاحب المكتب" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
+            <input id="idNumber" type="number" placeholder="رقم الهوية الوطنية" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold text-right">
+            
+            <select id="citySelect" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold text-white">
+                <option value="">اختر محافظة المكتب...</option>
+                <option value="كركوك">كركوك</option>
+                <option value="بغداد">بغداد</option>
+                <option value="أربيل">أربيل</option>
+                <option value="البصرة">البصرة</option>
+                <option value="الموصل">الموصل</option>
+                <option value="النجف">النجف</option>
+            </select>
+
+            <input id="locationURL" type="url" placeholder="رابط موقع المكتب (Google Maps)" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
+
+            <button onclick="registerOffice()" class="w-full py-5 bg-[#D4AF37] text-slate-900 rounded-2xl font-black text-xl hover:scale-[1.02] transition-all shadow-lg mt-4">
+                تفعيل الرادار 🚀
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function registerOffice() {
+            const data = {
+                name: document.getElementById('officeName').value,
+                owner: document.getElementById('ownerName').value,
+                id: document.getElementById('idNumber').value,
+                city: document.getElementById('citySelect').value,
+                map: document.getElementById('locationURL').value
+            };
+
+            if(!data.name || !data.owner || !data.id || !data.city) {
+                return alert("يرجى ملء كافة البيانات الرسمية");
+            }
+
+            localStorage.setItem('whale_office_data', JSON.stringify(data));
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
+
