@@ -5,59 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رادار الحوت - لوحة المكاتب</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-950 text-white min-h-screen p-4 pb-24">
-    <header class="mb-8 p-4 bg-slate-900 rounded-[2rem] border-b-4 border-yellow-500 shadow-2xl">
-        <h1 class="text-2xl font-black text-center">🐋 رادار الحوت</h1>
-        <p id="officeName" class="text-center text-yellow-500 text-sm font-bold mt-1"></p>
+<body class="bg-slate-950 text-white min-h-screen p-4 pb-24 font-['Tajawal']">
+
+    <header class="mb-8 p-6 bg-slate-900 rounded-[2.5rem] border-b-4 border-[#D4AF37] shadow-2xl relative overflow-hidden">
+        <div class="relative z-10 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black text-white">🐋 رادار الحوت</h1>
+                <p id="officeName" class="text-[#D4AF37] text-xs font-bold mt-1 uppercase tracking-widest"></p>
+            </div>
+            <button onclick="location.reload()" class="bg-slate-800 p-3 rounded-2xl">
+                🔄
+            </button>
+        </div>
+        <div class="absolute right-[-20px] top-[-20px] opacity-10 text-8xl">🐋</div>
     </header>
 
     <div id="orders" class="space-y-4">
-        <div class="text-center p-10 text-slate-500">جاري البحث عن طلبات...</div>
+        <div class="text-center p-10 text-slate-500 animate-pulse">جاري فحص الرادار...</div>
     </div>
 
     <script>
+        // الرابط الجديد الذي أصدرته بنجاح
         const scriptURL = "https://script.google.com/macros/s/AKfycbzujkqi1n4TXICqp7g-bBmAErnraR43JIvPdc2zPz0j6UobP-FHnED9-LxL9QF3IE_eqA/exec";
+        
         const office = localStorage.getItem('whale_office');
         const city = localStorage.getItem('whale_city');
 
+        // التحقق من تسجيل الدخول
         if(!office) window.location.href = 'login.html';
         document.getElementById('officeName').innerText = `مكتب ${office} | ${city}`;
 
-        async function load() {
+        async function loadOrders() {
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
                 const data = await res.json();
                 
-                // تصفية الطلبات الخاصة بالمحافظة والتي لم تستلم بعد
+                // تصفية الطلبات: يجب أن تكون في نفس مدينة المكتب وحالتها "قيد الانتظار"
                 const filtered = data.filter(o => o.province === city && o.status === "قيد الانتظار");
                 
-                document.getElementById('orders').innerHTML = filtered.length ? filtered.map(o => `
-                    <div class="bg-slate-900 p-6 rounded-[2rem] border-r-8 border-yellow-500 flex justify-between items-center shadow-lg">
-                        <div>
-                            <h3 class="font-black text-xl text-white">${o.car}</h3>
-                            <p class="text-green-400 font-black text-lg mt-1">${o.price} د.ع</p>
-                            <p class="text-[10px] text-yellow-500 font-bold uppercase">${o.time}</p>
+                const container = document.getElementById('orders');
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-20">
+                            <div class="text-6xl mb-4">⚓</div>
+                            <p class="text-slate-500 font-bold">الرادار هادئ.. لا توجد طلبات في ${city}</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(o => `
+                    <div class="bg-slate-900 p-6 rounded-[2.5rem] border-r-[12px] border-[#D4AF37] shadow-xl hover:scale-[1.02] transition-transform">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="text-[10px] bg-[#D4AF37]/20 text-[#D4AF37] px-3 py-1 rounded-full font-black mb-2 inline-block">طلب جديد</span>
+                                <h3 class="font-black text-2xl text-white">${o.car}</h3>
+                                <p class="text-slate-400 text-sm font-bold mt-1">👤 ${o.name}</p>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-green-400 font-black text-xl">${o.price} د.ع</p>
+                                <p class="text-[10px] text-slate-500 font-bold italic">${o.time}</p>
+                            </div>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <button onclick="updateStatus('${o.id}', 'claim')" class="bg-white text-slate-900 px-6 py-2 rounded-xl font-black text-xs shadow-md">استلام</button>
-                            <button onclick="updateStatus('${o.id}', 'requestCancel')" class="text-red-500 text-[10px] font-bold">إلغاء</button>
+                        
+                        <div class="grid grid-cols-2 gap-3 mt-6">
+                            <button onclick="updateStatus('${o.id}', 'claim')" 
+                                class="bg-white text-slate-900 py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all">
+                                استلام الطلب ✅
+                            </button>
+                            <button onclick="updateStatus('${o.id}', 'requestCancel')" 
+                                class="bg-slate-800 text-red-500 py-4 rounded-2xl font-black text-sm active:scale-95 transition-all">
+                                إلغاء الطلب ❌
+                            </button>
                         </div>
                     </div>
-                `).join('') : '<div class="text-center p-10 text-slate-600">لا توجد طلبات جديدة حالياً</div>';
-            } catch(e) { console.error(e); }
+                `).join('');
+            } catch(e) { 
+                console.error("Error loading orders:", e);
+            }
         }
 
         async function updateStatus(id, action) {
-            const url = `${scriptURL}?action=${action}&id=${id}&office=${encodeURIComponent(office)}`;
-            await fetch(url);
-            alert(action === 'claim' ? "تم استلام الطلب!" : "تم إلغاء الطلب");
-            load();
+            const btn = event.currentTarget;
+            btn.innerHTML = "جاري...";
+            btn.disabled = true;
+
+            try {
+                // إضافة اسم المكتب المستلم عند الاستلام
+                const url = `${scriptURL}?action=${action}&id=${id}&office=${encodeURIComponent(office)}`;
+                await fetch(url);
+                
+                if(action === 'claim') {
+                    alert("✅ تم استلام الطلب! يمكنك الآن التواصل مع العميل.");
+                } else {
+                    alert("❌ تم إلغاء الطلب بنجاح.");
+                }
+                loadOrders();
+            } catch(e) {
+                alert("حدث خطأ في الاتصال");
+                btn.disabled = false;
+            }
         }
 
-        // تحديث تلقائي كل 10 ثواني لتعويض غياب التليجرام
-        setInterval(load, 10000);
-        load();
+        // تحديث الرادار تلقائياً كل 15 ثانية
+        setInterval(loadOrders, 15000);
+        loadOrders();
     </script>
 </body>
 </html>
