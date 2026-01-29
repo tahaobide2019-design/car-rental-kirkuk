@@ -3,59 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل شركاء الحوت 🐋</title>
+    <title>تسجيل شركاء الحوت | الرادار 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        .input-focus:focus { border-color: #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+    </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4 font-['Tajawal']">
-    <div class="max-w-md w-full bg-slate-900 p-8 rounded-[3rem] border-b-8 border-[#D4AF37] shadow-2xl transition-all">
-        <div class="text-center mb-6">
-            <span class="text-5xl">🐋</span>
-            <h2 class="text-2xl font-black mt-4">تسجيل مكاتب الحوت</h2>
-            <p class="text-slate-400 text-xs mt-2">يرجى إدخال البيانات الرسمية لفتح الرادار</p>
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4">
+    
+    <div class="max-w-md w-full bg-slate-900 p-8 rounded-[3.5rem] border-b-[10px] border-[#D4AF37] shadow-2xl">
+        <div class="text-center mb-8">
+            <div class="text-6xl mb-4">🐋</div>
+            <h2 class="text-3xl font-black mt-2">عائلة الحوت</h2>
+            <p class="text-slate-400 text-sm mt-2 font-bold italic">نظام تسجيل المكاتب والشركاء الرسمي</p>
         </div>
         
-        <div class="space-y-3">
-            <input id="officeName" type="text" placeholder="اسم المكتب التجاري" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
-            <input id="ownerName" type="text" placeholder="اسم صاحب المكتب" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
-            <input id="idNumber" type="number" placeholder="رقم الهوية الوطنية" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold text-right">
-            
-            <select id="citySelect" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold text-white">
-                <option value="">اختر محافظة المكتب...</option>
-                <option value="كركوك">كركوك</option>
-                <option value="بغداد">بغداد</option>
-                <option value="أربيل">أربيل</option>
-                <option value="البصرة">البصرة</option>
-                <option value="الموصل">الموصل</option>
-                <option value="النجف">النجف</option>
-            </select>
+        <div class="space-y-4">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">اسم المكتب التجاري</label>
+                <input id="officeName" type="text" placeholder="مثلاً: مكتب الحوت كركوك" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all">
+            </div>
 
-            <input id="locationURL" type="url" placeholder="رابط موقع المكتب (Google Maps)" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 focus:border-[#D4AF37] outline-none font-bold">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">صاحب المكتب</label>
+                <input id="ownerName" type="text" placeholder="الاسم الثلاثي الكامل" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all">
+            </div>
 
-            <button onclick="registerOffice()" class="w-full py-5 bg-[#D4AF37] text-slate-900 rounded-2xl font-black text-xl hover:scale-[1.02] transition-all shadow-lg mt-4">
-                تفعيل الرادار 🚀
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">المحافظة</label>
+                    <select id="citySelect" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 outline-none font-bold text-white input-focus transition-all">
+                        <option value="">اختر..</option>
+                        <option value="كركوك">كركوك</option>
+                        <option value="بغداد">بغداد</option>
+                        <option value="أربيل">أربيل</option>
+                        <option value="البصرة">البصرة</option>
+                        <option value="الموصل">الموصل</option>
+                        <option value="النجف">النجف</option>
+                        <option value="بقية المحافظات">أخرى</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">رقم الهوية</label>
+                    <input id="idNumber" type="number" placeholder="00000" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 outline-none font-bold text-center input-focus transition-all">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">رابط الخرائط (اختياري)</label>
+                <input id="locationURL" type="url" placeholder="Google Maps Link" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all text-xs">
+            </div>
+
+            <button onclick="registerOffice()" id="loginBtn" class="w-full py-5 bg-[#D4AF37] text-slate-950 rounded-2xl font-black text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.3)] mt-6 flex items-center justify-center gap-3">
+                فتح الرادار 🚀
             </button>
         </div>
+
+        <p class="text-[9px] text-center text-slate-500 mt-6 font-bold uppercase tracking-widest">Huta Radar System v4.0 © 2026</p>
     </div>
 
     <script>
+        // الرابط الجديد الفعال
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzj6sn1vSd6EbPbxrPZ3wkLiyrCcxtxj6PCkXL5IjluEulWnqKPHwED-9yyJHxSN-zTvA/exec";
+
         function registerOffice() {
+            const btn = document.getElementById('loginBtn');
             const data = {
-                name: document.getElementById('officeName').value,
-                owner: document.getElementById('ownerName').value,
-                id: document.getElementById('idNumber').value,
+                name: document.getElementById('officeName').value.trim(),
+                owner: document.getElementById('ownerName').value.trim(),
+                id: document.getElementById('idNumber').value.trim(),
                 city: document.getElementById('citySelect').value,
-                map: document.getElementById('locationURL').value
+                map: document.getElementById('locationURL').value.trim()
             };
 
             if(!data.name || !data.owner || !data.id || !data.city) {
-                return alert("يرجى ملء كافة البيانات الرسمية");
+                return alert("يا هلا بك، يرجى إكمال جميع الحقول المطلوبة لتفعيل الرادار.");
             }
 
+            // تجميل الزر أثناء المعالجة
+            btn.disabled = true;
+            btn.innerHTML = 'جاري التفعيل.. <span class="animate-spin text-2xl">⏳</span>';
+
+            // حفظ البيانات محلياً ليعمل الداشبورد فوراً
             localStorage.setItem('whale_office_data', JSON.stringify(data));
-            window.location.href = 'dashboard.html';
+            
+            // توجيه للداشبورد بعد ثانية واحدة لإعطاء شعور بالاحترافية
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1200);
+        }
+
+        // التحقق مما إذا كان المكتب مسجلاً مسبقاً
+        window.onload = () => {
+            if(localStorage.getItem('whale_office_data')) {
+                // إذا أردت توجيهه تلقائياً إذا كان مسجلاً
+                // window.location.href = 'dashboard.html';
+            }
         }
     </script>
 </body>
 </html>
-
