@@ -20,7 +20,6 @@
 <body class="flex items-center justify-center min-h-screen p-4">
     
     <div class="max-w-md w-full bg-white rounded-[3rem] p-8 text-center shadow-2xl border-t-8 border-[#D4AF37] bounce-in">
-        
         <div class="flex justify-center mb-2">
             <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 160px;" loop autoplay></dotlottie-player>
         </div>
@@ -40,6 +39,7 @@
 
     <script>
         const u = new URLSearchParams(window.location.search);
+        // المحرك الخاص بك
         const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
 
         const translationMap = {
@@ -53,15 +53,17 @@
         window.onload = () => {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#1e293b', '#D4AF37'] });
             
-            // 1. استخراج كافة البيانات الجديدة من الرابط
+            // 1. التقاط كافة البيانات (بما فيها الجديدة)
             const city = u.get('city') || u.get('province');
             const car = u.get('car') || u.get('type');
             const name = u.get('name') || "زبون مجهول";
             const phone = u.get('phone') || "0000";
             const price = u.get('price') || "0";
-            const gender = u.get('gender'); // جديد
-            const service = u.get('service'); // جديد
-            const map = u.get('map'); // جديد (رابط اللوكيشن)
+            const gender = u.get('gender'); 
+            const service = u.get('service');
+            const map = u.get('map');
+            const nationalID = u.get('nationalID') || u.get('id_no') || "غير متوفر"; // إضافة الهوية
+            const age = u.get('age') || "غير محدد"; // إضافة العمر
 
             document.getElementById('prov-ar').innerText = trans(city);
 
@@ -72,7 +74,7 @@
             }
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            // 2. إرسال "الباكيج" الكامل للمحرك
+            // 2. إرسال البيانات للمحرك
             if (!sessionStorage.getItem('orderSent')) {
                 const data = {
                     order_id: randomID,
@@ -81,9 +83,11 @@
                     province: trans(city),
                     car: trans(car),
                     price: price,
-                    gender: trans(gender), // إرسال الجنس
-                    service: service,      // إرسال نوع الخدمة
-                    map: map               // إرسال رابط الخريطة
+                    gender: trans(gender),
+                    service: service,
+                    map: map,
+                    nationalID: nationalID, // إرسال الهوية للإكسل
+                    age: age                // إرسال العمر للإكسل
                 };
 
                 fetch(scriptURL, {
@@ -92,7 +96,7 @@
                     body: JSON.stringify(data)
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ تم إرسال كافة بيانات الزبون للمحرك");
+                    console.log("✅ تم تحديث الإكسل بكافة المعلومات");
                 });
             }
         };
