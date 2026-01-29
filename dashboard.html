@@ -85,16 +85,13 @@
                 return;
             }
 
-            container.innerHTML = list.map(o => {
-                const isClaimed = o.status !== "قيد الانتظار";
-                
-                return `
+            container.innerHTML = list.map(o => `
                 <div class="order-card p-6 shadow-sm border-r-[8px] ${o.status.includes('✅') ? 'border-green-500' : 'border-[#D4AF37]'}">
                     <div class="flex justify-between items-start mb-4">
                         <div class="text-right">
-                            <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.id}</span>
+                            <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.order_id || o.id}</span>
                             <h3 class="text-lg font-black text-[#1e293b] leading-tight">${o.car || 'كورس تدريب'}</h3>
-                            <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa- briefcase ml-1"></i>${o.service || 'صيانة عامة'}</p>
+                            <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa-briefcase ml-1"></i>${o.service || 'صيانة عامة'}</p>
                         </div>
                         <div class="text-left">
                             <div class="text-[#D4AF37] font-black text-xl">${o.price || '0'}</div>
@@ -115,21 +112,21 @@
                         ${currentTab === 'mine' ? `
                             <div class="flex justify-between border-b border-white pb-1">
                                 <span class="text-[10px] font-bold text-slate-400">العمر:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.age || '---'} سنة</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.age || 'غير محدد'}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-[10px] font-bold text-slate-400">رقم الهوية:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.nationalID || o.id_no || 'غير متوفر'}</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.nationalID || 'غير متوفر'}</span>
                             </div>
                         ` : `
                             <div class="py-1 text-center border-t border-dashed border-slate-200 mt-1">
-                                <span class="text-[8px] font-bold text-slate-300 italic">بقية البيانات تظهر بعد الاستلام 🔒</span>
+                                <span class="text-[8px] font-bold text-slate-300 italic">بقية التفاصيل تظهر بعد الاستلام 🔒</span>
                             </div>
                         `}
                     </div>
 
                     ${currentTab === 'new' ? `
-                        <button onclick="update('${o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all alert-pulse">إستلام الطلب الآن ✅</button>
+                        <button onclick="update('${o.order_id || o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all alert-pulse">إستلام الطلب الآن ✅</button>
                     ` : `
                         <div class="space-y-2">
                             ${!o.status.includes('✅') ? `
@@ -141,24 +138,22 @@
                                         <i class="fas fa-location-dot"></i> الموقع
                                     </a>
                                 </div>
-                                <button onclick="update('${o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs active:scale-95">تم الإنجاز ✅</button>
+                                <button onclick="update('${o.order_id || o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs active:scale-95">تم الإنجاز ✅</button>
                             ` : `
                                 <div class="bg-green-100 text-green-700 py-4 rounded-2xl text-center font-black text-xs">تم الإنجاز بنجاح 🏆</div>
                             `}
                         </div>
                     `}
                 </div>
-                `;
-            }).join('');
+            `).join('');
         }
 
         async function update(id, act) {
             if(!confirm("تأكيد هذا الإجراء؟")) return;
             try {
-                // إرسال التحديث للمحرك
                 await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
-                await fetchOrders(); // تحديث القائمة فوراً
-            } catch(e) { alert("حدث خطأ في الاتصال بالسيرفر"); }
+                fetchOrders();
+            } catch(e) { alert("خطأ في السيرفر"); }
         }
 
         function switchTab(t) {
@@ -169,8 +164,6 @@
         }
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
-        
-        // التحديث التلقائي كل 10 ثوانٍ
         setInterval(fetchOrders, 10000);
         fetchOrders();
     </script>
