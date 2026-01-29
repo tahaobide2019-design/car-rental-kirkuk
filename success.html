@@ -17,14 +17,6 @@
             100% { transform: scale(1); }
         }
         .bg-gradient-success { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
-        /* أنيميشن تبديل اللغات */
-        .lang-fade { animation: fadeText 12s infinite; }
-        @keyframes fadeText {
-            0%, 20% { opacity: 1; transform: translateY(0); }
-            25%, 45% { opacity: 0; transform: translateY(-10px); }
-            50%, 70% { opacity: 1; transform: translateY(0); }
-            75%, 95% { opacity: 0; transform: translateY(10px); }
-        }
     </style>
 </head>
 <body class="bg-gradient-success flex items-center justify-center min-h-screen p-4 font-['Tajawal'] overflow-hidden">
@@ -66,13 +58,14 @@
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxmvgqHvXsinogjAISeP7T1afYlh9z2VWpEpvwNYmnC2llzpvJpYvsRLKFJBeTLAZ-EzA/exec";
+        // رابط تطبيق الويب الجديد الخاص بك
+        const scriptURL = "https://script.google.com/macros/s/AKfycby-n4RGZSmkxBI_gmsOIF8sygwGJAXH-l4yvP15EpL8NdcKyZa4M_bQCygy_Ki2nW3IbQ/exec";
 
-        // خريطة الترجمة للعربية لإرسالها للداشبورد
+        // خريطة الترجمة للعربية لضمان انتظام بيانات الإكسل
         const translationMap = {
             "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
-            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل",
-            "Personal Car": "تأجير سيارة شخصية", "Wedding Car": "سيارات أعراس", "Driving Lessons": "تعليم قيادة"
+            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل", "Anbar": "الأنبار", "Diyala": "ديالى",
+            "Personal Car": "تأجير سيارة شخصية", "Wedding Car": "سيارات أعراس ومناسبات", "Driving Lessons": "تعليم قيادة (مدربين)"
         };
 
         function translateToArabic(text) {
@@ -92,7 +85,7 @@
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
             if (!sessionStorage.getItem('orderSent')) {
-                // تحويل البيانات للعربية قبل الإرسال
+                // إرسال البيانات بترتيب الأعمدة الصحيح للإكسل
                 const data = {
                     order_id: randomID,
                     name: u.get('name'),
@@ -109,7 +102,8 @@
                     body: JSON.stringify(data)
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                });
+                    console.log("Order Sent Successfully to Huta Radar");
+                }).catch(err => console.error("Send Error:", err));
             }
         };
     </script>
