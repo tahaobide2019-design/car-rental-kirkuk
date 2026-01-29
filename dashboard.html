@@ -3,174 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رادار الحوت Ultra | ذكاء العمليات 🐋</title>
+    <title>رادار الحوت Ultra Pro | 2026 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: white; }
-        .glass-bg { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .order-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-right: 4px solid transparent; }
-        .order-card:hover { transform: translateY(-5px); background: rgba(51, 65, 85, 0.5); }
-        .tab-active { background: #D4AF37; color: #002349; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
-        .pulse-red { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        #refreshBar { height: 3px; background: #D4AF37; width: 0%; transition: width 10s linear; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #020617; color: white; overflow-x: hidden; }
+        .ultra-glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .tab-active { color: #D4AF37; border-bottom: 4px solid #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        .loading-line { height: 2px; background: linear-gradient(90deg, transparent, #D4AF37, transparent); position: fixed; top: 0; width: 100%; z-index: 1000; animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .order-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .order-card:hover { transform: scale(1.02); background: rgba(30, 41, 59, 0.5); }
+        .status-pulse { animation: status-glow 2s infinite; }
+        @keyframes status-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
-<body class="pb-24">
-    <audio id="whaleAlert" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+<body class="pb-28">
 
-    <nav class="sticky top-0 z-50 glass-bg px-5 py-4 flex justify-between items-center shadow-2xl border-b border-white/5">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-[#D4AF37] rounded-xl flex items-center justify-center text-[#002349] shadow-lg">
+    <div id="scanLine" class="loading-line hidden"></div>
+    <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
+    <nav class="sticky top-0 z-50 ultra-glass px-6 py-5 flex justify-between items-center border-b border-white/5 shadow-2xl">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#AA8B28] rounded-2xl flex items-center justify-center text-[#020617] shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                 <i class="fas fa-whale fa-lg"></i>
             </div>
             <div>
-                <h1 id="officeDisplay" class="font-black text-xs text-white">جاري التحميل..</h1>
-                <p id="cityDisplay" class="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest"></p>
+                <h1 id="navOfficeName" class="font-black text-sm tracking-tight tracking-tighter">جاري المزامنة..</h1>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full status-pulse"></span>
+                    <p id="navCity" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest"></p>
+                </div>
             </div>
         </div>
-        <button onclick="logout()" class="p-2 px-4 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black">خروج</button>
+        <button onclick="logout()" class="p-3 bg-red-500/10 text-red-400 rounded-xl border border-red-500/20 active:scale-90 transition-all">
+            <i class="fas fa-power-off"></i>
+        </button>
     </nav>
 
-    <div id="refreshBar" class="fixed top-[68px] z-50"></div>
-
-    <div class="p-4 sticky top-[71px] z-40 glass-bg flex gap-2">
-        <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-3 rounded-2xl text-[11px] font-black transition-all tab-active">
-            <i class="fas fa-radar ml-1"></i> الرادار العام
-        </button>
-        <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-3 rounded-2xl text-[11px] font-black transition-all text-slate-400">
-            <i class="fas fa-box-open ml-1"></i> استلاماتي
-        </button>
+    <div class="p-4 grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+        <div class="ultra-glass p-4 rounded-[2rem] flex items-center justify-between border-l-4 border-blue-500">
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase">طلباتي اليوم</p>
+                <p id="myCount" class="text-xl font-black">0</p>
+            </div>
+            <i class="fas fa-briefcase text-blue-500/30 text-2xl"></i>
+        </div>
+        <div class="ultra-glass p-4 rounded-[2rem] flex items-center justify-between border-l-4 border-[#D4AF37]">
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase">متاح بالرادار</p>
+                <p id="radarCount" class="text-xl font-black">0</p>
+            </div>
+            <i class="fas fa-satellite-dish text-[#D4AF37]/30 text-2xl"></i>
+        </div>
     </div>
 
-    <main class="p-4 max-w-2xl mx-auto space-y-4" id="mainContainer">
-        <div class="text-center py-20 opacity-20">
-            <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
-            <p class="font-bold">جاري مسح الرادار...</p>
+    <div class="sticky top-[88px] z-40 ultra-glass border-b border-white/5">
+        <div class="flex">
+            <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 text-[11px] font-black transition-all tab-active uppercase">الرادار العام</button>
+            <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 text-[11px] font-black transition-all text-slate-500 uppercase">صندوق العمليات</button>
         </div>
-    </main>
+        <div class="px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="searchInput" oninput="filterOrders()" placeholder="ابحث بالاسم، السيارة، أو الهاتف.." class="w-full bg-slate-900/50 border border-white/5 rounded-xl py-2 px-10 text-xs font-bold outline-none focus:border-[#D4AF37]/50 transition-all">
+                <i class="fas fa-search absolute right-4 top-2.5 text-slate-500 text-[10px]"></i>
+            </div>
+        </div>
+    </div>
+
+    <main class="p-4 max-w-2xl mx-auto space-y-4" id="mainContainer"></main>
 
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
         let currentTab = 'new';
-        let knownOrders = new Set();
+        let allOrders = [];
+        let knownOrderIds = new Set();
 
         if(!officeData) window.location.href = 'login.html';
-        document.getElementById('officeDisplay').innerText = officeData.name;
-        document.getElementById('cityDisplay').innerText = officeData.city;
+        document.getElementById('navOfficeName').innerText = officeData.name;
+        document.getElementById('navCity').innerText = officeData.city;
 
         async function fetchOrders() {
-            resetProgressBar();
+            document.getElementById('scanLine').classList.remove('hidden');
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
-                const data = await res.json();
+                allOrders = await res.json();
                 
-                // ذكاء التنبيه: إذا كان هناك طلب جديد لم يسبق رؤيته في محافظة المستخدم
-                if(currentTab === 'new') {
-                    data.forEach(o => {
-                        if(o.province === officeData.city && o.status === "قيد الانتظار" && !knownOrders.has(o.id)) {
-                            playWhaleAlert();
-                            knownOrders.add(o.id);
+                // تحديث العدادات
+                document.getElementById('myCount').innerText = allOrders.filter(o => o.claimedBy === officeData.name).length;
+                document.getElementById('radarCount').innerText = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار").length;
+
+                if (currentTab === 'new') {
+                    allOrders.forEach(o => {
+                        if (o.province === officeData.city && o.status === "قيد الانتظار" && !knownOrderIds.has(o.id)) {
+                            playAlert();
+                            knownOrderIds.add(o.id);
                         }
                     });
                 }
-                render(data);
-            } catch(e) { console.error("Radar Error"); }
+                render(allOrders);
+            } catch(e) { console.error("Sync Error"); }
+            finally { document.getElementById('scanLine').classList.add('hidden'); }
+        }
+
+        function playAlert() { 
+            const sound = document.getElementById('alertSound');
+            sound.currentTime = 0;
+            sound.play().catch(e => {}); 
         }
 
         function render(data) {
             const container = document.getElementById('mainContainer');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
             let list = (currentTab === 'new') 
                 ? data.filter(o => o.province === officeData.city && o.status === "قيد الانتظار")
                 : data.filter(o => o.claimedBy === officeData.name);
 
+            // تصفية البحث
+            if(search) {
+                list = list.filter(o => 
+                    o.name.toLowerCase().includes(search) || 
+                    o.car.toLowerCase().includes(search) || 
+                    o.phone.includes(search)
+                );
+            }
+
             if(list.length === 0) {
-                container.innerHTML = `
-                <div class="text-center py-32 opacity-30">
-                    <i class="fas fa-anchor text-5xl mb-4"></i>
-                    <p class="font-black text-sm uppercase">البحر هادئ.. لا توجد طلبات</p>
-                </div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-20 font-black italic">لا يوجد بيانات مطابقة.. ⚓</div>`;
                 return;
             }
 
-            container.innerHTML = list.map(o => `
-                <div class="order-card p-5 rounded-[2rem] glass-bg border-r-4 ${currentTab === 'new' ? 'border-[#D4AF37]' : 'border-blue-500'}">
+            container.innerHTML = list.map(o => {
+                const isCompleted = o.status.includes("إنجاز") || o.status.includes("✅");
+                const isCanceled = o.status.includes("إلغاء");
+
+                return `
+                <div class="order-card ultra-glass p-6 rounded-[2.5rem] border-r-[6px] ${isCompleted ? 'border-green-500 opacity-60' : (currentTab === 'new' ? 'border-[#D4AF37]' : 'border-blue-500')} shadow-xl">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="space-y-1">
-                            <span class="text-[8px] bg-white/10 px-2 py-1 rounded-md text-slate-400 font-mono italic">${o.id}</span>
-                            <h3 class="text-lg font-black text-white">${o.car}</h3>
-                            <p class="text-[10px] font-bold text-slate-400"><i class="fas fa-map-marker-alt text-red-500 ml-1"></i> ${o.province} | ${o.name}</p>
+                        <div class="flex-1 text-right">
+                            <span class="text-[8px] font-black bg-white/5 px-2 py-1 rounded text-slate-400 mb-2 inline-block font-mono italic tracking-tighter">${o.id}</span>
+                            <h3 class="text-xl font-black text-white leading-tight">${o.car}</h3>
+                            <p class="text-slate-400 text-[10px] font-bold mt-1 flex items-center gap-2">
+                                <i class="fas fa-location-arrow text-[#D4AF37]"></i> ${o.province}
+                            </p>
                         </div>
                         <div class="text-left">
-                            <p class="text-[#D4AF37] font-black text-xl">${o.price}</p>
-                            <p class="text-[8px] text-slate-500 uppercase font-black">IQD</p>
+                            <div class="text-[#D4AF37] font-black text-2xl tracking-tighter">${o.price}</div>
+                            <div class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">IQD</div>
                         </div>
                     </div>
 
                     ${currentTab === 'new' ? `
-                        <div class="flex items-center gap-2 mb-4 text-[10px] font-bold text-green-400 bg-green-500/10 p-2 rounded-xl">
-                            <i class="fas fa-bolt pulse-red"></i> طلب فوري بانتظارك
+                        <div class="bg-blue-500/5 p-4 rounded-2xl border border-white/5 flex justify-between items-center mb-4">
+                            <div>
+                                <p class="text-[8px] text-slate-500 uppercase font-black">صاحب الطلب</p>
+                                <p class="text-[11px] font-black text-blue-400">${o.name}</p>
+                            </div>
+                            <span class="bg-[#D4AF37] text-[#020617] text-[8px] px-3 py-1 rounded-full font-black animate-pulse">متاح الآن</span>
                         </div>
-                        <button onclick="update('${o.id}', 'claim')" class="w-full py-4 bg-[#D4AF37] text-[#002349] rounded-2xl font-black text-sm shadow-xl active:scale-95 transition-transform">
-                            استحواذ على الطلب 🐋
-                        </button>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full bg-[#D4AF37] text-[#020617] py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">إستحواذ فوري على الطلب ✅</button>
                     ` : `
-                        <div class="grid grid-cols-2 gap-2 mt-4">
-                            <a href="tel:${o.phone}" class="flex items-center justify-center gap-2 bg-white/5 border border-white/10 py-3 rounded-2xl text-[11px] font-black hover:bg-green-500 hover:text-white transition-all">
-                                <i class="fas fa-phone"></i> اتصال
-                            </a>
-                            <button onclick="update('${o.id}', 'complete')" class="flex items-center justify-center gap-2 bg-blue-600/20 border border-blue-500/30 text-blue-400 py-3 rounded-2xl text-[11px] font-black hover:bg-blue-600 hover:text-white">
-                                <i class="fas fa-check-double"></i> تم الإنجاز
-                            </button>
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+                                    <p class="text-[8px] text-slate-500 font-black uppercase mb-1">العميل</p>
+                                    <p class="text-[10px] font-black">${o.name}</p>
+                                </div>
+                                <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+                                    <p class="text-[8px] text-slate-500 font-black uppercase mb-1">الموعد</p>
+                                    <p class="text-[10px] font-black">${o.time || 'غير محدد'}</p>
+                                </div>
+                            </div>
+                            
+                            ${isCompleted ? `
+                                <div class="bg-green-500/10 text-green-500 py-4 rounded-2xl text-center font-black text-xs border border-green-500/20">العملية مكتملة بنجاح ✅</div>
+                            ` : isCanceled ? `
+                                <div class="bg-red-500/10 text-red-400 py-4 rounded-2xl text-center font-black text-[10px] border border-red-500/20">بانتظار موافقة المدير على الإلغاء.. ⚠️</div>
+                            ` : `
+                                <div class="flex gap-2">
+                                    <a href="tel:${o.phone}" class="flex-[2] bg-green-500 text-white py-4 rounded-2xl font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-green-500/20">
+                                        <i class="fas fa-phone"></i> اتصال بالزبون
+                                    </a>
+                                    ${o.map ? `
+                                    <a href="${o.map}" target="_blank" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/20">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </a>` : ''}
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="update('${o.id}', 'complete')" class="bg-white text-[#020617] py-4 rounded-2xl font-black text-[10px] active:scale-95 transition-all">تم الإنجاز ✅</button>
+                                    <button onclick="update('${o.id}', 'requestCancel')" class="bg-red-500/10 text-red-500 py-4 rounded-2xl font-black text-[10px] border border-red-500/20">طلب إلغاء ❌</button>
+                                </div>
+                            `}
                         </div>
                     `}
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
+        function filterOrders() { render(allOrders); }
+
         async function update(id, act) {
+            if(!confirm("هل أنت متأكد من تنفيذ الإجراء؟")) return;
             const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> جاري التنفيذ..';
-            
             try {
-                await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
-                fetchOrders();
+                const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
+                const result = await res.text();
+                if(result === "Success") {
+                    await fetchOrders();
+                } else { throw new Error(); }
             } catch(e) { 
-                alert("خطأ في الاتصال"); 
-                btn.disabled = false;
+                alert("حدث خطأ في النظام!");
+                await fetchOrders(); 
             }
         }
 
         function switchTab(t) {
             currentTab = t;
-            document.getElementById('tabNew').className = `flex-1 py-3 rounded-2xl text-[11px] font-black transition-all ${t==='new' ? 'tab-active' : 'text-slate-400'}`;
-            document.getElementById('tabMine').className = `flex-1 py-3 rounded-2xl text-[11px] font-black transition-all ${t==='mine' ? 'tab-active' : 'text-slate-400'}`;
-            fetchOrders();
-        }
-
-        function playWhaleAlert() {
-            const sound = document.getElementById('whaleAlert');
-            sound.play().catch(e => console.log("Sound interaction required"));
-        }
-
-        function resetProgressBar() {
-            const bar = document.getElementById('refreshBar');
-            bar.style.transition = 'none';
-            bar.style.width = '0%';
-            setTimeout(() => {
-                bar.style.transition = 'width 10s linear';
-                bar.style.width = '100%';
-            }, 50);
+            document.getElementById('tabNew').className = `flex-1 py-4 text-[11px] font-black transition-all ${t==='new' ? 'tab-active' : 'text-slate-500'}`;
+            document.getElementById('tabMine').className = `flex-1 py-4 text-[11px] font-black transition-all ${t==='mine' ? 'tab-active' : 'text-slate-500'}`;
+            render(allOrders);
         }
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
         
-        // تحديث كل 10 ثواني
-        setInterval(fetchOrders, 10000);
+        setInterval(fetchOrders, 15000);
+        document.addEventListener('click', () => { document.getElementById('alertSound').load(); }, {once: true});
         fetchOrders();
     </script>
 </body>
