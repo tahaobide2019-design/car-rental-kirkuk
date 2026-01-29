@@ -3,118 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم بنجاح | عائلة الحوت 🐋✨</title>
+    <title>تم بنجاح | عائلة الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; }
-        .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-        }
-        .bg-gradient-success { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
-    </style>
 </head>
-<body class="bg-gradient-success flex items-center justify-center min-h-screen p-4 overflow-hidden">
-    
-    <div class="max-w-md w-full bg-white rounded-[3.5rem] p-8 text-center shadow-2xl border-b-[10px] border-[#D4AF37] relative bounce-in">
-        
-        <div class="flex justify-center mb-2">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 180px;" loop autoplay></dotlottie-player>
-        </div>
-
-        <div id="langContainer" class="space-y-4">
-            <div class="lang-block">
-                <h1 class="text-3xl font-black text-[#002349] mb-3">يا هلا بيك! 😍</h1>
-                <p class="text-gray-600 font-bold mb-4">تم استلام طلبك، مكاتبنا في <span class="text-blue-600 underline" id="prov-ar">منطقتك</span> ستتصل بك قريباً.</p>
-            </div>
-            <hr class="opacity-10">
-            <div class="text-[13px] font-bold text-slate-500 space-y-1">
-                <p>Bi xêr hatî! Daxwaza we hat qebûlkirin. ☀️</p>
-                <p>Hoş geldiniz! Talebiniz başarıyla alındı. 🇹🇷</p>
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-black">Success! Your request is being processed. 🇬🇧</p>
-            </div>
-        </div>
-
-        <div class="bg-blue-50 p-6 rounded-[2rem] my-8 border-2 border-dashed border-blue-200 relative overflow-hidden">
-            <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">رقم الرحلة | Order ID</p>
+<body class="bg-blue-50 flex items-center justify-center min-h-screen p-6 font-['Tajawal'] text-center">
+    <div class="max-w-md w-full bg-white rounded-[3rem] p-10 shadow-2xl border-b-8 border-[#D4AF37]">
+        <h1 class="text-4xl font-black text-[#002349] mb-4">تم استلام طلبك! 😍</h1>
+        <p class="text-slate-500 font-bold mb-8">سيتواصل معك مكتبنا في منطقتك خلال دقائق.</p>
+        <div class="bg-blue-50 p-4 rounded-2xl mb-8">
+            <p class="text-xs font-black text-blue-400 uppercase mb-1">رقم الطلب</p>
             <p id="orderIDDisplay" class="text-2xl font-black text-[#002349]">#HUT-0000</p>
-            <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl rotate-12">🐋</div>
         </div>
-
-        <div class="space-y-4">
-            <a href="index.html" class="block w-full py-5 bg-[#002349] text-[#D4AF37] rounded-2xl font-black text-xl shadow-lg hover:scale-105 transition-all">
-                الرئيسية | Home | Mal
-            </a>
-        </div>
+        <a href="index.html" class="block w-full py-5 bg-[#002349] text-[#D4AF37] rounded-2xl font-black text-xl">العودة للرئيسية</a>
     </div>
-
     <script>
-        const u = new URLSearchParams(window.location.search);
-        
-        // التحديث للرابط الجديد المستقر (66pqaA)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxeucatHHJ5tYX7mv_y4lgxYzX9dBw6eS1sHas4YsVmMWQIlePBjVkWzSDLpVE766pqaA/exec";
-
-        const translationMap = {
-            "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
-            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل", 
-            "Anbar": "الأنبار", "Diyala": "ديالى", "Najaf": "النجف", "Karbala": "كربلاء",
-            "Personal Car": "تأجير سيارة شخصية", "Wedding Car": "سيارات أعراس ومناسبات", 
-            "Driving Lessons": "تعليم قيادة (مدربين)"
-        };
-
-        function translateToArabic(text) {
-            if (!text) return "غير محدد";
-            return translationMap[text] || text;
-        }
-
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
         window.onload = () => {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#002349', '#D4AF37'] });
-            
-            const rawProv = u.get('city') || u.get('province');
-            const rawCar = u.get('car') || u.get('type');
-            const rawName = u.get('name') || "زبون مجهول";
-            const rawPhone = u.get('phone') || "0000";
-            const rawTime = u.get('time') || "غير محدد";
-            const rawPrice = u.get('price') || "0";
-
-            document.getElementById('prov-ar').innerText = translateToArabic(rawProv);
-
-            let randomID = sessionStorage.getItem('currentOrderID');
-            if (!randomID) {
-                randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
-                sessionStorage.setItem('currentOrderID', randomID);
-            }
+            const u = new URLSearchParams(window.location.search);
+            const randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
-            
-            if (!sessionStorage.getItem('orderSent')) {
-                const data = {
-                    order_id: randomID,
-                    name: rawName,
-                    phone: rawPhone,
-                    province: translateToArabic(rawProv),
-                    car: translateToArabic(rawCar),
-                    time: rawTime,
-                    price: rawPrice
-                };
 
-                // إرسال البيانات فوراً إلى جوجل شيت
-                fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    cache: 'no-cache',
-                    body: JSON.stringify(data)
-                }).then(() => {
-                    sessionStorage.setItem('orderSent', 'true');
-                }).catch(err => {
-                    console.error("خطأ في الربط:", err);
-                });
-            }
+            const data = {
+                order_id: randomID,
+                name: u.get('name'),
+                phone: u.get('phone'),
+                province: u.get('city') || u.get('province'),
+                car: u.get('car'),
+                time: u.get('time'),
+                price: u.get('price')
+            };
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
         };
     </script>
 </body>
