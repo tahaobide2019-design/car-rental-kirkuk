@@ -65,8 +65,8 @@
     </div>
 
     <script>
-        // الرابط الجديد الفعال
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzj6sn1vSd6EbPbxrPZ3wkLiyrCcxtxj6PCkXL5IjluEulWnqKPHwED-9yyJHxSN-zTvA/exec";
+        // الرابط الجديد الذي قمت بنشره للتو
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxeucatHHJ5tYX7mv_y4lgxYzX9dBw6eS1sHas4YsVmMWQIlePBjVkWzSDLpVE766pqaA/exec";
 
         function registerOffice() {
             const btn = document.getElementById('loginBtn');
@@ -82,25 +82,14 @@
                 return alert("يا هلا بك، يرجى إكمال جميع الحقول المطلوبة لتفعيل الرادار.");
             }
 
-            // تجميل الزر أثناء المعالجة
             btn.disabled = true;
             btn.innerHTML = 'جاري التفعيل.. <span class="animate-spin text-2xl">⏳</span>';
 
-            // حفظ البيانات محلياً ليعمل الداشبورد فوراً
             localStorage.setItem('whale_office_data', JSON.stringify(data));
             
-            // توجيه للداشبورد بعد ثانية واحدة لإعطاء شعور بالاحترافية
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
-            }, 1200);
-        }
-
-        // التحقق مما إذا كان المكتب مسجلاً مسبقاً
-        window.onload = () => {
-            if(localStorage.getItem('whale_office_data')) {
-                // إذا أردت توجيهه تلقائياً إذا كان مسجلاً
-                // window.location.href = 'dashboard.html';
-            }
+            }, 1000);
         }
     </script>
 </body>
