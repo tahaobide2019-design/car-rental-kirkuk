@@ -17,6 +17,14 @@
             100% { transform: scale(1); }
         }
         .bg-gradient-success { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
+        /* أنيميشن تبديل اللغات */
+        .lang-fade { animation: fadeText 12s infinite; }
+        @keyframes fadeText {
+            0%, 20% { opacity: 1; transform: translateY(0); }
+            25%, 45% { opacity: 0; transform: translateY(-10px); }
+            50%, 70% { opacity: 1; transform: translateY(0); }
+            75%, 95% { opacity: 0; transform: translateY(10px); }
+        }
     </style>
 </head>
 <body class="bg-gradient-success flex items-center justify-center min-h-screen p-4 font-['Tajawal'] overflow-hidden">
@@ -24,69 +32,75 @@
     <div class="max-w-md w-full bg-white rounded-[3.5rem] p-8 text-center shadow-2xl border-b-[10px] border-[#D4AF37] relative bounce-in">
         
         <div class="flex justify-center mb-2">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 180px; height: 180px;" loop autoplay></dotlottie-player>
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 180px;" loop autoplay></dotlottie-player>
         </div>
 
-        <h1 class="text-3xl font-black text-[#002349] mb-3">يا هلا بيك! 😍✨</h1>
-        <p class="text-lg font-bold text-slate-700 mb-2">طلبك صار عندنا وبأمانة 🤝</p>
-        <p class="text-gray-500 font-medium mb-8 leading-relaxed">
-            مكاتبنا في <span id="userProvince" class="text-blue-600 font-black italic underline underline-offset-4">منطقتك</span> بدأت الآن بتجهيز أفضل العروض لك. خليك قريب من الموبايل، راح يتصلون بيك بأسرع وقت! 📞🚗
-        </p>
+        <div id="langContainer" class="space-y-4">
+            <div class="lang-block">
+                <h1 class="text-3xl font-black text-[#002349] mb-3">يا هلا بيك! 😍</h1>
+                <p class="text-gray-600 font-bold mb-4">تم استلام طلبك بنجاح، مكاتبنا في <span class="text-blue-600" id="prov-ar">منطقتك</span> ستتصل بك قريباً.</p>
+            </div>
+            <hr class="opacity-20">
+            <div class="lang-block">
+                <p class="text-sm font-bold text-slate-500">Bi xêr hatî! Daxwaza we hat qebûlkirin. ☀️</p>
+            </div>
+            <div class="lang-block">
+                <p class="text-sm font-bold text-slate-500">Hoş geldiniz! Talebiniz başarıyla alındı. 🇹🇷</p>
+            </div>
+            <div class="lang-block text-xs font-medium text-slate-400 uppercase tracking-widest">
+                Welcome! Your request is being processed. 🇬🇧
+            </div>
+        </div>
 
-        <div class="bg-blue-50 p-6 rounded-[2rem] mb-8 border-2 border-dashed border-blue-200 relative overflow-hidden">
-            <p class="text-[11px] font-black text-blue-400 uppercase tracking-widest mb-1">رقم رحلتك المميز 🎫</p>
-            <p id="orderIDDisplay" class="text-3xl font-black text-[#002349] drop-shadow-sm">#HUT-0000</p>
+        <div class="bg-blue-50 p-6 rounded-[2rem] my-8 border-2 border-dashed border-blue-200 relative overflow-hidden">
+            <p class="text-[11px] font-black text-blue-400 uppercase tracking-widest mb-1">ID: <span id="orderIDDisplay">#HUT-0000</span></p>
             <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl rotate-12">🐋</div>
         </div>
 
         <div class="space-y-4">
             <a href="index.html" class="block w-full py-5 bg-[#002349] text-[#D4AF37] rounded-2xl font-black text-xl shadow-lg hover:scale-105 transition-all">
-                العودة للرئيسية 🏠
+                الرئيسية | Home | Mal
             </a>
-            <p class="text-xs font-bold text-slate-400">شكراً لثقتك بـ "الحوت" لتأجير السيارات 🏁</p>
         </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        
-        // تم استبداله برابط تطبيق الويب الجديد الذي نشرته للتو
         const scriptURL = "https://script.google.com/macros/s/AKfycbxmvgqHvXsinogjAISeP7T1afYlh9z2VWpEpvwNYmnC2llzpvJpYvsRLKFJBeTLAZ-EzA/exec";
-        
-        function launchConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#002349', '#D4AF37', '#60a5fa']
-            });
+
+        // خريطة الترجمة للعربية لإرسالها للداشبورد
+        const translationMap = {
+            "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
+            "Duhok": "دهوك", "Sulaymaniyah": "السليمانية", "Mosul": "الموصل",
+            "Personal Car": "تأجير سيارة شخصية", "Wedding Car": "سيارات أعراس", "Driving Lessons": "تعليم قيادة"
+        };
+
+        function translateToArabic(text) {
+            return translationMap[text] || text;
         }
 
         window.onload = () => {
-            launchConfetti();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#002349', '#D4AF37'] });
             
-            const prov = u.get('city') || u.get('province');
-            if(prov) document.getElementById('userProvince').innerText = prov;
+            const rawProv = u.get('city') || u.get('province') || "منطقتك";
+            const rawCar = u.get('car') || u.get('type') || "خدمة عامة";
+            
+            document.getElementById('prov-ar').innerText = translateToArabic(rawProv);
 
-            const hasSent = sessionStorage.getItem('orderSent');
-            let randomID = sessionStorage.getItem('currentOrderID');
-            
-            if (!randomID) {
-                randomID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
-                sessionStorage.setItem('currentOrderID', randomID);
-            }
-            
+            let randomID = sessionStorage.getItem('currentOrderID') || "HUT-" + Math.floor(1000 + Math.random() * 9000);
+            sessionStorage.setItem('currentOrderID', randomID);
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            if (!hasSent) {
+            if (!sessionStorage.getItem('orderSent')) {
+                // تحويل البيانات للعربية قبل الإرسال
                 const data = {
                     order_id: randomID,
                     name: u.get('name'),
                     phone: u.get('phone'),
-                    province: prov,
-                    car: u.get('car') || u.get('type'),
+                    province: translateToArabic(rawProv),
+                    car: translateToArabic(rawCar),
                     time: u.get('time'),
-                    price: u.get('price') || "0" // إرسال السعر للعمود J في الإكسل
+                    price: u.get('price') || "0"
                 };
 
                 fetch(scriptURL, {
