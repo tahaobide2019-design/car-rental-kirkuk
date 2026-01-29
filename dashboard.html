@@ -8,41 +8,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; overflow-x: hidden; }
-        .glass-card { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; transition: transform 0.2s; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .glass-card { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s; }
         .glass-card:active { transform: scale(0.98); }
         .tab-active { color: #002349; border-bottom: 4px solid #D4AF37; font-weight: 900; }
         .badge-new { animation: pulse-gold 1.5s infinite; }
         @keyframes pulse-gold { 
-            0% { background-color: #D4AF37; } 
+            0% { background-color: #D4AF37; color: #002349; } 
             50% { background-color: #002349; color: white; } 
-            100% { background-color: #D4AF37; } 
+            100% { background-color: #D4AF37; color: #002349; } 
         }
         .loading-bar { height: 3px; background: #D4AF37; width: 0%; transition: width 0.3s; position: fixed; top: 0; z-index: 100; }
+        .shake-icon { animation: shake 0.5s infinite; }
+        @keyframes shake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(10deg); } 75% { transform: rotate(-10deg); } }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="loader" class="loading-bar"></div>
+    
     <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
 
     <nav class="sticky top-0 z-50 bg-[#002349] text-white px-5 py-4 flex justify-between items-center shadow-2xl">
         <div class="flex items-center gap-2">
-            <div class="bg-[#D4AF37] p-2 rounded-lg text-[#002349] font-black text-xs">🐋 رادار</div>
-            <p id="navOfficeInfo" class="text-[10px] font-bold opacity-80 uppercase tracking-tighter"></p>
+            <div class="bg-[#D4AF37] p-2 rounded-lg text-[#002349] font-black text-[10px] shadow-inner">🐋 رادار الحوت</div>
+            <p id="navOfficeInfo" class="text-[9px] font-bold opacity-80 uppercase tracking-tighter"></p>
         </div>
-        <button onclick="logout()" class="text-[10px] font-black bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg">خروج</button>
+        <button onclick="logout()" class="text-[10px] font-black bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl active:bg-red-500 active:text-white transition-colors">خروج</button>
     </nav>
 
     <div class="flex bg-white sticky top-[62px] z-40 border-b border-slate-200 shadow-sm">
-        <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 text-xs font-black transition-all tab-active">الرادار العام ✨</button>
-        <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 text-xs font-black transition-all text-slate-400">طلباتي المستلمة 📦</button>
+        <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 text-xs font-black transition-all tab-active uppercase">الرادار العام ✨</button>
+        <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 text-xs font-black transition-all text-slate-400 uppercase">طلباتي المستلمة 📦</button>
     </div>
 
-    <main class="p-4 max-w-2xl mx-auto space-y-4" id="mainContainer"></main>
+    <main class="p-4 max-w-2xl mx-auto space-y-4" id="mainContainer">
+        <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+            <i class="fas fa-satellite-dish fa-spin text-4xl mb-4"></i>
+            <p class="font-bold italic">جاري البحث عن طلبات جديدة...</p>
+        </div>
+    </main>
 
     <script>
-        // رابط تطبيق الويب الجديد
+        // الرابط الفعال المعتمد من قبلك [cite: 2026-01-29]
         const scriptURL = "https://script.google.com/macros/s/AKfycby-n4RGZSmkxBI_gmsOIF8sygwGJAXH-l4yvP15EpL8NdcKyZa4M_bQCygy_Ki2nW3IbQ/exec";
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
         let currentTab = 'new';
@@ -52,13 +60,14 @@
         document.getElementById('navOfficeInfo').innerText = `${officeData.name} | ${officeData.city}`;
 
         async function fetchOrders() {
-            document.getElementById('loader').style.width = "40%";
+            const loader = document.getElementById('loader');
+            loader.style.width = "40%";
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
                 const data = await res.json();
-                document.getElementById('loader').style.width = "100%";
+                loader.style.width = "100%";
                 
-                // منطق التنبيه الصوتي الذكي [cite: 2026-01-29]
+                // تنبيه صوتي ذكي للطلبات الجديدة في مدينة المكتب حصراً [cite: 2026-01-29]
                 if (currentTab === 'new') {
                     data.forEach(o => {
                         if (o.province === officeData.city && o.status === "قيد الانتظار" && !knownOrderIds.has(o.id)) {
@@ -69,14 +78,18 @@
                 }
                 
                 render(data);
-                setTimeout(() => document.getElementById('loader').style.width = "0%", 400);
-            } catch(e) { console.error("Radar Error"); }
+                setTimeout(() => loader.style.width = "0%", 400);
+            } catch(e) { 
+                console.error("Connection Error");
+                loader.style.backgroundColor = "red";
+                setTimeout(() => { loader.style.width = "0%"; loader.style.backgroundColor = "#D4AF37"; }, 1000);
+            }
         }
 
         function playAlert() {
             const sound = document.getElementById('alertSound');
             sound.currentTime = 0;
-            sound.play().catch(() => console.log("تفاعل مطلوب للصوت"));
+            sound.play().catch(() => console.log("الصوت بانتظار تفاعل المستخدم"));
         }
 
         function render(data) {
@@ -86,7 +99,11 @@
                 : data.filter(o => o.claimedBy === officeData.name);
 
             if(list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 text-slate-400 text-sm font-bold italic">لا يوجد شيء في الرادار حالياً.. ⚓</div>`;
+                container.innerHTML = `
+                <div class="text-center py-20">
+                    <div class="text-5xl opacity-20 mb-4">⚓</div>
+                    <p class="text-slate-400 text-sm font-bold italic">لا توجد طلبات متاحة حالياً في ${officeData.city}</p>
+                </div>`;
                 return;
             }
 
@@ -94,28 +111,36 @@
                 <div class="glass-card p-5 shadow-xl border-r-[6px] ${currentTab === 'new' ? 'border-[#D4AF37]' : 'border-blue-600'}">
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
-                            <span class="text-[8px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block uppercase italic">ID: ${o.id}</span>
-                            <h3 class="text-lg font-black text-[#002349]">${o.car}</h3>
-                            <p class="text-slate-500 text-[10px] font-bold mt-0.5"><i class="fas fa-location-dot text-[#D4AF37]"></i> ${o.province}</p>
+                            <span class="text-[8px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block uppercase italic tracking-tighter">${o.id}</span>
+                            <h3 class="text-lg font-black text-[#002349] leading-tight">${o.car}</h3>
+                            <p class="text-slate-500 text-[10px] font-bold mt-1"><i class="fas fa-location-dot text-[#D4AF37] ml-1"></i> ${o.province}</p>
                         </div>
                         <div class="text-left">
-                            <div class="text-blue-600 font-black text-lg">${o.price}</div>
-                            <div class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">دينار عراقي</div>
+                            <div class="text-blue-600 font-black text-xl leading-none">${o.price}</div>
+                            <div class="text-[8px] font-bold text-slate-400 uppercase mt-1">دينار عراقي</div>
                         </div>
                     </div>
 
                     ${currentTab === 'new' ? `
-                        <div class="mt-4 bg-blue-50/50 p-3 rounded-xl border border-blue-100 flex justify-between items-center">
-                            <p class="text-[10px] font-black text-blue-900">👤 العميل: ${o.name}</p>
-                            <span class="badge-new text-[8px] px-2 py-1 rounded-lg font-black italic">طلب جديد!</span>
+                        <div class="mt-4 bg-blue-50/50 p-3 rounded-2xl border border-blue-100 flex justify-between items-center">
+                            <p class="text-[10px] font-black text-blue-900 italic">👤 العميل: ${o.name}</p>
+                            <span class="badge-new text-[8px] px-3 py-1 rounded-full font-black uppercase tracking-tighter">جديد !</span>
                         </div>
-                        <button onclick="update('${o.id}', 'claim')" class="w-full mt-3 bg-[#002349] text-[#D4AF37] py-4 rounded-xl font-black text-xs shadow-lg hover:brightness-125 transition-all">إستلام فوري ✅</button>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full mt-3 bg-[#002349] text-[#D4AF37] py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">إستلام الطلبية ✅</button>
                     ` : `
-                        <div class="mt-4 grid gap-2">
-                            <a href="tel:${o.phone}" class="flex items-center justify-center gap-2 bg-green-500 text-white py-3.5 rounded-xl font-black text-xs shadow-md">اتصال مباشر <i class="fas fa-phone-flip animate-bounce"></i></a>
+                        <div class="mt-4 space-y-2">
+                            <div class="bg-green-50 p-3 rounded-2xl border border-green-100">
+                                <p class="text-[10px] font-black text-green-800 text-center mb-2">معلومات الزبون</p>
+                                <a href="tel:${o.phone}" class="flex items-center justify-center gap-3 bg-green-500 text-white py-4 rounded-xl font-black text-xs shadow-md active:bg-green-700 transition-colors">
+                                    إتصال بالزبون <i class="fas fa-phone-flip shake-icon"></i>
+                                </a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.province + ' ' + o.name)}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-800 text-white py-3 rounded-xl font-black text-[9px] mt-2 opacity-90">
+                                    تحديد الموقع <i class="fas fa-route"></i>
+                                </a>
+                            </div>
                             <div class="grid grid-cols-2 gap-2">
-                                <button onclick="update('${o.id}', 'complete')" class="bg-blue-600 text-white py-3 rounded-xl font-black text-[10px]">تم الإنجاز ✅</button>
-                                <button onclick="update('${o.id}', 'requestCancel')" class="bg-red-50 text-red-500 py-3 rounded-xl font-black text-[10px] border border-red-100">إلغاء ❌</button>
+                                <button onclick="update('${o.id}', 'complete')" class="bg-blue-600 text-white py-4 rounded-xl font-black text-[10px] shadow-sm active:bg-blue-800">تم الإنجاز ✅</button>
+                                <button onclick="update('${o.id}', 'requestCancel')" class="bg-red-50 text-red-500 py-4 rounded-xl font-black text-[10px] border border-red-100 active:bg-red-500 active:text-white">إلغاء ❌</button>
                             </div>
                         </div>
                     `}
@@ -124,11 +149,21 @@
         }
 
         async function update(id, act) {
-            const btn = event.target;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            if(act === 'requestCancel' && !confirm("هل تريد إرسال طلب إلغاء للإدارة؟")) return;
+            
+            const btn = event.currentTarget;
+            const oldContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
             btn.disabled = true;
-            await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
-            fetchOrders();
+
+            try {
+                await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
+                await fetchOrders();
+            } catch(e) {
+                alert("خطأ في الشبكة");
+                btn.innerHTML = oldContent;
+                btn.disabled = false;
+            }
         }
 
         function switchTab(t) {
@@ -140,8 +175,11 @@
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
         
-        // سرعة الرادار القصوى: تحديث كل 3 ثوانٍ [cite: 2026-01-29]
+        // سرعة الرادار: تحديث كل 3 ثوانٍ فقط لاقتناص الطلبات [cite: 2026-01-29]
         setInterval(fetchOrders, 3000);
+        
+        // تشغيل الرادار فور فتح الصفحة
+        document.addEventListener('click', () => { document.getElementById('alertSound').load(); }, {once: true});
         fetchOrders();
     </script>
 </body>
