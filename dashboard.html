@@ -3,64 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رادار الحوت - لوحة المكاتب</title>
+    <title>رادار الحوت - لوحة التحكم الذكية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-950 text-white min-h-screen p-4 pb-24 font-['Tajawal']">
+<body class="bg-slate-950 text-white min-h-screen font-['Tajawal'] pb-10">
 
-    <header class="mb-6 p-6 bg-slate-900 rounded-[2.5rem] border-b-4 border-[#D4AF37] shadow-2xl flex justify-between items-center">
-        <div>
-            <h1 class="text-xl font-black text-white">🐋 رادار الحوت</h1>
-            <p id="displayInfo" class="text-[#D4AF37] text-[10px] font-bold mt-1 uppercase"></p>
+    <header class="p-6 bg-slate-900 rounded-b-[3rem] border-b-4 border-[#D4AF37] shadow-2xl mb-6">
+        <div class="flex justify-between items-center max-w-4xl mx-auto">
+            <div>
+                <h1 class="text-2xl font-black italic">🐋 رادار الحوت</h1>
+                <p id="officeInfo" class="text-[#D4AF37] text-xs font-bold mt-1"></p>
+            </div>
+            <button onclick="logout()" class="bg-red-500/10 text-red-500 text-[10px] px-4 py-2 rounded-xl font-bold">خروج</button>
         </div>
-        <button onclick="logout()" class="bg-red-500/10 text-red-500 text-[10px] px-4 py-2 rounded-xl font-bold">تسجيل خروج</button>
     </header>
 
-    <div id="orders" class="space-y-4">
-        <div class="text-center p-20 text-slate-600 animate-pulse font-black">جاري تتبع الطلبات في منطقتك...</div>
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="flex gap-2 mb-8 bg-slate-900 p-2 rounded-2xl border border-slate-800">
+            <button onclick="switchTab('new')" id="btnNew" class="flex-1 py-3 rounded-xl font-black text-sm transition-all bg-[#D4AF37] text-slate-900">طلبات الرادار (الجديدة)</button>
+            <button onclick="switchTab('claimed')" id="btnClaimed" class="flex-1 py-3 rounded-xl font-black text-sm transition-all text-slate-400">طلباتي المستلمة</button>
+        </div>
+
+        <div id="ordersList" class="space-y-4">
+            <div class="text-center py-20 animate-pulse text-slate-500">جاري مسح الرادار...</div>
+        </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzujkqi1n4TXICqp7g-bBmAErnraR43JIvPdc2zPz0j6UobP-FHnED9-LxL9QF3IE_eqA/exec";
+        // رابط تطبيق الويب الأخير
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxmvgqHvXsinogjAISeP7T1afYlh9z2VWpEpvwNYmnC2llzpvJpYvsRLKFJBeTLAZ-EzA/exec";
         
-        // استرجاع بيانات المكتب الشاملة
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
+        let currentTab = 'new';
 
         if(!officeData) window.location.href = 'login.html';
-        document.getElementById('displayInfo').innerText = `مكتب ${officeData.name} | ${officeData.city}`;
+        document.getElementById('officeInfo').innerText = `مكتب ${officeData.name} | ${officeData.city}`;
 
         async function loadOrders() {
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
                 const data = await res.json();
                 
-                // تصفية الطلبات بناءً على "المحافظة" التي سجل بها المكتب فقط
-                const myCityOrders = data.filter(o => o.province === officeData.city && o.status === "قيد الانتظار");
+                const container = document.getElementById('ordersList');
                 
-                const container = document.getElementById('orders');
-                if (myCityOrders.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-20 bg-slate-900/50 rounded-[3rem] border-2 border-dashed border-slate-800">
-                            <p class="text-slate-500 font-bold">لا توجد طلبات حالياً في ${officeData.city}</p>
-                        </div>`;
+                // تصفية الطلبات بناءً على التبويب والمحافظة
+                let filtered;
+                if(currentTab === 'new') {
+                    filtered = data.filter(o => o.province === officeData.city && o.status === "قيد الانتظار");
+                } else {
+                    filtered = data.filter(o => o.claimedBy === officeData.name);
+                }
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div class="text-center py-20 text-slate-600 font-bold">لا توجد طلبات هنا حالياً ⚓</div>`;
                     return;
                 }
 
-                container.innerHTML = myCityOrders.map(o => `
-                    <div class="bg-slate-900 p-6 rounded-[2.5rem] border-r-8 border-[#D4AF37] shadow-xl relative overflow-hidden">
-                        <div class="flex justify-between items-start relative z-10">
+                container.innerHTML = filtered.map(o => `
+                    <div class="bg-slate-900 p-6 rounded-[2.5rem] border-r-8 ${currentTab === 'new' ? 'border-[#D4AF37]' : 'border-green-500'} shadow-xl">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h3 class="font-black text-2xl text-white">${o.car}</h3>
-                                <p class="text-slate-400 text-sm font-bold mt-1">العميل: ${o.name}</p>
-                                <p class="text-[#D4AF37] text-[10px] font-bold mt-1 italic">الموعد: ${o.time}</p>
+                                <p class="text-slate-400 text-sm font-bold">العميل: ${o.name}</p>
+                                <p class="text-blue-400 text-sm font-bold">📞 ${o.phone}</p>
                             </div>
                             <div class="text-left font-black text-green-400 text-xl">${o.price} د.ع</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 mt-6 relative z-10">
-                            <button onclick="updateStatus('${o.id}', 'claim')" class="bg-white text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md active:scale-95 transition-all">استلام ✅</button>
-                            <button onclick="updateStatus('${o.id}', 'requestCancel')" class="bg-slate-800 text-red-500 py-4 rounded-2xl font-black text-sm active:scale-95 transition-all">إلغاء ❌</button>
+
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            ${currentTab === 'new' ? 
+                                `<button onclick="updateStatus('${o.id}', 'claim')" class="flex-1 bg-white text-slate-900 py-3 rounded-xl font-black text-sm">استلام الطلب ✅</button>
+                                 <button onclick="updateStatus('${o.id}', 'requestCancel')" class="bg-slate-800 text-red-500 px-6 py-3 rounded-xl font-bold text-sm">إلغاء</button>` 
+                                : 
+                                `<button class="flex-1 bg-green-500/20 text-green-500 py-3 rounded-xl font-black text-sm border border-green-500/30">تم الاستلام بنجاح</button>`
+                            }
                         </div>
+                        <p class="text-slate-600 text-[10px] mt-4 text-center font-bold italic">وقت الطلب: ${o.time}</p>
                     </div>
                 `).join('');
             } catch(e) { console.error("Error:", e); }
@@ -69,15 +88,26 @@
         async function updateStatus(id, action) {
             const url = `${scriptURL}?action=${action}&id=${id}&office=${encodeURIComponent(officeData.name)}`;
             await fetch(url);
-            alert(action === 'claim' ? "مبروك! تم استلام الطلب." : "تم إلغاء الطلب من الرادار.");
+            alert(action === 'claim' ? "تم نقل الطلب لتبويب 'طلباتي المستلمة'" : "تم الإلغاء");
             loadOrders();
         }
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+        function switchTab(tab) {
+            currentTab = tab;
+            const btnNew = document.getElementById('btnNew');
+            const btnClaimed = document.getElementById('btnClaimed');
+            
+            if(tab === 'new') {
+                btnNew.className = "flex-1 py-3 rounded-xl font-black text-sm transition-all bg-[#D4AF37] text-slate-900";
+                btnClaimed.className = "flex-1 py-3 rounded-xl font-black text-sm transition-all text-slate-400";
+            } else {
+                btnClaimed.className = "flex-1 py-3 rounded-xl font-black text-sm transition-all bg-green-500 text-white";
+                btnNew.className = "flex-1 py-3 rounded-xl font-black text-sm transition-all text-slate-400";
+            }
+            loadOrders();
         }
 
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
         setInterval(loadOrders, 10000);
         loadOrders();
     </script>
