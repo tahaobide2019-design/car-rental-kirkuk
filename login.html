@@ -24,7 +24,7 @@
         <div class="space-y-4">
             <div class="space-y-2">
                 <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">اسم المكتب التجاري</label>
-                <input id="officeName" type="text" placeholder="مثلاً: مكتب الحوت كركوك" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all">
+                <input id="officeName" type="text" placeholder="مثلاً: مكتب الحوت كركوك" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all text-white">
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -62,8 +62,8 @@
     </div>
 
     <script>
-        // رابط تطبيق الويب الخاص بك (المحدث)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyrMl7y7nTEnqfaQONH9bCSeD7t_rF0iKdMw4cI5loW1m0jXva-mtiM4lybh5xykrPB/exec";
+        // رابط تطبيق الويب الجديد الخاص بك
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwlBj0BPa4z3zalacIlPHARGpUiCwhWGwGShzQsuzEE3YDhWme6Rr1vckfdHsAGmCnG/exec";
 
         async function registerOffice() {
             const btn = document.getElementById('loginBtn');
@@ -80,11 +80,12 @@
             btn.innerHTML = 'جاري التحقق من الحساب.. <span class="animate-spin ml-2 inline-block">⏳</span>';
 
             try {
-                // الاتصال بالسكريبت للتحقق من الحالة
+                // استدعاء الأكشن الخاص بفحص حالة المكتب
                 const response = await fetch(`${scriptURL}?action=checkOfficeStatus&id=${id}&name=${encodeURIComponent(officeName)}&city=${city}&map=${encodeURIComponent(map)}`);
                 const result = await response.json();
 
                 if (result.status === "نشط") {
+                    // تخزين بيانات الجلسة للانتقال للداشبورد
                     const officeData = { name: officeName, city: city, id: id, map: map };
                     localStorage.setItem('whale_office_data', JSON.stringify(officeData));
                     window.location.href = 'dashboard.html';
