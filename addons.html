@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,43 +12,45 @@
         :root { --main-color: #002349; --bg-soft: #f8fafc; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
         .glass-card { background: rgba(255, 255, 255, 0.98); }
-        .addon-item { border: 2px solid #e2e8f0; border-radius: 1.5rem; transition: 0.3s; cursor: pointer; background: #f9fafb; }
-        .addon-item.selected { border-color: var(--main-color); background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .check-indicator { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .addon-item { border: 2px solid #e2e8f0; border-radius: 1.75rem; transition: 0.3s; cursor: pointer; background: #f9fafb; }
+        .addon-item.selected { border-color: var(--main-color); background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: translateY(-5px); }
+        .check-indicator { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         .selected .check-indicator { background: var(--main-color); border-color: var(--main-color); color: white; }
         .dynamic-text { color: var(--main-color); transition: 0.5s; }
         .dynamic-bg { background-color: var(--main-color); transition: 0.5s; }
         .mood-msg { font-size: 0.85rem; font-weight: 700; opacity: 0.8; margin-top: 0.5rem; display: inline-block; padding: 4px 15px; border-radius: 12px; }
     </style>
 </head>
-<body class="p-4 md:p-8 text-right">
+<body class="p-4 md:p-8">
 
     <div id="mainCard" class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] transition-all duration-500">
         
         <div id="headerBox" class="p-10 text-center border-b transition-all duration-500">
             <div id="bigEmoji" class="text-6xl mb-3">🚗</div>
-            <h2 id="pageTitle" class="text-3xl font-black dynamic-text">إضافات الراحة</h2>
+            <h2 id="pageTitle" class="text-3xl font-black dynamic-text"></h2>
             <div id="congratsBox" class="mood-msg"></div>
             <br>
             <div id="typeBadge" class="mt-4 p-2 px-6 rounded-full text-[11px] font-black shadow-sm inline-block border"></div>
         </div>
 
         <div class="p-8 space-y-6">
+            <p id="welcomeMsg" class="text-center font-bold text-slate-600 leading-relaxed"></p>
+
             <div id="addonsContainer" class="space-y-3"></div>
 
             <div class="bg-gray-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner flex justify-between items-center">
-                <div>
-                    <span class="block text-[10px] font-black text-gray-400 uppercase">المجموع الكلي</span>
+                <div class="text-right">
+                    <span id="lblTotal" class="block text-[10px] font-black text-gray-400 uppercase"></span>
                     <div class="flex items-baseline gap-1">
                         <span id="totalDisplay" class="text-4xl font-black dynamic-text">0</span>
-                        <span class="text-xs font-bold opacity-40">د.ع</span>
+                        <span id="lblCurrency" class="text-xs font-bold opacity-40"></span>
                     </div>
                 </div>
                 <div class="text-left"><i class="fas fa-gem text-2xl opacity-20 dynamic-text"></i></div>
             </div>
 
             <button onclick="saveAndProceed()" class="w-full py-5 dynamic-bg text-white rounded-[2rem] font-black text-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3">
-                تأكيد ومتابعة <i class="fas fa-chevron-left text-sm"></i>
+                <span id="btnText"></span> <i class="fas fa-chevron-left text-sm"></i>
             </button>
         </div>
     </div>
@@ -56,58 +58,70 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type') || 'personal';
+        const carName = u.get('car') || '...';
         const basePrice = parseInt(u.get('price') || 0);
+        const currentLang = u.get('lang') || 'ar';
         let selected = [];
 
-        function initPage() {
-            const root = document.documentElement;
-            const hBox = document.getElementById('headerBox');
-            const badge = document.getElementById('typeBadge');
-            const emoji = document.getElementById('bigEmoji');
-            const title = document.getElementById('pageTitle');
-            const cBox = document.getElementById('congratsBox');
+        const translations = {
+            ar: { dir: 'rtl', titleP: 'إضافات الراحة', titleW: 'تجهيزات الموكب', welcomeP: `رحلتك مع ${carName} ستبدأ قريباً، اختر إضافاتك:`, welcomeW: `ليلة العمر بـ ${carName} تحتاج لمسات ملكية:`, moodP: 'رحلة آمنة نتمناها لك 💙', moodW: 'ألف مبروك.. ليلة سعيدة ✨', badgeP: 'توصيل شخصي', badgeW: 'باقة أعراس', total: 'المجموع الكلي', curr: 'د.ع', btn: 'تأكيد ومتابعة', dvr: 'سائق محترف', home: 'توصيل للمنزل', baby: 'كرسي أطفال', flowers: 'تزيين ملكي' },
+            ku: { dir: 'rtl', titleP: 'زیادکراوەکانی ئاسوودەیی', titleW: 'ئامادەکارییەکانی کاروان', welcomeP: `گەشتەکەت بە ${carName} دەست پێدەکات، زیادکراوەکان هەڵبژێرە:`, welcomeW: `شەوی تەمەن بە ${carName} پێویستی بە دەستکاری شاهانەیە:`, moodP: 'گەشتێکی ئارامت بۆ دەخوازین 💙', moodW: 'پیرۆزە.. شەوێکی خۆش ✨', badgeP: 'گەیاندنی تایبەت', badgeW: 'پاکێجی ئاهەنگ', total: 'کۆی گشتی', curr: 'دینار', btn: 'پ پشتڕاستکردنەوە', dvr: 'شۆفێری شارەزا', home: 'گەیاندن بۆ ماڵەوە', baby: 'کورسی منداڵ', flowers: 'ڕازاندنەوەی شاهانە' },
+            tr: { dir: 'ltr', titleP: 'Konfor Ekstraları', titleW: 'Konvoy Hazırlıkları', welcomeP: `${carName} ile yolculuğunuz başlıyor, ekstraları seçin:`, welcomeW: `${carName} ile bu özel gece için kraliyet dokunuşları:`, moodP: 'Güvenli yolculuklar dileriz 💙', moodW: 'Tebrikler.. Mutlu geceler ✨', badgeP: 'Kişisel Teslimat', badgeW: 'Düğün Paketi', total: 'Toplam Tutar', curr: 'IQD', btn: 'Onayla ve Devam Et', dvr: 'Profesyonel Şoför', home: 'Eve Teslimat', baby: 'Bebek Koltuğu', flowers: 'Kraliyet Süslemesi' },
+            en: { dir: 'ltr', titleP: 'Comfort Add-ons', titleW: 'Convoy Setup', welcomeP: `Your ride with ${carName} starts soon, choose add-ons:`, welcomeW: `A night with ${carName} needs royal touches:`, moodP: 'Safe trip wishes 💙', moodW: 'Congrats.. Happy night ✨', badgeP: 'Personal Delivery', badgeW: 'Wedding Package', total: 'Total Amount', curr: 'IQD', btn: 'Confirm & Proceed', dvr: 'Professional Driver', home: 'Home Delivery', baby: 'Baby Seat', flowers: 'Royal Decoration' }
+        };
 
+        function initPage() {
+            const l = translations[currentLang] || translations['ar'];
+            const root = document.documentElement;
+            document.getElementById('htmlTag').dir = l.dir;
+            document.body.style.textAlign = l.dir === 'rtl' ? 'right' : 'left';
+            
+            // تخصيص الألوان حسب النوع
             if(type === 'wedding') {
                 root.style.setProperty('--main-color', '#be185d');
                 root.style.setProperty('--bg-soft', '#fff1f2');
-                hBox.style.backgroundColor = '#fff1f2';
-                badge.innerText = 'باقة مناسبات الأعراس';
-                badge.className = 'mt-4 p-2 px-6 rounded-full text-[11px] font-black shadow-sm inline-block border border-pink-100 bg-white text-pink-600';
-                emoji.innerText = '💍';
-                title.innerText = 'تجهيزات الموكب';
-                cBox.innerText = "ألف مبروك.. ليلة سعيدة نتمناها لكم ✨";
+                document.getElementById('pageTitle').innerText = l.titleW;
+                document.getElementById('welcomeMsg').innerText = l.welcomeW;
+                document.getElementById('moodMsg'); // mood update logic...
+                document.getElementById('bigEmoji').innerText = '💍';
+                document.getElementById('typeBadge').innerText = l.badgeW;
+                document.getElementById('congratsBox').innerText = l.moodW;
             } else {
                 root.style.setProperty('--main-color', '#002349');
                 root.style.setProperty('--bg-soft', '#f8fafc');
-                hBox.style.backgroundColor = '#f0f4f8';
-                badge.innerText = 'خدمة التوصيل الشخصي';
-                badge.className = 'mt-4 p-2 px-6 rounded-full text-[11px] font-black shadow-sm inline-block border border-blue-100 bg-white text-[#002349]';
-                emoji.innerText = '🚗';
-                title.innerText = 'إضافات الراحة';
-                cBox.innerText = "رحلة ممتعة وآمنة نتمناها لك 💙";
+                document.getElementById('pageTitle').innerText = l.titleP;
+                document.getElementById('welcomeMsg').innerText = l.welcomeP;
+                document.getElementById('bigEmoji').innerText = '🚗';
+                document.getElementById('typeBadge').innerText = l.badgeP;
+                document.getElementById('congratsBox').innerText = l.moodP;
             }
+
+            document.getElementById('lblTotal').innerText = l.total;
+            document.getElementById('lblCurrency').innerText = l.curr;
+            document.getElementById('btnText').innerText = l.btn;
             document.getElementById('mainCard').style.borderColor = 'var(--main-color)';
-            renderAddons();
+            
+            renderAddons(l);
         }
 
-        function renderAddons() {
+        function renderAddons(l) {
             const container = document.getElementById('addonsContainer');
             let addons = [
-                { id: 'driver', name: 'سائق خاص محترف', price: 25000, icon: 'fa-user-tie' },
-                { id: 'home', name: 'توصيل السيارة للمنزل', price: 15000, icon: 'fa-map-marker-alt' }
+                { id: 'driver', name: l.dvr, price: 25000, icon: 'fa-user-tie' },
+                { id: 'home', name: l.home, price: 15000, icon: 'fa-map-marker-alt' }
             ];
             if(type === 'wedding') {
-                addons.push({ id: 'flowers', name: 'تزيين ملكي فاخر للموكب', price: 50000, icon: 'fa-gift' });
+                addons.push({ id: 'flowers', name: l.flowers, price: 50000, icon: 'fa-magic' });
             } else {
-                addons.push({ id: 'baby', name: 'كرسي أمان للأطفال', price: 10000, icon: 'fa-baby' });
+                addons.push({ id: 'baby', name: l.baby, price: 10000, icon: 'fa-baby-carriage' });
             }
             container.innerHTML = addons.map(item => `
                 <div onclick="toggleAddon('${item.id}', ${item.price}, this)" class="addon-item p-5 flex items-center justify-between">
-                    <div class="flex items-center gap-4 text-right">
+                    <div class="flex items-center gap-4">
                         <div class="text-xl dynamic-text"><i class="fas ${item.icon}"></i></div>
                         <div>
                             <h4 class="font-black text-sm text-slate-700">${item.name}</h4>
-                            <span class="text-[10px] font-bold text-amber-500">+ ${item.price.toLocaleString()} د.ع</span>
+                            <span class="text-[10px] font-bold text-amber-500">+ ${item.price.toLocaleString()} ${l.curr}</span>
                         </div>
                     </div>
                     <div class="check-indicator"><i class="fas fa-check text-[10px]"></i></div>
@@ -125,19 +139,14 @@
 
         function calculate() {
             const sum = selected.reduce((s, a) => s + a.price, 0);
-            const total = basePrice + sum;
-            document.getElementById('totalDisplay').innerText = total.toLocaleString();
-            return total;
+            document.getElementById('totalDisplay').innerText = (basePrice + sum).toLocaleString();
         }
 
         function saveAndProceed() {
             const names = selected.map(a => a.name).join(' + ');
-            const finalTotal = document.getElementById('totalDisplay').innerText.replace(/,/g, '');
-            
-            // تحديث بيانات الرابط
-            u.set('addons', names || 'بدون إضافات');
-            u.set('price', finalTotal); // نحدث السعر ليكون السعر النهائي الشامل
-            
+            const finalP = document.getElementById('totalDisplay').innerText.replace(/,/g, '');
+            u.set('addons', names || 'None');
+            u.set('price', finalP);
             const target = (type === 'wedding') ? 'booking_wedding.html' : 'booking_personal.html';
             window.location.href = `${target}?${u.toString()}`;
         }
