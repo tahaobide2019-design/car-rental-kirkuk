@@ -15,12 +15,12 @@
         .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8962E 100%); color: white; }
         .timer-badge { background: #fee2e2; color: #ef4444; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 900; }
         
-        /* تفاعلات الألوان الذكية المقتبسة من لوحة المدير */
-        .order-new { border-right: 8px solid #3b82f6; } /* أزرق - جديد */
-        .order-delayed { border-right: 8px solid #facc15; animation: pulse-yellow 2s infinite; } /* أصفر - تأخير متوسط */
-        .order-urgent { border-right: 8px solid #ef4444; animation: pulse-red 1s infinite; } /* أحمر - تأخير حرج */
-        .order-completed { border-right: 8px solid #22c55e; background: rgba(34, 197, 94, 0.05); } /* أخضر - منجز */
-        .order-cancel-req { border-right: 8px solid #a855f7; background: rgba(168, 85, 247, 0.05); } /* بنفسجي - طلب إلغاء */
+        /* تأثيرات الألوان الذكية */
+        .order-new { border-right: 8px solid #3b82f6; } 
+        .order-delayed { border-right: 8px solid #facc15; animation: pulse-yellow 2s infinite; } 
+        .order-urgent { border-right: 8px solid #ef4444; animation: pulse-red 1s infinite; } 
+        .order-completed { border-right: 8px solid #22c55e; background: rgba(34, 197, 94, 0.05); } 
+        .order-cancel-req { border-right: 8px solid #a855f7; background: rgba(168, 85, 247, 0.05); } 
 
         @keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         @keyframes pulse-yellow { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
@@ -32,7 +32,7 @@
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 btn-gold rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-whale"></i></div>
             <div>
-                <h1 id="navOfficeName" class="font-black text-xs text-slate-700">...</h1>
+                <h1 id="navOfficeName" class="font-black text-xs text-slate-700">جاري الاتصال..</h1>
                 <p id="navCity" class="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest"></p>
             </div>
         </div>
@@ -67,11 +67,9 @@
         document.getElementById('navOfficeName').innerText = officeData.name;
         document.getElementById('navCity').innerText = officeData.city;
 
-        // دالة تحديد صنف الألوان الذكي بناءً على الوقت والحالة
         function getOrderVisualClass(status, timestamp) {
             if (status.includes('✅')) return 'order-completed';
             if (status.includes('إلغاء')) return 'order-cancel-req';
-            
             const diff = Math.floor((new Date() - new Date(timestamp)) / 60000);
             if (status === "قيد الانتظار") {
                 if (diff > 30) return 'order-urgent';
@@ -89,10 +87,22 @@
         async function fetchOrders() {
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
-                allOrders = await res.json();
+                const rawData = await res.json();
+                
+                // منع التكرار بناءً على الـ ID الفريد للطلبية
+                const uniqueOrders = [];
+                const seenIds = new Set();
+                rawData.forEach(order => {
+                    if (!seenIds.has(order.id)) {
+                        seenIds.add(order.id);
+                        uniqueOrders.push(order);
+                    }
+                });
+
+                allOrders = uniqueOrders;
                 renderCards();
                 updateCounts();
-            } catch(e) { console.error("Error fetching orders"); }
+            } catch(e) { console.error("Radar Sync Error"); }
         }
 
         function renderCards() {
@@ -102,14 +112,16 @@
                 : allOrders.filter(o => o.claimedBy === officeData.name);
 
             if (list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات هنا حالياً..</div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات في ${officeData.city} حالياً..</div>`;
                 return;
             }
 
             container.innerHTML = list.map(o => {
                 const visualClass = getOrderVisualClass(o.status, o.timestamp);
-                // إصلاح عرض الإضافات: نتأكد من قراءة o.addons أو o.extra حسب تعريفك في الإكسل
-                const additions = (o.addons && o.addons !== "undefined" && o.addons !== "") ? o.addons : "بدون إضافات";
+                
+                // البحث الذكي عن الإضافات في مسميات مختلفة (addons أو extra)
+                let additions = o.addons || o.extra || "";
+                if (additions === "undefined" || additions === "") additions = "بدون إضافات";
 
                 return `
                 <div class="order-card p-6 shadow-sm ${visualClass}">
@@ -122,13 +134,13 @@
                     </div>
 
                     <div class="bg-slate-50 p-4 rounded-2xl mb-4 text-[11px] space-y-2 border border-slate-100">
-                        <div class="flex justify-between border-b border-white pb-1"><span>الزبون:</span><span class="font-black">${o.name}</span></div>
+                        <div class="flex justify-between border-b border-white pb-1"><span>الزبون:</span><span class="font-black text-slate-700">${o.name}</span></div>
                         <div class="flex justify-between border-b border-white pb-1"><span>الخدمة:</span><span class="font-black text-blue-600">${o.service || 'تأجير'}</span></div>
-                        <div class="flex justify-between border-b border-white pb-1"><span>الجنس / العمر:</span><span class="font-black">${o.gender || 'غير محدد'} (${o.age || '--'})</span></div>
+                        <div class="flex justify-between border-b border-white pb-1"><span>الجنس / العمر:</span><span class="font-black">${o.gender || 'ذكر'} (${o.age || '22'})</span></div>
                         <div class="flex justify-between border-b border-white pb-1"><span>المدة:</span><span class="font-black text-orange-600">${o.days || '1'} أيام</span></div>
                         <div class="pt-2">
-                            <span class="text-slate-400 block mb-1">الإضافات المطلوبة:</span> 
-                            <span class="text-slate-700 font-bold italic block bg-white p-2 rounded-lg border border-slate-100 shadow-sm underline decoration-[#D4AF37] decoration-2">${additions}</span>
+                            <span class="text-slate-400 block mb-1">الإضافات:</span> 
+                            <span class="text-slate-700 font-bold italic block bg-white p-2 rounded-lg border border-slate-200 shadow-sm">${additions}</span>
                         </div>
                     </div>
 
@@ -159,8 +171,8 @@
                 const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 const result = await res.json();
                 if(result.success) fetchOrders();
-                else alert("عذراً، قد يكون الطلب تم تحديثه أو استلامه مسبقاً");
-            } catch(e) { alert("خطأ في الاتصال بالسيرفر"); }
+                else alert("عذراً، الطلب تم تحديثه بالفعل");
+            } catch(e) { alert("خطأ في الاتصال"); }
         }
 
         function switchTab(t) {
@@ -178,8 +190,8 @@
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
         
-        // التحديث التلقائي كل 20 ثانية
-        setInterval(fetchOrders, 20000);
+        // تم تقليل الوقت إلى 5 ثوانٍ ليكون "لحظياً"
+        setInterval(fetchOrders, 5000);
         fetchOrders();
     </script>
 </body>
