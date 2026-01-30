@@ -81,7 +81,7 @@
                 : allOrders.filter(o => o.claimedBy === officeData.name);
 
             if(list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات حالياً..</div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات في محافظتك حالياً..</div>`;
                 return;
             }
 
@@ -89,34 +89,38 @@
                 <div class="order-card p-6 shadow-sm border-r-[8px] ${o.status.includes('✅') ? 'border-green-500' : 'border-[#D4AF37]'}">
                     <div class="flex justify-between items-start mb-4">
                         <div class="text-right">
-                            <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.order_id || o.id}</span>
-                            <h3 class="text-lg font-black text-[#1e293b] leading-tight">${o.car || 'كورس تدريب'}</h3>
-                            <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa-briefcase ml-1"></i>${o.service || 'صيانة عامة'}</p>
+                            <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.id}</span>
+                            <h3 class="text-lg font-black text-[#1e293b] leading-tight">${o.car || 'خدمة الحوت'}</h3>
+                            <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa-calendar-day ml-1"></i>المدة: ${o.days || '1'} يوم</p>
                         </div>
                         <div class="text-left">
                             <div class="text-[#D4AF37] font-black text-xl">${o.price || '0'}</div>
-                            <div class="text-[8px] font-bold text-slate-300 uppercase">دينار</div>
+                            <div class="text-[8px] font-bold text-slate-300 uppercase">دينار عراقي</div>
                         </div>
                     </div>
 
                     <div class="bg-slate-50 p-4 rounded-[1.5rem] mb-4 space-y-2 border border-slate-100">
                         <div class="flex justify-between border-b border-white pb-1">
                             <span class="text-[10px] font-bold text-slate-400">الاسم:</span>
-                            <span class="text-[10px] font-black text-slate-800">${o.name || 'غير متوفر'}</span>
+                            <span class="text-[10px] font-black text-slate-800">${o.name}</span>
                         </div>
-                        <div class="flex justify-between border-b border-white pb-1">
-                            <span class="text-[10px] font-bold text-slate-400">الجنس:</span>
-                            <span class="text-[10px] font-black ${o.gender === 'أنثى' ? 'text-pink-500' : 'text-blue-500'}">${o.gender || 'غير محدد'}</span>
+                         <div class="flex justify-between border-b border-white pb-1">
+                            <span class="text-[10px] font-bold text-slate-400">الإضافات:</span>
+                            <span class="text-[10px] font-black text-rose-500">${o.addons || 'لا يوجد'}</span>
                         </div>
                         
                         ${currentTab === 'mine' ? `
                             <div class="flex justify-between border-b border-white pb-1">
-                                <span class="text-[10px] font-bold text-slate-400">العمر:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.age || 'غير محدد'}</span>
+                                <span class="text-[10px] font-bold text-slate-400">الهاتف:</span>
+                                <span class="text-[10px] font-black text-green-600" dir="ltr">${o.phone}</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white pb-1">
+                                <span class="text-[10px] font-bold text-slate-400">الهوية:</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.nationalID}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-[10px] font-bold text-slate-400">رقم الهوية:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.nationalID || 'غير متوفر'}</span>
+                                <span class="text-[10px] font-bold text-slate-400">العمر:</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.age} سنة (${o.gender})</span>
                             </div>
                         ` : `
                             <div class="py-1 text-center border-t border-dashed border-slate-200 mt-1">
@@ -126,7 +130,7 @@
                     </div>
 
                     ${currentTab === 'new' ? `
-                        <button onclick="update('${o.order_id || o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all alert-pulse">إستلام الطلب الآن ✅</button>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all alert-pulse">إستلام الطلب الآن ✅</button>
                     ` : `
                         <div class="space-y-2">
                             ${!o.status.includes('✅') ? `
@@ -134,11 +138,11 @@
                                     <a href="tel:${o.phone}" class="flex items-center justify-center gap-2 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] shadow-md active:scale-95">
                                         <i class="fas fa-phone"></i> اتصال
                                     </a>
-                                    <a href="${o.map || '#'}" target="_blank" class="flex items-center justify-center gap-2 ${o.map ? 'bg-blue-600' : 'bg-slate-300 pointer-events-none'} text-white py-4 rounded-2xl font-black text-[10px] shadow-md active:scale-95">
+                                    <a href="${o.map}" target="_blank" class="flex items-center justify-center gap-2 ${o.map && o.map !== 'undefined' ? 'bg-blue-600' : 'bg-slate-300 pointer-events-none'} text-white py-4 rounded-2xl font-black text-[10px] shadow-md active:scale-95">
                                         <i class="fas fa-location-dot"></i> الموقع
                                     </a>
                                 </div>
-                                <button onclick="update('${o.order_id || o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs active:scale-95">تم الإنجاز ✅</button>
+                                <button onclick="update('${o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs active:scale-95">إتمام المهمة ✅</button>
                             ` : `
                                 <div class="bg-green-100 text-green-700 py-4 rounded-2xl text-center font-black text-xs">تم الإنجاز بنجاح 🏆</div>
                             `}
@@ -153,7 +157,7 @@
             try {
                 await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 fetchOrders();
-            } catch(e) { alert("خطأ في السيرفر"); }
+            } catch(e) { alert("خطأ في الاتصال بالسيرفر"); }
         }
 
         function switchTab(t) {
