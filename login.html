@@ -62,8 +62,8 @@
     </div>
 
     <script>
-        // الرابط الذي زودتني به تم تحديثه هنا
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw8wFETe9wXfHluETDSl9xwSQeuC6-XGXS359TJQ6Io4qThy2gBGj1UT5GPwE4pn-na/exec";
+        // الرابط الجديد الذي أرسلته تم تحديثه هنا بدقة
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw7jO9V-WQqPfqAzX5u37UcqLQOWpwQqhQlVV9HCMmZJkKhuBIq-R3zhPdrskJc8Isq/exec";
 
         async function registerOffice() {
             const btn = document.getElementById('loginBtn');
@@ -80,7 +80,7 @@
             btn.innerHTML = 'جاري التحقق من الحساب.. <span class="animate-spin ml-2 inline-block">⏳</span>';
 
             try {
-                // الاتصال المباشر بالرابط الجديد
+                // الاتصال بالسكريبت الجديد
                 const response = await fetch(`${scriptURL}?action=checkOfficeStatus&id=${id}&name=${encodeURIComponent(officeName)}&city=${city}&map=${encodeURIComponent(map)}`);
                 const result = await response.json();
 
@@ -99,8 +99,7 @@
                 }
             } catch (error) {
                 console.error("Login Error:", error);
-                // هذا هو الخطأ الذي كان يظهر لك سابقاً، إذا استمر يعني أن "عملية النشر" تحتاج مراجعة في جوجل سكريبت
-                alert("حدث خطأ في الاتصال بالسيرفر. تأكد من جودة الإنترنت وحاول مجدداً.");
+                alert("حدث خطأ في الاتصال بالسيرفر. تأكد من أنك قمت بنشر السكريبت (New Deployment) بشكل صحيح كـ Web App.");
                 resetBtn(btn);
             }
         }
