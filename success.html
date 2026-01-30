@@ -40,16 +40,15 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         
-        // رابط تطبيق الويب الجديد الخاص بك (تم التحديث)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw7HJU42xszDvZDF0l3V3ueO-IA7QwgDmtSTlrhiJ1t7WLCwPmQFfNKUxj_ieLn3p7G/exec";
+        // الرابط الجديد الذي زودتني به
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw8wFETe9wXfHluETDSl9xwSQeuC6-XGXS359TJQ6Io4qThy2gBGj1UT5GPwE4pn-na/exec";
 
-        // خريطة الترجمة لضمان وصول المحافظات والبيانات بالعربية للإكسل
+        // خريطة الترجمة لضمان دقة البيانات المرسلة للإكسل (المحافظات الثمانية)
         const translationMap = {
             "Kirkuk": "كركوك", "Kerkük": "كركوك",
             "Baghdad": "بغداد", "Bağdat": "بغداد",
             "Erbil": "أربيل", 
             "Basra": "البصرة",
-            "Duhok": "دهوك", 
             "Sulaymaniyah": "السليمانية", "Slemani": "السليمانية", "Süleymaniye": "السليمانية",
             "Mosul": "الموصل", "Musul": "الموصل",
             "Anbar": "الأنبار", "Enbar": "الأنبار",
@@ -87,6 +86,7 @@
             }
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
+            // منع تكرار الإرسال عند تحديث الصفحة
             if (!sessionStorage.getItem('orderSent')) {
                 const data = {
                     order_id: randomID,
@@ -112,8 +112,8 @@
                     headers: { 'Content-Type': 'application/json' }
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ تم إرسال الطلب بنجاح إلى الإكسل");
-                }).catch(err => console.error("❌ خطأ:", err));
+                    console.log("✅ تم إرسال طلب الزبون إلى إكسل الحوت");
+                }).catch(err => console.error("❌ فشل الإرسال:", err));
             }
         };
     </script>
