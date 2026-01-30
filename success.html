@@ -39,7 +39,7 @@
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        // المحرك الخاص بك
+        // المحرك الخاص بك (Google App Script)
         const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
 
         const translationMap = {
@@ -53,17 +53,20 @@
         window.onload = () => {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#1e293b', '#D4AF37'] });
             
-            // 1. التقاط كافة البيانات (بما فيها الجديدة)
+            // 1. التقاط كافة البيانات من الرابط (URL)
             const city = u.get('city') || u.get('province');
-            const car = u.get('car') || u.get('type');
-            const name = u.get('name') || "زبون مجهول";
-            const phone = u.get('phone') || "0000";
-            const price = u.get('price') || "0";
+            const car = u.get('car');
+            const name = u.get('name');
+            const phone = u.get('phone');
+            const price = u.get('price');
+            const days = u.get('days') || "1"; // عدد الأيام الجديد
+            const addons = u.get('addons') || "بدون إضافات"; // الإضافات الجديدة
             const gender = u.get('gender'); 
             const service = u.get('service');
-            const map = u.get('map');
-            const nationalID = u.get('nationalID') || u.get('id_no') || "غير متوفر"; // إضافة الهوية
-            const age = u.get('age') || "غير محدد"; // إضافة العمر
+            const mapLink = u.get('map');
+            const nationalID = u.get('id_no') || "غير متوفر"; 
+            const age = u.get('age') || "غير محدد";
+            const license = u.get('license') || "غير متوفر"; // رقم الإجازة
 
             document.getElementById('prov-ar').innerText = trans(city);
 
@@ -74,30 +77,36 @@
             }
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            // 2. إرسال البيانات للمحرك
+            // 2. إرسال البيانات للمحرك إذا لم تكن قد أرسلت في هذه الجلسة
             if (!sessionStorage.getItem('orderSent')) {
                 const data = {
+                    timestamp: new Date().toLocaleString(),
                     order_id: randomID,
                     name: name,
                     phone: phone,
                     province: trans(city),
-                    car: trans(car),
-                    price: price,
-                    gender: trans(gender),
+                    car: car,
+                    days: days,           // تم إضافة عدد الأيام
+                    addons: addons,       // تم إضافة الإضافات
+                    total_price: price,   // السعر النهائي
+                    gender: gender,
+                    age: age,
+                    national_id: nationalID,
+                    license_no: license,  // تم إضافة رقم الإجازة
                     service: service,
-                    map: map,
-                    nationalID: nationalID, // إرسال الهوية للإكسل
-                    age: age                // إرسال العمر للإكسل
+                    location_link: mapLink
                 };
 
+                // إرسال البيانات عبر POST
                 fetch(scriptURL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(data)
+                    mode: 'no-cors', // لضمان عدم حدوث مشاكل CORS مع جوجل سكريبت
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' }
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ تم تحديث الإكسل بكافة المعلومات");
-                });
+                    console.log("✅ البيانات أُرسلت بنجاح إلى الإكسل");
+                }).catch(err => console.error("❌ خطأ في الإرسال:", err));
             }
         };
     </script>
