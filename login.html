@@ -44,13 +44,13 @@
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">رقم الهوية</label>
-                    <input id="idNumber" type="number" placeholder="0000" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold text-center input-focus transition-all">
+                    <input id="idNumber" type="number" placeholder="0000" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold text-center input-focus transition-all text-white">
                 </div>
             </div>
 
             <div class="space-y-2">
                 <label class="text-[10px] font-black uppercase text-[#D4AF37] mr-2 tracking-widest">رابط الخرائط (اختياري)</label>
-                <input id="locationURL" type="url" placeholder="Google Maps Link" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all text-xs">
+                <input id="locationURL" type="url" placeholder="Google Maps Link" class="w-full p-4 bg-slate-800/50 rounded-2xl border border-slate-700 outline-none font-bold input-focus transition-all text-xs text-white">
             </div>
 
             <button onclick="registerOffice()" id="loginBtn" class="w-full py-5 bg-[#D4AF37] text-slate-950 rounded-2xl font-black text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.3)] mt-6 flex items-center justify-center gap-3">
@@ -62,8 +62,8 @@
     </div>
 
     <script>
-        // رابط السكريبت الموحد (يجب وضعه هنا بعد النشر)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
+        // رابط تطبيق الويب الخاص بك (المحدث)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyrMl7y7nTEnqfaQONH9bCSeD7t_rF0iKdMw4cI5loW1m0jXva-mtiM4lybh5xykrPB/exec";
 
         async function registerOffice() {
             const btn = document.getElementById('loginBtn');
@@ -72,39 +72,29 @@
             const id = document.getElementById('idNumber').value.trim();
             const map = document.getElementById('locationURL').value.trim();
 
-            // التحقق من الحقول الأساسية
             if(!officeName || !city || !id) {
                 return alert("يا هلا بك، يرجى إكمال جميع الحقول المطلوبة لتفعيل الرادار.");
             }
 
-            // تفعيل حالة التحميل
             btn.disabled = true;
             btn.innerHTML = 'جاري التحقق من الحساب.. <span class="animate-spin ml-2 inline-block">⏳</span>';
 
             try {
-                // الاتصال بالسكريبت للتحقق من حالة المكتب (نشط، معلق، محظور)
+                // الاتصال بالسكريبت للتحقق من الحالة
                 const response = await fetch(`${scriptURL}?action=checkOfficeStatus&id=${id}&name=${encodeURIComponent(officeName)}&city=${city}&map=${encodeURIComponent(map)}`);
                 const result = await response.json();
 
                 if (result.status === "نشط") {
-                    // إذا كان المكتب مفعلاً من قبل الإدارة، اسمح له بالدخول
-                    const officeData = {
-                        name: officeName,
-                        city: city,
-                        id: id,
-                        map: map
-                    };
+                    const officeData = { name: officeName, city: city, id: id, map: map };
                     localStorage.setItem('whale_office_data', JSON.stringify(officeData));
                     window.location.href = 'dashboard.html';
                 } 
                 else if (result.status === "معلق") {
-                    // إذا كان المكتب جديداً ولم يتم تفعيله بعد
-                    alert("يا هلا بك! طلب انضمامك قيد المراجعة حالياً من قبل الإدارة. سيتم تفعيل الرادار لك قريباً.");
+                    alert("يا هلا بك! طلب انضمامك قيد المراجعة حالياً. سيتم تفعيل الرادار لك من قبل الإدارة قريباً.");
                     resetBtn(btn);
                 } 
                 else if (result.status === "محظور") {
-                    // إذا تم حظر المكتب من لوحة القائد
-                    alert("عذراً، هذا الحساب معطل حالياً. يرجى التواصل مع إدارة عائلة الحوت.");
+                    alert("عذراً، هذا الحساب معطل حالياً. يرجى التواصل مع الإدارة.");
                     resetBtn(btn);
                 }
             } catch (error) {
