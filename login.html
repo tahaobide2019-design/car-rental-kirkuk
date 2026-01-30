@@ -40,6 +40,7 @@
                         <option value="السليمانية">السليمانية</option>
                         <option value="الأنبار">الأنبار</option>
                         <option value="ديالى">ديالى</option>
+                        <option value="دهوك">دهوك</option>
                     </select>
                 </div>
                 <div class="space-y-2">
@@ -62,7 +63,7 @@
     </div>
 
     <script>
-        // رابط تطبيق الويب الجديد الخاص بك
+        // الرابط الجديد والنهائي الخاص بك
         const scriptURL = "https://script.google.com/macros/s/AKfycbwlBj0BPa4z3zalacIlPHARGpUiCwhWGwGShzQsuzEE3YDhWme6Rr1vckfdHsAGmCnG/exec";
 
         async function registerOffice() {
@@ -80,12 +81,10 @@
             btn.innerHTML = 'جاري التحقق من الحساب.. <span class="animate-spin ml-2 inline-block">⏳</span>';
 
             try {
-                // استدعاء الأكشن الخاص بفحص حالة المكتب
                 const response = await fetch(`${scriptURL}?action=checkOfficeStatus&id=${id}&name=${encodeURIComponent(officeName)}&city=${city}&map=${encodeURIComponent(map)}`);
                 const result = await response.json();
 
                 if (result.status === "نشط") {
-                    // تخزين بيانات الجلسة للانتقال للداشبورد
                     const officeData = { name: officeName, city: city, id: id, map: map };
                     localStorage.setItem('whale_office_data', JSON.stringify(officeData));
                     window.location.href = 'dashboard.html';
