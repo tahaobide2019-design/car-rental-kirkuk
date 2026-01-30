@@ -3,77 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دخول الإدارة | شركة الحوت</title>
+    <title>لوحة التحكم | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Tajawal', sans-serif; 
-            background: radial-gradient(circle at top, #003366 0%, #002349 100%);
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.8s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .admin-card { background: white; border-radius: 1.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .sidebar { background: #002349; color: white; height: 100vh; position: sticky; top: 0; }
+        .input-field { width: 100%; padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 1rem; outline: none; transition: 0.3s; font-weight: 700; }
+        .input-field:focus { border-color: #D4AF37; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex">
 
-    <div class="login-card max-w-md w-full rounded-[3rem] p-10 shadow-2xl border-t-8 border-[#D4AF37]">
-        <div class="text-center mb-8">
-            <div class="text-5xl mb-3">🐋</div>
-            <h1 class="text-2xl font-black text-[#002349]">نظام إدارة الحـوت</h1>
-            <p class="text-gray-400 text-sm font-bold mt-1 uppercase tracking-widest">Secure Admin Access</p>
+    <aside class="sidebar w-64 p-6 hidden md:block">
+        <div class="text-2xl font-black text-[#D4AF37] mb-10 flex items-center gap-2">
+            <span>🐋 الحوت</span>
+        </div>
+        <nav class="space-y-4">
+            <a href="#" class="block p-3 rounded-xl bg-[#D4AF37] text-[#002349] font-bold"><i class="fas fa-car ml-2"></i> إدارة السيارات</a>
+            <a href="#" class="block p-3 rounded-xl hover:bg-white/10 font-bold opacity-70"><i class="fas fa-concierge-bell ml-2"></i> الخدمات</a>
+            <a href="#" class="block p-3 rounded-xl hover:bg-white/10 font-bold opacity-70"><i class="fas fa-chart-line ml-2"></i> الإحصائيات</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-10">
+            <h1 class="text-3xl font-black text-[#002349]">إدارة أسطول السيارات</h1>
+            <button onclick="toggleModal()" class="bg-[#002349] text-[#D4AF37] px-6 py-3 rounded-2xl font-bold shadow-lg flex items-center gap-2">
+                <i class="fas fa-plus"></i> إضافة سيارة جديدة
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="admin-card p-6 border-r-8 border-blue-500">
+                <p class="text-slate-400 font-bold text-sm">إجمالي السيارات</p>
+                <h2 id="totalCars" class="text-3xl font-black mt-2">0</h2>
+            </div>
+            <div class="admin-card p-6 border-r-8 border-green-500">
+                <p class="text-slate-400 font-bold text-sm">نشطة حالياً</p>
+                <h2 class="text-3xl font-black mt-2">12</h2>
+            </div>
+            <div class="admin-card p-6 border-r-8 border-amber-500">
+                <p class="text-slate-400 font-bold text-sm">تعديلات اليوم</p>
+                <h2 class="text-3xl font-black mt-2">4</h2>
+            </div>
         </div>
 
-        <form onsubmit="handleLogin(event)" class="space-y-5">
-            <div>
-                <label class="block text-xs font-black text-gray-400 mr-2 mb-2 uppercase">اسم المستخدم</label>
-                <div class="relative">
-                    <i class="fas fa-user absolute right-4 top-4 text-gray-300"></i>
-                    <input type="text" id="username" required class="w-full pr-12 p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:border-[#D4AF37] focus:bg-white transition-all font-bold">
+        <div class="admin-card overflow-hidden">
+            <table class="w-full text-right border-collapse">
+                <thead class="bg-slate-50 text-slate-500 font-bold">
+                    <tr>
+                        <th class="p-4">الصورة</th>
+                        <th class="p-4">اسم السيارة</th>
+                        <th class="p-4">السعر اليومي</th>
+                        <th class="p-4">الخدمة</th>
+                        <th class="p-4 text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="carTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="carModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-lg p-8 shadow-2xl">
+            <h2 class="text-2xl font-black mb-6 text-[#002349]">إضافة سيارة للأسطول</h2>
+            <div class="space-y-4">
+                <input type="text" id="newCarName" class="input-field" placeholder="اسم السيارة (مثلاً: تاهو 2025)">
+                <input type="number" id="newCarPrice" class="input-field" placeholder="السعر بالدينار">
+                <select id="newCarService" class="input-field">
+                    <option value="شخصي">تأجير شخصي</option>
+                    <option value="أعراس">أعراس ومناسبات</option>
+                    <option value="تدريب">تعليم قيادة</option>
+                </select>
+                <div class="p-4 border-2 border-dashed rounded-xl text-center text-slate-400 font-bold">
+                    <i class="fas fa-image mb-2"></i><br>
+                    سيتم استخدام المسار: images/Cars/
                 </div>
+                <input type="text" id="newCarImage" class="input-field" placeholder="اسم ملف الصورة (مثلاً: camry.png)">
             </div>
-
-            <div>
-                <label class="block text-xs font-black text-gray-400 mr-2 mb-2 uppercase">كلمة المرور</label>
-                <div class="relative">
-                    <i class="fas fa-lock absolute right-4 top-4 text-gray-300"></i>
-                    <input type="password" id="password" required class="w-full pr-12 p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:border-[#D4AF37] focus:bg-white transition-all font-bold">
-                </div>
+            <div class="flex gap-4 mt-8">
+                <button onclick="saveCar()" class="flex-1 bg-[#002349] text-[#D4AF37] py-4 rounded-xl font-black">حفظ السيارة</button>
+                <button onclick="toggleModal()" class="px-6 bg-slate-100 text-slate-500 py-4 rounded-xl font-bold">إلغاء</button>
             </div>
-
-            <button type="submit" class="w-full bg-[#002349] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-[#D4AF37] hover:text-[#002349] transform hover:scale-[1.02] active:scale-95 transition-all">
-                دخول اللوحة <i class="fas fa-sign-in-alt mr-2"></i>
-            </button>
-        </form>
-
-        <div class="mt-8 text-center">
-            <a href="../index.html" class="text-sm font-bold text-gray-400 hover:text-[#002349] transition-colors">
-                <i class="fas fa-arrow-right ml-1"></i> العودة للموقع الرئيسي
-            </a>
         </div>
     </div>
 
     <script>
-        function handleLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+        // مصفوفة افتراضية إذا لم تكن هناك بيانات محفوظة
+        let cars = JSON.parse(localStorage.getItem('HutCars')) || [];
 
-            // يمكنك تغيير بيانات الدخول هنا
-            if(user === "admin" && pass === "alhut2026") {
-                window.location.href = "dashboard.html";
-            } else {
-                alert("⚠️ خطأ في بيانات الدخول! يرجى المحاولة مرة أخرى.");
+        function renderCars() {
+            const tbody = document.getElementById('carTableBody');
+            document.getElementById('totalCars').innerText = cars.length;
+            tbody.innerHTML = '';
+            
+            cars.forEach((car, index) => {
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-slate-50 transition">
+                        <td class="p-4"><img src="../images/Cars/${car.img}" class="w-12 h-12 rounded-lg object-cover"></td>
+                        <td class="p-4 font-bold text-[#002349]">${car.name}</td>
+                        <td class="p-4 font-black text-green-600">${parseInt(car.price).toLocaleString()} د.ع</td>
+                        <td class="p-4"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">${car.service}</span></td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteCar(${index})" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fas fa-trash"></i></button>
+                            <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-lg"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function toggleModal() {
+            const modal = document.getElementById('carModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function saveCar() {
+            const newCar = {
+                name: document.getElementById('newCarName').value,
+                price: document.getElementById('newCarPrice').value,
+                service: document.getElementById('newCarService').value,
+                img: document.getElementById('newCarImage').value || 'placeholder.png'
+            };
+
+            if(!newCar.name || !newCar.price) return alert("يرجى ملء كافة البيانات");
+
+            cars.push(newCar);
+            localStorage.setItem('HutCars', JSON.stringify(cars));
+            renderCars();
+            toggleModal();
+            // تصفير الحقول
+            document.getElementById('newCarName').value = '';
+            document.getElementById('newCarPrice').value = '';
+        }
+
+        function deleteCar(index) {
+            if(confirm("هل أنت متأكد من حذف هذه السيارة؟")) {
+                cars.splice(index, 1);
+                localStorage.setItem('HutCars', JSON.stringify(cars));
+                renderCars();
             }
         }
+
+        window.onload = renderCars;
     </script>
 </body>
 </html>
