@@ -57,7 +57,8 @@
                         <i class="fas fa-star"></i> تفاصيل الحجز الملكي
                     </h3>
                     <div class="bg-rose-50 p-6 rounded-[2.5rem] border border-rose-100 relative">
-                        <div id="summary" class="text-sm font-black space-y-2 text-rose-900"></div>
+                        <div id="summary" class="text-sm font-black space-y-2 text-rose-900">
+                            </div>
                         <div class="absolute -top-3 -right-3 text-3xl">✨</div>
                     </div>
                     <p class="text-[10px] text-gray-400 font-bold px-4 leading-relaxed">
@@ -86,10 +87,8 @@
         const currentLang = u.get('lang') || 'ar';
 
         const trans = {
-            ar: { dir: 'rtl', title: 'مبارك لكما! 💍', sub: 'نحن فخورون بأن نكون جزءاً من يومكم', sec1: 'بيانات الحجز', sec2: 'تفاصيل المناسبة', sec3: 'موقع الانطلاق', name: 'الاسم الكامل', phone: 'رقم الهاتف', age: 'العمر', car: 'السيارة المختارة:', add: 'الإضافات:', submit: 'تأكيد الحجز الملكي', alert: 'يرجى إكمال البيانات لمشاركتكم الفرحة 🐋💍' },
-            ku: { dir: 'rtl', title: 'پیرۆزە! 💍', sub: 'شانازی دەکەین کە بەشێکین لە ڕۆژەکەتان', sec1: 'زانیاری حجز', sec2: 'وردەکاری بۆنەکە', sec3: 'شوێنی دەستپێکردن', name: 'ناوی تەواو', phone: 'ژمارەی مۆبایل', age: 'تەمەن', car: 'ئۆتۆمبێل:', add: 'زیادکراوەکان:', submit: 'پشتڕاستکردنەوەی حجز', alert: 'تکایە زانیارییەکان تەواو بکە 🐋💍' },
-            tr: { dir: 'ltr', title: 'Tebrikler! 💍', sub: 'Özel gününüzün bir parçası olmaktan gurur duyuyoruz', sec1: 'Rezervasyon Bilgileri', sec2: 'Etkinlik Detayları', sec3: 'Başlangıç Konumu', name: 'Tam Adı', phone: 'Telefon', age: 'Yaş', car: 'Araç:', add: 'Ekstralar:', submit: 'Kraliyet Rezervasyonunu Onayla', alert: 'Lütfen bilgileri doldurun 🐋💍' },
-            en: { dir: 'ltr', title: 'Congratulations! 💍', sub: 'Proud to be part of your special day', sec1: 'Booking Info', sec2: 'Event Details', sec3: 'Start Location', name: 'Full Name', phone: 'Phone', age: 'Age', car: 'Car:', add: 'Add-ons:', submit: 'Confirm Royal Booking', alert: 'Please fill all details 🐋💍' }
+            ar: { dir: 'rtl', title: 'مبارك لكما! 💍', sub: 'نحن فخورون بأن نكون جزءاً من يومكم', sec1: 'بيانات الحجز', sec2: 'تفاصيل المناسبة', sec3: 'موقع الانطلاق', name: 'الاسم الكامل', phone: 'رقم الهاتف', age: 'العمر', car: 'السيارة:', days: 'المدة:', price: 'المجموع:', add: 'الإضافات:', submit: 'تأكيد الحجز الملكي', alert: 'يرجى إكمال البيانات لمشاركتكم الفرحة 🐋💍', unit: 'يوم', curr: 'د.ع' },
+            ku: { dir: 'rtl', title: 'پیرۆزە! 💍', sub: 'شانازی دەکەین کە بەشێکین لە ڕۆژەکەتان', sec1: 'زانیاری حجز', sec2: 'وردەکاری بۆنەکە', sec3: 'شوێنی دەستپێکردن', name: 'ناوی تەواو', phone: 'ژمارەی مۆبایل', age: 'تەمەن', car: 'ئۆتۆمبێل:', days: 'ماوە:', price: 'کۆی گشتی:', add: 'زیادکراوەکان:', submit: 'پشتڕاستکردنەوەی حجز', alert: 'تکایە زانیارییەکان تەواو بکە 🐋💍', unit: 'ڕۆژ', curr: 'دینار' }
         };
 
         window.onload = function() {
@@ -102,9 +101,13 @@
             document.getElementById('custAge').placeholder = l.age;
             document.getElementById('btnSubmit').innerText = l.submit;
 
+            // عرض ملخص الحجز مع عدد الأيام والسعر النهائي
+            const finalPrice = parseInt(u.get('price') || 0).toLocaleString();
             document.getElementById('summary').innerHTML = `
                 <div class="flex justify-between border-b border-rose-100 pb-2"><span>${l.car}</span> <span>${u.get('car') || ''}</span></div>
-                <div class="flex justify-between pt-2"><span>${l.add}</span> <span class="text-[10px]">${u.get('addons') || '---'}</span></div>
+                <div class="flex justify-between border-b border-rose-100 py-2"><span>${l.days}</span> <span>${u.get('days') || 1} ${l.unit}</span></div>
+                <div class="flex justify-between border-b border-rose-100 py-2"><span>${l.add}</span> <span class="text-[10px] text-left">${u.get('addons') || '---'}</span></div>
+                <div class="flex justify-between pt-2 text-rose-700 font-black text-lg"><span>${l.price}</span> <span>${finalPrice} ${l.curr}</span></div>
             `;
 
             map = L.map('map').setView([33.3152, 44.3661], 12);
