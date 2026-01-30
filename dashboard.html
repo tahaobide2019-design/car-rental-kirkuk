@@ -51,7 +51,9 @@
     <main class="p-4 max-w-2xl mx-auto space-y-6" id="mainContainer"></main>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxQiq-dn55ZaMfjhOBJzs-YXfrAt_IkcrbfCDhzgIDE3MIB09AGEtRTrCRpa7eCuObK2g/exec";
+        // الرابط الجديد الخاص بك
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyrMl7y7nTEnqfaQONH9bCSeD7t_rF0iKdMw4cI5loW1m0jXva-mtiM4lybh5xykrPB/exec";
+        
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
         let currentTab = 'new';
         let allOrders = [];
@@ -70,7 +72,9 @@
         }
 
         function updateCounts() {
+            // الطلبات المنجزة من قبل هذا المكتب
             document.getElementById('myCount').innerText = allOrders.filter(o => o.claimedBy === officeData.name && o.status.includes('✅')).length;
+            // الطلبات المتاحة في نفس محافظة المكتب
             document.getElementById('radarCount').innerText = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار").length;
         }
 
@@ -81,7 +85,7 @@
                 : allOrders.filter(o => o.claimedBy === officeData.name);
 
             if(list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات في محافظتك حالياً..</div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات في ${officeData.city} حالياً..</div>`;
                 return;
             }
 
@@ -92,6 +96,7 @@
                             <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.id}</span>
                             <h3 class="text-lg font-black text-[#1e293b] leading-tight">${o.car || 'خدمة الحوت'}</h3>
                             <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa-calendar-day ml-1"></i>المدة: ${o.days || '1'} يوم</p>
+                            <p class="text-[9px] font-bold text-slate-400 mt-0.5"><i class="fas fa-concierge-bell ml-1"></i>الخدمة: ${o.service || 'عام'}</p>
                         </div>
                         <div class="text-left">
                             <div class="text-[#D4AF37] font-black text-xl">${o.price || '0'}</div>
@@ -119,8 +124,8 @@
                                 <span class="text-[10px] font-black text-slate-800">${o.nationalID}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-[10px] font-bold text-slate-400">العمر:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.age} سنة (${o.gender})</span>
+                                <span class="text-[10px] font-bold text-slate-400">العمر/الجنس:</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.age} سنة / ${o.gender}</span>
                             </div>
                         ` : `
                             <div class="py-1 text-center border-t border-dashed border-slate-200 mt-1">
@@ -155,6 +160,7 @@
         async function update(id, act) {
             if(!confirm("تأكيد هذا الإجراء؟")) return;
             try {
+                // إرسال الطلب للسكريبت
                 await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 fetchOrders();
             } catch(e) { alert("خطأ في الاتصال بالسيرفر"); }
@@ -168,6 +174,8 @@
         }
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+        
+        // تحديث الرادار كل 10 ثوانٍ تلقائياً
         setInterval(fetchOrders, 10000);
         fetchOrders();
     </script>
