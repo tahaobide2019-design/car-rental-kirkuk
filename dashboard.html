@@ -53,8 +53,8 @@
     </main>
 
     <script>
-        // الرابط الجديد الذي زودتني به
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw8wFETe9wXfHluETDSl9xwSQeuC6-XGXS359TJQ6Io4qThy2gBGj1UT5GPwE4pn-na/exec";
+        // الرابط الجديد الذي زودتني به تم تحديثه هنا
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw7jO9V-WQqPfqAzX5u37UcqLQOWpwQqhQlVV9HCMmZJkKhuBIq-R3zhPdrskJc8Isq/exec";
         
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
         let currentTab = 'new';
@@ -72,12 +72,15 @@
                 updateCounts();
             } catch(e) { 
                 console.error("Fetch Error"); 
+                document.getElementById('mainContainer').innerHTML = '<div class="text-center py-10 text-red-400 text-xs">فشل الاتصال بالرادار..</div>';
             }
         }
 
         function updateCounts() {
             if(!allOrders || !allOrders.length) return;
+            // المنجز اليوم: الطلبات التي استلمتها أنت وحالتها مكتملة
             document.getElementById('myCount').innerText = allOrders.filter(o => o.claimedBy === officeData.name && o.status.includes('✅')).length;
+            // الرادار العام: الطلبات التي في محافظتك ولا تزال قيد الانتظار
             document.getElementById('radarCount').innerText = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار").length;
         }
 
@@ -115,11 +118,11 @@
                         ${currentTab === 'mine' ? `
                             <div class="flex justify-between border-b border-white pb-1">
                                 <span class="text-[10px] font-bold text-slate-400">الهاتف:</span>
-                                <span class="text-[10px] font-black text-green-600" dir="ltr">${o.phone}</span>
+                                <a href="tel:${o.phone}" class="text-[10px] font-black text-green-600 underline" dir="ltr">${o.phone}</a>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-[10px] font-bold text-slate-400">العمر/الجنس:</span>
-                                <span class="text-[10px] font-black text-slate-800">${o.age} سنة / ${o.gender}</span>
+                                <span class="text-[10px] font-black text-slate-800">${o.age || 'غير محدد'} سنة / ${o.gender || 'غير محدد'}</span>
                             </div>
                         ` : `
                             <div class="py-1 text-center border-t border-dashed border-slate-200 mt-1">
@@ -156,9 +159,14 @@
             try {
                 const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 const result = await res.json();
-                if(result.success) fetchOrders();
-                else alert("عذراً، قد يكون الطلب استلم من قبل مكتب آخر");
-            } catch(e) { alert("حدث خطأ في الاتصال بالسيرفر"); }
+                if(result.success) {
+                    fetchOrders();
+                } else {
+                    alert("عذراً، قد يكون الطلب استلم من قبل مكتب آخر");
+                }
+            } catch(e) { 
+                alert("حدث خطأ في الاتصال بالسيرفر"); 
+            }
         }
 
         function switchTab(t) {
@@ -168,8 +176,12 @@
             renderCards();
         }
 
-        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+        function logout() { 
+            localStorage.clear(); 
+            window.location.href = 'login.html'; 
+        }
         
+        // تحديث البيانات كل 15 ثانية تلقائياً
         setInterval(fetchOrders, 15000); 
         fetchOrders();
     </script>
