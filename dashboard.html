@@ -3,59 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رادار الحوت Gold Edition 🐋</title>
+    <title>رادار الحوت المطور 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
-        .gold-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.2); }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .gold-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); border-b: 1px solid rgba(212, 175, 55, 0.2); }
         .tab-active { color: #D4AF37; border-bottom: 4px solid #D4AF37; font-weight: 900; }
-        .order-card { background: white; border-radius: 2.5rem; border: 1px solid #e2e8f0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .order-card { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; transition: 0.3s; position: relative; }
         .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8962E 100%); color: white; }
-        .alert-pulse { animation: alert-glow 1.5s infinite; }
-        @keyframes alert-glow { 0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.2); } 70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); } 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }
+        .timer-badge { background: #fee2e2; color: #ef4444; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 900; }
     </style>
 </head>
 <body class="pb-28">
 
-    <nav class="sticky top-0 z-50 gold-glass px-6 py-4 flex justify-between items-center border-b border-gold/10">
+    <nav class="sticky top-0 z-50 gold-glass px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 btn-gold rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-whale text-xl"></i></div>
+            <div class="w-10 h-10 btn-gold rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-whale"></i></div>
             <div>
-                <h1 id="navOfficeName" class="font-black text-xs text-[#1e293b]">جاري التحميل..</h1>
-                <p id="navCity" class="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest"></p>
+                <h1 id="navOfficeName" class="font-black text-xs">...</h1>
+                <p id="navCity" class="text-[9px] font-bold text-[#D4AF37] uppercase"></p>
             </div>
         </div>
-        <button onclick="logout()" class="p-2 px-4 bg-red-50 text-red-500 rounded-xl border border-red-100 text-[10px] font-black">خروج</button>
+        <button onclick="logout()" class="p-2 px-4 bg-red-50 text-red-500 rounded-xl text-[10px] font-black italic">خروج</button>
     </nav>
 
     <div class="p-4 grid grid-cols-2 gap-3 max-w-2xl mx-auto text-center">
         <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
-            <p class="text-[8px] font-black text-slate-400 uppercase mb-1">منجز اليوم</p>
+            <p class="text-[8px] font-black text-slate-400 uppercase">منجز اليوم</p>
             <p id="myCount" class="text-xl font-black text-green-600">0</p>
         </div>
         <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
-            <p class="text-[8px] font-black text-slate-400 uppercase mb-1">الرادار العام</p>
+            <p class="text-[8px] font-black text-slate-400 uppercase">الرادار العام</p>
             <p id="radarCount" class="text-xl font-black text-[#D4AF37]">0</p>
         </div>
     </div>
 
-    <div class="sticky top-[71px] z-40 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div class="flex">
-            <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 text-[11px] font-black transition-all tab-active uppercase">الطلبات الجديدة ✨</button>
-            <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 text-[11px] font-black transition-all text-slate-400 uppercase">صندوقي العملي 📦</button>
-        </div>
+    <div class="sticky top-[71px] z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 flex">
+        <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 text-[11px] font-black tab-active">الطلبات الجديدة ✨</button>
+        <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 text-[11px] font-black text-slate-400">صندوقي العملي 📦</button>
     </div>
 
-    <main class="p-4 max-w-2xl mx-auto space-y-6" id="mainContainer">
-        <div class="text-center py-20 opacity-30 text-xs font-bold">جاري تحديث الرادار... 📡</div>
-    </main>
+    <main class="p-4 max-w-2xl mx-auto space-y-6" id="mainContainer"></main>
 
     <script>
-        // الرابط الجديد والموحد h8
         const scriptURL = "https://script.google.com/macros/s/AKfycbxjkaA9pVrodw8vJcNQnJ2r8yQhIzScsxxj3R_a24Tkyz5V93E0WDwYzyYstI_weXh8/exec";
-        
         const officeData = JSON.parse(localStorage.getItem('whale_office_data'));
         let currentTab = 'new';
         let allOrders = [];
@@ -64,22 +57,18 @@
         document.getElementById('navOfficeName').innerText = officeData.name;
         document.getElementById('navCity').innerText = officeData.city;
 
+        function getTimeAgo(dateString) {
+            const diff = Math.floor((new Date() - new Date(dateString)) / 60000);
+            return diff < 1 ? "الآن" : `منذ ${diff} دقيقة`;
+        }
+
         async function fetchOrders() {
             try {
                 const res = await fetch(`${scriptURL}?action=getAllOrders&t=${Date.now()}`);
                 allOrders = await res.json();
                 renderCards();
                 updateCounts();
-            } catch(e) { 
-                console.error("Fetch Error"); 
-                document.getElementById('mainContainer').innerHTML = '<div class="text-center py-10 text-red-400 text-xs">فشل الاتصال بالرادار المحدث..</div>';
-            }
-        }
-
-        function updateCounts() {
-            if(!allOrders || !allOrders.length) return;
-            document.getElementById('myCount').innerText = allOrders.filter(o => o.claimedBy === officeData.name && o.status.includes('✅')).length;
-            document.getElementById('radarCount').innerText = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار").length;
+            } catch(e) { console.error("Error"); }
         }
 
         function renderCards() {
@@ -88,86 +77,69 @@
                 ? allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار")
                 : allOrders.filter(o => o.claimedBy === officeData.name);
 
-            if(!list || list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 opacity-30 text-sm font-bold">لا توجد طلبات في ${officeData.city} حالياً..</div>`;
-                return;
-            }
-
             container.innerHTML = list.map(o => `
                 <div class="order-card p-6 shadow-sm border-r-[8px] ${o.status.includes('✅') ? 'border-green-500' : 'border-[#D4AF37]'}">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="text-right">
-                            <span class="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded text-slate-500 mb-1 inline-block italic">${o.id}</span>
-                            <h3 class="text-lg font-black text-[#1e293b] leading-tight">${o.car || 'خدمة الحوت'}</h3>
-                            <p class="text-[10px] font-bold text-blue-600 mt-1"><i class="fas fa-calendar-day ml-1"></i>المدة: ${o.days || '1'} يوم</p>
+                        <div>
+                            <span class="timer-badge"><i class="far fa-clock ml-1"></i>${getTimeAgo(o.timestamp || new Date())}</span>
+                            <h3 class="text-lg font-black text-[#1e293b] mt-2">${o.car}</h3>
                         </div>
-                        <div class="text-left">
-                            <div class="text-[#D4AF37] font-black text-xl">${o.price || '0'}</div>
-                            <div class="text-[8px] font-bold text-slate-300 uppercase">د.ع</div>
-                        </div>
+                        <div class="text-left font-black text-[#D4AF37] text-xl">${o.price} <span class="text-[8px] block text-slate-300">د.ع</span></div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 rounded-[1.5rem] mb-4 space-y-2 border border-slate-100">
-                        <div class="flex justify-between border-b border-white pb-1">
-                            <span class="text-[10px] font-bold text-slate-400">الزبون:</span>
-                            <span class="text-[10px] font-black text-slate-800">${o.name}</span>
-                        </div>
-                        
-                        ${currentTab === 'mine' ? `
-                            <div class="flex justify-between border-b border-white pb-1">
-                                <span class="text-[10px] font-bold text-slate-400">الهاتف:</span>
-                                <a href="tel:${o.phone}" class="text-[10px] font-black text-green-600 underline" dir="ltr">${o.phone}</a>
-                            </div>
-                        ` : `
-                            <div class="py-1 text-center border-t border-dashed border-slate-200 mt-1">
-                                <span class="text-[8px] font-bold text-slate-300 italic">التفاصيل تظهر للمستلم فقط 🔒</span>
-                            </div>
-                        `}
+                    <div class="bg-slate-50 p-4 rounded-2xl mb-4 text-[11px] space-y-2 border border-slate-100">
+                        <div class="flex justify-between"><span>الزبون:</span><span class="font-black">${o.name}</span></div>
+                        <div class="flex justify-between"><span>الخدمة:</span><span class="font-black text-blue-600">${o.service || 'تأجير'}</span></div>
+                        <div class="flex justify-between"><span>الجنس / العمر:</span><span class="font-black">${o.gender || 'ذكر'} (${o.age || '20'})</span></div>
+                        <div class="flex justify-between"><span>المدة:</span><span class="font-black text-orange-600">${o.days} أيام</span></div>
+                        <div class="pt-2 border-t border-dashed"><span>الإضافات:</span> <span class="text-slate-500 block mt-1 italic">${o.addons}</span></div>
                     </div>
 
                     ${currentTab === 'new' ? `
-                        <button onclick="update('${o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all alert-pulse">إستلام الطلب للعمل ✅</button>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full btn-gold py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">إستلام الطلب للعمل ✅</button>
                     ` : `
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             ${!o.status.includes('✅') ? `
                                 <div class="grid grid-cols-2 gap-2">
-                                    <a href="tel:${o.phone}" class="flex items-center justify-center gap-2 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] shadow-md active:scale-95">
-                                        <i class="fas fa-phone"></i> اتصال
-                                    </a>
-                                    <a href="${o.map}" target="_blank" class="flex items-center justify-center gap-2 ${o.map && o.map !== 'undefined' && o.map !== '' ? 'bg-blue-600' : 'bg-slate-300 pointer-events-none'} text-white py-4 rounded-2xl font-black text-[10px] shadow-md active:scale-95">
-                                        <i class="fas fa-location-dot"></i> الموقع
-                                    </a>
+                                    <a href="tel:${o.phone}" class="bg-green-500 text-white py-4 rounded-2xl text-center font-black text-[10px] shadow-md"><i class="fas fa-phone ml-1"></i>اتصال</a>
+                                    <a href="${o.map}" target="_blank" class="bg-blue-600 text-white py-4 rounded-2xl text-center font-black text-[10px] shadow-md"><i class="fas fa-map-marker-alt ml-1"></i>الموقع</a>
                                 </div>
-                                <button onclick="update('${o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs active:scale-95">إتمام المهمة ✅</button>
+                                <button onclick="update('${o.id}', 'complete')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-black text-xs">إتمام المهمة ✅</button>
+                                <button onclick="update('${o.id}', 'cancelRequest')" class="w-full text-red-500 py-2 text-[10px] font-bold border border-red-100 rounded-xl">⚠️ طلب إلغاء الطلبية</button>
                             ` : `
-                                <div class="bg-green-100 text-green-700 py-4 rounded-2xl text-center font-black text-xs">تم الإنجاز بنجاح 🏆</div>
+                                <div class="bg-green-100 text-green-700 py-4 rounded-2xl text-center font-black text-xs italic">تم الإنجاز بنجاح 🏆</div>
                             `}
                         </div>
                     `}
                 </div>
-            `).join('');
+            `).reverse().join('');
         }
 
         async function update(id, act) {
-            if(!confirm("تأكيد هذا الإجراء؟")) return;
+            const msg = act === 'cancelRequest' ? "هل تريد إرسال طلب إلغاء للمانجر؟" : "تأكيد الإجراء؟";
+            if(!confirm(msg)) return;
             try {
                 const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 const result = await res.json();
                 if(result.success) fetchOrders();
-                else alert("عذراً، قد يكون الطلب استلم من قبل مكتب آخر");
-            } catch(e) { alert("حدث خطأ في الاتصال بالسيرفر"); }
+                else alert("حدث خطأ أو تم استلام الطلب مسبقاً");
+            } catch(e) { alert("خطأ في الاتصال"); }
         }
 
         function switchTab(t) {
             currentTab = t;
-            document.getElementById('tabNew').className = `flex-1 py-4 text-[11px] font-black transition-all ${t==='new' ? 'tab-active' : 'text-slate-400'}`;
-            document.getElementById('tabMine').className = `flex-1 py-4 text-[11px] font-black transition-all ${t==='mine' ? 'tab-active' : 'text-slate-400'}`;
+            document.getElementById('tabNew').className = `flex-1 py-4 text-[11px] font-black ${t==='new' ? 'tab-active' : 'text-slate-400'}`;
+            document.getElementById('tabMine').className = `flex-1 py-4 text-[11px] font-black ${t==='mine' ? 'tab-active' : 'text-slate-400'}`;
             renderCards();
         }
 
+        function updateCounts() {
+            document.getElementById('myCount').innerText = allOrders.filter(o => o.claimedBy === officeData.name && o.status.includes('✅')).length;
+            document.getElementById('radarCount').innerText = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار").length;
+        }
+
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
-        
-        setInterval(fetchOrders, 15000); // تحديث الرادار كل 15 ثانية لملاحقة الطلبات
+        setInterval(fetchOrders, 20000);
         fetchOrders();
     </script>
 </body>
