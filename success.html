@@ -40,8 +40,8 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         
-        // الرابط الجديد الخاص بك O34 تم تحديثه لضمان وصول الطلبات للإكسل
-        const scriptURL = "https://script.google.com/macros/s/AKfycby09szRjInw_jODIknkQ2BnCr9eb4-dNr669UfVw2eZ-XW8NhmIfZvdiHHlAC2mhO34/exec";
+        // الرابط الجديد والموحد الذي ينتهي بـ h8
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxjkaA9pVrodw8vJcNQnJ2r8yQhIzScsxxj3R_a24Tkyz5V93E0WDwYzyYstI_weXh8/exec";
 
         const translationMap = {
             "Kirkuk": "كركوك", "Kerkük": "كركوك",
@@ -85,7 +85,7 @@
             }
             document.getElementById('orderIDDisplay').innerText = "#" + randomID;
             
-            // إرسال البيانات للسيرفر (POST)
+            // إرسال البيانات للسيرفر (POST) لمرة واحدة فقط لمنع التكرار
             if (!sessionStorage.getItem('orderSent')) {
                 const data = {
                     order_id: randomID,
@@ -111,7 +111,7 @@
                     headers: { 'Content-Type': 'application/json' }
                 }).then(() => {
                     sessionStorage.setItem('orderSent', 'true');
-                    console.log("✅ تم إرسال طلب الزبون بنجاح");
+                    console.log("✅ تم إرسال طلب الزبون للسيرفر الجديد");
                 }).catch(err => console.error("❌ فشل الإرسال:", err));
             }
         };
