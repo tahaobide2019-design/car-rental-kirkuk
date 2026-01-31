@@ -2,39 +2,95 @@
 <html lang="ar" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تخصيص طلبك | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #002349; --accent-color: #D4AF37; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        .hero-bg { background: linear-gradient(135deg, var(--main-color) 0%, #003366 100%); transition: 0.5s; }
-        .option-card { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 3px solid transparent; position: relative; overflow: hidden; }
-        .option-card.active { border-color: var(--accent-color); background-color: #fffdf5; transform: translateY(-10px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15); }
-        .active-badge { position: absolute; top: 1rem; right: 1rem; color: var(--accent-color); font-size: 1.5rem; opacity: 0; transition: 0.3s; }
-        .option-card.active .active-badge { opacity: 1; }
-        .whale-anim { animation: whaleMove 3s ease-in-out infinite; }
-        @keyframes whaleMove { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+        :root { --whale-navy: #001a35; --whale-gold: #c5a02d; --soft-gold: #fcf9ee; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7fa; color: var(--whale-navy); }
+
+        /* الهيدر المستوحى من الصورة */
+        .hero-section {
+            background: linear-gradient(135deg, var(--whale-navy) 0%, #003366 100%);
+            border-bottom: 5px solid var(--whale-gold);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-pattern {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        /* الكروت العصرية */
+        .option-card {
+            background: white;
+            border-radius: 2rem;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .option-card.active {
+            border-color: var(--whale-gold);
+            background: var(--soft-gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(197, 160, 45, 0.15);
+        }
+        
+        .check-mark {
+            position: absolute; top: 1.5rem; left: 1.5rem;
+            width: 30px; height: 30px; background: var(--whale-gold);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            opacity: 0; transform: scale(0.5); transition: 0.3s;
+        }
+        .option-card.active .check-mark { opacity: 1; transform: scale(1); }
+
+        .price-label {
+            background: var(--whale-navy);
+            color: var(--whale-gold);
+            padding: 8px 20px;
+            border-radius: 1rem;
+            font-weight: 900;
+            display: inline-block;
+        }
+
+        /* زر المتابعة العائم */
+        .btn-proceed {
+            background: linear-gradient(135deg, var(--whale-navy) 0%, #002d5a 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(0, 26, 53, 0.3);
+            transition: 0.3s;
+        }
+        .btn-proceed:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 20px 45px rgba(0, 26, 53, 0.4); }
+        .btn-proceed:disabled { opacity: 0.4; filter: grayscale(1); }
+
+        .whale-logo { animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(5deg); } }
     </style>
 </head>
-<body class="text-[#002349]">
+<body class="pb-10">
 
-    <header id="headerBg" class="hero-bg text-white pt-10 pb-28 text-center relative">
-        <div class="text-5xl mb-3 whale-anim">🐋</div>
-        <h1 id="pageHeader" class="text-3xl font-black text-[#D4AF37] mb-2">تخصيص طلبك</h1>
-        <p id="pageSub" class="opacity-80 font-bold">اختر الباقة التي تناسب احتياجاتك</p>
+    <header id="headerBg" class="hero-section text-white pt-16 pb-32 px-6 text-center">
+        <div class="hero-pattern"></div>
+        <div class="relative z-10">
+            <div class="whale-logo text-6xl mb-4 text-white">🐋</div>
+            <h1 id="pageHeader" class="text-4xl font-black mb-2 text-white">تحميل خياراتك</h1>
+            <p id="pageSub" class="text-white/70 font-bold max-w-md mx-auto"></p>
+        </div>
     </header>
 
-    <main class="container mx-auto px-4 -mt-16 relative z-10 pb-20">
-        <div id="optionsGrid" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+    <main class="container mx-auto px-4 -mt-20 relative z-10">
+        <div id="optionsGrid" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             </div>
 
-        <div class="max-w-md mx-auto mt-12 px-4">
-            <button id="nextBtn" onclick="proceed()" disabled class="w-full bg-[#D4AF37] text-[#002349] py-6 rounded-3xl font-black text-2xl shadow-2xl opacity-50 cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-4">
-                <span id="btnText">متابعة الحجز</span>
-                <i id="btnIcon" class="fas fa-arrow-left"></i>
+        <div class="max-w-md mx-auto mt-12">
+            <button id="nextBtn" onclick="proceed()" disabled class="btn-proceed w-full py-6 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 transition-all active:scale-95">
+                <span id="btnText">متابعة الطلب</span>
+                <i id="btnIcon" class="fas fa-chevron-left"></i>
             </button>
         </div>
     </main>
@@ -47,47 +103,45 @@
 
         const content = {
             ar: {
-                training: { title: "باقات التعليم", sub: "حدد مستوى التدريب", color: "#7c3aed", 
+                training: { title: "باقات تدريب الحوت", sub: "اختر مستوى التدريب الاحترافي", color: "#1e40af", 
                     opts: [
-                        { n: "كورس أساسي (3 أيام)", d: "أساسيات السيطرة والقيادة", p: 100000, i: "🥉" },
-                        { n: "كورس ذهبي (5 أيام)", d: "تدريب شامل + اختبارات ذكاء", p: 150000, i: "🥇" }
+                        { n: "كورس أساسي (3 أيام)", d: "تغطية شاملة لأساسيات القيادة والتحكم", p: 100000, i: "🥉" },
+                        { n: "كورس ذهبي (5 أيام)", d: "تدريب مكثف مع اختبارات قدرات متقدمة", p: 150000, i: "🥇" }
                     ]},
-                wedding: { title: "باقات الزفاف", sub: "اجعل ليلتك ملكية", color: "#be185d", 
+                wedding: { title: "باقات الزفاف الملكية", sub: "اجعل مناسبتك ذكرى لا تُنسى", color: "#831843", 
                     opts: [
-                        { n: "باقة الزهور الطبيعية", d: "تزيين كامل بزهور فريش", p: 75000, i: "💐" },
-                        { n: "باقة الموكب الملكي", d: "تزيين + سائق بزي رسمي", p: 125000, i: "👑" }
+                        { n: "باقة الزهور الطبيعية", d: "تنسيق ملكي بزهور طبيعية فواحة", p: 75000, i: "💐" },
+                        { n: "باقة الموكب الملكي", d: "تزيين كامل + سائق بروتوكول خاص", p: 125000, i: "👑" }
                     ]},
-                personal: { title: "إضافات الراحة", sub: "خيارات التأجير الإضافية", color: "#002349", 
+                personal: { title: "إضافات الراحة والآمان", sub: "خصص تجربة قيادتك بما يناسبك", color: "#001a35", 
                     opts: [
-                        { n: "تأمين الحوت الشامل", d: "راحة بال كاملة ضد الحوادث", p: 25000, i: "🛡️" },
-                        { n: "بدون إضافات", d: "المواصفات القياسية فقط", p: 0, i: "🚗" }
+                        { n: "تأمين الحوت الشامل", d: "حماية كاملة وراحة بال ضد كافة الحوادث", p: 25000, i: "🛡️" },
+                        { n: "بدون إضافات", d: "الاستمتاع بالمواصفات القياسية للحوت", p: 0, i: "🚗" }
                     ]},
-                btn: "تأكيد ومتابعة", free: "مجاني", curr: "د.ع"
-            },
-            // يمكن إضافة ku, tr, en هنا بنفس الهيكلية
+                btn: "تأكيد ومتابعة الحجز", free: "هدية مجانية", curr: "د.ع"
+            }
         };
 
         function init() {
             const data = content[lang] || content['ar'];
             const config = data[type];
             
-            // تحديث الهوية البصرية حسب الخدمة
-            document.getElementById('headerBg').style.background = `linear-gradient(135deg, ${config.color} 0%, #1a1a1a 100%)`;
             document.getElementById('pageHeader').innerText = config.title;
             document.getElementById('pageSub').innerText = config.sub;
             document.getElementById('btnText').innerText = data.btn;
             document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
-            document.getElementById('btnIcon').className = `fas fa-arrow-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
-
+            
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = config.opts.map((opt, idx) => `
-                <div onclick="select(${idx}, '${opt.n}', ${opt.p})" id="card-${idx}" class="option-card bg-white rounded-[3rem] p-8 text-center shadow-lg border-2">
-                    <div class="active-badge"><i class="fas fa-check-circle"></i></div>
-                    <div class="text-5xl mb-4">${opt.i}</div>
-                    <h3 class="text-2xl font-black mb-2">${opt.n}</h3>
-                    <p class="text-gray-500 font-bold text-sm mb-6">${opt.d}</p>
-                    <div class="text-2xl font-black text-[#002349] bg-gray-50 py-3 rounded-2xl">
-                        ${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}
+                <div onclick="select(${idx}, '${opt.n}', ${opt.p})" id="card-${idx}" class="option-card p-8 md:p-10 cursor-pointer">
+                    <div class="check-mark"><i class="fas fa-check text-sm"></i></div>
+                    <div class="flex flex-col items-center text-center">
+                        <div class="text-6xl mb-6 drop-shadow-sm">${opt.i}</div>
+                        <h3 class="text-2xl font-black mb-3 text-slate-800">${opt.n}</h3>
+                        <p class="text-slate-500 font-bold text-sm mb-8 leading-relaxed">${opt.d}</p>
+                        <div class="price-label">
+                            ${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -100,7 +154,6 @@
             
             const btn = document.getElementById('nextBtn');
             btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
         function proceed() {
@@ -110,7 +163,6 @@
 
             u.set('addon_name', choice.name);
             u.set('addon_price', choice.price);
-            
             window.location.href = `${next}?${u.toString()}`;
         }
 
