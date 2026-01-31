@@ -10,66 +10,17 @@
     <style>
         :root { --whale-navy: #001a35; --whale-gold: #c5a02d; --soft-gold: #fcf9ee; }
         body { font-family: 'Tajawal', sans-serif; background-color: #f4f7fa; color: var(--whale-navy); }
-
-        /* الهيدر المستوحى من الصورة */
-        .hero-section {
-            background: linear-gradient(135deg, var(--whale-navy) 0%, #003366 100%);
-            border-bottom: 5px solid var(--whale-gold);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-pattern {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
-
-        /* الكروت العصرية */
-        .option-card {
-            background: white;
-            border-radius: 2rem;
-            border: 2px solid transparent;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .option-card.active {
-            border-color: var(--whale-gold);
-            background: var(--soft-gold);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(197, 160, 45, 0.15);
-        }
-        
-        .check-mark {
-            position: absolute; top: 1.5rem; left: 1.5rem;
-            width: 30px; height: 30px; background: var(--whale-gold);
-            color: white; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.5); transition: 0.3s;
-        }
+        .hero-section { background: linear-gradient(135deg, var(--whale-navy) 0%, #003366 100%); border-bottom: 5px solid var(--whale-gold); position: relative; overflow: hidden; }
+        .hero-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 24px 24px; }
+        .option-card { background: white; border-radius: 2rem; border: 2px solid transparent; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .option-card.active { border-color: var(--whale-gold); background: var(--soft-gold); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(197, 160, 45, 0.15); }
+        .check-mark { position: absolute; top: 1.5rem; left: 1.5rem; width: 30px; height: 30px; background: var(--whale-gold); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: 0.3s; }
         .option-card.active .check-mark { opacity: 1; transform: scale(1); }
-
-        .price-label {
-            background: var(--whale-navy);
-            color: var(--whale-gold);
-            padding: 8px 20px;
-            border-radius: 1rem;
-            font-weight: 900;
-            display: inline-block;
-        }
-
-        /* زر المتابعة العائم */
-        .btn-proceed {
-            background: linear-gradient(135deg, var(--whale-navy) 0%, #002d5a 100%);
-            color: white;
-            box-shadow: 0 15px 35px rgba(0, 26, 53, 0.3);
-            transition: 0.3s;
-        }
-        .btn-proceed:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 20px 45px rgba(0, 26, 53, 0.4); }
+        .price-label { background: var(--whale-navy); color: var(--whale-gold); padding: 8px 20px; border-radius: 1rem; font-weight: 900; display: inline-block; }
+        .btn-proceed { background: linear-gradient(135deg, var(--whale-navy) 0%, #002d5a 100%); color: white; box-shadow: 0 15px 35px rgba(0, 26, 53, 0.3); transition: 0.3s; }
         .btn-proceed:disabled { opacity: 0.4; filter: grayscale(1); }
-
         .whale-logo { animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body class="pb-10">
@@ -78,18 +29,16 @@
         <div class="hero-pattern"></div>
         <div class="relative z-10">
             <div class="whale-logo text-6xl mb-4 text-white">🐋</div>
-            <h1 id="pageHeader" class="text-4xl font-black mb-2 text-white">تحميل خياراتك</h1>
-            <p id="pageSub" class="text-white/70 font-bold max-w-md mx-auto"></p>
+            <h1 id="pageHeader" class="text-4xl font-black mb-2 text-white">---</h1>
+            <p id="pageSub" class="text-white/70 font-bold max-w-md mx-auto">---</p>
         </div>
     </header>
 
     <main class="container mx-auto px-4 -mt-20 relative z-10">
-        <div id="optionsGrid" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            </div>
-
+        <div id="optionsGrid" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         <div class="max-w-md mx-auto mt-12">
             <button id="nextBtn" onclick="proceed()" disabled class="btn-proceed w-full py-6 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 transition-all active:scale-95">
-                <span id="btnText">متابعة الطلب</span>
+                <span id="btnText">---</span>
                 <i id="btnIcon" class="fas fa-chevron-left"></i>
             </button>
         </div>
@@ -99,73 +48,108 @@
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type') || 'personal';
         const lang = u.get('lang') || 'ar';
-        let choice = { name: '', price: 0 };
+        let choice = { name: '', price: 0, internalName: '' };
 
         const content = {
             ar: {
-                training: { title: "باقات تدريب الحوت", sub: "اختر مستوى التدريب الاحترافي", color: "#1e40af", 
-                    opts: [
-                        { n: "كورس أساسي (3 أيام)", d: "تغطية شاملة لأساسيات القيادة والتحكم", p: 100000, i: "🥉" },
-                        { n: "كورس ذهبي (5 أيام)", d: "تدريب مكثف مع اختبارات قدرات متقدمة", p: 150000, i: "🥇" }
-                    ]},
-                wedding: { title: "باقات الزفاف الملكية", sub: "اجعل مناسبتك ذكرى لا تُنسى", color: "#831843", 
-                    opts: [
-                        { n: "باقة الزهور الطبيعية", d: "تنسيق ملكي بزهور طبيعية فواحة", p: 75000, i: "💐" },
-                        { n: "باقة الموكب الملكي", d: "تزيين كامل + سائق بروتوكول خاص", p: 125000, i: "👑" }
-                    ]},
-                personal: { title: "إضافات الراحة والآمان", sub: "خصص تجربة قيادتك بما يناسبك", color: "#001a35", 
-                    opts: [
-                        { n: "تأمين الحوت الشامل", d: "حماية كاملة وراحة بال ضد كافة الحوادث", p: 25000, i: "🛡️" },
-                        { n: "بدون إضافات", d: "الاستمتاع بالمواصفات القياسية للحوت", p: 0, i: "🚗" }
-                    ]},
-                btn: "تأكيد ومتابعة الحجز", free: "هدية مجانية", curr: "د.ع"
+                training: { title: "باقات تدريب الحوت", sub: "اختر مستوى التدريب الاحترافي", opts: [
+                    { n: "كورس أساسي (3 أيام)", d: "أساسيات القيادة والتحكم", p: 100000, i: "🥉" },
+                    { n: "كورس ذهبي (5 أيام)", d: "تدريب مكثف واختبارات ذكاء", p: 150000, i: "🥇" }
+                ]},
+                wedding: { title: "باقات الزفاف الملكية", sub: "اجعل مناسبتك ذكرى لا تُنسى", opts: [
+                    { n: "باقة الزهور الطبيعية", d: "تنسيق ملكي بزهور فريش", p: 75000, i: "💐" },
+                    { n: "باقة الموكب الملكي", d: "تزيين كامل + سائق بروتوكول", p: 125000, i: "👑" }
+                ]},
+                personal: { title: "إضافات الراحة والآمان", sub: "خصص تجربة قيادتك بما يناسبك", opts: [
+                    { n: "تأمين الحوت الشامل", d: "حماية كاملة ضد كافة الحوادث", p: 25000, i: "🛡️" },
+                    { n: "بدون إضافات", d: "المواصفات القياسية للحوت", p: 0, i: "🚗" }
+                ]},
+                btn: "تأكيد ومتابعة", free: "مجاني", curr: "د.ع"
+            },
+            ku: {
+                training: { title: "پاکێجەکانی ڕاهێنان", sub: "ئاستی ڕاهێنانی پیشەیی هەڵبژێرە", opts: [
+                    { n: "کۆرسی سەرەکی (3 ڕۆژ)", d: "بنەماکانی لێخوڕین و کۆنتڕۆڵکردن", p: 100000, i: "🥉" },
+                    { n: "کۆرسی زێڕین (5 ڕۆژ)", d: "ڕاهێنانی چڕ و تاقیکردنەوەی زیرەکی", p: 150000, i: "🥇" }
+                ]},
+                wedding: { title: "پاکێجەکانی هاوسەرگیری", sub: "بۆنەکەت بکە بە یادگارییەکی لەبیرنەکراو", opts: [
+                    { n: "پاکێجی گوڵی سروشتی", d: "ڕێکخستنی شاهانە بە گوڵی فرێش", p: 75000, i: "💐" },
+                    { n: "پاکێجی کاروانی شاهانە", d: "ڕازاندنەوە + شۆفێری پڕۆتۆکۆڵ", p: 125000, i: "👑" }
+                ]},
+                personal: { title: "زیادکراوەکانی ئارامی", sub: "ئەزموونی لێخوڕینەکەت تەرخان بکە", opts: [
+                    { n: "دڵنیایی گشتگیری حوت", d: "پاراستنی تەواو لە هەموو ڕووداوەکان", p: 25000, i: "🛡️" },
+                    { n: "بێ زیادکراو", d: "تایبەتمەندییە ستانداردەکانی حوت", p: 0, i: "🚗" }
+                ]},
+                btn: "پشتڕاستکردنەوە", free: "بێ بەرامبەر", curr: "د.ع"
+            },
+            en: {
+                training: { title: "Whale Training Packages", sub: "Choose your professional level", opts: [
+                    { n: "Basic Course (3 Days)", d: "Basics of driving and control", p: 100000, i: "🥉" },
+                    { n: "Gold Course (5 Days)", d: "Intensive training & IQ tests", p: 150000, i: "🥇" }
+                ]},
+                wedding: { title: "Royal Wedding Packages", sub: "Make your event unforgettable", opts: [
+                    { n: "Natural Flowers Pack", d: "Royal arrangement with fresh flowers", p: 75000, i: "💐" },
+                    { n: "Royal Convoy Pack", d: "Full decoration + protocol driver", p: 125000, i: "👑" }
+                ]},
+                personal: { title: "Comfort & Safety Addons", sub: "Customize your driving experience", opts: [
+                    { n: "Full Whale Insurance", d: "Full protection against all accidents", p: 25000, i: "🛡️" },
+                    { n: "No Addons", d: "Standard whale specifications only", p: 0, i: "🚗" }
+                ]},
+                btn: "Confirm & Proceed", free: "Free", curr: "IQD"
+            },
+            tr: {
+                training: { title: "Whale Eğitim Paketleri", sub: "Profesyonel eğitim seviyenizi seçin", opts: [
+                    { n: "Temel Kurs (3 Gün)", d: "Sürüş ve kontrolün temelleri", p: 100000, i: "🥉" },
+                    { n: "Altın Kurs (5 Gün)", d: "Yoğun eğitim ve IQ testleri", p: 150000, i: "🥇" }
+                ]},
+                wedding: { title: "Kraliyet Düğün Paketleri", sub: "Etkinliğinizi unutulmaz kılın", opts: [
+                    { n: "Doğal Çiçek Paketi", d: "Taze çiçeklerle kraliyet süslemesi", p: 75000, i: "💐" },
+                    { n: "Kraliyet Konvoyu", d: "Tam süsleme + protokol şoförü", p: 125000, i: "👑" }
+                ]},
+                personal: { title: "Konfor ve Güvenlik", sub: "Sürüş deneyiminizi özelleştirin", opts: [
+                    { n: "Tam Whale Sigortası", d: "Tüm kazalara karşı tam koruma", p: 25000, i: "🛡️" },
+                    { n: "Ek ميزة Yok", d: "Sadece standart Whale özellikleri", p: 0, i: "🚗" }
+                ]},
+                btn: "Onayla ve Devam Et", free: "Ücretsiz", curr: "IQD"
             }
         };
 
         function init() {
             const data = content[lang] || content['ar'];
             const config = data[type];
-            
             document.getElementById('pageHeader').innerText = config.title;
             document.getElementById('pageSub').innerText = config.sub;
             document.getElementById('btnText').innerText = data.btn;
             document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
-            
+            document.getElementById('btnIcon').className = `fas fa-chevron-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
+
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = config.opts.map((opt, idx) => `
-                <div onclick="select(${idx}, '${opt.n}', ${opt.p})" id="card-${idx}" class="option-card p-8 md:p-10 cursor-pointer">
+                <div onclick="select(${idx}, '${opt.n}', ${opt.p}, '${content.ar[type].opts[idx].n}')" id="card-${idx}" class="option-card p-8 cursor-pointer">
                     <div class="check-mark"><i class="fas fa-check text-sm"></i></div>
                     <div class="flex flex-col items-center text-center">
                         <div class="text-6xl mb-6 drop-shadow-sm">${opt.i}</div>
                         <h3 class="text-2xl font-black mb-3 text-slate-800">${opt.n}</h3>
                         <p class="text-slate-500 font-bold text-sm mb-8 leading-relaxed">${opt.d}</p>
-                        <div class="price-label">
-                            ${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}
-                        </div>
+                        <div class="price-label">${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}</div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function select(idx, name, price) {
-            choice = { name, price };
+        function select(idx, name, price, internal) {
+            choice = { name, price, internalName: internal };
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
             document.getElementById(`card-${idx}`).classList.add('active');
-            
-            const btn = document.getElementById('nextBtn');
-            btn.disabled = false;
+            document.getElementById('nextBtn').disabled = false;
         }
 
         function proceed() {
-            let next = "booking_personal.html";
-            if(type === 'training') next = "training.html";
-            if(type === 'wedding') next = "booking_wedding.html";
-
-            u.set('addon_name', choice.name);
+            let next = (type === 'training') ? "training.html" : (type === 'wedding' ? "booking_wedding.html" : "booking_personal.html");
+            u.set('addon_name', choice.internalName); // نرسل الاسم بالعربي للسكريبت
+            u.set('addon_display', choice.name); // الاسم باللغة المختارة للعرض فقط
             u.set('addon_price', choice.price);
             window.location.href = `${next}?${u.toString()}`;
         }
-
         window.onload = init;
     </script>
 </body>
