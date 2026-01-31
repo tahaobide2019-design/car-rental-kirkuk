@@ -23,7 +23,6 @@
         .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
         .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .dynamic-text { color: var(--main-color); transition: 0.5s; }
-        /* تحسين شكل مربع البحث */
         .leaflet-control-geocoder { border-radius: 10px; border: 2px solid var(--main-color) !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; }
     </style>
 </head>
@@ -39,29 +38,29 @@
 
         <div class="p-8 space-y-5 text-right">
             <div>
-                <label id="lblInputName" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">اسم المتدرب</label>
+                <label class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">اسم المتدرب</label>
                 <input type="text" id="tName" class="input-training" placeholder="الاسم الكامل">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label id="lblInputPhone" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهاتف</label>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهاتف</label>
                     <input type="tel" id="tPhone" class="input-training text-left" dir="ltr" placeholder="07xx xxx xxxx">
                 </div>
                 <div>
-                    <label id="lblInputAge" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">العمر</label>
+                    <label class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">العمر</label>
                     <input type="number" id="tAge" class="input-training" placeholder="مثال: 25">
                 </div>
             </div>
 
             <div>
-                <label id="lblInputID" class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهوية الوطنية</label>
+                <label class="block text-xs font-black text-gray-400 mb-2 mr-2 uppercase">رقم الهوية الوطنية</label>
                 <input type="text" id="tNationalID" class="input-training" placeholder="أو رقم جواز السفر">
             </div>
 
             <div class="space-y-3">
                 <div class="flex items-center mr-2">
-                    <label id="lblGender" class="text-xs font-black text-gray-400 uppercase">جنس المتدرب</label>
+                    <label class="text-xs font-black text-gray-400 uppercase">جنس المتدرب</label>
                 </div>
                 <div class="flex gap-4">
                     <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 ذكر</div>
@@ -95,20 +94,17 @@
 
         window.onload = function() {
             initLang();
-            // إعداد الخريطة
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
 
-            // إضافة خيار البحث داخل الخريطة
             const geocoder = L.Control.geocoder({
                 defaultMarkGeocode: false,
                 placeholder: currentLang === 'ar' ? "ابحث عن منطقة..." : "Search area...",
                 errorMessage: currentLang === 'ar' ? "لم يتم العثور على الموقع" : "Location not found"
             }).on('markgeocode', function(e) {
-                const bbox = e.geocode.bbox;
                 const center = e.geocode.center;
-                map.fitBounds(bbox);
+                map.setView(center, 15);
                 marker.setLatLng(center);
             }).addTo(map);
         };
@@ -155,23 +151,26 @@
             const age = document.getElementById('tAge').value;
             const latlng = marker.getLatLng();
 
-            if(!name || !phone || !nationalID || !age) { alert(translations[currentLang].alert); return; }
+            if(!name || !phone || !nationalID || !age) { 
+                alert(translations[currentLang].alert); 
+                return; 
+            }
             
+            // تصحيح رابط الخريطة
             const googleMapsLink = `https://www.google.com/maps?q=${latlng.lat},${latlng.lng}`;
             
             const params = new URLSearchParams();
             params.set('lang', currentLang);
-            params.set('city', p.get('city') || '');
-            params.set('date', p.get('date') || '');
-            params.set('time', p.get('time') || '');
+            params.set('province', p.get('city') || ''); // نستخدم province لتوافق السكريبت
             params.set('service', 'كورس تعليم قيادة');
             params.set('name', name);
             params.set('phone', phone);
-            params.set('nationalID', nationalID);
+            params.set('id_no', nationalID); // تغيير المعرف ليتوافق مع review.html
             params.set('age', age);
             params.set('gender', selectedGender === 'Male' ? 'ذكر' : 'أنثى');
             params.set('map', googleMapsLink);
             params.set('car', 'كورس تدريب');
+            params.set('price', 'حسب الاتفاق'); // كورس التعليم عادة ليس له سعر ثابت بالرادادر
 
             window.location.href = `review.html?${params.toString()}`;
         }
