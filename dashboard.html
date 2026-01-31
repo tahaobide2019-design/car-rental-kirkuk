@@ -3,32 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>رادار الحوت | نظام الوقت الذكي 🐋</title>
+    <title>رادار الحوت | النخبة التفاعلي 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --whale-navy: #001a35; --whale-gold: #c5a02d; }
-        body { font-family: 'Tajawal', sans-serif; background: #f8fafc; color: #1e293b; }
+        :root { --whale-navy: #001a35; --whale-gold: #c5a02d; --soft-gold: #fcf9ee; }
+        body { font-family: 'Tajawal', sans-serif; background: #f4f7fa; color: #1e293b; overflow-x: hidden; }
 
-        /* الهيدر المطور */
         .premium-nav {
             background: linear-gradient(135deg, var(--whale-navy) 0%, #003366 100%);
-            border-radius: 0 0 2.5rem 2.5rem;
-            border-bottom: 4px solid var(--whale-gold);
-            padding: 2rem 1.5rem 3.5rem;
+            border-radius: 0 0 3rem 3rem;
+            box-shadow: 0 15px 40px rgba(0, 26, 53, 0.25);
+            border-bottom: 5px solid var(--whale-gold);
+        }
+        .whale-avatar {
+            width: 50px; height: 50px; background: white; border-radius: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15); animation: float 3s ease-in-out infinite;
         }
 
-        /* حاوية العداد التفاعلي */
+        .tab-pill { transition: 0.4s; font-weight: 900; font-size: 0.85rem; border-radius: 1.5rem; color: #64748b; }
+        .tab-pill.active {
+            background: var(--whale-navy); color: var(--whale-gold);
+            transform: scale(1.08); box-shadow: 0 10px 20px rgba(0, 26, 53, 0.15);
+        }
+
+        .whale-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.03); transition: 0.5s; position: relative; overflow: hidden; }
+        .whale-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0, 35, 73, 0.15); }
+        
+        /* تصميم العداد التفاعلي الجديد */
         .time-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 99px;
-            font-weight: 800;
-            font-size: 13px;
-            transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+            border-radius: 99px; font-weight: 800; font-size: 11px; transition: 0.3s;
         }
         .time-safe { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
         .time-warn { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
@@ -36,50 +43,52 @@
 
         @keyframes pulse-red {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
             100% { transform: scale(1); }
         }
 
-        /* تصميم الكارت الملكي */
-        .whale-card {
-            background: white;
-            border-radius: 2rem;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-            overflow: hidden;
+        .live-pulse {
+            width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;
+            animation: pulse-green 2s infinite;
         }
 
-        .tab-pill { transition: 0.3s; font-weight: 900; border-radius: 1.2rem; }
-        .tab-pill.active { background: var(--whale-navy); color: var(--whale-gold); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+        .price-tag { background: var(--soft-gold); color: #8a6d1a; padding: 0.5rem 1rem; border-radius: 1.2rem; border: 1px solid rgba(197, 160, 45, 0.2); font-weight: 900; }
+        
+        .btn-transfer { background: #fff1f2; color: #e11d48; border: 1.5px dashed #fecdd3; transition: 0.3s; }
     </style>
 </head>
 <body class="min-h-screen">
 
     <audio id="radarSound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
-    <header class="premium-nav">
-        <div class="max-w-2xl mx-auto flex items-center justify-between text-white">
+    <header class="premium-nav px-6 pt-8 pb-12">
+        <div class="max-w-2xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <div class="bg-white p-2 rounded-xl text-2xl">🐋</div>
+                <div class="whale-avatar"><span class="text-3xl">🐋</span></div>
                 <div>
-                    <h2 id="navOfficeName" class="font-black text-lg">...</h2>
-                    <p id="navCity" class="text-white/60 text-[10px] font-bold uppercase tracking-widest"></p>
+                    <div class="flex items-center gap-2">
+                        <h2 id="navOfficeName" class="text-white font-black text-lg leading-tight">...</h2>
+                        <span class="live-pulse"></span>
+                    </div>
+                    <p id="navCity" class="text-white/50 text-[10px] font-bold uppercase tracking-widest mt-1"></p>
                 </div>
             </div>
-            <button onclick="logout()" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-red-400"><i class="fas fa-power-off"></i></button>
+            <button onclick="logout()" class="w-12 h-12 flex items-center justify-center bg-red-500/20 text-red-400 rounded-2xl transition-all shadow-lg"><i class="fas fa-power-off text-xl"></i></button>
         </div>
     </header>
 
     <div class="max-w-2xl mx-auto -mt-8 px-4">
-        <div class="bg-white/90 backdrop-blur-md p-2 rounded-[1.5rem] flex gap-1 shadow-xl">
-            <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-3 tab-pill active text-sm">الرادار 📡</button>
-            <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-3 tab-pill text-slate-400 text-sm">التنفيذ 📦</button>
-            <button onclick="switchTab('done')" id="tabDone" class="flex-1 py-3 tab-pill text-slate-400 text-sm font-bold">الأرشيف ✅</button>
+        <div class="bg-white/80 backdrop-blur-xl p-2 rounded-[2rem] flex gap-1 shadow-xl border border-white">
+            <button onclick="switchTab('new')" id="tabNew" class="flex-1 py-4 tab-pill active">الرادار 📡</button>
+            <button onclick="switchTab('mine')" id="tabMine" class="flex-1 py-4 tab-pill">التنفيذ 📦</button>
+            <button onclick="switchTab('done')" id="tabDone" class="flex-1 py-4 tab-pill text-slate-400 font-bold">الأرشيف ✅</button>
         </div>
     </div>
 
-    <main id="mainContainer" class="p-4 max-w-2xl mx-auto mt-6"></main>
+    <main id="mainContainer" class="p-4 max-w-2xl mx-auto space-y-6 mt-6"></main>
 
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec";
@@ -88,7 +97,17 @@
 
         if(!officeData) window.location.href = 'login.html';
         document.getElementById('navOfficeName').innerText = officeData.name;
-        document.getElementById('navCity').innerText = `📍 ${officeData.city}`;
+        document.getElementById('navCity').innerText = `📍 ${officeData.city} | رادار الحوت`;
+
+        // دالة العداد الذكية
+        function getTimeCounter(timestamp) {
+            const diff = Math.floor((new Date() - new Date(timestamp)) / 60000);
+            let badgeClass = 'time-safe';
+            if (diff >= 10 && diff < 20) badgeClass = 'time-warn';
+            if (diff >= 20) badgeClass = 'time-danger';
+            
+            return `<div class="time-badge ${badgeClass}"><i class="far fa-clock"></i> <span>منذ ${diff} دقيقة</span></div>`;
+        }
 
         async function fetchOrders() {
             try {
@@ -107,19 +126,6 @@
             setTimeout(() => { s.pause(); }, 5000);
         }
 
-        // دالة حساب الوقت وتحديد شكل العداد
-        function getTimeCounter(timestamp) {
-            const diff = Math.floor((new Date() - new Date(timestamp)) / 60000);
-            let style = 'time-safe';
-            if (diff >= 10 && diff < 20) style = 'time-warn';
-            if (diff >= 20) style = 'time-danger';
-            
-            return `<div class="time-badge ${style}">
-                        <i class="far fa-clock"></i>
-                        <span>منذ ${diff} دقيقة</span>
-                    </div>`;
-        }
-
         function renderCards() {
             const container = document.getElementById('mainContainer');
             let list = [];
@@ -129,81 +135,78 @@
             else if(currentTab === 'done') list = allOrders.filter(o => o.office === officeData.name && (o.status.includes('✅') || o.status.includes('⚠️')));
 
             if(list.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 opacity-30 font-black italic">🌊 لا توجد طلبات حالياً...</div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-sm font-black tracking-widest uppercase">لا توجد عمليات حالياً</div>`;
                 return;
             }
 
             container.innerHTML = list.map(o => {
+                const timerHtml = getTimeCounter(o.timestamp);
+
                 if(currentTab === 'new') {
                     return `
-                    <div class="whale-card p-6">
-                        <div class="flex justify-between items-center mb-5">
-                            ${getTimeCounter(o.timestamp)}
-                            <div class="text-right">
-                                <span class="text-[10px] text-slate-400 font-bold block">مبلغ الطلب</span>
-                                <span class="text-xl font-black text-blue-900">${Number(o.price).toLocaleString()} <small class="text-[10px]">د.ع</small></span>
-                            </div>
+                    <div class="whale-card p-6 border-b-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-6">
+                            ${timerHtml}
+                            <div class="price-tag"><span class="text-lg">${Number(o.price).toLocaleString()}</span></div>
                         </div>
-                        <h3 class="text-2xl font-black text-slate-800 mb-2">${o.car}</h3>
-                        <p class="text-xs font-bold text-slate-500 mb-6 flex items-center gap-2"><i class="fas fa-user-circle"></i> ${o.name}</p>
-                        <div class="flex gap-2">
-                             <div class="flex-1 bg-slate-50 p-3 rounded-2xl border border-slate-100"><p class="text-[9px] text-slate-400 font-bold mb-1 uppercase">المدة</p><p class="text-xs font-black">${o.days} أيام</p></div>
-                             <div class="flex-1 bg-slate-50 p-3 rounded-2xl border border-slate-100"><p class="text-[9px] text-slate-400 font-bold mb-1 uppercase">المحافظة</p><p class="text-xs font-black">${o.prov}</p></div>
+                        <h3 class="text-xl font-black text-slate-800 mb-4">${o.name}</h3>
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-slate-50 p-4 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">السيارة</p><p class="text-xs font-black">🚗 ${o.car}</p></div>
+                            <div class="bg-slate-50 p-4 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">الموعد</p><p class="text-xs font-black">📅 ${o.timestamp.split('T')[0]}</p></div>
                         </div>
-                        <button onclick="update('${o.id}', 'claim')" class="w-full mt-5 bg-slate-900 text-[#D4AF37] py-4 rounded-2xl font-black text-sm shadow-xl active:scale-95 transition-all">استلام الطلبية الآن ⚡</button>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full bg-slate-900 text-[#D4AF37] py-4 rounded-2xl font-black text-xs shadow-xl active:scale-95 transition-all">استلام المهمة الآن 🔥</button>
                     </div>`;
                 }
 
                 if(currentTab === 'mine') {
                     return `
-                    <div class="whale-card p-6 border-t-8 border-blue-600">
+                    <div class="whale-card p-8">
                         <div class="flex justify-between items-center mb-6">
-                            <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-[10px] font-black italic">طلب # ${o.id}</span>
-                            <a href="tel:${o.phone}" class="w-12 h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg"><i class="fas fa-phone-alt"></i></a>
+                            ${timerHtml}
+                            <a href="tel:${o.phone}" class="w-12 h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg animate-bounce"><i class="fas fa-phone-alt"></i></a>
                         </div>
-                        <div class="space-y-4 mb-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100"><p class="text-[10px] text-slate-400 font-bold uppercase mb-1">العميل</p><p class="font-black text-slate-800">${o.name}</p></div>
-                            <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-inner"><p class="text-[10px] opacity-60 font-bold uppercase mb-1">السيارة والخدمة</p><p class="font-black text-lg text-blue-300">${o.car}</p><p class="text-xs mt-1 font-bold italic">${o.service || 'بدون خدمة إضافية'}</p></div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-4 tracking-tighter">${o.car}</h3>
+                        <div class="bg-slate-50 p-4 rounded-3xl mb-4"><p class="text-[9px] font-black text-slate-400 uppercase mb-1">الزبون</p><p class="font-black text-slate-700">${o.name}</p></div>
+                        <div class="bg-indigo-900 text-indigo-100 p-5 rounded-3xl mb-6 text-xs font-bold leading-relaxed">
+                             ${o.addons || 'لا توجد طلبات إضافية'}
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <a href="${o.map}" target="_blank" class="bg-slate-100 text-slate-700 py-4 rounded-2xl text-center font-black text-xs">🗺️ الموقع</a>
-                            <button onclick="update('${o.id}', 'complete')" class="bg-blue-600 text-white py-4 rounded-2xl font-black text-xs">إتمام ✅</button>
-                            <button onclick="update('${o.id}', 'cancelRequest')" class="col-span-2 text-red-500 text-[11px] font-bold py-2 mt-2 border-t border-red-50 border-dashed">طلب إلغاء أو تحويل ⚠️</button>
+                        <div class="space-y-3">
+                            <div class="flex gap-2">
+                                <a href="${o.map}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 py-4 rounded-2xl text-center font-black text-xs">عرض الموقع 📍</a>
+                                <button onclick="update('${o.id}', 'complete')" class="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-black text-xs">إتمام المهمة ✅</button>
+                            </div>
+                            <button onclick="update('${o.id}', 'cancelRequest')" class="w-full btn-transfer py-3 rounded-2xl font-black text-[11px]">طلب إلغاء أو تحويل ⚠️</button>
                         </div>
                     </div>`;
                 }
 
                 if(currentTab === 'done') {
                     return `
-                    <div class="whale-card p-4 flex items-center justify-between opacity-60">
-                        <div class="flex items-center gap-3">
+                    <div class="whale-card p-5 flex justify-between items-center bg-white/50 opacity-80">
+                        <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full ${o.status.includes('✅') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} flex items-center justify-center text-xs"><i class="fas ${o.status.includes('✅') ? 'fa-check' : 'fa-times'}"></i></div>
-                            <div><p class="font-black text-xs text-slate-700">${o.name}</p><p class="text-[9px] text-slate-400">${o.timestamp}</p></div>
+                            <div><h3 class="font-black text-slate-700 text-xs">${o.name}</h3><p class="text-[8px] font-bold text-slate-400 tracking-tighter">${o.timestamp}</p></div>
                         </div>
-                        <p class="font-black text-sm">${Number(o.price).toLocaleString()} د.ع</p>
+                        <div class="text-left"><p class="font-black text-slate-900 text-sm">${Number(o.price).toLocaleString()} د.ع</p></div>
                     </div>`;
                 }
             }).reverse().join('');
         }
 
         async function update(id, act) {
-            if(!confirm("تأكيد الإجراء؟")) return;
+            let msg = act === 'cancelRequest' ? "هل تريد طلب الإلغاء/التحويل؟" : "تأكيد العملية؟";
+            if(!confirm(msg)) return;
             try {
                 const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
                 const result = await res.json();
                 if(result.success) fetchOrders();
-            } catch(e) { alert("خطأ في الاتصال"); }
+            } catch(e) { alert("خطأ اتصال"); }
         }
 
         function switchTab(t) {
             currentTab = t;
-            document.querySelectorAll('.tab-pill').forEach(b => {
-                b.classList.remove('active');
-                b.classList.add('text-slate-400');
-            });
-            const activeBtn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-            activeBtn.classList.add('active');
-            activeBtn.classList.remove('text-slate-400');
+            document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('active');
             renderCards();
         }
 
