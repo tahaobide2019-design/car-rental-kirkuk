@@ -3,120 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تخصيص الطلب | الحوت 🐋</title>
+    <title>تخصيص طلبك | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        :root { --main-color: #002349; --accent-color: #D4AF37; }
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); position: relative; }
-        .option-card { transition: 0.3s; cursor: pointer; border: 3px solid transparent; }
-        .option-card.active { border-color: #D4AF37; background-color: #fffdf5; transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.1); }
-        .whale-float { display: inline-block; font-size: 3rem; animation: floating 4s ease-in-out infinite; }
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .hero-bg { background: linear-gradient(135deg, var(--main-color) 0%, #003366 100%); transition: 0.5s; }
+        .option-card { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 3px solid transparent; position: relative; overflow: hidden; }
+        .option-card.active { border-color: var(--accent-color); background-color: #fffdf5; transform: translateY(-10px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15); }
+        .active-badge { position: absolute; top: 1rem; right: 1rem; color: var(--accent-color); font-size: 1.5rem; opacity: 0; transition: 0.3s; }
+        .option-card.active .active-badge { opacity: 1; }
+        .whale-anim { animation: whaleMove 3s ease-in-out infinite; }
+        @keyframes whaleMove { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <header class="hero-bg text-white pt-10 pb-28 text-center overflow-hidden">
-        <div class="whale-float mb-2">🐋</div>
-        <h1 id="pageHeader" class="text-3xl font-black text-[#D4AF37]">تخصيص طلبك</h1>
-        <p id="pageSubheader" class="opacity-80">اختر الإضافات المناسبة لخدمتك</p>
+    <header id="headerBg" class="hero-bg text-white pt-10 pb-28 text-center relative">
+        <div class="text-5xl mb-3 whale-anim">🐋</div>
+        <h1 id="pageHeader" class="text-3xl font-black text-[#D4AF37] mb-2">تخصيص طلبك</h1>
+        <p id="pageSub" class="opacity-80 font-bold">اختر الباقة التي تناسب احتياجاتك</p>
     </header>
 
     <main class="container mx-auto px-4 -mt-16 relative z-10 pb-20">
-        <div id="optionsContainer" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        <div id="optionsGrid" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            </div>
 
-        <div class="max-w-md mx-auto mt-10">
-            <button id="nextBtn" onclick="proceedToNextStep()" disabled class="w-full bg-[#D4AF37] text-[#002349] py-5 rounded-2xl font-black text-xl shadow-2xl opacity-50 cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-3">
-                <span id="btnText">تأكيد ومتابعة</span> <i id="btnIcon" class="fas fa-chevron-left"></i>
+        <div class="max-w-md mx-auto mt-12 px-4">
+            <button id="nextBtn" onclick="proceed()" disabled class="w-full bg-[#D4AF37] text-[#002349] py-6 rounded-3xl font-black text-2xl shadow-2xl opacity-50 cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-4">
+                <span id="btnText">متابعة الحجز</span>
+                <i id="btnIcon" class="fas fa-arrow-left"></i>
             </button>
         </div>
     </main>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const serviceType = urlParams.get('type'); 
-        const currentLang = urlParams.get('lang') || 'ar';
+        const u = new URLSearchParams(window.location.search);
+        const type = u.get('type') || 'personal';
+        const lang = u.get('lang') || 'ar';
+        let choice = { name: '', price: 0 };
 
-        let selectedName = "";
-        let selectedPrice = "";
-
-        const translations = {
+        const content = {
             ar: {
-                training: { header: "اختر كورس التعليم", sub: "حدد الباقة المناسبة", opt1: "كورس أساسي (3 أيام)", desc1: "أساسيات القيادة", opt2: "كورس احترافي (5 أيام)", desc2: "تدريب شامل" },
-                personal: { header: "إضافات التأجير", sub: "خيارات إضافية", opt1: "تأمين شامل", desc1: "تغطية كاملة", opt2: "بدون إضافات", desc2: "المواصفات القياسية" },
-                wedding: { header: "خدمات المناسبات", sub: "تنسيق الحفلات", opt1: "تزيين كامل", desc1: "زهور طبيعية", opt2: "سائق رسمي", desc2: "زي مخصص" },
+                training: { title: "باقات التعليم", sub: "حدد مستوى التدريب", color: "#7c3aed", 
+                    opts: [
+                        { n: "كورس أساسي (3 أيام)", d: "أساسيات السيطرة والقيادة", p: 100000, i: "🥉" },
+                        { n: "كورس ذهبي (5 أيام)", d: "تدريب شامل + اختبارات ذكاء", p: 150000, i: "🥇" }
+                    ]},
+                wedding: { title: "باقات الزفاف", sub: "اجعل ليلتك ملكية", color: "#be185d", 
+                    opts: [
+                        { n: "باقة الزهور الطبيعية", d: "تزيين كامل بزهور فريش", p: 75000, i: "💐" },
+                        { n: "باقة الموكب الملكي", d: "تزيين + سائق بزي رسمي", p: 125000, i: "👑" }
+                    ]},
+                personal: { title: "إضافات الراحة", sub: "خيارات التأجير الإضافية", color: "#002349", 
+                    opts: [
+                        { n: "تأمين الحوت الشامل", d: "راحة بال كاملة ضد الحوادث", p: 25000, i: "🛡️" },
+                        { n: "بدون إضافات", d: "المواصفات القياسية فقط", p: 0, i: "🚗" }
+                    ]},
                 btn: "تأكيد ومتابعة", free: "مجاني", curr: "د.ع"
             },
-            ku: {
-                training: { header: "کۆرسی فێربوون هەڵبژێرە", sub: "پاکێجی گونجاو دیاری بکە", opt1: "کۆرسی بنەڕەتی (٣ ڕۆژ)", desc1: "بنەماکانی شۆفێری", opt2: "کۆرسی پێشکەوتوو (٥ ڕۆژ)", desc2: "ڕاهێنانی تەواو" },
-                personal: { header: "زیادکراوەکانی بەکرێگرتن", sub: "بژاردە زیادەکان", opt1: "دڵنیایی گشتگیر", desc1: "داپۆشینی تەواو", opt2: "بێ زیادکراو", desc2: "سەپاندنی ستاندارد" },
-                wedding: { header: "خزمەتگوزاری بۆنەکان", sub: "ڕێکخستنی ئاهەنگ", opt1: "ڕازاندنەوەی تەواو", desc1: "گوڵی سروشتی", opt2: "شۆفێری فەرمی", desc2: "جلوبەرگی تایبەت" },
-                btn: "پشتڕاستکردنەوە", free: "بێ بەرامبەر", curr: "دینار"
-            },
-            en: {
-                training: { header: "Choose Training Course", sub: "Select your package", opt1: "Basic Course (3 Days)", desc1: "Driving basics", opt2: "Pro Course (5 Days)", desc2: "Full training" },
-                personal: { header: "Rental Addons", sub: "Extra options", opt1: "Full Insurance", desc1: "Full coverage", opt2: "No Addons", desc2: "Standard specs" },
-                wedding: { header: "Event Services", sub: "Make it special", opt1: "Full Decoration", desc1: "Fresh flowers", opt2: "Uniformed Driver", desc2: "Official suit" },
-                btn: "Confirm & Continue", free: "Free", curr: "IQD"
-            }
+            // يمكن إضافة ku, tr, en هنا بنفس الهيكلية
         };
 
-        function initPage() {
-            const langData = translations[currentLang] || translations['ar'];
-            const config = langData[serviceType] || langData['personal'];
+        function init() {
+            const data = content[lang] || content['ar'];
+            const config = data[type];
             
-            document.getElementById('htmlTag').dir = (currentLang === 'en') ? 'ltr' : 'rtl';
-            document.getElementById('pageHeader').innerText = config.header;
-            document.getElementById('pageSubheader').innerText = config.sub;
-            document.getElementById('btnText').innerText = langData.btn;
-            document.getElementById('btnIcon').className = `fas fa-chevron-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
+            // تحديث الهوية البصرية حسب الخدمة
+            document.getElementById('headerBg').style.background = `linear-gradient(135deg, ${config.color} 0%, #1a1a1a 100%)`;
+            document.getElementById('pageHeader').innerText = config.title;
+            document.getElementById('pageSub').innerText = config.sub;
+            document.getElementById('btnText').innerText = data.btn;
+            document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
+            document.getElementById('btnIcon').className = `fas fa-arrow-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
 
-            // الأسعار بدون فواصل لسهولة الحساب لاحقاً
-            const prices = serviceType === 'training' ? ["100000", "150000"] : (serviceType === 'wedding' ? ["50000", "30000"] : ["25000", "0"]);
-            const icons = serviceType === 'training' ? ["🥉", "🥇"] : (serviceType === 'wedding' ? ["💐", "👔"] : ["🛡️", "🚗"]);
-
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = `
-                <div id="opt0" onclick="selectOption('${config.opt1}', '${prices[0]}', 'opt0')" class="option-card bg-white shadow-xl rounded-[2.5rem] p-8 flex flex-col items-center text-center border-2">
-                    <div class="text-4xl mb-4">${icons[0]}</div>
-                    <h3 class="text-xl font-black mb-1">${config.opt1}</h3>
-                    <p class="text-slate-500 text-sm mb-4 font-bold">${config.desc1}</p>
-                    <div class="text-2xl font-black text-[#002349]">${parseInt(prices[0]).toLocaleString()} ${langData.curr}</div>
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = config.opts.map((opt, idx) => `
+                <div onclick="select(${idx}, '${opt.n}', ${opt.p})" id="card-${idx}" class="option-card bg-white rounded-[3rem] p-8 text-center shadow-lg border-2">
+                    <div class="active-badge"><i class="fas fa-check-circle"></i></div>
+                    <div class="text-5xl mb-4">${opt.i}</div>
+                    <h3 class="text-2xl font-black mb-2">${opt.n}</h3>
+                    <p class="text-gray-500 font-bold text-sm mb-6">${opt.d}</p>
+                    <div class="text-2xl font-black text-[#002349] bg-gray-50 py-3 rounded-2xl">
+                        ${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}
+                    </div>
                 </div>
-                <div id="opt1" onclick="selectOption('${config.opt2}', '${prices[1]}', 'opt1')" class="option-card bg-white shadow-xl rounded-[2.5rem] p-8 flex flex-col items-center text-center border-2">
-                    <div class="text-4xl mb-4">${icons[1]}</div>
-                    <h3 class="text-xl font-black mb-1">${config.opt2}</h3>
-                    <p class="text-slate-500 text-sm mb-4 font-bold">${config.desc2}</p>
-                    <div class="text-2xl font-black text-[#002349]">${prices[1] === '0' ? langData.free : parseInt(prices[1]).toLocaleString() + ' ' + langData.curr}</div>
-                </div>
-            `;
+            `).join('');
         }
 
-        function selectOption(name, price, id) {
-            selectedName = name;
-            selectedPrice = price;
+        function select(idx, name, price) {
+            choice = { name, price };
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('nextBtn').disabled = false;
-            document.getElementById('nextBtn').classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-
-        function proceedToNextStep() {
-            let nextPage = "booking_personal.html";
-            if (serviceType === "training") nextPage = "training.html";
-            else if (serviceType === "wedding") nextPage = "booking_wedding.html";
-
-            const params = new URLSearchParams(window.location.search);
-            params.set('service', selectedName);
-            // نرسل السعر الصافي بدون نصوص لكي تجمعه صفحة المراجعة بسهولة
-            params.set('addon_price', selectedPrice); 
+            document.getElementById(`card-${idx}`).classList.add('active');
             
-            window.location.href = `${nextPage}?${params.toString()}`;
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
-        window.onload = initPage;
+        function proceed() {
+            let next = "booking_personal.html";
+            if(type === 'training') next = "training.html";
+            if(type === 'wedding') next = "booking_wedding.html";
+
+            u.set('addon_name', choice.name);
+            u.set('addon_price', choice.price);
+            
+            window.location.href = `${next}?${u.toString()}`;
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
