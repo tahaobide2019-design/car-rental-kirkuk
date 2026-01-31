@@ -23,7 +23,6 @@
         .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
         .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .dynamic-text { color: var(--main-color); transition: 0.5s; }
-        .leaflet-control-geocoder { border-radius: 10px; border: 2px solid var(--main-color) !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -59,9 +58,7 @@
             </div>
 
             <div class="space-y-3">
-                <div class="flex items-center mr-2">
-                    <label class="text-xs font-black text-gray-400 uppercase">جنس المتدرب</label>
-                </div>
+                <label class="text-xs font-black text-gray-400 uppercase mr-2">جنس المتدرب</label>
                 <div class="flex gap-4">
                     <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 ذكر</div>
                     <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">👩 أنثى</div>
@@ -88,8 +85,8 @@
         const currentLang = p.get('lang') || 'ar';
 
         const translations = {
-            ar: { dir: 'rtl', title: 'كورس تعليم قيادة', city: 'المدينة', date: 'التاريخ', map: 'ابحث عن موقعك أو حدده:', gps: 'تحديد موقعي الحالي 🛰️', submit: 'مراجعة البيانات', alert: '⚠️ يرجى إكمال البيانات' },
-            en: { dir: 'ltr', title: 'Driving Course', city: 'City', date: 'Date', map: 'Search or Select Location:', gps: 'Get My Location 🛰️', submit: 'Review Details', alert: '⚠️ Please fill all fields' }
+            ar: { dir: 'rtl', title: 'كورس تعليم قيادة', map: 'ابحث عن موقعك أو حدده:', gps: 'تحديد موقعي الحالي 🛰️', submit: 'مراجعة البيانات', alert: '⚠️ يرجى إكمال البيانات' },
+            en: { dir: 'ltr', title: 'Driving Course', map: 'Search or Select Location:', gps: 'Get My Location 🛰️', submit: 'Review Details', alert: '⚠️ Please fill all fields' }
         };
 
         window.onload = function() {
@@ -98,14 +95,12 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
 
-            const geocoder = L.Control.geocoder({
+            L.Control.geocoder({
                 defaultMarkGeocode: false,
-                placeholder: currentLang === 'ar' ? "ابحث عن منطقة..." : "Search area...",
-                errorMessage: currentLang === 'ar' ? "لم يتم العثور على الموقع" : "Location not found"
+                placeholder: currentLang === 'ar' ? "ابحث عن منطقة..." : "Search area..."
             }).on('markgeocode', function(e) {
-                const center = e.geocode.center;
-                map.setView(center, 15);
-                marker.setLatLng(center);
+                map.setView(e.geocode.center, 15);
+                marker.setLatLng(e.geocode.center);
             }).addTo(map);
         };
 
@@ -117,36 +112,23 @@
             document.getElementById('btnGPS').innerText = l.gps;
             document.getElementById('btnSubmitText').innerText = l.submit;
             
-            // استلام البيانات الجديدة من الرابط
-            const cityParam = p.get('city') || '---';
-            const dateParam = p.get('date') || '---';
-            const serviceParam = p.get('service') || 'كورس تعليم';
-            const priceParam = p.get('price') || '0';
-
             document.getElementById('summary').innerHTML = `
-                <span>📍 ${cityParam}</span> | 
-                <span>📅 ${dateParam}</span> | 
-                <span>🎓 ${serviceParam}</span> | 
-                <span>💰 ${priceParam} د.ع</span>
+                <span>📍 ${p.get('city') || '---'}</span> | 
+                <span>📅 ${p.get('date') || '---'}</span> | 
+                <span>🎓 ${p.get('service') || 'تعليم'}</span> | 
+                <span>💰 ${p.get('price') || '0'} د.ع</span>
             `;
         }
 
         function setGender(g) {
             selectedGender = g;
             const root = document.documentElement;
-            if(g === 'Female') {
-                root.style.setProperty('--main-color', '#db2777');
-                document.getElementById('femaleBtn').classList.add('active');
-                document.getElementById('maleBtn').classList.remove('active');
-            } else {
-                root.style.setProperty('--main-color', '#7c3aed');
-                document.getElementById('maleBtn').classList.add('active');
-                document.getElementById('femaleBtn').classList.remove('active');
-            }
+            root.style.setProperty('--main-color', g === 'Female' ? '#db2777' : '#7c3aed');
+            document.getElementById('femaleBtn').className = g === 'Female' ? 'gender-btn active' : 'gender-btn';
+            document.getElementById('maleBtn').className = g === 'Male' ? 'gender-btn active' : 'gender-btn';
         }
 
         function getGPS() {
-            if (!navigator.geolocation) return;
             navigator.geolocation.getCurrentPosition(pos => {
                 const coords = [pos.coords.latitude, pos.coords.longitude];
                 map.setView(coords, 17); marker.setLatLng(coords);
@@ -156,31 +138,20 @@
         function goToReviewTraining() {
             const name = document.getElementById('tName').value;
             const phone = document.getElementById('tPhone').value;
-            const nationalID = document.getElementById('tNationalID').value;
+            const id_no = document.getElementById('tNationalID').value;
             const age = document.getElementById('tAge').value;
-            const latlng = marker.getLatLng();
-
-            if(!name || !phone || !nationalID || !age) { 
-                alert(translations[currentLang].alert); 
-                return; 
-            }
+            if(!name || !phone || !id_no || !age) { alert(translations[currentLang].alert); return; }
             
-            const googleMapsLink = `https://www.google.com/maps?q=${latlng.lat},${latlng.lng}`;
-            
-            // تجميع كافة المعلومات للإرسال
-            const params = new URLSearchParams(window.location.search); // نحتفظ بالبيانات القديمة (city, service, price)
-            params.set('lang', currentLang);
+            const pos = marker.getLatLng();
+            const params = new URLSearchParams(window.location.search);
             params.set('name', name);
             params.set('phone', phone);
-            params.set('id_no', nationalID);
+            params.set('id_no', id_no);
             params.set('age', age);
             params.set('gender', selectedGender === 'Male' ? 'ذكر' : 'أنثى');
-            params.set('map', googleMapsLink);
-            params.set('province', p.get('city') || '');
-            
-            // التأكد من إرسال السعر ونوع الخدمة المختارين من addons.html
-            params.set('car', p.get('service') || 'كورس تعليم'); 
-            params.set('price', p.get('price') || 'حسب الاتفاق');
+            // إصلاح رابط الخريطة هنا أيضاً ليكون متوافقاً مع الرادار
+            params.set('map', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
+            params.set('car', p.get('service') || 'كورس تعليم');
 
             window.location.href = `review.html?${params.toString()}`;
         }
