@@ -3,193 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شركة الحوت 🐋 | Al-Hut Platform</title>
+    <title>اختيار الكورس | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); transition: 1s; position: relative; }
-        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; transition: 0.5s; }
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        .smart-input { width: 100%; padding: 1rem; background-color: #f1f5f9; border: 2px solid transparent; border-radius: 1.25rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
-        .smart-input:focus { background-color: #fff; border-color: #D4AF37; }
-        .city-overlay { position: absolute; inset: 0; opacity: 0.4; transition: 1s; pointer-events: none; }
-        .lang-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 12px; font-size: 0.75rem; color: white; cursor: pointer; transition: 0.3s; }
-        .lang-btn:hover { background: #D4AF37; color: #002349; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); position: relative; }
+        .course-card { transition: 0.3s; cursor: pointer; border: 3px solid transparent; }
+        .course-card.active { border-color: #D4AF37; background-color: #fffdf5; transform: scale(1.02); }
+        .whale-float { display: inline-block; font-size: 4rem; animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <div class="absolute top-4 left-4 right-4 z-50 flex justify-center gap-2">
-        <button onclick="changeLang('ar')" class="lang-btn">العربية</button>
-        <button onclick="changeLang('ku')" class="lang-btn">کوردی</button>
-        <button onclick="changeLang('tr')" class="lang-btn">Türkçe</button>
-        <button onclick="changeLang('en')" class="lang-btn">English</button>
-    </div>
-
-    <header id="mainHero" class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
-        <div id="cityOverlay" class="city-overlay"></div>
-        <div class="whale-float mb-4 text-7xl" id="whaleIcon">🐋</div>
-        <h1 class="text-6xl font-black text-[#D4AF37] mb-2 tracking-tighter" id="brandName">الحـوت</h1>
-        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic px-4 h-8 transition-all duration-500"></p>
+    <header class="hero-bg text-white pt-12 pb-32 text-center overflow-hidden">
+        <div class="whale-float mb-2">🐋</div>
+        <h1 class="text-4xl font-black text-[#D4AF37]">اختر كورس التعليم</h1>
+        <p class="opacity-80">حدد الباقة المناسبة لك للبدء في تعلم القيادة</p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
-        <div class="bg-white shadow-2xl rounded-[3.5rem] p-8 md:p-12 max-w-7xl mx-auto border border-gray-100">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-                
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelCity">المدينة</label>
-                    <select id="citySelect" onchange="adaptToCity()" class="smart-input appearance-none cursor-pointer"></select>
-                </div>
-
-                <div class="md:col-span-3 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelService">الخدمة المطلوبة</label>
-                    <select id="mainService" class="smart-input appearance-none text-sm cursor-pointer"></select>
-                </div>
-
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelDate">التاريخ</label>
-                    <input type="date" id="dateInput" class="smart-input">
-                </div>
-
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelTime">الوقت</label>
-                    <input type="time" id="timeInput" class="smart-input" onchange="validateTime()">
-                </div>
-
-                <div class="md:col-span-3">
-                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
-                        <span id="btnText">استمر الآن</span> <i id="btnIcon" class="fas fa-arrow-left"></i>
-                    </button>
-                </div>
+    <main class="container mx-auto px-4 -mt-20 relative z-10 pb-20">
+        <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div id="course1" onclick="selectCourse('كورس تعليم 3 أيام', '100,000', 'course1')" class="course-card bg-white shadow-xl rounded-[2.5rem] p-8 flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mb-4">🥉</div>
+                <h3 class="text-2xl font-black mb-2">كورس أساسي</h3>
+                <p class="text-slate-500 mb-4 font-bold">مدة التدريب: 3 أيام مكثفة</p>
+                <div class="text-3xl font-black text-[#002349] mb-6">100,000 <span class="text-sm">د.ع</span></div>
+                <ul class="text-right text-sm space-y-2 mb-8 opacity-70 font-bold">
+                    <li><i class="fas fa-check-circle text-green-500 ml-2"></i> أساسيات القيادة</li>
+                    <li><i class="fas fa-check-circle text-green-500 ml-2"></i> تدريب عملي في طرق هادئة</li>
+                </ul>
             </div>
+
+            <div id="course2" onclick="selectCourse('كورس تعليم 5 أيام', '150,000', 'course2')" class="course-card bg-white shadow-xl rounded-[2.5rem] p-8 flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center text-3xl mb-4">🥇</div>
+                <h3 class="text-2xl font-black mb-2">كورس احترافي</h3>
+                <p class="text-slate-500 mb-4 font-bold">مدة التدريب: 5 أيام شاملة</p>
+                <div class="text-3xl font-black text-[#002349] mb-6">150,000 <span class="text-sm">د.ع</span></div>
+                <ul class="text-right text-sm space-y-2 mb-8 opacity-70 font-bold">
+                    <li><i class="fas fa-check-circle text-green-500 ml-2"></i> كافة المهارات المرورية</li>
+                    <li><i class="fas fa-check-circle text-green-500 ml-2"></i> تدريب في الزحام والطرق العامة</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="max-w-md mx-auto mt-10">
+            <button id="nextBtn" onclick="goToTraining()" disabled class="w-full bg-[#D4AF37] text-[#002349] py-5 rounded-2xl font-black text-xl shadow-2xl opacity-50 cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-3">
+                <span>تأكيد الاختيار</span> <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
     </main>
 
     <script>
-        let currentLang = 'ar';
+        let selectedCourseName = "";
+        let selectedCoursePrice = "";
+        const urlParams = new URLSearchParams(window.location.search);
 
-        const data = {
-            ar: {
-                dir: 'rtl', font: 'Tajawal', brand: 'الحـوت', labelCity: 'المدينة', labelService: 'الخدمة المطلوبة',
-                labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول للمتابعة 🐋',
-                timeAlert: 'عذراً، أوقات العمل من 8 صباحاً حتى 11 مساءً 🐋', pastTimeAlert: 'لا يمكن اختيار وقت قد مضى!',
-                morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
-                services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس ومناسبات', training: '🎓 تعليم قيادة (مدربين)' },
-                cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
-                msgs: { 'كركوك': 'يا أهل كركوك.. الحوت يحييكم في مدينة التآخي والجمال 💎', 'بغداد': 'من بغداد دار السلام.. الحوت يرافقكم في كل شوارعها العريقة 🏰', 'أربيل': 'بخير ببن لـ أربيل.. استمتع بجمال القلعة مع خدماتنا المتميزة 🏔️', 'السليمانية': 'سليماني جوان.. تمتع بأجواء السليمانية الرائعة مع سياراتنا 🌲', 'الموصل': 'أهلاً بالموصل الحدباء.. الحوت في خدمة نينوى وأهلها الكرام 🏹', 'البصرة': 'حي الله أهلنا بالبصرة الفيحاء.. الحوت يرسو في ثغر العراق ⚓', 'الأنبار': 'أهلاً بالأنبار العزيزة.. الحوت يصل لقلب الكرم العراقي الأصيل 🌴', 'ديالى': 'نورتم ديالى.. الحوت في مدينة البرتقال والجمال 🍊' }
-            },
-            ku: {
-                dir: 'rtl', font: 'Tajawal', brand: 'ئەلحووت', labelCity: 'شار', labelService: 'جۆری خزمەتگوزاری',
-                labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
-                timeAlert: 'ببورە، کاتی کارکردن لە ٨ی بەیانی تا ١١ی شەو دەبێت 🐋', pastTimeAlert: 'ناتوانی کاتێکی ڕابردوو هەڵبژێریت!',
-                morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
-                services: { placeholder: '-- خزمەتگوزاری هەڵبژێرە --', personal: '🚗 بەکرێگرتنی ئۆتۆمبێل', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
-                cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 'كركوك': 'سڵاو بۆ کەرکوکی دڵی کوردستان.. ئەلحووت خزمەتتان دەکات 💎', 'بغداد': 'سڵاو لە بەغدای پایتەخت.. ئەلحووت لەگەڵتاندایە 🏰', 'أربيل': 'بەخێربێن بۆ هەولێری قەڵا و منارە.. 🏔️', 'السليمانية': 'سلێمانی جوان.. چێژ لە کەشوهەوای سلێمانی وەربگرە 🌲', 'الموصل': 'سڵاو بۆ مووسڵ.. 🏹', 'البصرة': 'سڵاو بۆ بەسرە.. ⚓', 'الأنبار': 'بەخێربێن بۆ ئەنبار.. 🌴', 'ديالى': 'سڵاو بۆ دیالە.. 🍊' }
-            },
-            tr: {
-                dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'Şehir', labelService: 'Hizmet Türü',
-                labelDate: 'Tarih', labelTime: 'Saat', btnText: 'Devam Et', alert: 'Lütfen alanları doldurun 🐋',
-                timeAlert: 'Çalışma saatleri 08:00 - 23:00 arasıdır 🐋', pastTimeAlert: 'Geçmiş bir zamanı seçemezsiniz!',
-                morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
-                services: { placeholder: '-- Hizmet Seçin --', personal: '🚗 Araç Kiralama', wedding: '🎁 Düğün Araçları', training: '🎓 Sürüş Eğitimi' },
-                cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Baغdaت 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Selam Kerkük.. Al-Hut yanınızda 💎', 'بغداد': 'Bağdat\'a hoş geldiniz.. 🏰', 'أربيل': 'Erbil\'e hoş geldiniz.. 🏔️', 'السليمانية': 'Güzel Süleymaniye.. 🌲', 'الموصل': 'Selam Musul.. 🏹', 'البصرة': 'Basra\'ya selamlar.. ⚓', 'الأنبار': 'Enbar\'a hoş geldiniz.. 🌴', 'ديالى': 'Diyala\'ya selamlar.. 🍊' }
-            },
-            en: {
-                dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'City', labelService: 'Required Service',
-                labelDate: 'Date', labelTime: 'Time', btnText: 'Continue Now', alert: 'Please fill all fields 🐋',
-                timeAlert: 'Working hours: 8 AM to 11 PM 🐋', pastTimeAlert: 'You cannot select a past time!',
-                morning: 'Good Morning', day: 'Have a nice day', evening: 'Good Evening',
-                services: { placeholder: '-- Select Service --', personal: '🚗 Personal Car Rental', wedding: '🎁 Wedding & Events Cars', training: '🎓 Driving Training' },
-                cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Slemani 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Welcome Kirkuk.. Al-Hut greets you 💎', 'بغداد': 'From Baghdad, the city of peace.. 🏰', 'أربيل': 'Welcome to Erbil.. 🏔️', 'السليمانية': 'Slemani Jwan.. 🌲', 'الموصل': 'Welcome to Mosul.. 🏹', 'البصرة': 'Greetings to Basra.. ⚓', 'الأنبار': 'Welcome to Anbar.. 🌴', 'ديالى': 'Welcome to Diyala.. 🍊' }
-            }
-        };
+        function selectCourse(name, price, id) {
+            selectedCourseName = name;
+            selectedCoursePrice = price;
 
-        function validateTime() {
-            const timeInput = document.getElementById('timeInput');
-            const dateInput = document.getElementById('dateInput');
-            const selectedTime = timeInput.value;
-            const selectedDate = dateInput.value;
-            const l = data[currentLang];
-            if (!selectedTime) return;
-            const hour = parseInt(selectedTime.split(':')[0]);
-            const minutes = parseInt(selectedTime.split(':')[1]);
-            const now = new Date();
-            const today = now.toISOString().split('T')[0];
-            if (hour < 8 || hour >= 23) { alert(l.timeAlert); timeInput.value = ""; return; }
-            if (selectedDate === today) {
-                if (hour < now.getHours() || (hour === now.getHours() && minutes < now.getMinutes())) {
-                    alert(l.pastTimeAlert); timeInput.value = "";
-                }
-            }
+            // تمييز الكرت المختار
+            document.querySelectorAll('.course-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            // تفعيل الزر
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
-        function changeLang(lang) {
-            currentLang = lang;
-            const l = data[lang];
-            document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = l.font + ', sans-serif';
-            document.getElementById('brandName').innerText = l.brand;
-            document.getElementById('labelCity').innerText = l.labelCity;
-            document.getElementById('labelService').innerText = l.labelService;
-            document.getElementById('labelDate').innerText = l.labelDate;
-            document.getElementById('labelTime').innerText = l.labelTime;
-            document.getElementById('btnText').innerText = l.btnText;
-            document.getElementById('btnIcon').className = `fas fa-arrow-${l.dir === 'rtl' ? 'left' : 'right'}`;
-            const citySelect = document.getElementById('citySelect');
-            const currentCity = citySelect.value || 'كركوك';
-            citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}" ${key === currentCity ? 'selected' : ''}>${val}</option>`).join('');
-            const serviceSelect = document.getElementById('mainService');
-            serviceSelect.innerHTML = `<option value="">${l.services.placeholder}</option><option value="personal">${l.services.personal}</option><option value="wedding">${l.services.wedding}</option><option value="training">${l.services.training}</option>`;
-            adaptToCity();
-        }
+        function goToTraining() {
+            if (!selectedCourseName) return;
 
-        function adaptToCity() {
-            const city = document.getElementById('citySelect').value;
-            const greet = document.getElementById('dynamicGreeting');
-            const overlay = document.getElementById('cityOverlay');
-            const l = data[currentLang];
-            const hour = new Date().getHours();
-            let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
-            const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
-            greet.style.opacity = 0;
-            setTimeout(() => {
-                greet.innerText = `${timeText}.. ${l.msgs[city] || ''}`;
-                greet.style.opacity = 1;
-                overlay.style.backgroundColor = styleColor[city] || '#002349';
-            }, 300);
-        }
+            // دمج المعلومات القديمة مع الكورس المختار
+            const params = new URLSearchParams(window.location.search);
+            params.set('service', selectedCourseName);
+            params.set('price', selectedCoursePrice);
+            params.set('car', selectedCourseName); // نمرر اسم الكورس في حقل car لكي يفهمه السكريبت
 
-        function startBooking() {
-            const service = document.getElementById('mainService').value;
-            const date = document.getElementById('dateInput').value;
-            const time = document.getElementById('timeInput').value;
-            const city = document.getElementById('citySelect').value;
-
-            if(!service || !date || !time) {
-                alert(data[currentLang].alert);
-                return;
-            }
-
-            // التعديل المطلوب: إذا كان الاختيار "تعليم قيادة"، نتوجه لملف الاضافات addons.html
-            let targetPage = "fleet.html"; 
-            if (service === "training") {
-                targetPage = "addons.html"; 
-            }
-
-            window.location.href = `${targetPage}?type=${service}&lang=${currentLang}&date=${date}&time=${time}&city=${city}`;
-        }
-
-        window.onload = () => {
-            const dateInput = document.getElementById('dateInput');
-            dateInput.min = new Date().toISOString().split('T')[0];
-            dateInput.value = dateInput.min;
-            changeLang('ar');
+            // التوجه لصفحة ملئ البيانات الشخصية
+            window.location.href = `training.html?${params.toString()}`;
         }
     </script>
 </body>
