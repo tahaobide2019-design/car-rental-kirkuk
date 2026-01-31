@@ -11,137 +11,111 @@
     <style>
         :root { --main-theme: #002349; --accent-theme: #D4AF37; }
         body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; overflow: hidden; }
-        
-        .main-card {
-            background: white;
-            border-radius: 3.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.2);
-            position: relative;
-            z-index: 10;
-        }
-
+        .main-card { background: white; border-radius: 3.5rem; box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.2); position: relative; z-index: 10; }
         .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3) translateY(100px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .success-glow {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; background: var(--main-theme);
-            filter: blur(100px); opacity: 0.1; z-index: -1;
-        }
-
-        .lang-badge { font-size: 0.7rem; font-weight: 800; color: #94a3b8; background: #f8fafc; padding: 6px 12px; border-radius: 1rem; border: 1px solid #f1f5f9; }
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3) translateY(100px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <div class="success-glow"></div>
-    
     <div id="mainBox" class="max-w-md w-full main-card p-8 text-center bounce-in border-t-[12px]" style="border-color: var(--main-theme);">
         
         <div class="flex justify-center mb-2">
-            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 160px;" loop autoplay></dotlottie-player>
+            <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 140px;" loop autoplay></dotlottie-player>
         </div>
 
-        <h1 id="mainGreeting" class="text-3xl font-black mb-1" style="color: var(--main-theme);">مبارك الإتمام!</h1>
+        <h1 id="mainGreeting" class="text-3xl font-black mb-1" style="color: var(--main-theme);">...</h1>
         <h2 id="userNameDisplay" class="text-xl font-black mb-4" style="color: var(--accent-theme);">...</h2>
 
         <div class="bg-blue-50/50 p-4 rounded-3xl mb-6">
-            <p id="cityBlessing" class="text-blue-900 font-black text-sm leading-relaxed italic">
-                جاري تحضير التحية...
-            </p>
+            <p id="cityBlessing" class="text-blue-900 font-black text-sm leading-relaxed italic">...</p>
         </div>
 
-        <p class="text-slate-500 font-bold text-xs px-4 leading-relaxed mb-6">
-            تم استلام طلبك بنجاح، سيقوم <span class="font-black text-blue-600">أقرب مكتب حوت</span> بالتواصل معك هاتفياً لإتمام إجراءات التسليم.
-        </p>
+        <p id="subInstruction" class="text-slate-500 font-bold text-xs px-4 leading-relaxed mb-6">...</p>
 
-        <div class="bg-slate-50 p-6 rounded-[2.5rem] mb-8 border-2 border-dashed border-slate-200 relative">
-            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">رقم الحجز المرجعي</p>
+        <div class="bg-slate-50 p-6 rounded-[2.5rem] mb-8 border-2 border-dashed border-slate-200">
+            <p id="orderLabel" class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">REFERENCE NUMBER</p>
             <p id="orderIDDisplay" class="text-2xl font-black tracking-tighter" style="color: var(--main-theme);">#HUT-0000</p>
             <div id="summaryText" class="text-[10px] font-bold text-green-600 mt-2 flex items-center justify-center gap-1">
-                <i class="fas fa-satellite-dish animate-pulse"></i> تم الربط مع الرادار
+                <i class="fas fa-satellite-dish animate-pulse"></i> RADAR CONNECTED
             </div>
         </div>
 
-        <a href="index.html" class="block w-full py-5 rounded-2xl font-black text-xl shadow-xl transition-all active:scale-95 text-white" style="background: var(--main-theme);">
+        <a id="backBtn" href="index.html" class="block w-full py-5 rounded-2xl font-black text-xl shadow-xl transition-all active:scale-95 text-white" style="background: var(--main-theme);">
             العودة للرئيسية
         </a>
-
-        <div class="flex justify-center gap-2 mt-6 overflow-hidden">
-            <span class="lang-badge">SUCCESS!</span>
-            <span class="lang-badge">سەرکەوتوو بوو!</span>
-            <span class="lang-badge">BAŞARILI!</span>
-        </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec"; //
+        const lang = u.get('lang') || 'ar';
+
+        // 1. نظام القواميس (عرض للزبون vs إرسال للسكريبت)
+        const uiContent = {
+            ar: { greet: "مبارك الإتمام!", sub: "سيقوم أقرب مكتب حوت بالتواصل معك هاتفياً لإتمام إجراءات التسليم.", btn: "العودة للرئيسية", orderL: "رقم الحجز المرجعي" },
+            ku: { greet: "پیرۆزە!", sub: "نزیکترین ئۆفیسی حوت پەیوەندیت پێوە دەکات بۆ تەواوکردنی ڕێکارەکانی ڕادەستکردن.", btn: "بگەڕێوە سەرەکی", orderL: "ژمارەی تەرخانکردن" },
+            en: { greet: "Success!", sub: "The nearest Whale office will contact you via phone to complete the delivery process.", btn: "Back to Home", orderL: "REFERENCE NUMBER" },
+            tr: { greet: "Tebrikler!", sub: "En yakın Whale ofisi, teslimat işlemlerini tamamlamak için sizinle telefonla iletişime geçecektir.", btn: "Ana Sayfaya Dön", orderL: "REFERANS NUMARASI" }
+        };
 
         const cityBlessings = {
             "بغداد": "يرعاك الله في أرض هارون الرشيد بغداد 🏰",
             "كركوك": "حياك الله في مدينة القلاع والإخاء كركوك 💎",
-            "أربيل": "نورتنا في حضن القلعة الشامخة أربيل 🏔️",
             "البصرة": "على راسي أهلنا في ثغر العراق الباسم البصرة 🌊",
-            "الموصل": "أهلاً بك في مدينة الحدباء أم الربعين الموصل 🏛️",
-            "السليمانية": "حيا الله أهل الثقافة والجمال في السليمانية ✨",
-            "النجف": "نورتنا في مدينة العلم والعلماء النجف الأشرف 🕌",
-            "كربلاء": "أهلاً بك في مدينة الحسين كربلاء المقدسة 🕊️",
-            "الأنبار": "حي الله أهل الكرم والغيرة في الأنبار 🌴",
+            "أربيل": "نورتنا في حضن القلعة الشامخة أربيل 🏔️",
             "default": "يرعاك الله أينما كنت في أرض العراق العظيم 🇮🇶"
         };
 
-        const translationMap = {
-            "Kirkuk": "كركوك", "Baghdad": "بغداد", "Erbil": "أربيل", "Basra": "البصرة",
-            "Sulaymaniyah": "السليمانية", "Duhok": "دهوك", "Anbar": "الأنبار", "Diyala": "ديالى",
-            "Male": "ذكر", "Female": "أنثى",
-            "personal": "تأجير شخصي", "wedding": "أعراس ومناسبات", "training": "تعليم قيادة"
+        // خريطة الترجمة العكسية (لإرسالها للسكريبت باللغة الموحدة)
+        const toScriptMap = {
+            // المحافظات
+            "Kirkuk": "كركوك", "Kerkük": "كركوك", "کەرکوک": "كركوك",
+            "Baghdad": "بغداد", "Bağdat": "بغداد", "بەغدا": "بغداد",
+            "Erbil": "أربيل", "Erbil": "أربيل", "هەولێر": "أربيل",
+            // الخدمات
+            "personal": "تأجير شخصي", "wedding": "أعراس ومناسبات", "training": "تعليم قيادة",
+            // الجنس
+            "Male": "ذكر", "Erkek": "ذكر", "نێر": "ذكر",
+            "Female": "أنثى", "Kadın": "أنثى", "مێ": "أنثى"
         };
 
-        function trans(text) { return translationMap[text] || text || "---"; }
+        function translateToScript(val) { return toScriptMap[val] || val || "---"; }
 
         window.onload = () => {
-            // 1. توليد الهوية البصرية والبيانات
+            // ضبط واجهة المستخدم بلغة الزبون
+            const ui = uiContent[lang] || uiContent.ar;
+            document.getElementById('mainGreeting').innerText = ui.greet;
+            document.getElementById('subInstruction').innerText = ui.sub;
+            document.getElementById('backBtn').innerText = ui.btn;
+            document.getElementById('orderLabel').innerText = ui.orderL;
+            document.dir = (lang === 'ar' || lang === 'ku') ? 'rtl' : 'ltr';
+
             let orderID = sessionStorage.getItem('currentOrderID') || "HUT-" + Math.floor(1000 + Math.random() * 9000);
             sessionStorage.setItem('currentOrderID', orderID);
             document.getElementById('orderIDDisplay').innerText = "#" + orderID;
 
-            const city = trans(u.get('city') || u.get('province') || u.get('prov'));
-            const userName = u.get('name') || "عميلنا العزيز";
-            document.getElementById('userNameDisplay').innerText = userName;
+            const rawCity = u.get('city') || u.get('prov') || "بغداد";
+            const scriptCity = translateToScript(rawCity);
+            document.getElementById('cityBlessing').innerText = cityBlessings[scriptCity] || cityBlessings["default"];
+            document.getElementById('userNameDisplay').innerText = u.get('name') || "...";
 
-            // 2. تطبيق العبارة التفاعلية حسب المحافظة
-            const blessing = cityBlessings[city] || cityBlessings["default"];
-            document.getElementById('cityBlessing').innerText = blessing;
+            // تأثير الاحتفال 🎊
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#002349', '#D4AF37'] });
 
-            // 3. تأثير الاحتفال 🎊 (confetti)
-            const type = u.get('type') || 'personal';
-            const colors = type === 'wedding' ? ['#be185d', '#ff0000', '#ffffff'] : ['#002349', '#D4AF37', '#ffffff'];
-            
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: colors
-            });
-
-            // 4. إرسال البيانات للسكريبت (مرة واحدة)
+            // إرسال البيانات بلغة السكريبت (العربية الموحدة)
             if (sessionStorage.getItem('orderSent') !== 'true') {
                 const data = {
                     order_id: orderID,
-                    name: userName,
-                    phone: u.get('phone') || "---",
-                    province: city,
-                    car: u.get('car') || "غير محدد",
-                    days: u.get('days') || u.get('date') || "---",
-                    addons: u.get('addons') || u.get('addon_name') || "أساسية فقط",
-                    total_price: u.get('total_final') || u.get('price') || "0",
-                    gender: trans(u.get('gender')),
-                    age: u.get('age') || "---",
-                    service: trans(u.get('service') || u.get('type')),
+                    name: u.get('name'),
+                    phone: u.get('phone'),
+                    province: scriptCity, // ترسل كـ "كركوك" مهما كانت لغة الواجهة
+                    car: u.get('car'),
+                    days: u.get('days') || u.get('date'),
+                    addons: u.get('addon_name') || "أساسية",
+                    total_price: u.get('price'),
+                    gender: translateToScript(u.get('gender')),
+                    service: translateToScript(u.get('type')),
                     location_link: u.get('map') || ""
                 };
 
@@ -149,9 +123,7 @@
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify(data)
-                }).then(() => {
-                    sessionStorage.setItem('orderSent', 'true');
-                });
+                }).then(() => sessionStorage.setItem('orderSent', 'true'));
             }
         };
     </script>
