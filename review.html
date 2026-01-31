@@ -14,8 +14,9 @@
         .data-row { border-bottom: 1px dashed #e2e8f0; padding: 0.85rem 0; display: flex; justify-content: space-between; align-items: center; }
         .data-label { color: #64748b; font-size: 0.8rem; font-weight: 800; }
         .data-value { color: var(--brand-color); font-weight: 900; text-align: left; }
-        .price-box { background: var(--brand-color); color: #D4AF37; border-radius: 2rem; padding: 1.5rem; text-align: center; margin-top: 1rem; transition: 0.5s; }
+        .price-box { background: var(--brand-color); color: #D4AF37; border-radius: 2rem; padding: 1.5rem; text-align: center; margin-top: 1rem; transition: 0.5s; border: 2px solid rgba(212, 175, 55, 0.3); }
         .dynamic-btn { background: var(--brand-color); color: #D4AF37; }
+        .addon-badge { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 8px; font-size: 10px; margin-right: 5px; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -55,16 +56,13 @@
         const selectedCar = u.get('car') || '';
 
         const trans = {
-            ar: { title:'مراجعة الطلب', btn:'تأكيد وإرسال الطلب', edit:'تعديل البيانات', name:'👤 الاسم', phone:'📞 الهاتف', age:'🎂 العمر', gender:'👫 الجنس', service:'🛠️ الخدمة', city:'📍 المدينة', days:'📅 المدة', unit:'أيام', priceLabel:'المبلغ الإجمالي', map:'🗺️ الموقع', id_no:'🆔 الهوية/الجواز', curr:'د.ع', locTxt:'تم تحديد الموقع 📍' },
-            en: { title:'Review Order', btn:'Confirm & Send', edit:'Edit Data', name:'👤 Name', phone:'📞 Phone', age:'🎂 Age', gender:'👫 Gender', service:'🛠️ Service', city:'📍 City', days:'📅 Duration', unit:'Days', priceLabel:'Total Amount', map:'🗺️ Location', id_no:'🆔 ID/Passport', curr:'IQD', locTxt:'Location Selected 📍' },
-            ku: { title:'پێداچوونەوە', btn:'تەواوکردن و ناردن', edit:'دەستکاری', name:'👤 ناو', phone:'📞 مۆبایل', age:'🎂 تەمەن', gender:'👫 ڕەگەز', service:'🛠️ خزمەتگوزاری', city:'📍 شار', days:'📅 ماوە', unit:'ڕۆژ', priceLabel:'کۆی گشتی', map:'🗺️ شوێن', id_no:'🆔 ناسنامە', curr:'دینار', locTxt:'شوێن دیاریکراوە 📍' },
-            tr: { title:'Siparişi İncele', btn:'Onayla ve Gönder', edit:'Verileri Düzenle', name:'👤 İsim', phone:'📞 Telefon', age:'🎂 Yaş', gender:'👫 Cinsiyet', service:'🛠️ Hizmet', city:'📍 Şehir', days:'📅 Süre', unit:'Gün', priceLabel:'Toplam Tutar', map:'🗺️ Konum', id_no:'🆔 Kimlik No', curr:'IQD', locTxt:'Konum Seçildi 📍' }
+            ar: { title:'مراجعة الطلب', btn:'تأكيد وإرسال الطلب', edit:'تعديل البيانات', name:'👤 الاسم', phone:'📞 الهاتف', age:'🎂 العمر', gender:'👫 الجنس', service:'🛠️ الخدمة', city:'📍 المدينة', days:'📅 المدة', unit:'أيام', priceLabel:'المبلغ الإجمالي', map:'🗺️ الموقع', id_no:'🆔 الهوية/الجواز', curr:'د.ع', locTxt:'تم تحديد الموقع 📍', addon:'✨ الإضافة' },
+            en: { title:'Review Order', btn:'Confirm & Send', edit:'Edit Data', name:'👤 Name', phone:'📞 Phone', age:'🎂 Age', gender:'👫 Gender', service:'🛠️ Service', city:'📍 City', days:'📅 Duration', unit:'Days', priceLabel:'Total Amount', map:'🗺️ Location', id_no:'🆔 ID/Passport', curr:'IQD', locTxt:'Location Selected 📍', addon:'✨ Add-on' }
         };
 
         window.onload = () => {
             const l = trans[currentLang] || trans['ar'];
             document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = (l.dir === 'rtl' ? 'Tajawal' : 'Poppins') + ', sans-serif';
 
             // --- الثيم الديناميكي ---
             const root = document.documentElement;
@@ -79,15 +77,7 @@
                 document.getElementById('serviceEmoji').innerText = '🚗';
             }
 
-            document.getElementById('pageTitle').innerText = l.title;
-            document.getElementById('btnText').innerText = l.btn;
-            document.getElementById('btnEdit').innerText = l.edit;
-            document.getElementById('lblFinalPrice').innerText = l.priceLabel;
-            document.getElementById('currVal').innerText = l.curr;
-
             // --- عرض البيانات ---
-            let html = '';
-            // مصفوفة الحقول لضمان الترتيب
             const displayFields = [
                 {k: 'name', l: l.name},
                 {k: 'phone', l: l.phone},
@@ -96,9 +86,11 @@
                 {k: 'id_no', l: l.id_no},
                 {k: 'city', l: l.city},
                 {k: 'car', l: l.service},
+                {k: 'addon_name', l: l.addon}, // عرض الإضافة هنا
                 {k: 'map', l: l.map}
             ];
 
+            let html = '';
             displayFields.forEach(item => {
                 let val = u.get(item.k);
                 if(val && val !== '---' && val !== 'null') {
@@ -111,11 +103,20 @@
             });
             document.getElementById('detailsList').innerHTML = html;
             
-            // --- السعر والمدة ---
-            const price = u.get('price') || '0';
-            const cleanPrice = price.toString().replace(/[^0-9]/g, '');
-            document.getElementById('totalVal').innerText = cleanPrice ? parseInt(cleanPrice).toLocaleString() : price;
+            // --- الحساب الذكي للسعر الإجمالي ---
+            const basePrice = parseInt(u.get('price') || '0');
+            const addonPrice = parseInt(u.get('addon_price') || '0');
+            const total = basePrice + addonPrice;
             
+            document.getElementById('totalVal').innerText = total.toLocaleString();
+            
+            // تحديث نصوص الواجهة
+            document.getElementById('pageTitle').innerText = l.title;
+            document.getElementById('btnText').innerText = l.btn;
+            document.getElementById('btnEdit').innerText = l.edit;
+            document.getElementById('lblFinalPrice').innerText = l.priceLabel;
+            document.getElementById('currVal').innerText = l.curr;
+
             const days = u.get('days');
             if(days && days !== 'null') {
                 document.getElementById('extraInfo').innerText = `${days} ${l.unit}`;
@@ -125,7 +126,11 @@
         };
 
         function confirmAndSubmit() {
-            // نمرر كل البيانات لصفحة النجاح، وهناك سيتم الإرسال الفعلي للرادار
+            // نمرر المجموع النهائي أيضاً لصفحة النجاح
+            const basePrice = parseInt(u.get('price') || '0');
+            const addonPrice = parseInt(u.get('addon_price') || '0');
+            u.set('total_final', basePrice + addonPrice);
+            
             window.location.href = `success.html?${u.toString()}`;
         }
     </script>
