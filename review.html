@@ -5,48 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>مراجعة الطلب | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --main: #002349; --accent: #D4AF37; --bg-soft: #f8fafc; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: background 0.8s ease; }
-        .glass-card { background: white; border-radius: 3.5rem; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.15); transition: 0.5s; border-top: 15px solid var(--main); }
-        .data-row { border-bottom: 1px dashed #e5e7eb; padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; }
-        .data-label { color: #94a3b8; font-size: 0.85rem; font-weight: 800; }
-        .data-value { color: var(--main); font-weight: 900; text-align: left; }
-        .price-box { background: var(--main); color: var(--accent); border-radius: 2.5rem; padding: 1.8rem; text-align: center; position: relative; overflow: hidden; }
-        .btn-main { background: var(--main); color: var(--accent); transition: 0.3s; }
-        .btn-main:active { transform: scale(0.95); }
+        :root { --main: #002349; --accent: #D4AF37; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
+        
+        .main-card {
+            background: white; border-radius: 3.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.15);
+            border-top: 12px solid var(--main);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+        }
+
+        .info-item {
+            background: #f8fafc; padding: 0.75rem; border-radius: 1.2rem;
+            border: 1px solid #edf2f7; display: flex; flex-direction: column;
+        }
+
+        .info-label { color: #94a3b8; font-size: 0.65rem; font-weight: 800; margin-bottom: 2px; }
+        .info-value { color: var(--main); font-size: 0.85rem; font-weight: 900; }
+
+        .price-summary {
+            background: var(--main); color: var(--accent);
+            border-radius: 2.5rem; padding: 1.5rem;
+            position: relative; overflow: hidden;
+        }
+
+        .btn-confirm {
+            background: var(--main); color: white;
+            box-shadow: 0 15px 30px rgba(0, 35, 73, 0.3);
+            transition: 0.3s;
+        }
+        .btn-confirm:active { transform: scale(0.96); }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <div id="mainCard" class="max-w-lg mx-auto glass-card overflow-hidden">
-        <div id="headerArea" class="p-10 text-center">
-            <div id="mainEmoji" class="text-7xl mb-4">📋</div>
-            <h2 id="pageTitle" class="text-3xl font-black mb-2" style="color: var(--main);">مراجعة التفاصيل</h2>
-            <div id="statusBadge" class="inline-block px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-white" style="background: var(--main);">تأكيد أخير قبل الإرسال</div>
+    <div id="mainBox" class="max-w-md w-full main-card p-6 md:p-8">
+        
+        <div class="text-center mb-6">
+            <div id="mainEmoji" class="text-5xl mb-2">📋</div>
+            <h1 id="pageTitle" class="text-2xl font-black" style="color: var(--main);">مراجعة الطلب</h1>
+            <p id="pageSub" class="text-slate-400 text-[10px] font-bold tracking-widest uppercase">Review Details</p>
         </div>
 
-        <div class="px-10 py-2 space-y-1" id="detailsList"></div>
+        <div id="detailsGrid" class="info-grid mb-6">
+            </div>
 
-        <div class="px-10 py-6">
-            <div class="price-box shadow-2xl">
-                <p class="text-[11px] font-black opacity-80 mb-1">المبلغ الإجمالي التقريبي</p>
-                <div class="text-4xl font-black tracking-tighter">
-                    <span id="totalVal">0</span> <small class="text-lg">د.ع</small>
-                </div>
-                <div id="daysBadge" class="mt-3 inline-block px-4 py-1 bg-white/10 rounded-lg text-xs font-bold text-white">---</div>
+        <div class="price-summary text-center shadow-xl mb-6">
+            <p id="totalLabel" class="text-[10px] font-black opacity-70 uppercase mb-1">إجمالي المبلغ التقريبي</p>
+            <div class="text-3xl font-black">
+                <span id="totalVal">0</span> <small class="text-sm font-bold" id="currLabel">د.ع</small>
             </div>
         </div>
 
-        <div class="p-10 pt-2 space-y-4">
-            <button onclick="confirmAndSubmit()" class="w-full py-6 btn-main rounded-[2rem] font-black text-2xl shadow-xl flex items-center justify-center gap-3">
-                <span id="btnSubmit">إرسال للرادار 🛰️</span>
-                <i class="fas fa-paper-plane text-sm"></i>
+        <div class="space-y-3">
+            <button onclick="confirmAndSubmit()" class="btn-confirm w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3">
+                <span id="btnSubmit">تأكيد وطلب</span>
+                <i class="fas fa-check-circle"></i>
             </button>
-            <button onclick="window.history.back()" class="w-full text-gray-400 font-black text-sm hover:text-red-500 transition-colors">
-                <i class="fas fa-undo-alt ml-1"></i> رجوع للتعديل
+            
+            <button onclick="window.history.back()" class="w-full text-slate-400 font-black text-xs hover:text-red-500 transition-all">
+                <i class="fas fa-edit ml-1"></i> <span id="btnBack">تعديل البيانات</span>
             </button>
         </div>
     </div>
@@ -54,59 +84,76 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type') || 'personal';
+        const lang = u.get('lang') || 'ar';
 
-        const themes = {
-            training: { main: '#7c3aed', accent: '#fcd34d', emoji: '🎓', bg: '#f5f3ff' },
-            wedding: { main: '#be185d', accent: '#ffffff', emoji: '💍', bg: '#fff1f2' },
-            personal: { main: '#002349', accent: '#D4AF37', emoji: '🚗', bg: '#f8fafc' }
+        const configs = {
+            training: { main: '#7c3aed', accent: '#ffffff', emoji: '🎓' },
+            wedding: { main: '#be185d', accent: '#ffffff', emoji: '💍' },
+            personal: { main: '#002349', accent: '#D4AF37', emoji: '🚗' }
         };
 
-        const fieldLabels = {
-            name: "👤 الاسم", phone: "📞 الهاتف", age: "🎂 العمر", 
-            id_no: "🆔 الهوية", city: "📍 المدينة", prov: "📍 المدينة",
-            car: "🚘 السيارة", addon_name: "✨ الإضافات", map: "🗺️ الموقع",
-            gender: "🚻 الجنس", license: "🪪 الإجازة"
+        const uiContent = {
+            ar: { title: "مراجعة التفاصيل", total: "المبلغ الإجمالي التقريبي", btn: "تأكيد وطلب", back: "رجوع للتعديل", curr: "د.ع", 
+                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", city: "المدينة", prov: "المدينة", car: "السيارة", addons: "الإضافات", addon_name: "الإضافات", days: "المدة", gender: "الجنس", license: "الإجازة" } },
+            ku: { title: "پیاچوونەوەی وردەکارییەکان", total: "کۆی گشتی خەمڵێنراو", btn: "پشتڕاستکردنەوە", back: "گەڕانەوە بۆ دەستکاری", curr: "د.ع",
+                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", city: "شار", prov: "شار", car: "ئۆتۆمبێل", addons: "زیادکراوەکان", addon_name: "زیادکراوەکان", days: "ماوە", gender: "ڕەگەز", license: "مۆڵەت" } },
+            en: { title: "Review Details", total: "Approximate Total Price", btn: "Confirm & Order", back: "Back to Edit", curr: "IQD",
+                fields: { name: "Name", phone: "Phone", age: "Age", city: "City", prov: "City", car: "Car", addons: "Addons", addon_name: "Addons", days: "Days", gender: "Gender", license: "License" } },
+            tr: { title: "Detayları İncele", total: "Tahmini Toplam Tutar", btn: "Onayla ve Sipariş Et", back: "Düzenlemeye Dön", curr: "IQD",
+                fields: { name: "İsim", phone: "Telefon", age: "Yaş", city: "Şehir", prov: "Şehir", car: "Araç", addons: "Ekstralar", addon_name: "Ekstralar", days: "Gün", gender: "Cinsiyet", license: "Ehliyet" } }
+        };
+
+        const toScriptMap = {
+            "Kirkuk": "كركوك", "Kerkük": "كركوك", "کەرکوک": "كركوك",
+            "Baghdad": "بغداد", "Bağdat": "بغداد", "بەغدا": "بغداد",
+            "personal": "تأجير شخصي", "wedding": "أعراس ومناسبات", "training": "تعليم قيادة",
+            "Male": "ذكر", "Erkek": "ذكر", "نێر": "ذكر",
+            "Female": "أنثى", "Kadın": "أنثى", "مێ": "أنثى"
         };
 
         window.onload = () => {
-            const t = themes[type] || themes.personal;
+            const t = configs[type] || configs.personal;
+            const ui = uiContent[lang] || uiContent.ar;
+            
             document.documentElement.style.setProperty('--main', t.main);
             document.documentElement.style.setProperty('--accent', t.accent);
-            document.body.style.backgroundColor = t.bg;
             document.getElementById('mainEmoji').innerText = t.emoji;
+            document.getElementById('pageTitle').innerText = ui.title;
+            document.getElementById('totalLabel').innerText = ui.total;
+            document.getElementById('btnSubmit').innerText = ui.btn;
+            document.getElementById('btnBack').innerText = ui.back;
+            document.getElementById('currLabel').innerText = ui.curr;
+            document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
 
-            let listHtml = '';
-            // عرض كل البيانات الموجودة في الرابط تلقائياً
-            u.forEach((value, key) => {
-                if (fieldLabels[key] && value && value !== 'null' && value !== '---') {
-                    let display = value;
-                    if (key === 'map') display = `<span class="text-green-600 font-black">محدد ✅</span>`;
-                    
-                    listHtml += `
-                        <div class="data-row">
-                            <span class="data-label">${fieldLabels[key]}</span>
-                            <span class="data-value">${display}</span>
+            let gridHtml = '';
+            // عرض المعلومات بشكل مصفوفة مرتبة
+            Object.keys(ui.fields).forEach(key => {
+                let val = u.get(key);
+                if (val && val !== 'null' && val !== '---') {
+                    gridHtml += `
+                        <div class="info-item">
+                            <span class="info-label">${ui.fields[key]}</span>
+                            <span class="info-value">${val}</span>
                         </div>`;
                 }
             });
-            document.getElementById('detailsList').innerHTML = listHtml;
+            document.getElementById('detailsGrid').innerHTML = gridHtml;
 
-            // حساب السعر النهائي
+            // حساب السعر
             const p1 = parseInt(u.get('price') || 0);
             const p2 = parseInt(u.get('addon_price') || 0);
             document.getElementById('totalVal').innerText = (p1 + p2).toLocaleString();
-            
-            const days = u.get('days') || u.get('date');
-            document.getElementById('daysBadge').innerText = days ? `${days} أيام` : `يوم واحد`;
         };
 
         function confirmAndSubmit() {
             const p1 = parseInt(u.get('price') || 0);
             const p2 = parseInt(u.get('addon_price') || 0);
             
-            // توحيد مسميات الإضافات والسعر النهائي لصفحة النجاح
             u.set('total_final', p1 + p2);
-            if(u.get('addon_name')) u.set('addons', u.get('addon_name'));
+            
+            // المترجم الصامت قبل الانتقال لصفحة النجاح
+            if (u.has('city')) u.set('city', toScriptMap[u.get('city')] || u.get('city'));
+            if (u.has('gender')) u.set('gender', toScriptMap[u.get('gender')] || u.get('gender'));
             
             window.location.href = `success.html?${u.toString()}`;
         }
