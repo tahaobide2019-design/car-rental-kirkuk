@@ -17,7 +17,7 @@
         .wedding-header { background: linear-gradient(135deg, #002349 0%, #be185d 100%); }
         .glass-input { width: 100%; padding: 1.1rem; background: white; border: 2px solid #f1e4bc; border-radius: 1.5rem; font-weight: 700; outline: none; transition: 0.3s; }
         .glass-input:focus { border-color: var(--wedding-pink); box-shadow: 0 0 15px rgba(190, 24, 93, 0.1); }
-        .wedding-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.1); border-t: 10px solid var(--main-gold); }
+        .wedding-card { background: white; border-radius: 3.5rem; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.1); border-top: 10px solid var(--main-gold); }
         #map { height: 250px; border-radius: 2.5rem; border: 4px solid #fffaf0; z-index: 1; }
         .gender-btn { flex: 1; padding: 1rem; border: 2px solid #f1e4bc; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; }
         .gender-btn.active { background: var(--wedding-pink); color: white; border-color: var(--wedding-pink); }
@@ -104,16 +104,20 @@
             document.getElementById('custPhone').placeholder = l.phone;
             document.getElementById('custAge').placeholder = l.age;
 
+            let carName = u.get('car') || 'سيارة زفاف';
+            let daysNum = u.get('days') || 1;
+            let totalPrice = u.get('price') || 0;
+
             document.getElementById('summary').innerHTML = `
-                <div class="flex justify-between border-b border-rose-100 pb-2"><span>${l.car}</span> <span>${u.get('car') || ''}</span></div>
-                <div class="flex justify-between border-b border-rose-100 py-2"><span>${l.days}</span> <span>${u.get('days') || 1} ${l.unit}</span></div>
-                <div class="flex justify-between pt-2 text-rose-700 font-black text-lg"><span>${l.price}</span> <span>${parseInt(u.get('price')).toLocaleString()} ${l.curr}</span></div>
+                <div class="flex justify-between border-b border-rose-100 pb-2"><span>${l.car}</span> <span>${carName}</span></div>
+                <div class="flex justify-between border-b border-rose-100 py-2"><span>${l.days}</span> <span>${daysNum} ${l.unit}</span></div>
+                <div class="flex justify-between pt-2 text-rose-700 font-black text-lg"><span>${l.price}</span> <span>${parseInt(totalPrice).toLocaleString()} ${l.curr}</span></div>
             `;
 
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
-            L.Control.geocoder({ defaultMarkGeocode: false, placeholder: l.search }).on('markgeocode', function(e) { map.fitBounds(e.geocode.bbox); marker.setLatLng(e.geocode.center); }).addTo(map);
+            L.Control.geocoder({ defaultMarkGeocode: false, placeholder: l.search }).on('markgeocode', function(e) { map.setView(e.geocode.center, 15); marker.setLatLng(e.geocode.center); }).addTo(map);
         };
 
         function setGender(g) {
@@ -122,7 +126,13 @@
             document.getElementById('femaleBtn').className = g === 'Female' ? 'gender-btn active' : 'gender-btn';
         }
 
-        function getGPS() { navigator.geolocation.getCurrentPosition(p => { const c = [p.coords.latitude, p.coords.longitude]; map.setView(c, 16); marker.setLatLng(c); }); }
+        function getGPS() { 
+            navigator.geolocation.getCurrentPosition(p => { 
+                const c = [p.coords.latitude, p.coords.longitude]; 
+                map.setView(c, 16); 
+                marker.setLatLng(c); 
+            }); 
+        }
 
         function confirmWedding() {
             const name = document.getElementById('custName').value;
@@ -131,15 +141,18 @@
             const l = trans[currentLang] || trans['ar'];
 
             if(!name || !phone || !age) { alert(l.alert); return; }
+            
             const pos = marker.getLatLng();
-            u.set('name', name); 
-            u.set('phone', phone); 
-            u.set('age', age);
-            u.set('gender', selectedGender === 'Male' ? l.groom : l.bride);
-            u.set('service', currentLang === 'ar' ? 'سيارات أعراس ومناسبات' : 'Wedding & Events Cars');
-            // رابط الخريطة المصحح
-            u.set('map', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
-            window.location.href = `review.html?${u.toString()}`;
+            const params = new URLSearchParams(window.location.search);
+            
+            params.set('name', name); 
+            params.set('phone', phone); 
+            params.set('age', age);
+            params.set('gender', selectedGender === 'Male' ? l.groom : l.bride);
+            params.set('service', currentLang === 'ar' ? 'حجز سيارة زفاف' : 'Wedding Car Booking');
+            params.set('map', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
+            
+            window.location.href = `review.html?${params.toString()}`;
         }
     </script>
 </body>
