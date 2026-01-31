@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>رادار الحوت | النخبة التفاعلي 🐋</title>
+    <title>رادار الحوت | النسخة المتكاملة 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,12 +30,11 @@
         }
 
         .whale-card { background: white; border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.03); transition: 0.5s; position: relative; overflow: hidden; }
-        .whale-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0, 35, 73, 0.15); }
+        .whale-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -15px rgba(0, 35, 73, 0.12); }
         
-        /* تصميم العداد التفاعلي الجديد */
         .time-badge {
             display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
-            border-radius: 99px; font-weight: 800; font-size: 11px; transition: 0.3s;
+            border-radius: 99px; font-weight: 800; font-size: 11px;
         }
         .time-safe { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
         .time-warn { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
@@ -47,16 +46,13 @@
             100% { transform: scale(1); }
         }
 
-        .live-pulse {
-            width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;
-            animation: pulse-green 2s infinite;
-        }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-
         .price-tag { background: var(--soft-gold); color: #8a6d1a; padding: 0.5rem 1rem; border-radius: 1.2rem; border: 1px solid rgba(197, 160, 45, 0.2); font-weight: 900; }
         
+        /* ستايل الإضافات المميز */
+        .addons-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 1.5rem; padding: 12px; }
+        .addons-label { font-size: 9px; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .btn-transfer { background: #fff1f2; color: #e11d48; border: 1.5px dashed #fecdd3; transition: 0.3s; }
     </style>
 </head>
@@ -71,12 +67,12 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h2 id="navOfficeName" class="text-white font-black text-lg leading-tight">...</h2>
-                        <span class="live-pulse"></span>
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     </div>
                     <p id="navCity" class="text-white/50 text-[10px] font-bold uppercase tracking-widest mt-1"></p>
                 </div>
             </div>
-            <button onclick="logout()" class="w-12 h-12 flex items-center justify-center bg-red-500/20 text-red-400 rounded-2xl transition-all shadow-lg"><i class="fas fa-power-off text-xl"></i></button>
+            <button onclick="logout()" class="w-12 h-12 flex items-center justify-center bg-red-500/20 text-red-400 rounded-2xl shadow-lg"><i class="fas fa-power-off text-xl"></i></button>
         </div>
     </header>
 
@@ -99,13 +95,11 @@
         document.getElementById('navOfficeName').innerText = officeData.name;
         document.getElementById('navCity').innerText = `📍 ${officeData.city} | رادار الحوت`;
 
-        // دالة العداد الذكية
         function getTimeCounter(timestamp) {
             const diff = Math.floor((new Date() - new Date(timestamp)) / 60000);
             let badgeClass = 'time-safe';
             if (diff >= 10 && diff < 20) badgeClass = 'time-warn';
             if (diff >= 20) badgeClass = 'time-danger';
-            
             return `<div class="time-badge ${badgeClass}"><i class="far fa-clock"></i> <span>منذ ${diff} دقيقة</span></div>`;
         }
 
@@ -145,35 +139,47 @@
                 if(currentTab === 'new') {
                     return `
                     <div class="whale-card p-6 border-b-4 border-blue-500">
-                        <div class="flex justify-between items-center mb-6">
+                        <div class="flex justify-between items-center mb-5">
                             ${timerHtml}
                             <div class="price-tag"><span class="text-lg">${Number(o.price).toLocaleString()}</span></div>
                         </div>
-                        <h3 class="text-xl font-black text-slate-800 mb-4">${o.name}</h3>
-                        <div class="grid grid-cols-2 gap-3 mb-6">
-                            <div class="bg-slate-50 p-4 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">السيارة</p><p class="text-xs font-black">🚗 ${o.car}</p></div>
-                            <div class="bg-slate-50 p-4 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">الموعد</p><p class="text-xs font-black">📅 ${o.timestamp.split('T')[0]}</p></div>
+                        <h3 class="text-xl font-black text-slate-800 mb-2">${o.car}</h3>
+                        <p class="text-[10px] font-bold text-slate-400 mb-4 flex items-center gap-2"><i class="fas fa-user-circle"></i> ${o.name}</p>
+                        
+                        <div class="addons-box mb-6">
+                            <span class="addons-label">📋 ملاحظات وإضافات الطلب:</span>
+                            <p class="text-xs font-bold text-slate-600 leading-relaxed">${o.addons || 'لا توجد إضافات خاصة'}</p>
                         </div>
-                        <button onclick="update('${o.id}', 'claim')" class="w-full bg-slate-900 text-[#D4AF37] py-4 rounded-2xl font-black text-xs shadow-xl active:scale-95 transition-all">استلام المهمة الآن 🔥</button>
+
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-slate-50 p-3 rounded-2xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">المدة</p><p class="text-xs font-black">${o.days} أيام</p></div>
+                            <div class="bg-slate-50 p-3 rounded-2xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-1">الموعد</p><p class="text-xs font-black tracking-tighter">${o.timestamp.split('T')[0]}</p></div>
+                        </div>
+                        <button onclick="update('${o.id}', 'claim')" class="w-full bg-slate-900 text-[#D4AF37] py-4 rounded-2xl font-black text-sm shadow-xl active:scale-95 transition-all">استلام الطلبية الآن ⚡</button>
                     </div>`;
                 }
 
                 if(currentTab === 'mine') {
                     return `
-                    <div class="whale-card p-8">
+                    <div class="whale-card p-8 border-t-8 border-blue-900">
                         <div class="flex justify-between items-center mb-6">
                             ${timerHtml}
                             <a href="tel:${o.phone}" class="w-12 h-12 bg-green-500 text-white rounded-2xl flex items-center justify-center shadow-lg animate-bounce"><i class="fas fa-phone-alt"></i></a>
                         </div>
-                        <h3 class="text-2xl font-black text-slate-800 mb-4 tracking-tighter">${o.car}</h3>
-                        <div class="bg-slate-50 p-4 rounded-3xl mb-4"><p class="text-[9px] font-black text-slate-400 uppercase mb-1">الزبون</p><p class="font-black text-slate-700">${o.name}</p></div>
-                        <div class="bg-indigo-900 text-indigo-100 p-5 rounded-3xl mb-6 text-xs font-bold leading-relaxed">
-                             ${o.addons || 'لا توجد طلبات إضافية'}
+                        <h3 class="text-2xl font-black text-slate-800 mb-1">${o.car}</h3>
+                        <p class="text-xs font-black text-blue-600 mb-6 tracking-widest">رقم الطلب #${o.id}</p>
+
+                        <div class="bg-slate-50 p-5 rounded-3xl mb-4"><p class="text-[9px] font-black text-slate-400 uppercase mb-1">العميل</p><p class="font-black text-lg text-slate-800">${o.name}</p></div>
+                        
+                        <div class="bg-indigo-900 text-indigo-50 p-5 rounded-3xl mb-6 shadow-lg shadow-indigo-100">
+                             <span class="text-[8px] font-black uppercase opacity-50 mb-2 block">الطلبات الخاصة والإضافات:</span>
+                             <p class="text-xs font-bold leading-relaxed">${o.addons || 'توصيل عادي - لا توجد إضافات'}</p>
                         </div>
+
                         <div class="space-y-3">
                             <div class="flex gap-2">
-                                <a href="${o.map}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 py-4 rounded-2xl text-center font-black text-xs">عرض الموقع 📍</a>
-                                <button onclick="update('${o.id}', 'complete')" class="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-black text-xs">إتمام المهمة ✅</button>
+                                <a href="${o.map}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 py-4 rounded-2xl text-center font-black text-xs flex items-center justify-center gap-2">الموقع 📍</a>
+                                <button onclick="update('${o.id}', 'complete')" class="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-black text-xs">تأكيد التسليم ✅</button>
                             </div>
                             <button onclick="update('${o.id}', 'cancelRequest')" class="w-full btn-transfer py-3 rounded-2xl font-black text-[11px]">طلب إلغاء أو تحويل ⚠️</button>
                         </div>
@@ -182,19 +188,19 @@
 
                 if(currentTab === 'done') {
                     return `
-                    <div class="whale-card p-5 flex justify-between items-center bg-white/50 opacity-80">
+                    <div class="whale-card p-5 flex justify-between items-center opacity-70 grayscale-[0.5]">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full ${o.status.includes('✅') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} flex items-center justify-center text-xs"><i class="fas ${o.status.includes('✅') ? 'fa-check' : 'fa-times'}"></i></div>
                             <div><h3 class="font-black text-slate-700 text-xs">${o.name}</h3><p class="text-[8px] font-bold text-slate-400 tracking-tighter">${o.timestamp}</p></div>
                         </div>
-                        <div class="text-left"><p class="font-black text-slate-900 text-sm">${Number(o.price).toLocaleString()} د.ع</p></div>
+                        <p class="font-black text-sm">${Number(o.price).toLocaleString()} د.ع</p>
                     </div>`;
                 }
             }).reverse().join('');
         }
 
         async function update(id, act) {
-            let msg = act === 'cancelRequest' ? "هل تريد طلب الإلغاء/التحويل؟" : "تأكيد العملية؟";
+            let msg = act === 'cancelRequest' ? "هل تريد طلب الإلغاء؟" : "تأكيد العملية؟";
             if(!confirm(msg)) return;
             try {
                 const res = await fetch(`${scriptURL}?action=${act}&id=${id}&office=${encodeURIComponent(officeData.name)}`);
