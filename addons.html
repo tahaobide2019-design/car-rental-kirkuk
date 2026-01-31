@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إضافات الخدمة | الحوت 🐋</title>
+    <title>تخصيص الطلب | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
@@ -42,7 +42,6 @@
         let selectedName = "";
         let selectedPrice = "";
 
-        // نظام الترجمة الشامل لجميع الخدمات واللغات
         const translations = {
             ar: {
                 training: { header: "اختر كورس التعليم", sub: "حدد الباقة المناسبة", opt1: "كورس أساسي (3 أيام)", desc1: "أساسيات القيادة", opt2: "كورس احترافي (5 أيام)", desc2: "تدريب شامل" },
@@ -55,14 +54,6 @@
                 personal: { header: "Rental Addons", sub: "Extra options", opt1: "Full Insurance", desc1: "Full coverage", opt2: "No Addons", desc2: "Standard specs" },
                 wedding: { header: "Event Services", sub: "Make it special", opt1: "Full Decoration", desc1: "Fresh flowers", opt2: "Uniformed Driver", desc2: "Official suit" },
                 btn: "Confirm & Continue", free: "Free"
-            },
-            ku: {
-                training: { header: "کۆرسی فێربوون", sub: "باکێجی گونجاو هەڵبژێرە", opt1: "کۆرسی سەرەتایی (٣ ڕۆژ)", desc1: "بنەماکانی شۆفێری", opt2: "کۆرسی پێشکەوتوو (٥ ڕۆژ)", desc2: "ڕاهێنانی گشتگیر" },
-                btn: "پشتڕاستکردنەوە", free: "بێبەرامبەر"
-            },
-            tr: {
-                training: { header: "Eğitim Kursu Seçin", sub: "Uygun paketi belirleyin", opt1: "Temel Kurs (3 Gün)", desc1: "Sürüş temelleri", opt2: "Profesyonel Kurs (5 Gün)", desc2: "Kapsamlı eğitim" },
-                btn: "Onayla ve Devam Et", free: "Ücretsiz"
             }
         };
 
@@ -70,17 +61,13 @@
             const langData = translations[currentLang] || translations['ar'];
             const config = langData[serviceType] || langData['personal'];
             
-            // تحديث اتجاه الصفحة والخط
             document.getElementById('htmlTag').dir = (currentLang === 'en' || currentLang === 'tr') ? 'ltr' : 'rtl';
-            document.getElementById('btnIcon').className = `fas fa-chevron-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
-
             document.getElementById('pageHeader').innerText = config.header;
             document.getElementById('pageSubheader').innerText = config.sub;
             document.getElementById('btnText').innerText = langData.btn;
 
-            // تحديد الأسعار الثابتة (د.ع)
             const prices = serviceType === 'training' ? ["100,000", "150,000"] : (serviceType === 'wedding' ? ["50,000", "30,000"] : ["25,000", "0"]);
-            const icons = serviceType === 'training' ? ["🥉", "🥇"] : ["✨", "🚗"];
+            const icons = serviceType === 'training' ? ["🥉", "🥇"] : (serviceType === 'wedding' ? ["💐", "👔"] : ["🛡️", "🚗"]);
 
             const container = document.getElementById('optionsContainer');
             container.innerHTML = `
@@ -109,10 +96,21 @@
         }
 
         function proceedToNextStep() {
-            const nextPage = serviceType === 'training' ? "training.html" : "fleet.html";
+            // منطق التوجيه الذكي حسب نوع الخدمة
+            let nextPage = "booking_personal.html"; // الافتراضي
+            
+            if (serviceType === "training") {
+                nextPage = "training.html";
+            } else if (serviceType === "wedding") {
+                nextPage = "booking_wedding.html";
+            } else if (serviceType === "personal") {
+                nextPage = "booking_personal.html";
+            }
+
             const params = new URLSearchParams(window.location.search);
             params.set('service', selectedName);
             params.set('price', selectedPrice);
+            
             window.location.href = `${nextPage}?${params.toString()}`;
         }
 
