@@ -2,49 +2,119 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل شركاء الحوت | الرادار 🐋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بوابة الشركاء | رادار الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); color: white; }
-        .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .input-style { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(212, 175, 55, 0.1); transition: 0.3s; }
-        .input-style:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
+        :root { --whale-gold: #D4AF37; --whale-navy: #020617; }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); 
+            color: white; 
+            overflow: hidden;
+        }
+
+        /* خلفية الرادار المتحركة */
+        .radar-bg {
+            position: fixed; top: 50%; left: 50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+            transform: translate(-50%, -50%); z-index: -1; animation: pulse 4s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-group { position: relative; }
+        .input-group i { position: absolute; right: 1.25rem; top: 1.25rem; color: var(--whale-gold); opacity: 0.5; }
+
+        .whale-input {
+            width: 100%; padding: 1.1rem 3.5rem 1.1rem 1.1rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1.5rem; color: white; transition: 0.3s;
+        }
+        .whale-input:focus {
+            border-color: var(--whale-gold); background: rgba(30, 41, 59, 0.8);
+            outline: none; box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .gold-btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+            color: #020617; transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .gold-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); }
+        .gold-btn::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg); transition: 0.8s;
+        }
+        .gold-btn:hover::after { left: 100%; }
+
+        .shimmer { animation: shimmer 2s infinite linear; background: linear-gradient(90deg, #94a3b8 0%, #ffffff 50%, #94a3b8 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes shimmer { to { background-position: 200% center; } }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-md w-full glass-panel p-8 rounded-[3.5rem] border-b-[10px] border-[#D4AF37] shadow-2xl">
-        <div class="text-center mb-8">
-            <div class="text-6xl mb-4">🐋</div>
-            <h2 class="text-3xl font-black text-[#D4AF37]">عائلة الحوت</h2>
-            <p class="text-slate-400 text-xs mt-2 uppercase tracking-widest font-bold">نظام دخول الشركاء المعتمدين</p>
+
+    <div class="radar-bg"></div>
+
+    <div class="max-w-md w-full glass-card p-10 rounded-[3.5rem] border-b-[12px] border-[#D4AF37] relative z-10">
+        <div class="text-center mb-10">
+            <div class="relative inline-block mb-4">
+                <div class="text-7xl">🐋</div>
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-[#0f172a] animate-ping"></div>
+            </div>
+            <h2 class="text-4xl font-black tracking-tighter shimmer">رادار الحوت</h2>
+            <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-[0.3em] font-bold">Partners Operations Portal</p>
         </div>
         
-        <div class="space-y-4">
-            <input id="officeName" type="text" placeholder="اسم المكتب" class="w-full p-4 rounded-2xl input-style text-white">
+        <div class="space-y-5">
+            <div class="input-group">
+                <i class="fas fa-building"></i>
+                <input id="officeName" type="text" placeholder="اسم المكتب" class="whale-input font-bold">
+            </div>
             
-            <select id="citySelect" class="w-full p-4 rounded-2xl input-style text-white">
-                <option value="بغداد">بغداد</option>
-                <option value="كركوك">كركوك</option>
-                <option value="أربيل">أربيل</option>
-                <option value="البصرة">البصرة</option>
-                <option value="الموصل">الموصل</option>
-                <option value="السليمانية">السليمانية</option>
-                <option value="الأنبار">الأنبار</option>
-                <option value="ديالى">ديالى</option>
-            </select>
+            <div class="input-group">
+                <i class="fas fa-map-location-dot"></i>
+                <select id="citySelect" class="whale-input font-bold appearance-none">
+                    <option value="" disabled selected>اختر المدينة</option>
+                    <option value="بغداد">بغداد</option>
+                    <option value="كركوك">كركوك</option>
+                    <option value="أربيل">أربيل</option>
+                    <option value="البصرة">البصرة</option>
+                    <option value="الموصل">الموصل</option>
+                    <option value="السليمانية">السليمانية</option>
+                    <option value="الأنبار">الأنبار</option>
+                    <option value="ديالى">ديالى</option>
+                </select>
+            </div>
 
-            <input id="officeMap" type="url" placeholder="رابط الموقع (Google Maps)" class="w-full p-4 rounded-2xl input-style text-white">
+            <div class="input-group">
+                <i class="fas fa-link"></i>
+                <input id="officeMap" type="url" placeholder="رابط الموقع الجغرافي" class="whale-input text-xs">
+            </div>
 
-            <input id="idNumber" type="number" placeholder="رقم الكود الخاص بك" class="w-full p-4 rounded-2xl input-style text-center text-white text-lg font-bold">
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input id="idNumber" type="password" placeholder="كود الدخول المعتمد" class="whale-input text-center text-2xl tracking-[0.5em] font-black">
+            </div>
             
-            <button onclick="registerOffice()" id="loginBtn" class="w-full py-5 bg-[#D4AF37] text-slate-950 rounded-2xl font-black text-xl shadow-lg mt-4 active:scale-95 transition-transform">فتح الرادار 🚀</button>
+            <button onclick="registerOffice()" id="loginBtn" class="w-full py-6 gold-btn rounded-2xl font-black text-xl shadow-2xl mt-4 active:scale-95 transition-all">
+                فتح الرادار 🚀
+            </button>
+            
+            <p class="text-center text-[9px] text-slate-500 font-bold">يجب تفعيل الحساب من قبل الإدارة المركزية</p>
         </div>
     </div>
 
     <script>
-        // الرابط المحدث النهائي RFIH
         const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec";
 
         async function registerOffice() {
@@ -56,13 +126,14 @@
                 id: document.getElementById('idNumber').value.trim()
             };
 
-            if(!data.name || !data.id) return alert("الاسم والكود مطلوبان يا حوت! 🐋");
+            if(!data.name || !data.id || !data.city) {
+                return alert("يا حوت! يرجى ملء كافة الحقول الأساسية.");
+            }
             
             btn.disabled = true; 
-            btn.innerText = "جاري التحقق من النظام...";
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin ml-2"></i> جاري الاتصال بالرادار...`;
 
             try {
-                // الربط مع action=checkOfficeStatus
                 const query = `?action=checkOfficeStatus&id=${data.id}&name=${encodeURIComponent(data.name)}&city=${encodeURIComponent(data.city)}&map=${encodeURIComponent(data.map)}`;
                 const res = await fetch(scriptURL + query);
                 const result = await res.json();
@@ -71,13 +142,12 @@
                     localStorage.setItem('whale_office_data', JSON.stringify(data));
                     window.location.href = 'dashboard.html';
                 } else if (result.status === "محظور") {
-                    alert("⚠️ نعتذر، هذا الحساب محظور حالياً.");
+                    alert("⚠️ هذا الحساب محظور. يرجى مراجعة الإدارة.");
                 } else {
-                    alert("⏳ حسابك قيد المراجعة. بمجرد تفعيل المدير لكودك سيفتح الرادار تلقائياً.");
+                    alert("⏳ كودك قيد المراجعة. سيفتح الرادار فور تفعيلك من قبل المدير.");
                 }
             } catch (e) {
-                console.error(e);
-                alert("❌ فشل الاتصال بالسيرفر. تأكد من جودة الإنترنت.");
+                alert("❌ عذراً، هنالك خلل في الاتصال بالرادار.");
             } finally {
                 btn.disabled = false; 
                 btn.innerText = "فتح الرادار 🚀";
