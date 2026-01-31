@@ -11,7 +11,7 @@
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); position: relative; }
         .option-card { transition: 0.3s; cursor: pointer; border: 3px solid transparent; }
-        .option-card.active { border-color: #D4AF37; background-color: #fffdf5; transform: scale(1.02); }
+        .option-card.active { border-color: #D4AF37; background-color: #fffdf5; transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.1); }
         .whale-float { display: inline-block; font-size: 3rem; animation: floating 4s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
@@ -47,13 +47,19 @@
                 training: { header: "اختر كورس التعليم", sub: "حدد الباقة المناسبة", opt1: "كورس أساسي (3 أيام)", desc1: "أساسيات القيادة", opt2: "كورس احترافي (5 أيام)", desc2: "تدريب شامل" },
                 personal: { header: "إضافات التأجير", sub: "خيارات إضافية", opt1: "تأمين شامل", desc1: "تغطية كاملة", opt2: "بدون إضافات", desc2: "المواصفات القياسية" },
                 wedding: { header: "خدمات المناسبات", sub: "تنسيق الحفلات", opt1: "تزيين كامل", desc1: "زهور طبيعية", opt2: "سائق رسمي", desc2: "زي مخصص" },
-                btn: "تأكيد ومتابعة", free: "مجاني"
+                btn: "تأكيد ومتابعة", free: "مجاني", curr: "د.ع"
+            },
+            ku: {
+                training: { header: "کۆرسی فێربوون هەڵبژێرە", sub: "پاکێجی گونجاو دیاری بکە", opt1: "کۆرسی بنەڕەتی (٣ ڕۆژ)", desc1: "بنەماکانی شۆفێری", opt2: "کۆرسی پێشکەوتوو (٥ ڕۆژ)", desc2: "ڕاهێنانی تەواو" },
+                personal: { header: "زیادکراوەکانی بەکرێگرتن", sub: "بژاردە زیادەکان", opt1: "دڵنیایی گشتگیر", desc1: "داپۆشینی تەواو", opt2: "بێ زیادکراو", desc2: "سەپاندنی ستاندارد" },
+                wedding: { header: "خزمەتگوزاری بۆنەکان", sub: "ڕێکخستنی ئاهەنگ", opt1: "ڕازاندنەوەی تەواو", desc1: "گوڵی سروشتی", opt2: "شۆفێری فەرمی", desc2: "جلوبەرگی تایبەت" },
+                btn: "پشتڕاستکردنەوە", free: "بێ بەرامبەر", curr: "دینار"
             },
             en: {
                 training: { header: "Choose Training Course", sub: "Select your package", opt1: "Basic Course (3 Days)", desc1: "Driving basics", opt2: "Pro Course (5 Days)", desc2: "Full training" },
                 personal: { header: "Rental Addons", sub: "Extra options", opt1: "Full Insurance", desc1: "Full coverage", opt2: "No Addons", desc2: "Standard specs" },
                 wedding: { header: "Event Services", sub: "Make it special", opt1: "Full Decoration", desc1: "Fresh flowers", opt2: "Uniformed Driver", desc2: "Official suit" },
-                btn: "Confirm & Continue", free: "Free"
+                btn: "Confirm & Continue", free: "Free", curr: "IQD"
             }
         };
 
@@ -61,12 +67,14 @@
             const langData = translations[currentLang] || translations['ar'];
             const config = langData[serviceType] || langData['personal'];
             
-            document.getElementById('htmlTag').dir = (currentLang === 'en' || currentLang === 'tr') ? 'ltr' : 'rtl';
+            document.getElementById('htmlTag').dir = (currentLang === 'en') ? 'ltr' : 'rtl';
             document.getElementById('pageHeader').innerText = config.header;
             document.getElementById('pageSubheader').innerText = config.sub;
             document.getElementById('btnText').innerText = langData.btn;
+            document.getElementById('btnIcon').className = `fas fa-chevron-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
 
-            const prices = serviceType === 'training' ? ["100,000", "150,000"] : (serviceType === 'wedding' ? ["50,000", "30,000"] : ["25,000", "0"]);
+            // الأسعار بدون فواصل لسهولة الحساب لاحقاً
+            const prices = serviceType === 'training' ? ["100000", "150000"] : (serviceType === 'wedding' ? ["50000", "30000"] : ["25000", "0"]);
             const icons = serviceType === 'training' ? ["🥉", "🥇"] : (serviceType === 'wedding' ? ["💐", "👔"] : ["🛡️", "🚗"]);
 
             const container = document.getElementById('optionsContainer');
@@ -75,13 +83,13 @@
                     <div class="text-4xl mb-4">${icons[0]}</div>
                     <h3 class="text-xl font-black mb-1">${config.opt1}</h3>
                     <p class="text-slate-500 text-sm mb-4 font-bold">${config.desc1}</p>
-                    <div class="text-2xl font-black text-[#002349]">${prices[0]} د.ع</div>
+                    <div class="text-2xl font-black text-[#002349]">${parseInt(prices[0]).toLocaleString()} ${langData.curr}</div>
                 </div>
                 <div id="opt1" onclick="selectOption('${config.opt2}', '${prices[1]}', 'opt1')" class="option-card bg-white shadow-xl rounded-[2.5rem] p-8 flex flex-col items-center text-center border-2">
                     <div class="text-4xl mb-4">${icons[1]}</div>
                     <h3 class="text-xl font-black mb-1">${config.opt2}</h3>
                     <p class="text-slate-500 text-sm mb-4 font-bold">${config.desc2}</p>
-                    <div class="text-2xl font-black text-[#002349]">${prices[1] === '0' ? langData.free : prices[1] + ' د.ع'}</div>
+                    <div class="text-2xl font-black text-[#002349]">${prices[1] === '0' ? langData.free : parseInt(prices[1]).toLocaleString() + ' ' + langData.curr}</div>
                 </div>
             `;
         }
@@ -96,20 +104,14 @@
         }
 
         function proceedToNextStep() {
-            // منطق التوجيه الذكي حسب نوع الخدمة
-            let nextPage = "booking_personal.html"; // الافتراضي
-            
-            if (serviceType === "training") {
-                nextPage = "training.html";
-            } else if (serviceType === "wedding") {
-                nextPage = "booking_wedding.html";
-            } else if (serviceType === "personal") {
-                nextPage = "booking_personal.html";
-            }
+            let nextPage = "booking_personal.html";
+            if (serviceType === "training") nextPage = "training.html";
+            else if (serviceType === "wedding") nextPage = "booking_wedding.html";
 
             const params = new URLSearchParams(window.location.search);
             params.set('service', selectedName);
-            params.set('price', selectedPrice);
+            // نرسل السعر الصافي بدون نصوص لكي تجمعه صفحة المراجعة بسهولة
+            params.set('addon_price', selectedPrice); 
             
             window.location.href = `${nextPage}?${params.toString()}`;
         }
