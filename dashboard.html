@@ -70,7 +70,9 @@
             const container = document.getElementById('mainContainer');
             let list = [];
             
-            if(currentTab === 'new') list = allOrders.filter(o => o.prov === officeData.city && o.status === "قيد الانتظار");
+            // الربط مع أسماء الحقول في Apps Script
+            // o.province (المحافظة), o.status (الحالة), o.office (المكتب)
+            if(currentTab === 'new') list = allOrders.filter(o => o.province === officeData.city && o.status === "قيد الانتظار");
             else if(currentTab === 'mine') list = allOrders.filter(o => o.office === officeData.name && o.status === "تم الاستلام");
             else if(currentTab === 'done') list = allOrders.filter(o => o.office === officeData.name && (o.status.includes('✅') || o.status.includes('⚠️')));
 
@@ -80,10 +82,13 @@
             }
 
             container.innerHTML = list.map(o => {
-                const isFemale = o.gen === 'أنثى' || o.gen === 'Female';
+                const isFemale = o.gender === 'أنثى' || o.gender === 'Female';
                 const genderIcon = isFemale ? '👩' : '👨';
                 const genderClass = isFemale ? 'gender-female' : 'gender-male';
-                const formattedPrice = Number(o.price).toLocaleString() + " د.ع";
+                
+                // التأكد من قراءة total_price كما يرسله Success.html
+                const priceValue = o.total_price || o.price || 0;
+                const formattedPrice = Number(priceValue).toLocaleString() + " د.ع";
 
                 // --- 1. عرض الرادار (قبل الاستلام) ---
                 if(currentTab === 'new') {
@@ -92,7 +97,7 @@
                         <h3 class="text-xl font-black text-slate-800 mb-2">${o.car}</h3>
                         <div class="flex items-center gap-3 mb-4">
                             <span class="text-xs font-bold text-slate-500"><i class="fas fa-user"></i> ${o.name}</span>
-                            <span class="gender-tag ${genderClass}">${genderIcon} ${o.gen}</span>
+                            <span class="gender-tag ${genderClass}">${genderIcon} ${o.gender}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-3 mb-4">
                             <div class="bg-slate-50 p-3 rounded-2xl"><span class="info-label">عدد الأيام</span><p class="text-sm font-black">${o.days} أيام</p></div>
@@ -102,7 +107,7 @@
                             <span class="info-label text-blue-400">الإضافات Addons</span>
                             <p class="text-xs font-bold text-blue-900">${o.addons || 'لا توجد إضافات'}</p>
                         </div>
-                        <button onclick="update('${o.id}', 'claim')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-sm active:scale-95 transition-all">استلام الطلبية الآن ⚡</button>
+                        <button onclick="update('${o.order_id}', 'claim')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-sm active:scale-95 transition-all">استلام الطلبية الآن ⚡</button>
                     </div>`;
                 }
 
@@ -111,7 +116,7 @@
                     return `
                     <div class="whale-card p-8 border-t-8 border-blue-900 shadow-xl">
                         <h3 class="text-2xl font-black text-slate-800 mb-1 text-center">${o.car}</h3>
-                        <p class="text-xs font-black text-blue-600 mb-6 text-center">رقم الطلب #${o.id}</p>
+                        <p class="text-xs font-black text-blue-600 mb-6 text-center">رقم الطلب #${o.order_id}</p>
 
                         <div class="bg-slate-50 p-5 rounded-3xl mb-4 text-center">
                             <span class="info-label">الاسم الكامل</span>
@@ -121,7 +126,7 @@
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="info-box"><span class="info-label">رقم الهاتف</span><p class="font-black text-slate-800">${o.phone}</p></div>
                             <div class="info-box"><span class="info-label">السعر الكلي</span><p class="font-black price-text">${formattedPrice}</p></div>
-                            <div class="info-box"><span class="info-label">الجنس</span><p class="font-black text-slate-800">${genderIcon} ${o.gen}</p></div>
+                            <div class="info-box"><span class="info-label">الجنس</span><p class="font-black text-slate-800">${genderIcon} ${o.gender}</p></div>
                             <div class="info-box"><span class="info-label">مدة الإيجار</span><p class="font-black text-slate-800">${o.days} أيام</p></div>
                         </div>
                         
@@ -132,10 +137,10 @@
 
                         <div class="space-y-3">
                             <div class="flex gap-2">
-                                <a href="${o.map}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 py-4 rounded-2xl text-center font-black text-xs flex items-center justify-center gap-2">موقع الزبون 📍</a>
-                                <button onclick="update('${o.id}', 'complete')" class="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-black text-xs">تأكيد التسليم ✅</button>
+                                <a href="${o.location_link}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 py-4 rounded-2xl text-center font-black text-xs flex items-center justify-center gap-2">موقع الزبون 📍</a>
+                                <button onclick="update('${o.order_id}', 'complete')" class="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-black text-xs">تأكيد التسليم ✅</button>
                             </div>
-                            <button onclick="update('${o.id}', 'cancelRequest')" class="w-full text-red-500 bg-red-50 py-3 rounded-2xl font-black text-[11px] border border-dashed border-red-200">طلب إلغاء أو تحويل ⚠️</button>
+                            <button onclick="update('${o.order_id}', 'cancelRequest')" class="w-full text-red-500 bg-red-50 py-3 rounded-2xl font-black text-[11px] border border-dashed border-red-200">طلب إلغاء أو تحويل ⚠️</button>
                         </div>
                     </div>`;
                 }
@@ -146,7 +151,7 @@
                     <div class="whale-card p-5 flex justify-between items-center opacity-70">
                         <div>
                             <h3 class="font-black text-slate-700 text-sm">${o.name}</h3>
-                            <p class="text-[10px] text-slate-400">${o.timestamp}</p>
+                            <p class="text-[10px] text-slate-400">${o.date || ''}</p>
                         </div>
                         <div class="text-right">
                             <p class="font-black text-xs text-slate-800">${o.car}</p>
