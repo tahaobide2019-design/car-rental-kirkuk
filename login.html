@@ -8,66 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --whale-gold: #D4AF37; --whale-navy: #020617; --neon-blue: #00f2ff; }
-        body { 
-            font-family: 'Tajawal', sans-serif; 
-            background: #010409;
-            color: white; 
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        /* خلفية التداول التقنية */
-        .trading-bg {
-            position: fixed; inset: 0;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: -1;
-        }
-        
-        .radar-scan {
-            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, transparent, var(--whale-gold), transparent);
-            animation: scan 4s linear infinite; opacity: 0.3;
-        }
+        :root { --whale-gold: #D4AF37; --whale-navy: #020617; }
+        body { font-family: 'Tajawal', sans-serif; background: #010409; color: white; overflow: hidden; height: 100vh; }
+        .trading-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(212, 175, 55, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.02) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; }
+        .radar-scan { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: var(--whale-gold); animation: scan 6s linear infinite; opacity: 0.2; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        .glass-card { 
-            background: rgba(13, 17, 23, 0.8); 
-            backdrop-filter: blur(25px); 
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 1), inset 0 0 20px rgba(212, 175, 55, 0.05);
-        }
-
-        .whale-input {
-            width: 100%; padding: 1.1rem 3.5rem 1.1rem 1.1rem;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 1rem; color: white; transition: 0.4s;
-            font-family: 'Tajawal', sans-serif;
-        }
-        .whale-input:focus {
-            border-color: var(--whale-gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-            outline: none;
-        }
-
-        .ticker-wrap {
-            position: fixed; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.1);
-            backdrop-filter: blur(10px); padding: 5px 0; border-top: 1px solid var(--whale-gold);
-        }
-        .ticker { display: flex; animation: ticker 20s linear infinite; white-space: nowrap; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .trading-btn {
-            background: var(--whale-gold);
-            color: #000; font-weight: 900;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-            transition: 0.3s;
-        }
-        .trading-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+        .glass-card { background: rgba(13, 17, 23, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .whale-input { width: 100%; padding: 1.1rem 3.5rem 1.1rem 1.1rem; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; color: white; transition: 0.4s; }
+        .whale-input:focus { border-color: var(--whale-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); outline: none; }
+        .trading-btn { background: var(--whale-gold); color: #000; font-weight: 900; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s; }
+        .trading-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
     </style>
 </head>
 <body class="flex items-center justify-center p-4">
@@ -77,69 +27,50 @@
 
     <div class="max-w-md w-full glass-card p-10 rounded-2xl relative z-10">
         <div class="text-center mb-8">
-            <div class="inline-block p-4 rounded-full bg-black border border-yellow-500/30 mb-4">
-                <span class="text-5xl animate-pulse">🐋</span>
+            <div class="inline-block p-4 rounded-full bg-black border border-yellow-500/20 mb-4">
+                <span class="text-5xl">🐋</span>
             </div>
-            <h2 class="text-3xl font-black tracking-widest text-white uppercase italic" style="font-family: 'Orbitron', sans-serif;">
+            <h2 class="text-3xl font-black tracking-widest uppercase italic" style="font-family: 'Orbitron', sans-serif;">
                 AL-HUT <span class="text-[#D4AF37]">RADAR</span>
             </h2>
-            <div class="flex justify-center items-center gap-2 mt-2">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-                <span class="text-[10px] text-green-500 font-bold uppercase tracking-widest">System Online</span>
-            </div>
+            <p class="text-[10px] text-slate-500 mt-2 tracking-[0.2em]">PARTNER AUTHENTICATION SYSTEM</p>
         </div>
         
         <div class="space-y-4">
             <div class="relative">
                 <i class="fas fa-building absolute right-4 top-1/2 -translate-y-1/2 text-[#D4AF37]"></i>
-                <input id="officeName" type="text" placeholder="اسم المكتب الشريك" class="whale-input font-bold">
+                <input id="officeName" type="text" placeholder="اسم المكتب" class="whale-input font-bold">
             </div>
             
             <div class="relative">
-                <i class="fas fa-city absolute right-4 top-1/2 -translate-y-1/2 text-[#D4AF37]"></i>
+                <i class="fas fa-location-dot absolute right-4 top-1/2 -translate-y-1/2 text-[#D4AF37]"></i>
                 <select id="citySelect" class="whale-input font-bold appearance-none cursor-pointer">
-                    <option value="" disabled selected>تحديد المنطقة المركزية</option>
-                    <option value="بغداد">بغداد - المركز</option>
-                    <option value="كركوك">كركوك - المقر</option>
-                    <option value="أربيل">أربيل - الشمال</option>
-                    <option value="البصرة">البصرة - الجنوب</option>
+                    <option value="" disabled selected>تحديد المدينة</option>
+                    <option value="كركوك">كركوك</option>
+                    <option value="بغداد">بغداد</option>
+                    <option value="أربيل">أربيل</option>
+                    <option value="السليمانية">السليمانية</option>
+                    <option value="الموصل">الموصل</option>
+                    <option value="البصرة">البصرة</option>
+                    <option value="الأنبار">الأنبار</option>
+                    <option value="ديالى">ديالى</option>
                 </select>
             </div>
 
             <div class="relative">
-                <i class="fas fa-microchip absolute right-4 top-1/2 -translate-y-1/2 text-[#D4AF37]"></i>
-                <input id="idNumber" type="password" placeholder="كود التشفير" class="whale-input text-center tracking-[0.8em] font-black text-xl">
+                <i class="fas fa-fingerprint absolute right-4 top-1/2 -translate-y-1/2 text-[#D4AF37]"></i>
+                <input id="idNumber" type="password" placeholder="كود الوصول" class="whale-input text-center tracking-[0.5em] font-black text-xl">
             </div>
             
             <button onclick="registerOffice()" id="loginBtn" class="w-full py-5 trading-btn mt-6 flex items-center justify-center gap-3">
-                <span>اتصال بالخادم</span>
-                <i class="fas fa-rocket"></i>
+                <span>تفعيل الرادار</span>
+                <i class="fas fa-shield-halved"></i>
             </button>
-            
-            <div class="mt-6 grid grid-cols-2 gap-4">
-                <div class="bg-black/40 p-3 rounded border border-white/5 text-center">
-                    <p class="text-[8px] text-slate-500 uppercase">Latency</p>
-                    <p class="text-xs font-bold text-green-400">24ms</p>
-                </div>
-                <div class="bg-black/40 p-3 rounded border border-white/5 text-center">
-                    <p class="text-[8px] text-slate-500 uppercase">Status</p>
-                    <p class="text-xs font-bold text-blue-400">Encrypted</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="ticker-wrap">
-        <div class="ticker font-bold text-[10px] uppercase tracking-tighter">
-            <span class="mx-8 text-white">Kirkuk: Active 🟢</span>
-            <span class="mx-8 text-white">Baghdad: Active 🟢</span>
-            <span class="mx-8 text-white">Erbil: Waiting 🟡</span>
-            <span class="mx-8 text-white">Basra: Maintenance 🔴</span>
-            <span class="mx-8 text-white">Al-Hut Radar System v2.0.26</span>
         </div>
     </div>
 
     <script>
+        // الرابط من الصورة الخاصة بك
         const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec";
 
         async function registerOffice() {
@@ -151,29 +82,32 @@
             };
 
             if(!data.name || !data.id || !data.city) {
-                return alert("أدخل بيانات التشفير يا حوت!");
+                return alert("يا حوت! أدخل كامل بياناتك.");
             }
             
             btn.disabled = true; 
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> جاري المزامنة...`;
+            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i> جاري التحقق...`;
 
             try {
-                // الربط مع الـ Apps Script الخاص بك
-                const query = `?action=checkOfficeStatus&id=${data.id}&name=${encodeURIComponent(data.name)}&city=${encodeURIComponent(data.city)}`;
+                // يرسل الطلب إلى وظيفة doGet(e) في السكريبت الخاص بك
+                const query = `?action=checkOfficeStatus&id=${data.id}&name=${encodeURIComponent(data.name)}&city=${encodeURIComponent(data.city)}&map=#`;
                 const res = await fetch(scriptURL + query);
                 const result = await res.json();
 
+                // التحقق من حالة المكتب (نشط، محظور، معلق)
                 if (result.status === "نشط") {
                     localStorage.setItem('whale_office_data', JSON.stringify(data));
                     window.location.href = 'dashboard.html';
+                } else if (result.status === "محظور") {
+                    alert("⚠️ الدخول مرفوض. هذا الحساب محظور.");
                 } else {
-                    alert("⏳ الدخول مرفوض: الكود غير مفعل أو غير صحيح.");
+                    alert("⏳ الحساب قيد المراجعة. سيتم التفعيل قريباً.");
                 }
             } catch (e) {
-                alert("❌ فشل الاتصال بالخادم الرئيسي.");
+                alert("❌ فشل الاتصال بخادم الحوت.");
             } finally {
                 btn.disabled = false; 
-                btn.innerText = "اتصال بالخادم";
+                btn.innerText = "تفعيل الرادار";
             }
         }
     </script>
