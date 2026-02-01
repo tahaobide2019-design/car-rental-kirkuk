@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مراجعة الطلب | الحوت 🐋</title>
+    <title id="docTitle">مراجعة الطلب | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --main: #002349; --accent: #D4AF37; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
+        body { font-family: 'Tajawal', 'Poppins', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
         .main-card { background: white; border-radius: 3.5rem; box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.15); border-top: 12px solid var(--main); animation: slideUp 0.6s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
         .info-item { background: #f8fafc; padding: 0.75rem; border-radius: 1.2rem; border: 1px solid #edf2f7; display: flex; flex-direction: column; }
-        .info-label { color: #94a3b8; font-size: 0.65rem; font-weight: 800; margin-bottom: 2px; }
+        .info-label { color: #94a3b8; font-size: 0.65rem; font-weight: 800; margin-bottom: 2px; text-transform: uppercase; }
         .info-value { color: var(--main); font-size: 0.85rem; font-weight: 900; }
         .price-summary { background: var(--main); color: var(--accent); border-radius: 2.5rem; padding: 1.5rem; position: relative; overflow: hidden; }
         .btn-confirm { background: var(--main); color: white; box-shadow: 0 15px 30px rgba(0, 35, 73, 0.3); transition: 0.3s; }
         .btn-confirm:active { transform: scale(0.96); }
-        .map-badge { background: #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 8px; font-size: 10px; display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; }
+        .map-badge { background: #e2e8f0; color: #475569; padding: 8px 15px; border-radius: 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; font-weight: bold; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -27,7 +27,7 @@
     <div id="mainBox" class="max-w-md w-full main-card p-6 md:p-8">
         <div class="text-center mb-6">
             <div id="mainEmoji" class="text-5xl mb-2">📋</div>
-            <h1 id="pageTitle" class="text-2xl font-black" style="color: var(--main);">مراجعة الطلب</h1>
+            <h1 id="pageTitle" class="text-2xl font-black" style="color: var(--main);">---</h1>
             <p id="pageSub" class="text-slate-400 text-[10px] font-bold tracking-widest uppercase italic">Order Verification</p>
         </div>
 
@@ -35,22 +35,22 @@
 
         <div id="locationPreview" class="mb-6 text-center hidden">
              <a id="mapLink" href="#" target="_blank" class="map-badge hover:bg-slate-200 transition-all">
-                <i class="fas fa-map-marker-alt"></i> عرض الموقع المختار على الخريطة
+                <i class="fas fa-map-marker-alt"></i> <span id="mapText">عرض الموقع على الخريطة</span>
              </a>
         </div>
 
         <div class="price-summary text-center shadow-xl mb-6">
-            <p id="totalLabel" class="text-[10px] font-black opacity-70 uppercase mb-1">إجمالي المبلغ التقريبي</p>
-            <div class="text-3xl font-black"><span id="totalVal">0</span> <small class="text-sm font-bold" id="currLabel">د.ع</small></div>
+            <p id="totalLabel" class="text-[10px] font-black opacity-70 uppercase mb-1">---</p>
+            <div class="text-3xl font-black"><span id="totalVal">0</span> <small class="text-sm font-bold" id="currLabel">---</small></div>
         </div>
 
         <div class="space-y-3">
             <button onclick="confirmAndSubmit()" class="btn-confirm w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3">
-                <span id="btnSubmit">تأكيد وطلب</span>
+                <span id="btnSubmit">---</span>
                 <i class="fas fa-check-circle"></i>
             </button>
             <button onclick="window.history.back()" class="w-full text-slate-400 font-black text-xs hover:text-red-500 transition-all">
-                <i class="fas fa-edit ml-1"></i> <span id="btnBack">تعديل</span>
+                <i class="fas fa-edit ml-1"></i> <span id="btnBack">---</span>
             </button>
         </div>
     </div>
@@ -67,15 +67,28 @@
         };
 
         const uiContent = {
-            ar: { title: "مراجعة التفاصيل", total: "المبلغ الإجمالي التقريبي", btn: "تأكيد وطلب", back: "رجوع للتعديل", curr: "د.ع", 
-                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", province: "المدينة", car: "السيارة", addon_display: "الإضافات", days: "المدة", gender: "الجنس", license_no: "رقم الإجازة", national_id: "رقم الهوية" } },
-            ku: { title: "پیاچوونەوەی وردەکارییەکان", total: "کۆی گشتی خەمڵێنراو", btn: "پشتڕاستکردنەوە", back: "گەڕانەوە بۆ دەستکاری", curr: "د.ع",
-                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", province: "شار", car: "ئۆتۆمبێل", addon_display: "زیادکراوەکان", days: "ماوە", gender: "ڕەگەز", license_no: "مۆڵەت", national_id: "ناسنامە" } }
+            ar: { 
+                title: "مراجعة التفاصيل", total: "إجمالي المبلغ التقريبي", btn: "تأكيد وإرسال الطلب", back: "رجوع للتعديل", curr: "د.ع", map: "عرض الموقع المختار",
+                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", province: "المدينة", car: "الخدمة/السيارة", addon_display: "الإضافات", date: "التاريخ", gender: "الجنس", license_no: "رقم الإجازة", national_id: "رقم الهوية" } 
+            },
+            ku: { 
+                title: "پیاچوونەوەی وردەکارییەکان", total: "کۆی گشتی خەمڵێنراو", btn: "پشتڕاستکردنەوە و ناردن", back: "گەڕانەوە بۆ دەستکاری", curr: "د.ع", map: "بینینی شوێن لەسەر نەخشە",
+                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", province: "شار", car: "ئۆتۆمبێل/خزمەتگوزاری", addon_display: "زیادکراوەکان", date: "بەروار", gender: "ڕەگەز", license_no: "ژ. مۆڵەت", national_id: "ژ. ناسنامە" } 
+            },
+            tr: { 
+                title: "Detayları İncele", total: "Tahmini Toplam Tutar", btn: "Onayla ve Gönder", back: "Düzenlemek İçin Geri Dön", curr: "IQD", map: "Haritada Görüntüle",
+                fields: { name: "Ad Soyad", phone: "Telefon", age: "Yaş", province: "Şehir", car: "Araç/Servis", addon_display: "Ekstralar", date: "Tarih", gender: "Cinsiyet", license_no: "Ehliyet No", national_id: "Kimlik No" } 
+            },
+            en: { 
+                title: "Review Details", total: "Approximate Total Amount", btn: "Confirm & Send Order", back: "Back to Edit", curr: "IQD", map: "View Location on Map",
+                fields: { name: "Full Name", phone: "Phone", age: "Age", province: "City", car: "Car/Service", addon_display: "Add-ons", date: "Date", gender: "Gender", license_no: "License No", national_id: "ID Number" } 
+            }
         };
 
         window.onload = () => {
             const t = configs[type] || configs.personal;
             const ui = uiContent[lang] || uiContent.ar;
+            const isRtl = (lang === 'ar' || lang === 'ku');
             
             document.documentElement.style.setProperty('--main', t.main);
             document.documentElement.style.setProperty('--accent', t.accent);
@@ -85,24 +98,24 @@
             document.getElementById('btnSubmit').innerText = ui.btn;
             document.getElementById('btnBack').innerText = ui.back;
             document.getElementById('currLabel').innerText = ui.curr;
-            document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
+            document.getElementById('mapText').innerText = ui.map;
+            document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
 
             let gridHtml = '';
             Object.keys(ui.fields).forEach(key => {
                 let val = u.get(key);
-                if (val && val !== 'null' && val !== '---') {
+                if (val && val !== 'null' && val !== '---' && val !== 'undefined') {
                     gridHtml += `<div class="info-item"><span class="info-label">${ui.fields[key]}</span><span class="info-value">${val}</span></div>`;
                 }
             });
             document.getElementById('detailsGrid').innerHTML = gridHtml;
 
-            // تحديث السعر النهائي
-            const p1 = parseInt(u.get('price') || 0);
-            const p2 = parseInt(u.get('addon_price') || 0);
-            const total = p1 + p2;
+            // حساب السعر النهائي
+            const price = parseInt(u.get('price') || 0);
+            const addonPrice = parseInt(u.get('addon_price') || 0);
+            const total = price + addonPrice;
             document.getElementById('totalVal').innerText = total.toLocaleString();
 
-            // عرض معاينة الموقع إذا وجد
             if (u.get('location_link')) {
                 document.getElementById('locationPreview').classList.remove('hidden');
                 document.getElementById('mapLink').href = u.get('location_link');
@@ -110,8 +123,11 @@
         };
 
         function confirmAndSubmit() {
+            // نقوم بتمرير كافة البيانات إلى صفحة النجاح أو معالج البيانات
             const finalPrice = parseInt(u.get('price') || 0) + parseInt(u.get('addon_price') || 0);
             u.set('total_final', finalPrice);
+            
+            // التوجيه إلى صفحة النجاح (التي ستقوم بإرسال البيانات فعلياً للسكريبت)
             window.location.href = `success.html?${u.toString()}`;
         }
     </script>
