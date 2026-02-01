@@ -61,7 +61,6 @@
         const content = {
             ar: { greet: "مبارك الإتمام!", status: "جاري تأكيد حجزك في أرض الحوت...", sub: "سيقوم فريق الحوت بالتواصل معك قريباً.", sync: "تم الربط بنجاح", back: "العودة للرئيسية", welcome: "عميلنا العزيز", already: "تم حفظ الطلب مسبقاً" },
             ku: { greet: "پیرۆزە!", status: "داواکارییەکەت لە زەوی حوت تۆمارکرا...", sub: "تیمی حوت بەم زوانە پەیوەندیت پێوە دەکەن.", sync: "بەسەرکەوتوویی بەستراوەتەوە", back: "گەڕانەوە بۆ سەرەتا", welcome: "کڕیاری بەڕێز", already: "داواکارییەکە پێشتر تۆمارکراوە" }
-            // يمكن إضافة البقية بنفس النمط
         };
 
         window.onload = () => {
@@ -79,7 +78,6 @@
             document.getElementById('backBtn').innerText = l.back;
             document.getElementById('userNameDisplay').innerText = u.get('name') || l.welcome;
 
-            // توليد رقم طلب ثابت لهذه الجلسة
             let sessionOrderID = sessionStorage.getItem('last_hut_id');
             if(!sessionOrderID) {
                 sessionOrderID = "HUT-" + Math.floor(1000 + Math.random() * 9000);
@@ -89,30 +87,28 @@
 
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: [c.main, c.accent] });
 
-            // التحقق من الإرسال المتكرر
             if (sessionStorage.getItem('order_sent') === 'true') {
-                document.getElementById('syncText').innerText = l.already || "Sent ✅";
+                document.getElementById('syncText').innerText = l.already;
                 document.getElementById('syncIcon').classList.remove('animate-pulse');
-                console.log("Order already sent in this session. Skipping fetch.");
-                return; // إيقاف الكود هنا وعدم الإرسال مرة أخرى
+                return;
             }
 
+            // التعديل الجذري هنا ليتطابق مع الـ Apps Script في صورتك المرفقة
             const payload = {
-                date: new Date().toLocaleString('ar-IQ'),
-                order_id: sessionOrderID,
-                name: u.get('name') || "---",
-                phone: u.get('phone') || "---",
-                province: u.get('province') || u.get('city') || "---",
-                car: u.get('car') || "---",
-                days: u.get('days') || "---",
-                addons: u.get('addon_display') || "---",
-                price: u.get('total_final') || "0", // إرسال السعر الكامل
-                gender: u.get('gender') || "---",
-                age: u.get('age') || "---",
-                national_id: u.get('national_id') || "---",
-                license_id: u.get('license_id') || "---",
-                service: u.get('service') || u.get('type') || "---",
-                map_link: u.get('location_link') || "---"
+                order_id: sessionOrderID,                    // يتطابق مع d.order_id
+                name: u.get('name') || "---",                // يتطابق مع d.name
+                phone: u.get('phone') || "---",              // يتطابق مع d.phone
+                province: u.get('province') || u.get('city') || "---", // يتطابق مع d.province
+                car: u.get('car') || "---",                  // يتطابق مع d.car
+                days: u.get('days') || "---",                // يتطابق مع d.days
+                addons: u.get('addon_display') || "---",     // يتطابق مع d.addons
+                total_price: u.get('total_final') || "0",    // التعديل: استبدال price بـ total_price ليتطابق مع السكريبت
+                gender: u.get('gender') || "---",            // يتطابق مع d.gender
+                age: u.get('age') || "---",                  // يتطابق مع d.age
+                national_id: u.get('national_id') || "---",  // يتطابق مع d.national_id
+                license_no: u.get('license_id') || "---",    // التعديل: استبدال license_id بـ license_no ليتطابق مع السكريبت
+                service: u.get('service') || u.get('type') || "---", // يتطابق مع d.service
+                location_link: u.get('location_link') || "---" // التعديل: استبدال map_link بـ location_link ليتطابق مع السكريبت
             };
 
             fetch(scriptURL, {
@@ -120,10 +116,8 @@
                 mode: 'no-cors',
                 body: JSON.stringify(payload)
             }).then(() => {
-                // وضع علامة نجاح الإرسال لمنع التكرار
                 sessionStorage.setItem('order_sent', 'true');
                 document.getElementById('syncText').innerText = l.sync;
-                console.log("Data successfully sent to Whale Sheets.");
             }).catch(err => {
                 console.error("Sync failed:", err);
                 document.getElementById('syncText').innerText = "Sync Error";
