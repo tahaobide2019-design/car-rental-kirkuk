@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --main-theme: #002349; --accent-theme: #D4AF37; }
-        body { font-family: 'Tajawal', 'Poppins', sans-serif; background: #f0f4f8; overflow: hidden; }
+        body { font-family: 'Tajawal', 'Poppins', sans-serif; background: #f0f4f8; overflow-x: hidden; }
         .main-card { background: white; border-radius: 3.5rem; box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.2); position: relative; z-index: 10; border-top: 12px solid var(--main-theme); }
         .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
         @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3) translateY(100px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
@@ -37,7 +37,7 @@
             <p id="orderLabel" class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">REFERENCE NUMBER</p>
             <p id="orderIDDisplay" class="text-2xl font-black tracking-tighter" style="color: var(--main-theme);">---</p>
             <div id="summaryText" class="text-[10px] font-bold text-green-600 mt-2 flex items-center justify-center gap-1">
-                <i id="syncIcon" class="fas fa-satellite-dish animate-pulse"></i> <span id="syncText">جاري الحفظ...</span>
+                <i id="syncIcon" class="fas fa-satellite-dish animate-pulse"></i> <span id="syncText">...</span>
             </div>
         </div>
 
@@ -49,19 +49,20 @@
     <script>
         const u = new URLSearchParams(window.location.search);
         const lang = u.get('lang') || 'ar';
-        const type = u.get('type') || 'personal';
-        // الرابط الخاص بـ Apps Script
+        const type = u.get('service') === 'زفاف' ? 'wedding' : (u.get('service') === 'تدريب قيادة' ? 'training' : 'personal');
         const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec";
 
         const configs = {
-            training: { main: '#7c3aed', accent: '#6d28d9' },
-            wedding: { main: '#be185d', accent: '#9d174d' },
+            training: { main: '#7c3aed', accent: '#D4AF37' },
+            wedding: { main: '#be185d', accent: '#D4AF37' },
             personal: { main: '#002349', accent: '#D4AF37' }
         };
 
         const content = {
-            ar: { greet: "تم الحجز بنجاح!", status: "تم إرسال بياناتك إلى خوادم الحوت...", sub: "سيقوم فريق الدعم الفني بالتواصل معك خلال دقائق.", sync: "تم المزامنة مع السجل الرقمي", back: "العودة للرئيسية", welcome: "عميلنا العزيز", already: "تم الحفظ مسبقاً" },
-            ku: { greet: "سەرکەوتوو بوو!", status: "زانیارییەکانت نێردرا بۆ سێرڤەری حوت...", sub: "تیمی پشتگیری لە ماوەی چەند خولەکێکدا پەیوەندیت پێوە دەکەن.", sync: "زانیارییەکان پارێزراون", back: "گەڕانەوە بۆ سەرەتا", welcome: "کڕیاری بەڕێز", already: "پێشتر نێردراوە" }
+            ar: { greet: "تم الحجز بنجاح!", status: "تم إرسال بياناتك إلى خوادم الحوت...", sub: "سيقوم فريق الدعم الفني بالتواصل معك خلال دقائق.", sync: "تم المزامنة مع السجل الرقمي", back: "العودة للرئيسية", welcome: "عميلنا العزيز", already: "تم الحفظ مسبقاً", syncing: "جاري الحفظ..." },
+            ku: { greet: "سەرکەوتوو بوو!", status: "زانیارییەکانت نێردرا بۆ سێرڤەری حوت...", sub: "تیمی پشتگیری لە ماوەی چەند خولەکێکدا پەیوەندیت پێوە دەکەین.", sync: "زانیارییەکان پارێزراون", back: "گەڕانەوە بۆ سەرەتا", welcome: "کڕیاری بەڕێز", already: "پێشتر نێردراوە", syncing: "خەریکی پاراستنە..." },
+            tr: { greet: "Rezervasyon Başarılı!", status: "Verileriniz Al-Hut sunucularına gönderildi...", sub: "Destek ekibimiz birkaç dakika içinde sizinle iletişime geçecektir.", sync: "Dijital kayda senkronize edildi", back: "Ana Sayfaya Dön", welcome: "Değerli Müşterimiz", already: "Zaten kaydedildi", syncing: "Kaydediliyor..." },
+            en: { greet: "Booking Successful!", status: "Your data has been sent to Al-Hut servers...", sub: "Our support team will contact you within minutes.", sync: "Synchronized with digital record", back: "Back to Home", welcome: "Valued Customer", already: "Already saved", syncing: "Saving now..." }
         };
 
         window.onload = () => {
@@ -77,55 +78,49 @@
             document.getElementById('statusMsg').innerText = l.status;
             document.getElementById('subInstruction').innerText = l.sub;
             document.getElementById('backBtn').innerText = l.back;
+            document.getElementById('syncText').innerText = l.syncing;
             document.getElementById('userNameDisplay').innerText = u.get('name') || l.welcome;
 
-            // الحصول على رقم الطلب المولد سابقاً أو توليد واحد جديد كحل أخير
             let finalOrderID = u.get('order_id') || "HUT-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById('orderIDDisplay').innerText = "#" + finalOrderID;
 
-            // إطلاق الاحتفال
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: [c.main, c.accent] });
 
-            // التحقق من عدم تكرار الإرسال
-            if (sessionStorage.getItem('sent_' + finalOrderID) === 'true') {
+            if (sessionStorage.getItem('sent_' + finalOrderID)) {
                 document.getElementById('syncText').innerText = l.already;
                 document.getElementById('syncIcon').classList.remove('animate-pulse');
                 return;
             }
 
-            // تجهيز البيانات المرسلة بدقة متناهية
             const payload = {
                 order_id: finalOrderID,
-                name: u.get('name') || "---",
-                phone: u.get('phone') || "---",
-                province: u.get('province') || "---",
-                car: u.get('car') || "---",
+                name: u.get('name'),
+                phone: u.get('phone'),
+                province: u.get('province'),
+                car: u.get('car'),
                 days: u.get('days') || "1",
-                addons: u.get('addon_display') || "لا يوجد",
-                total_price: u.get('total_final') || "0",
-                gender: u.get('gender') || "---",
-                age: u.get('age') || "---",
-                national_id: u.get('national_id') || "---",
-                license_no: u.get('license_no') || "---",
-                service: u.get('service') || "---",
-                location_link: u.get('location_link') || "---",
-                date: u.get('date') || new Date().toLocaleDateString('en-GB')
+                addons: u.get('addon_display') || "None",
+                total_price: u.get('total_price'),
+                gender: u.get('gender'),
+                age: u.get('age'),
+                national_id: u.get('national_id'),
+                license_no: u.get('license_no'),
+                service: u.get('service'),
+                location_link: u.get('location_link'),
+                date: new Date().toLocaleString('en-GB')
             };
 
-            // عملية الإرسال الفعلي
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
                 cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
                 sessionStorage.setItem('sent_' + finalOrderID, 'true');
                 document.getElementById('syncText').innerText = l.sync;
                 document.getElementById('syncIcon').className = "fas fa-check-double text-green-500";
             }).catch(err => {
-                console.error("Sync Error:", err);
-                document.getElementById('syncText').innerText = "خطأ في المزامنة";
+                document.getElementById('syncText').innerText = "Sync Error";
             });
         };
     </script>
