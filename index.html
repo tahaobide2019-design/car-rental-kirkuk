@@ -12,21 +12,32 @@
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #004d99 100%); transition: 1s; position: relative; padding-top: 5rem; padding-bottom: 16rem; overflow: hidden; }
         .map-pattern { position: absolute; inset: 0; opacity: 0.25; pointer-events: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🗺️</text></svg>'); background-repeat: repeat; animation: bgMove 40s linear infinite; }
         @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
-        .brand-text-style { font-weight: 900; line-height: 1.2; color: white; }
+        
+        /* تحسين تموضع العناصر */
+        .brand-text-style { font-weight: 900; line-height: 1.1; color: white; text-align: start; }
         .whale-left-container { display: flex; flex-direction: column; align-items: center; justify-content: center; animation: floating 4s ease-in-out infinite; }
-        .whale-emoji { font-size: 6rem; line-height: 1; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.4)); }
-        .whale-text-white { font-size: 4rem; font-weight: 900; color: white; margin-top: -10px; }
+        .whale-emoji { font-size: 7rem; line-height: 1; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.4)); }
+        .whale-text-white { font-size: 3.5rem; font-weight: 900; color: white; margin-top: -10px; }
+        
         @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
+        
         .glass-box { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.4); transform: translateY(-180px); border-radius: 3.5rem; position: relative; z-index: 30; }
         .smart-input { width: 100%; padding: 1.1rem; background-color: rgba(241, 245, 249, 0.95); border: 2px solid transparent; border-radius: 1.5rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
         .smart-input:focus { background-color: #fff; border-color: #D4AF37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-        .lang-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 14px; font-size: 0.85rem; color: white; cursor: pointer; transition: 0.3s; font-weight: 900; }
-        .lang-btn:hover, .lang-active { background: #D4AF37; color: #002349; transform: scale(1.05); }
+        .lang-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 8px 12px; border-radius: 12px; font-size: 0.8rem; color: white; cursor: pointer; transition: 0.3s; font-weight: 900; }
+        .lang-active { background: #D4AF37; color: #002349; }
         .city-overlay { position: absolute; inset: 0; opacity: 0.65; transition: 1s; pointer-events: none; }
         #daysContainer { transition: all 0.5s ease; overflow: hidden; }
-        .hidden-days { max-height: 0; opacity: 0; transform: translateY(20px); pointer-events: none; margin: 0 !important; }
-        .show-days { max-height: 200px; opacity: 1; transform: translateY(0); }
-        @media (max-width: 768px) { .glass-box { transform: translateY(-130px); margin: 0 10px; } .whale-emoji { font-size: 4rem; } .whale-text-white { font-size: 2.5rem; } .header-flex { flex-direction: column; text-align: center; } }
+        .hidden-days { max-height: 0; opacity: 0; pointer-events: none; margin: 0 !important; }
+        .show-days { max-height: 200px; opacity: 1; }
+
+        @media (max-width: 768px) { 
+            .header-flex { flex-direction: column-reverse; gap: 2rem; }
+            .brand-text-style { text-align: center; font-size: 2.5rem; }
+            .whale-emoji { font-size: 5rem; }
+            .whale-text-white { font-size: 2.5rem; }
+            .glass-box { transform: translateY(-120px); }
+        }
     </style>
 </head>
 <body class="text-[#002349]">
@@ -42,39 +53,41 @@
         <div id="cityOverlay" class="city-overlay"></div>
         <div class="map-pattern"></div>
         <div class="container mx-auto px-6 flex justify-between items-center relative z-10 header-flex">
-            <div class="text-right flex-1">
-                <h1 class="text-4xl md:text-7xl brand-text-style mb-4" id="brandName">---</h1>
-                <p id="dynamicGreeting" class="text-xl md:text-2xl font-black transition-all duration-500 drop-shadow-lg text-white/90 mb-2 h-8"></p>
-                <p id="subGreeting" class="text-lg md:text-xl font-bold text-[#D4AF37]">---</p>
+            
+            <div class="flex-1 w-full order-first md:order-none">
+                <h1 class="text-5xl md:text-8xl brand-text-style" id="brandName">---</h1>
+                <p id="dynamicGreeting" class="text-xl md:text-2xl font-black mt-4 transition-all duration-500 text-[#D4AF37] h-8"></p>
             </div>
+
             <div class="whale-left-container flex-1">
                 <div class="whale-emoji">🐋</div>
                 <div class="whale-text-white" id="whaleTitle">---</div>
             </div>
+
         </div>
     </header>
 
     <main class="container mx-auto px-4 relative z-20">
         <div class="glass-box p-6 md:p-10 max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelCity">---</label>
-                    <select id="citySelect" onchange="adaptToCity()" class="smart-input appearance-none cursor-pointer"></select>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-sm font-black text-slate-500 uppercase" id="labelCity">---</label>
+                    <select id="citySelect" onchange="adaptToCity()" class="smart-input"></select>
                 </div>
-                <div class="md:col-span-3 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelService">---</label>
-                    <select id="mainService" onchange="toggleDaysField()" class="smart-input appearance-none text-sm cursor-pointer"></select>
+                <div class="md:col-span-3 space-y-2">
+                    <label class="block text-sm font-black text-slate-500 uppercase" id="labelService">---</label>
+                    <select id="mainService" onchange="toggleDaysField()" class="smart-input"></select>
                 </div>
-                <div id="daysContainer" class="md:col-span-1 space-y-2 text-right hidden-days">
-                    <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelDays">---</label>
+                <div id="daysContainer" class="md:col-span-1 space-y-2 hidden-days">
+                    <label class="block text-sm font-black text-slate-500 uppercase" id="labelDays">---</label>
                     <input type="number" id="daysInput" class="smart-input" value="1" min="1">
                 </div>
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-500 mr-2" id="labelDate">---</label>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-sm font-black text-slate-500" id="labelDate">---</label>
                     <input type="date" id="dateInput" class="smart-input">
                 </div>
-                <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-500 mr-2" id="labelTime">---</label>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-sm font-black text-slate-500" id="labelTime">---</label>
                     <input type="time" id="timeInput" class="smart-input" onchange="validateTime()">
                 </div>
                 <div class="md:col-span-2">
@@ -84,74 +97,42 @@
                 </div>
             </div>
         </div>
-
-        <section class="max-w-6xl mx-auto -mt-24 pb-20">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="bg-white p-8 rounded-[3rem] shadow-2xl border border-gray-100">
-                    <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-bolt"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f1_t">---</h3>
-                    <p class="text-sm text-slate-500 font-bold" id="f1_d">---</p>
-                </div>
-                <div class="bg-white p-8 rounded-[3rem] shadow-2xl border border-gray-100">
-                    <div class="w-16 h-16 bg-amber-50 text-[#D4AF37] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-shield-check"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f2_t">---</h3>
-                    <p class="text-sm text-slate-500 font-bold" id="f2_d">---</p>
-                </div>
-                <div class="bg-white p-8 rounded-[3rem] shadow-2xl border border-gray-100">
-                    <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-star"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f3_t">---</h3>
-                    <p class="text-sm text-slate-500 font-bold" id="f3_d">---</p>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script>
         let currentLang = 'ar';
         const data = {
             ar: {
-                dir: 'rtl', whale: 'الحـوت', brand: 'استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات', subGreet: 'سيارات رائعة بأسعار رائعة',
-                labelCity: 'المدينة', labelService: 'الخدمة المطلوبة', labelDays: 'الأيام', labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر', alert: 'يرجى ملء جميع الحقول 🐋', timeAlert: 'أوقات العمل 8 ص - 11 م 🐋',
+                dir: 'rtl', whale: 'الحـوت', brand: 'استئجار سيارة<br>بكل سهولة', 
+                labelCity: 'المدينة', labelService: 'الخدمة', labelDays: 'أيام', labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر', 
                 morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
-                f1t: 'حجز لحظي', f1d: 'احجز سيارتك بضغطة زر واحصل على التأكيد الفوري.',
-                f2t: 'ثقة وأمان', f2d: 'المنصة الوحيدة التي تضمن حقوقك بالكامل.',
-                f3t: 'أسعار تنافسية', f3d: 'أفضل الأسعار المباشرة دون عمولات مخفية.',
-                services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير شخصي', wedding: '🎁 سيارات أعراس', training: '🎓 تعليم قيادة' },
+                services: { placeholder: '-- اختر --', personal: '🚗 تأجير شخصي', wedding: '🎁 أعراس', training: '🎓 تعليم قيادة' },
                 cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
-                msgs: { 'كركوك': 'أهلاً بكم في كركوك..', 'بغداد': 'أهلاً بكم في بغداد..', 'أربيل': 'أهلاً بكم في أربيل..' }
+                msgs: { 'كركوك': 'أهلاً بك في كركوك', 'بغداد': 'أهلاً بك في بغداد' }
             },
             ku: {
-                dir: 'rtl', whale: 'ئەلحووت', brand: 'ئۆتۆمبێلێک بگرە<br>بۆ هەموو جۆرە<br>گەشتەکان', subGreet: 'ئۆتۆمبێلی نایاب بە نرخی نایاب',
-                labelCity: 'شار', labelService: 'خزمەتگوزاری', labelDays: 'ڕۆژەکان', labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە هەموو خانەکان پڕبکەرەوە 🐋', timeAlert: 'کاتی کارکردن ٨ی بەیانی بۆ ١١ی شەو 🐋',
+                dir: 'rtl', whale: 'ئەلحووت', brand: 'ئۆتۆمبێل بگرە<br>بە ئاسانی', 
+                labelCity: 'شار', labelService: 'خزمەتگوزاری', labelDays: 'ڕۆژ', labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', 
                 morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
-                f1t: 'حجزی خێرا', f1d: 'بە یەک کلیک ئۆتۆمبێلەکەت حجز بکە.',
-                f2t: 'متمانە و پاراستن', f2d: 'تاکە پلاتفۆرم کە مافەکانت دەپارێزێت.',
-                f3t: 'نرخی گونجاو', f3d: 'باشترین نرخەکان بێ هیچ باجێکی شاراوە.',
-                services: { placeholder: '-- خزمەتگوزاری --', personal: '🚗 بەکرێگرتن', wedding: '🎁 زەماوەند', training: '🎓 فێربوونی شۆفێری' },
+                services: { placeholder: '-- هەڵبژێرە --', personal: '🚗 بەکرێگرتن', wedding: '🎁 زەماوەند', training: '🎓 فێربوون' },
                 cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک..', 'بغداد': 'سڵاو لە بەغداد..', 'أربيل': 'بەخێربێن بۆ هەولێر..' }
+                msgs: { 'كركوك': 'بەخێربێی بۆ کەرکوک', 'بغداد': 'سڵاو بۆ بەغداد' }
             },
             tr: {
-                dir: 'ltr', whale: 'Whale', brand: 'Her Yolculuğa<br>Uygun Araç<br>Kiralama', subGreet: 'Harika fiyatlarla harika arabalar',
-                labelCity: 'Şehir', labelService: 'Hizmet Türü', labelDays: 'Gün Sayısı', labelDate: 'Tarih', labelTime: 'Saat', btnText: 'Devam Et', alert: 'Lütfen tüm alanları doldurun 🐋', timeAlert: 'Çalışma saatleri 08:00 - 23:00 🐋',
+                dir: 'ltr', whale: 'Whale', brand: 'Kolayca Araç<br>Kiralayın', 
+                labelCity: 'Şehir', labelService: 'Hizmet', labelDays: 'Gün', labelDate: 'Tarih', labelTime: 'Saat', btnText: 'Devam Et', 
                 morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
-                f1t: 'Anında Rezervasyon', f1d: 'Tek tıkla aracınızı ayırtın ve onay alın.',
-                f2t: 'Güven ve Güvenlik', f2d: 'Haklarınızı tam garanti eden tek platform.',
-                f3t: 'Rekabetçi Fiyatlar', f3d: 'Gizli komisyon olmadan en iyi fiyatlar.',
-                services: { placeholder: '-- Hizmet Seçin --', personal: '🚗 Bireysel Kiralama', wedding: '🎁 Düğün Arabaları', training: '🎓 Direksiyon Eğitimi' },
+                services: { placeholder: '-- Seçiniz --', personal: '🚗 Bireysel', wedding: '🎁 Düğün', training: '🎓 Eğitim' },
                 cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Bağdat 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Kerkük\'e hoş geldiniz..', 'بغداد': 'Bağdat\'a hoş geldiniz..', 'أربيل': 'Erbil\'e hoş geldiniz..' }
+                msgs: { 'كركوك': 'Kerkük\'e Hoşgeldiniz' }
             },
             en: {
-                dir: 'ltr', whale: 'Whale', brand: 'Rent a Car<br>For Every Type<br>of Trip', subGreet: 'Great cars at great prices',
-                labelCity: 'City', labelService: 'Service Type', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Please fill all fields 🐋', timeAlert: 'Working hours 8 AM - 11 PM 🐋',
+                dir: 'ltr', whale: 'Whale', brand: 'Rent a Car<br>Easily', 
+                labelCity: 'City', labelService: 'Service', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', 
                 morning: 'Good morning', day: 'Good day', evening: 'Good evening',
-                f1t: 'Instant Booking', f1d: 'Book your car instantly and get confirmation.',
-                f2t: 'Trust & Safety', f2d: 'The only platform that guarantees your rights.',
-                f3t: 'Best Prices', f3d: 'Direct prices from offices with no hidden fees.',
-                services: { placeholder: '-- Select Service --', personal: '🚗 Personal Rental', wedding: '🎁 Wedding Cars', training: '🎓 Driving Training' },
+                services: { placeholder: '-- Select --', personal: '🚗 Personal', wedding: '🎁 Wedding', training: '🎓 Training' },
                 cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Sulaymaniyah 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Welcome to Kirkuk..', 'بغداد': 'Welcome to Baghdad..', 'أربيل': 'Welcome to Erbil..' }
+                msgs: { 'كركوك': 'Welcome to Kirkuk' }
             }
         };
 
@@ -160,13 +141,10 @@
             const l = data[lang];
             const isRtl = l.dir === 'rtl';
             document.getElementById('htmlTag').dir = l.dir;
-            document.getElementById('htmlTag').lang = lang;
             document.body.style.fontFamily = isRtl ? "'Tajawal', sans-serif" : "'Poppins', sans-serif";
             
-            // تحديث النصوص
             document.getElementById('brandName').innerHTML = l.brand;
             document.getElementById('whaleTitle').innerText = l.whale;
-            document.getElementById('subGreeting').innerText = l.subGreet;
             document.getElementById('labelCity').innerText = l.labelCity;
             document.getElementById('labelService').innerText = l.labelService;
             document.getElementById('labelDays').innerText = l.labelDays;
@@ -175,12 +153,6 @@
             document.getElementById('btnText').innerText = l.btnText;
             document.getElementById('btnIcon').className = `fas fa-arrow-${isRtl ? 'left' : 'right'}`;
             
-            // المميزات
-            document.getElementById('f1_t').innerText = l.f1t; document.getElementById('f1_d').innerText = l.f1d;
-            document.getElementById('f2_t').innerText = l.f2t; document.getElementById('f2_d').innerText = l.f2d;
-            document.getElementById('f3_t').innerText = l.f3t; document.getElementById('f3_d').innerText = l.f3d;
-
-            // القوائم المنسدلة
             const citySelect = document.getElementById('citySelect');
             const currentCity = citySelect.value || 'كركوك';
             citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}" ${key === currentCity ? 'selected' : ''}>${val}</option>`).join('');
@@ -191,10 +163,8 @@
                 <option value="wedding">${l.services.wedding}</option>
                 <option value="training">${l.services.training}</option>`;
             
-            // تحديث حالة الأزرار
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('lang-active'));
             document.getElementById('btn-' + lang).classList.add('lang-active');
-            
             adaptToCity();
         }
 
@@ -226,7 +196,7 @@
             const timeInput = document.getElementById('timeInput');
             if (!timeInput.value) return;
             const hour = parseInt(timeInput.value.split(':')[0]);
-            if (hour < 8 || hour >= 23) { alert(data[currentLang].timeAlert); timeInput.value = ""; return; }
+            if (hour < 8 || hour >= 23) { alert('8 AM - 11 PM 🐋'); timeInput.value = ""; return; }
         }
 
         function startBooking() {
@@ -235,11 +205,10 @@
             const time = document.getElementById('timeInput').value;
             const city = document.getElementById('citySelect').value;
             const days = document.getElementById('daysInput').value;
+            if(!service || !date || !time) { alert('Fill all fields 🐋'); return; }
             
-            if(!service || !date || !time) { alert(data[currentLang].alert); return; }
-            
-            // إذا كان تدريب يذهب لصفحة الإضافات، غير ذلك يذهب للأسطول
-            let targetPage = "addons.html"; 
+            // توجيه ذكي: التدريب يذهب للإضافات أولاً
+            let targetPage = (service === "training") ? "addons.html" : "fleet.html";
             window.location.href = `${targetPage}?type=${service}&lang=${currentLang}&date=${date}&time=${time}&city=${city}&days=${days}`;
         }
 
