@@ -59,16 +59,20 @@
     </main>
 
     <script>
-        // قراءة البيانات من الرابط بدقة
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'personal'; 
         const currentLang = params.get('lang') || 'ar';
         const city = params.get('city') || 'كركوك';
-        const days = params.get('days') || '1'; // التقاط عدد الأيام الهام جداً
+        const days = params.get('days') || '1'; 
         const date = params.get('date') || '';
         const time = params.get('time') || '';
 
-        const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
+        // تم فحص المدن الثمانية هنا
+        const styleColor = { 
+            'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 
+            'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 
+            'الأنبار': '#ef6c00', 'ديالى': '#558b2f' 
+        };
         
         const translations = {
             ar: { dir: 'rtl', font: 'Tajawal', title: 'أسطول سيارات الحوت', wedding: '✨ قسم سيارات الحفلات والأعراس', personal: '🚗 قسم السيارات الشخصية', engAll: 'كل المحركات', engHyb: 'هايبرد', engAuto: 'أوتوماتيك', catAll: 'كل الفئات', catEco: 'اقتصادية', catFam: 'عائلية', catLux: 'فاخرة VIP', btn: 'اختيار السيارة', currency: 'د.ع / يوم', empty: 'لا توجد نتائج 🐋' },
@@ -77,6 +81,7 @@
             en: { dir: 'ltr', font: 'Poppins', title: 'Al-Hut Fleet', wedding: '✨ Wedding Section', personal: '🚗 Personal Section', engAll: 'All Engines', engHyb: 'Hybrid', engAuto: 'Automatic', catAll: 'All Categories', catEco: 'Economy', catFam: 'Family/SUV', catLux: 'Luxury VIP', btn: 'Select Car', currency: 'IQD / Day', empty: 'No cars found 🐋' }
         };
 
+        // يمكن التعديل على أسعار السيارات هنا بسهولة
         const fleet = [
             { name: {ar:"تويوتا كورولا 2025", ku:"تۆیۆتا کۆرۆلا ٢٠٢٥", tr:"Toyota Corolla 2025", en:"Toyota Corolla 2025"}, engine: "hybrid", cat: "economy", price: "45000", img: "Cars/corolla.jpg" },
             { name: {ar:"دودج جارجر SRT", ku:"دۆج جارجەر SRT", tr:"Dodge Charger SRT", en:"Dodge Charger SRT"}, engine: "auto", cat: "luxury", price: "85000", img: "Cars/charger.jpg" },
@@ -134,8 +139,8 @@
         }
 
         function selectCar(carName, carPrice) {
-            // بناء الرابط الجديد يدوياً لضمان عدم ضياع أي متغير
-            const nextURL = `addons.html?type=${type}&lang=${currentLang}&city=${encodeURIComponent(city)}&days=${days}&date=${date}&time=${time}&car=${encodeURIComponent(carName)}&price=${carPrice}`;
+            // نمرر كل البيانات للصفحة التالية لضمان عدم ضياع أي معلومة يحتاجها الـ Apps Script
+            const nextURL = `addons.html?type=${type}&lang=${currentLang}&city=${encodeURIComponent(city)}&days=${days}&date=${date}&time=${time}&car=${encodeURIComponent(carName)}&basePrice=${carPrice}`;
             window.location.href = nextURL;
         }
 
