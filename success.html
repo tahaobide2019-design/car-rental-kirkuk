@@ -24,20 +24,20 @@
             <dotlottie-player src="https://lottie.host/82823631-f923-4412-bd77-2e9154784411/6vR0FvI7oN.json" background="transparent" speed="1.2" style="width: 160px; height: 140px;" loop autoplay></dotlottie-player>
         </div>
 
-        <h1 id="mainGreeting" class="text-3xl font-black mb-1" style="color: var(--main-theme);">...</h1>
+        <h1 id="mainGreeting" class="text-3xl font-black mb-1" style="color: var(--main-theme);">مبارك الإتمام!</h1>
         <h2 id="userNameDisplay" class="text-xl font-black mb-4" style="color: var(--accent-theme);">...</h2>
 
         <div class="bg-blue-50/50 p-4 rounded-3xl mb-6">
-            <p id="cityBlessing" class="text-blue-900 font-black text-sm leading-relaxed italic">...</p>
+            <p id="cityBlessing" class="text-blue-900 font-black text-sm leading-relaxed italic">جاري تأكيد حجزك في أرض الحوت...</p>
         </div>
 
-        <p id="subInstruction" class="text-slate-500 font-bold text-xs px-4 leading-relaxed mb-6">...</p>
+        <p id="subInstruction" class="text-slate-500 font-bold text-xs px-4 leading-relaxed mb-6">سيقوم فريق الحوت بالتواصل معك قريباً.</p>
 
         <div class="bg-slate-50 p-6 rounded-[2.5rem] mb-8 border-2 border-dashed border-slate-200">
             <p id="orderLabel" class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">REFERENCE NUMBER</p>
             <p id="orderIDDisplay" class="text-2xl font-black tracking-tighter" style="color: var(--main-theme);">#HUT-0000</p>
             <div id="summaryText" class="text-[10px] font-bold text-green-600 mt-2 flex items-center justify-center gap-1">
-                <i class="fas fa-satellite-dish animate-pulse"></i> RADAR CONNECTED
+                <i class="fas fa-satellite-dish animate-pulse"></i> تم الربط بنجاح
             </div>
         </div>
 
@@ -51,96 +51,44 @@
         const scriptURL = "https://script.google.com/macros/s/AKfycbznxCVbF350cer5qcXlIROrNmmnf5993r9-AoLbNKqb8YfVNhhT3rREefD7dbK6RFIH/exec"; 
         const lang = u.get('lang') || 'ar';
 
-        const uiContent = {
-            ar: { greet: "مبارك الإتمام!", sub: "سيقوم أقرب مكتب حوت بالتواصل معك هاتفياً لإتمام إجراءات التسليم.", btn: "العودة للرئيسية", orderL: "رقم الحجز المرجعي" },
-            ku: { greet: "پیرۆزە!", sub: "نزیکترین ئۆفیسی حوت پەیوەندیت پێوە دەکات بۆ تەواوکردنی ڕێکارەکانی ڕادەستکردن.", btn: "بگەڕێوە سەرەکی", orderL: "ژمارەی تەرخانکردن" },
-            en: { greet: "Success!", sub: "The nearest Whale office will contact you via phone to complete the delivery process.", btn: "Back to Home", orderL: "REFERENCE NUMBER" },
-            tr: { greet: "Tebrikler!", sub: "En yakın Whale ofisi, teslimat işlemlerini tamamlamak için sizinle telefonla iletişime geçecektir.", btn: "Ana Sayfaya Dön", orderL: "REFERANS NUMARASI" }
-        };
-
-        // نظام المباركات المترجم حسب المحافظة واللغة
-        const blessingsByLang = {
-            ar: {
-                "بغداد": "يرعاك الله في أرض هارون الرشيد بغداد 🏰",
-                "كركوك": "حياك الله في مدينة القلاع والإخاء كركوك 💎",
-                "أربيل": "نورتنا في حضن القلعة الشامخة أربيل 🏔️",
-                "البصرة": "على راسي أهلنا في ثغر العراق الباسم البصرة 🌊",
-                "default": "يرعاك الله أينما كنت في أرض العراق العظيم 🇮🇶"
-            },
-            ku: {
-                "بغداد": "خوا بتپارێزێت لە خاکی هارون ڕەشید بەغدا 🏰",
-                "كركوك": "بەخێر بێیت بۆ شاری قەڵا و برایەتی کەرکوک 💎",
-                "أربيل": "بەخێر بێیت بۆ هەولێری پایتەخت 🏔️",
-                "default": "خوا لە هەر کوێیەک بیت بتپارێزێت 🇮🇶"
-            },
-            en: {
-                "بغداد": "May God protect you in the land of Harun al-Rashid, Baghdad 🏰",
-                "كركوك": "Welcome to the city of castles and brotherhood, Kirkuk 💎",
-                "أربيل": "Welcome to the shadow of the majestic Erbil Citadel 🏔️",
-                "default": "May God protect you wherever you are in Iraq 🇮🇶"
-            },
-            tr: {
-                "بغداد": "Harun Reşid'in diyarı Bağdat'ta Allah seni korusun 🏰",
-                "كركوك": "Kaleler ve kardeşlik şehri Kerkük'e hoş geldiniz 💎",
-                "أربيل": "Görkemli Erbil Kalesi'nin gölgesine hoş geldiniz 🏔️",
-                "default": "Irak'ın neresinde olursanız olun Allah sizi korusun 🇮🇶"
-            }
-        };
-
-        const toScriptMap = {
-            "Kirkuk": "كركوك", "Kerkük": "كركوك", "کەرکوک": "كركوك",
-            "Baghdad": "بغداد", "Bağdat": "بغداد", "بەغدا": "بغداد",
-            "Erbil": "أربيل", "هەولێر": "أربيل",
-            "Basra": "البصرة", "بەسرە": "البصرة",
-            "Male": "ذكر", "Erkek": "ذكر", "نێر": "ذكر",
-            "Female": "أنثى", "Kadın": "أنثى", "مێ": "أنثى"
-        };
-
-        function translateToScript(val) { return toScriptMap[val] || val || "---"; }
-
         window.onload = () => {
-            const ui = uiContent[lang] || uiContent.ar;
-            document.getElementById('mainGreeting').innerText = ui.greet;
-            document.getElementById('subInstruction').innerText = ui.sub;
-            document.getElementById('backBtn').innerText = ui.btn;
-            document.getElementById('orderLabel').innerText = ui.orderL;
-            document.dir = (lang === 'ar' || lang === 'ku') ? 'rtl' : 'ltr';
-
+            // توليد رقم الطلب أو استعادته
             let orderID = sessionStorage.getItem('currentOrderID') || "HUT-" + Math.floor(1000 + Math.random() * 9000);
             sessionStorage.setItem('currentOrderID', orderID);
             document.getElementById('orderIDDisplay').innerText = "#" + orderID;
+            document.getElementById('userNameDisplay').innerText = u.get('name') || "عميلنا العزيز";
 
-            const rawCity = u.get('city') || u.get('prov') || "بغداد";
-            const scriptCity = translateToScript(rawCity);
-            
-            // اختيار المباركة باللغة والمدينة الصحيحة
-            const langBlessings = blessingsByLang[lang] || blessingsByLang.ar;
-            document.getElementById('cityBlessing').innerText = langBlessings[scriptCity] || langBlessings["default"];
-            
-            document.getElementById('userNameDisplay').innerText = u.get('name') || "...";
-
+            // إطلاق الاحتفال
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#002349', '#D4AF37'] });
 
+            // إرسال البيانات للـ Google Sheet
             if (sessionStorage.getItem('orderSent') !== 'true') {
-                const data = {
+                const payload = {
                     order_id: orderID,
                     name: u.get('name'),
                     phone: u.get('phone'),
-                    province: scriptCity,
+                    province: u.get('province') || u.get('city'),
                     car: u.get('car'),
-                    days: u.get('days') || u.get('date'),
-                    addons: u.get('addon_name') || "أساسية",
-                    total_price: u.get('price'),
-                    gender: translateToScript(u.get('gender')),
-                    service: translateToScript(u.get('type')),
-                    location_link: u.get('map') || ""
+                    days: u.get('days') || "---",
+                    addons: u.get('addon_display') || "بدون إضافات",
+                    total_price: u.get('total_final'),
+                    gender: u.get('gender') || "---",
+                    service: u.get('service') || "تأجير عام",
+                    location_link: u.get('location_link') || "---",
+                    national_id: u.get('national_id') || "---",
+                    age: u.get('age') || "---"
                 };
 
                 fetch(scriptURL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: JSON.stringify(data)
-                }).then(() => sessionStorage.setItem('orderSent', 'true'));
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    sessionStorage.setItem('orderSent', 'true');
+                    console.log("Data Sent Successfully to Whale Radar");
+                })
+                .catch(err => console.error("Whale Radar Error:", err));
             }
         };
     </script>
