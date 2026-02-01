@@ -10,87 +10,94 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; transition: 0.5s; }
         .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); transition: 1s; position: relative; }
-        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; transition: 0.5s; }
+        
+        /* تأثير الخريطة في الخلفية */
+        .map-pattern {
+            position: absolute; inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text y="50" font-size="20" opacity="0.1">🗺️</text></svg>');
+            background-repeat: repeat; opacity: 0.15; pointer-events: none;
+        }
+
+        .whale-float { display: inline-block; font-size: 5rem; animation: floating 4s ease-in-out infinite; transition: 0.5s; position: relative; z-index: 2; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        
         .smart-input { width: 100%; padding: 1rem; background-color: #f1f5f9; border: 2px solid transparent; border-radius: 1.25rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
-        .smart-input:focus { background-color: #fff; border-color: #D4AF37; }
-        .city-overlay { position: absolute; inset: 0; opacity: 0.4; transition: 1s; pointer-events: none; }
-        .lang-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 12px; font-size: 0.75rem; color: white; cursor: pointer; transition: 0.3s; }
-        .lang-btn:hover { background: #D4AF37; color: #002349; }
-        .feature-card { background: white; padding: 2rem; border-radius: 2.5rem; transition: 0.4s; border: 1px solid #f1f5f9; }
-        .feature-card:hover { transform: translateY(-10px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .smart-input:focus { background-color: #fff; border-color: #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        
+        .city-overlay { position: absolute; inset: 0; opacity: 0.6; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; }
+        
+        .lang-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 15px; font-size: 0.8rem; color: white; cursor: pointer; transition: 0.3s; font-weight: 900; }
+        .lang-btn:hover { background: #D4AF37; color: #002349; transform: translateY(-2px); }
+        
+        .feature-card { background: white; padding: 2.5rem; border-radius: 3rem; transition: 0.4s; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); }
+        .feature-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px -12px rgba(0, 35, 73, 0.15); border-color: #D4AF37; }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <div class="absolute top-4 left-4 right-4 z-50 flex justify-center gap-2">
+    <div class="absolute top-6 left-0 right-0 z-50 flex justify-center gap-3">
         <button onclick="changeLang('ar')" class="lang-btn">العربية</button>
         <button onclick="changeLang('ku')" class="lang-btn">کوردی</button>
         <button onclick="changeLang('tr')" class="lang-btn">Türkçe</button>
         <button onclick="changeLang('en')" class="lang-btn">English</button>
     </div>
 
-    <header id="mainHero" class="hero-bg text-white pt-16 pb-44 text-center relative overflow-hidden">
+    <header id="mainHero" class="hero-bg text-white pt-24 pb-48 text-center relative overflow-hidden">
         <div id="cityOverlay" class="city-overlay"></div>
-        <div class="whale-float mb-4 text-7xl" id="whaleIcon">🐋</div>
-        <h1 class="text-6xl font-black text-[#D4AF37] mb-2 tracking-tighter" id="brandName">الحـوت</h1>
-        <p id="dynamicGreeting" class="text-xl opacity-90 font-light italic px-4 h-8 transition-all duration-500"></p>
+        <div class="map-pattern"></div>
+        <div class="whale-float mb-4 text-8xl" id="whaleIcon">🐋</div>
+        <h1 class="text-7xl font-black text-[#D4AF37] mb-2 tracking-tighter drop-shadow-2xl" id="brandName">الحـوت</h1>
+        <p id="dynamicGreeting" class="text-xl md:text-2xl opacity-95 font-bold italic px-6 min-h-[2rem] transition-all duration-700 transform translate-y-0"></p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-32 relative z-10 pb-20">
-        <div class="bg-white shadow-2xl rounded-[3.5rem] p-8 md:p-12 max-w-7xl mx-auto border border-gray-100">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+    <main class="container mx-auto px-4 -mt-36 relative z-10 pb-20">
+        <div class="bg-white shadow-[0_50px_100px_-20px_rgba(0,35,73,0.25)] rounded-[4rem] p-10 md:p-14 max-w-7xl mx-auto border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
                 <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelCity">المدينة</label>
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase tracking-widest" id="labelCity">المدينة</label>
                     <select id="citySelect" onchange="adaptToCity()" class="smart-input appearance-none cursor-pointer"></select>
                 </div>
                 <div class="md:col-span-3 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2 uppercase" id="labelService">الخدمة المطلوبة</label>
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase tracking-widest" id="labelService">الخدمة المطلوبة</label>
                     <select id="mainService" class="smart-input appearance-none text-sm cursor-pointer"></select>
                 </div>
                 <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelDate">التاريخ</label>
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase tracking-widest" id="labelDate">التاريخ</label>
                     <input type="date" id="dateInput" class="smart-input">
                 </div>
                 <div class="md:col-span-2 space-y-2 text-right">
-                    <label class="block text-sm font-black text-slate-400 mr-2" id="labelTime">الوقت</label>
+                    <label class="block text-xs font-black text-slate-400 mr-2 uppercase tracking-widest" id="labelTime">الوقت</label>
                     <input type="time" id="timeInput" class="smart-input" onchange="validateTime()">
                 </div>
                 <div class="md:col-span-3">
-                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-2 active:scale-95">
-                        <span id="btnText">استمر الآن</span> <i id="btnIcon" class="fas fa-arrow-left"></i>
+                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-5 rounded-2xl font-black text-2xl shadow-xl hover:bg-[#b8962d] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-[0_15px_30px_-5px_rgba(212,175,55,0.4)]">
+                        <span id="btnText">استمر الآن</span> <i id="btnIcon" class="fas fa-chevron-left"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="text-center mt-12">
-            <a href="https://wa.me/9647713225471" target="_blank" class="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-full font-black shadow-lg hover:bg-green-600 transition-all active:scale-95">
-                <i class="fab fa-whatsapp text-2xl"></i>
-                <span id="supportBtnText">التواصل مع الدعم</span>
-            </a>
-        </div>
-
-        <section class="mt-24 max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-black mb-4" id="featTitle">لماذا يختار الجميع منصة الحوت؟ 🐋</h2>
-                <p class="text-slate-400 font-bold" id="featSub">الموقع الإلكتروني الأول والوحيد في العراق لخدمات السيارات الشاملة</p>
+        <section class="mt-28 max-w-6xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black mb-4 tracking-tight" id="featTitle">لماذا يختار الجميع منصة الحوت؟ 🐋</h2>
+                <div class="h-1 w-20 bg-[#D4AF37] mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-400 font-bold text-lg" id="featSub">الموقع الإلكتروني الأول والوحيد في العراق لخدمات السيارات الشاملة</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
                 <div class="feature-card">
-                    <div class="w-16 h-16 bg-blue-50 text-[#002349] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-bolt"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f1_t">حجز لحظي</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed font-bold" id="f1_d">احجز سيارتك بضغطة زر واحصل على التأكيد الفوري.</p>
+                    <div class="w-20 h-20 bg-blue-50 text-[#002349] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-inner"><i class="fas fa-bolt"></i></div>
+                    <h3 class="text-2xl font-black mb-4" id="f1_t">حجز لحظي</h3>
+                    <p class="text-slate-500 leading-relaxed font-bold" id="f1_d">احجز سيارتك بضغطة زر واحصل على التأكيد الفوري من الرادار.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="w-16 h-16 bg-amber-50 text-[#D4AF37] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-shield-check"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f2_t">الوحيدون في العراق</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed font-bold" id="f2_d">المنصة الإلكترونية الوحيدة التي تضمن حقوقك بالكامل.</p>
+                    <div class="w-20 h-20 bg-amber-50 text-[#D4AF37] rounded-3xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-inner"><i class="fas fa-shield-check"></i></div>
+                    <h3 class="text-2xl font-black mb-4" id="f2_t">الأمان والضمان</h3>
+                    <p class="text-slate-500 leading-relaxed font-bold" id="f2_d">المنصة الإلكترونية الوحيدة التي تضمن حقوقك والسيارة بالكامل.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6"><i class="fas fa-star"></i></div>
-                    <h3 class="text-xl font-black mb-3" id="f3_t">أسعار تنافسية</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed font-bold" id="f3_d">أفضل الأسعار المباشرة من المكاتب دون عمولات مخفية.</p>
+                    <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-inner"><i class="fas fa-star"></i></div>
+                    <h3 class="text-2xl font-black mb-4" id="f3_t">أسعار تنافسية</h3>
+                    <p class="text-slate-500 leading-relaxed font-bold" id="f3_d">أفضل الأسعار المباشرة من المكاتب المعتمدة دون أي عمولات.</p>
                 </div>
             </div>
         </section>
@@ -102,54 +109,74 @@
             ar: {
                 dir: 'rtl', font: 'Tajawal', brand: 'الحـوت', labelCity: 'المدينة', labelService: 'الخدمة المطلوبة',
                 labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول للمتابعة 🐋',
-                support: 'التواصل مع الدعم', featTitle: 'لماذا يختار الجميع منصة الحوت؟ 🐋', featSub: 'الموقع الإلكتروني الأول والوحيد في العراق',
+                featTitle: 'لماذا يختار الجميع منصة الحوت؟ 🐋', featSub: 'الموقع الإلكتروني الأول والوحيد في العراق لخدمات السيارات',
                 f1_t: 'حجز لحظي', f1_d: 'احجز سيارتك بضغطة زر واحصل على التأكيد الفوري.',
-                f2_t: 'الوحيدون في العراق', f2_d: 'المنصة الإلكترونية الوحيدة التي تضمن حقوقك بالكامل.',
+                f2_t: 'الأمان والضمان', f2_d: 'المنصة الإلكترونية الوحيدة التي تضمن حقوقك بالكامل.',
                 f3_t: 'أسعار تنافسية', f3_d: 'أفضل الأسعار المباشرة من المكاتب دون عمولات مخفية.',
                 timeAlert: 'عذراً، أوقات العمل من 8 صباحاً حتى 11 مساءً 🐋', pastTimeAlert: 'لا يمكن اختيار وقت قد مضى!',
                 morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
                 services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس ومناسبات', training: '🎓 تعليم قيادة (مدربين)' },
-                cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
-                msgs: { 'كركوك': 'يا أهل كركوك.. الحوت يحييكم 💎', 'بغداد': 'من بغداد دار السلام.. الحوت يرافقكم 🏰', 'أربيل': 'بخير ببن لـ أربيل.. 🏔️', 'السليمانية': 'سليماني جوان.. 🌲', 'الموصل': 'أهلاً بالموصل الحدباء.. 🏹', 'البصرة': 'حي الله أهلنا بالبصرة ⚓', 'الأنبار': 'أهلاً بالأنبار العزيزة.. 🌴', 'ديالى': 'نورتم ديالى.. 🍊' }
+                cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'البصرة': 'البصرة ⚓' },
+                msgs: { 
+                    'كركوك': 'أهلاً بكم في كركوك.. أرضكم ومسجدكم 💎', 
+                    'بغداد': 'من بغداد دار السلام.. الحوت يرافقكم 🏰', 
+                    'أربيل': 'نورتم أربيل.. عاصمة الجمال 🏔️',
+                    'البصرة': 'حي الله أهلنا في ثغر العراق الباسم البصرة ⚓'
+                }
             },
             ku: {
                 dir: 'rtl', font: 'Tajawal', brand: 'ئەلحووت', labelCity: 'شار', labelService: 'خزمەتگوزاری',
                 labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
-                support: 'پەیوەندی بە پشتیوانی', featTitle: 'بۆچی هەمووان ئەلحووت هەڵدەبژێرن؟ 🐋', featSub: 'یەکەم و تاقە ماڵپەڕی عێراق',
-                f1_t: 'حجزی خێرا', f1_d: 'بە یەک کلیک ئۆتۆمبێلەکەت حجز بکە.',
-                f2_t: 'تاقە لە عێراق', f2_d: 'تاقە سەکۆی ئەلیکترۆنی کە مافەکانت دەپارێزێت.',
-                f3_t: 'نرخی گونجاو', f3_d: 'باشترین نرخە ڕاستەوخۆکان بەبێ باجی شاراوە.',
+                featTitle: 'بۆچی هەمووان ئەلحووت هەڵدەبژێرن؟ 🐋', featSub: 'یەکەم و تاقە ماڵپەڕی عێراق بۆ خزمەتگوزاری ئۆتۆمبێل',
+                f1_t: 'حجزی خێرا', f1_d: 'بە یەک کلیک ئۆتۆمبێلەکەت حجز بکە و جێگیر بکە.',
+                f2_t: 'پاراستن و گرەنتی', f2_d: 'تاقە سەکۆی ئەلیکترۆنی کە مافەکانت دەپارێزێت.',
+                f3_t: 'باشترین نرخ', f3_d: 'باشترین نرخە ڕاستەوخۆکان بەبێ باجی شاراوە.',
                 timeAlert: 'کاتەکانی کارکردن ٨ بەیانی تا ١١ شەو 🐋', pastTimeAlert: 'کاتەکە تێپەڕیوە!',
                 morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
                 services: { placeholder: '-- خزمەتگوزاری هەڵبژێرە --', personal: '🚗 بەکرێگرتنی ئۆتۆمبێل', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
-                cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 'كركوك': 'سڵاو بۆ کەرکوک.. 💎', 'بغداد': 'سڵاو لە بەغداد.. 🏰', 'أربيل': 'بەخێربێن بۆ هەولێر.. 🏔️', 'السليمانية': 'سلێمانی جوان.. 🌲', 'الموصل': 'سڵاو بۆ مووسڵ.. 🏹', 'البصرة': 'سڵاو بۆ بەسرە.. ⚓', 'الأنبار': 'سڵاو بۆ ئەنبار.. 🌴', 'ديالى': 'سڵاو بۆ دیالە.. 🍊' }
+                cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'البصرة': 'بەسرە ⚓' },
+                msgs: { 
+                    'كركوك': 'بەخێربێن بۆ کەرکوک، دڵی کوردستان و خاکی ئیسلام 💎', 
+                    'بغداد': 'سڵاو لە بەغدادی پایتەخت.. 🏰', 
+                    'أربيل': 'بەخێربێن بۆ هەولێری پایتەخت.. 🏔️',
+                    'البصرة': 'سڵاو بۆ بەسرەی جوان.. ⚓'
+                }
             },
             tr: {
                 dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'Şehir', labelService: 'Hizmet',
                 labelDate: 'Tarih', labelTime: 'Saat', btnText: 'Devam Et', alert: 'Lütfen alanları doldurun 🐋',
-                support: 'Destekle İletişim', featTitle: 'Neden Al-Hut? 🐋', featSub: 'Irak\'ın ilk ve tek dijital platformu',
-                f1_t: 'Hızlı Rezervasyon', f1_d: 'Tek tıkla aracınızı ayırtın.',
-                f2_t: 'Irak\'ta Tek', f2_d: 'Haklarınızı koruyan tek platform.',
-                f3_t: 'En İyi Fiyat', f3_d: 'Gizli ücret olmadan en iyi fiyatlar.',
+                featTitle: 'Neden Al-Hut? 🐋', featSub: 'Irak\'ın ilk ve tek dijital araç platformu',
+                f1_t: 'Hızlı Rezervasyon', f1_d: 'Tek tıkla aracınızı ayırtın ve onay alın.',
+                f2_t: 'Güven ve Garanti', f2_d: 'Haklarınızı ve aracınızı koruyan tek Irak platformu.',
+                f3_t: 'En İyi Fiyat', f3_d: 'Gizli ücret olmadan en iyi piyasa fiyatları.',
                 timeAlert: 'Çalışma saatleri 08:00 - 23:00 🐋', pastTimeAlert: 'Geçmiş zaman seçilemez!',
                 morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
                 services: { placeholder: '-- Hizmet Seç --', personal: '🚗 Kiralama', wedding: '🎁 Düğün', training: '🎓 Eğitim' },
-                cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Bağdat 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Selam Kerkük.. 💎', 'بغداد': 'Selam Bağdat.. 🏰', 'أربيل': 'Erbil\'e hoş geldiniz.. 🏔️', 'السليمانية': 'Güzel Süleymaniye.. 🌲', 'الموصل': 'Selam Musul.. 🏹', 'البصرة': 'Selam Basra.. ⚓', 'الأنبار': 'Selam Enbar.. 🌴', 'ديالى': 'Selam Diyala.. 🍊' }
+                cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Bağdat 🏰', 'أربيل': 'Erbil 🏔️', 'البصرة': 'Basra ⚓' },
+                msgs: { 
+                    'كركوك': 'Kerkük\'e Hoş Geldiniz.. Sizin Toprağınız 💎', 
+                    'بغداد': 'Barış şehri Bağdat\'tan selamlar.. 🏰', 
+                    'أربيل': 'Erbil\'e hoş geldiniz.. 🏔️',
+                    'البصرة': 'Gülümseyen Basra\'ya selamlar.. ⚓'
+                }
             },
             en: {
                 dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'City', labelService: 'Service',
                 labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill all fields 🐋',
-                support: 'Contact Support', featTitle: 'Why Choose Al-Hut? 🐋', featSub: 'First car platform in Iraq',
-                f1_t: 'Instant Booking', f1_d: 'Book your car instantly.',
-                f2_t: 'Unique in Iraq', f2_d: 'The only platform guaranteeing rights.',
-                f3_t: 'Best Prices', f3_d: 'Direct prices with no hidden fees.',
+                featTitle: 'Why Choose Al-Hut? 🐋', featSub: 'First comprehensive car platform in Iraq',
+                f1_t: 'Instant Booking', f1_d: 'Book your car instantly with radar confirmation.',
+                f2_t: 'Safety & Trust', f2_d: 'The only platform guaranteeing your rights in full.',
+                f3_t: 'Best Prices', f3_d: 'Direct prices from providers with no hidden fees.',
                 timeAlert: 'Hours: 8 AM - 11 PM 🐋', pastTimeAlert: 'Invalid time!',
                 morning: 'Good Morning', day: 'Have a nice day', evening: 'Good Evening',
                 services: { placeholder: '-- Select Service --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
-                cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Slemani 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Welcome Kirkuk.. 💎', 'بغداد': 'Welcome Baghdad.. 🏰', 'أربيل': 'Welcome to Erbil.. 🏔️', 'السليمانية': 'Slemani Jwan.. 🌲', 'الموصل': 'Welcome to Mosul.. 🏹', 'البصرة': 'Greetings Basra.. ⚓', 'الأنبار': 'Welcome Anbar.. 🌴', 'ديالى': 'Welcome Diyala.. 🍊' }
+                cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'البصرة': 'Basra ⚓' },
+                msgs: { 
+                    'كركوك': 'Welcome to Kirkuk.. Your land and home 💎', 
+                    'بغداد': 'From Baghdad, the City of Peace.. 🏰', 
+                    'أربيل': 'Welcome to Erbil.. The capital of beauty 🏔️',
+                    'البصرة': 'Greetings to our people in Basra.. ⚓'
+                }
             }
         };
 
@@ -164,7 +191,6 @@
             document.getElementById('labelDate').innerText = l.labelDate;
             document.getElementById('labelTime').innerText = l.labelTime;
             document.getElementById('btnText').innerText = l.btnText;
-            document.getElementById('supportBtnText').innerText = l.support;
             document.getElementById('featTitle').innerText = l.featTitle;
             document.getElementById('featSub').innerText = l.featSub;
             document.getElementById('f1_t').innerText = l.f1_t;
@@ -173,13 +199,44 @@
             document.getElementById('f2_d').innerText = l.f2_d;
             document.getElementById('f3_t').innerText = l.f3_t;
             document.getElementById('f3_d').innerText = l.f3_d;
-            document.getElementById('btnIcon').className = `fas fa-arrow-${l.dir === 'rtl' ? 'left' : 'right'}`;
+            
+            document.getElementById('btnIcon').className = `fas fa-chevron-${l.dir === 'rtl' ? 'left' : 'right'}`;
+            
             const citySelect = document.getElementById('citySelect');
             const currentCity = citySelect.value || 'كركوك';
             citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}" ${key === currentCity ? 'selected' : ''}>${val}</option>`).join('');
+            
             const serviceSelect = document.getElementById('mainService');
             serviceSelect.innerHTML = `<option value="">${l.services.placeholder}</option><option value="personal">${l.services.personal}</option><option value="wedding">${l.services.wedding}</option><option value="training">${l.services.training}</option>`;
+            
             adaptToCity();
+        }
+
+        function adaptToCity() {
+            const city = document.getElementById('citySelect').value;
+            const greet = document.getElementById('dynamicGreeting');
+            const overlay = document.getElementById('cityOverlay');
+            const l = data[currentLang];
+            const hour = new Date().getHours();
+            let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
+            
+            // ألوان تفاعلية لكل مدينة
+            const styleColor = { 
+                'كركوك': '#004d40', 
+                'بغداد': '#1a237e', 
+                'أربيل': '#1b5e20', 
+                'البصرة': '#01579b'
+            };
+
+            greet.style.opacity = 0;
+            greet.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                greet.innerText = `${timeText}.. ${l.msgs[city] || ''}`;
+                greet.style.opacity = 1;
+                greet.style.transform = 'translateY(0)';
+                overlay.style.backgroundColor = styleColor[city] || '#002349';
+            }, 400);
         }
 
         function validateTime() {
@@ -196,22 +253,6 @@
                     alert(l.pastTimeAlert); timeInput.value = "";
                 }
             }
-        }
-
-        function adaptToCity() {
-            const city = document.getElementById('citySelect').value;
-            const greet = document.getElementById('dynamicGreeting');
-            const overlay = document.getElementById('cityOverlay');
-            const l = data[currentLang];
-            const hour = new Date().getHours();
-            let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
-            const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
-            greet.style.opacity = 0;
-            setTimeout(() => {
-                greet.innerText = `${timeText}.. ${l.msgs[city] || ''}`;
-                greet.style.opacity = 1;
-                overlay.style.backgroundColor = styleColor[city] || '#002349';
-            }, 300);
         }
 
         function startBooking() {
