@@ -107,7 +107,7 @@
     <script>
         let map, marker, selectedGender = 'Male';
         const u = new URLSearchParams(window.location.search);
-        const city = u.get('city') || 'بغداد';
+        const city = u.get('city') || 'كركوك';
         const lang = u.get('lang') || 'ar';
         const days = parseInt(u.get('days') || '1');
 
@@ -127,17 +127,36 @@
                 gps: "دیاریکردنی شوێنەکەم 🛰️", confirm: "پشتڕاستکردنەوەی حجز", alert: "تکایە ناو و ژمارەی مۆبایل پڕبکەرەوە 💍",
                 car: "ئۆتۆمبێل", addon: "زیادکراو", total: "کۆی گشتی", curr: "د.ع",
                 quote: "شەوی تەمەن شایەنی باشترینە ✨", mapSearch: "بگەڕێ بۆ شوێنی هۆڵ یان ماڵ..."
+            },
+            tr: {
+                title: "Tebrikler!", sub: "Büyük gününüz Al-Hut ile başlıyor", infoT: "Düğün Sahibi Bilgileri",
+                lblN: "Tam Ad Soyad (Gelin veya Damat)", lblP: "Telefon Numarası", lblA: "Yaş", lblR: "Rezervasyon Sahibi",
+                groom: "👨 Damat", bride: "👩 Gelin", summaryT: "Rezervasyon Özeti", mapT: "Konvoy Başlangıç Noktası",
+                gps: "Konumumu Bul 🛰️", confirm: "Kraliyet Rezervasyonunu Onayla", alert: "Lütfen isim ve telefonu doldurun 💍",
+                car: "Araç", addon: "Ekstra", total: "Toplam Tutar", curr: "IQD",
+                quote: "Hayatınızın en özel gecesi en iyisini hak ediyor ✨", mapSearch: "Salon veya ev konumu ara..."
+            },
+            en: {
+                title: "Congratulations!", sub: "Your big day starts with Al-Hut", infoT: "Wedding Details",
+                lblN: "Full Name (Groom or Bride)", lblP: "Phone Number", lblA: "Age", lblR: "Booking Role",
+                groom: "👨 Groom", bride: "👩 Bride", summaryT: "Booking Summary", mapT: "Convoy Start Location",
+                gps: "Get Location 🛰️", confirm: "Confirm Royal Booking", alert: "Please enter name and phone 💍",
+                car: "Car", addon: "Add-on", total: "Total Amount", curr: "IQD",
+                quote: "The night of a lifetime deserves the best ✨", mapSearch: "Search hall or home location..."
             }
         };
 
-        const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
+        const styleColor = { 
+            'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 
+            'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 
+            'الأنبار': '#ef6c00', 'ديالى': '#558b2f' 
+        };
         
         window.onload = function() {
             const l = data[lang] || data['ar'];
             const isRtl = (lang === 'ar' || lang === 'ku');
             document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
             
-            // تطبيق النصوص
             document.getElementById('pageTitle').innerText = l.title;
             document.getElementById('pageSub').innerText = l.sub;
             document.getElementById('infoTitle').innerText = l.infoT;
@@ -154,21 +173,17 @@
             document.getElementById('btnConfirmText').innerText = l.confirm;
 
             document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
-            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text y="50" x="10" font-size="30">💍</text></svg>')`;
 
-            // حساب السعر الكلي الصحيح
-            const carPrice = parseInt(u.get('price') || 0);
+            const carPrice = parseInt(u.get('basePrice') || 0);
             const addonPrice = parseInt(u.get('addon_price') || 0);
             const finalTotal = (carPrice + addonPrice) * days;
 
-            // عرض الملخص
             document.getElementById('summary').innerHTML = `
                 <div class="flex justify-between border-b border-amber-100 pb-2"><span>${l.car}:</span> <span>${u.get('car') || '---'}</span></div>
                 <div class="flex justify-between border-b border-amber-100 pb-2"><span>${l.addon}:</span> <span>${u.get('addon_display') || '---'}</span></div>
                 <div class="flex justify-between pt-2 text-rose-700 text-xl font-black"><span>${l.total}:</span> <span>${finalTotal.toLocaleString()} ${l.curr}</span></div>
             `;
 
-            // الخريطة
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
@@ -201,11 +216,9 @@
             const phone = document.getElementById('custPhone').value;
             if(!name || !phone) { alert(l.alert); return; }
             
-            // توليد رقم طلب زفاف
             const orderId = "WD-" + Math.floor(1000 + Math.random() * 9999);
-            
             const pos = marker.getLatLng();
-            const carPrice = parseInt(u.get('price') || 0);
+            const carPrice = parseInt(u.get('basePrice') || 0);
             const addonPrice = parseInt(u.get('addon_price') || 0);
             const finalTotal = (carPrice + addonPrice) * days;
 
@@ -218,7 +231,7 @@
             u.set('service', 'زفاف');
             u.set('total_price', finalTotal);
             u.set('location_link', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
-            u.set('national_id', 'Wedding-No-ID'); // الزفاف لا يتطلب هوية بالضرورة كالشخصي
+            u.set('national_id', 'Wedding-No-ID');
             u.set('license_no', 'Wedding-No-License');
             
             window.location.href = `review.html?${u.toString()}`;
