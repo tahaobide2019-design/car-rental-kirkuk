@@ -19,6 +19,7 @@
         .price-summary { background: var(--main); color: var(--accent); border-radius: 2.5rem; padding: 1.5rem; position: relative; overflow: hidden; }
         .btn-confirm { background: var(--main); color: white; box-shadow: 0 15px 30px rgba(0, 35, 73, 0.3); transition: 0.3s; }
         .btn-confirm:active { transform: scale(0.96); }
+        .map-badge { background: #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 8px; font-size: 10px; display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -30,7 +31,13 @@
             <p id="pageSub" class="text-slate-400 text-[10px] font-bold tracking-widest uppercase italic">Order Verification</p>
         </div>
 
-        <div id="detailsGrid" class="info-grid mb-6"></div>
+        <div id="detailsGrid" class="info-grid mb-4"></div>
+
+        <div id="locationPreview" class="mb-6 text-center hidden">
+             <a id="mapLink" href="#" target="_blank" class="map-badge hover:bg-slate-200 transition-all">
+                <i class="fas fa-map-marker-alt"></i> عرض الموقع المختار على الخريطة
+             </a>
+        </div>
 
         <div class="price-summary text-center shadow-xl mb-6">
             <p id="totalLabel" class="text-[10px] font-black opacity-70 uppercase mb-1">إجمالي المبلغ التقريبي</p>
@@ -61,25 +68,15 @@
 
         const uiContent = {
             ar: { title: "مراجعة التفاصيل", total: "المبلغ الإجمالي التقريبي", btn: "تأكيد وطلب", back: "رجوع للتعديل", curr: "د.ع", 
-                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", city: "المدينة", car: "السيارة", addon_name: "الإضافات", days: "المدة", gender: "الجنس", license: "الإجازة" } },
+                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", province: "المدينة", car: "السيارة", addon_display: "الإضافات", days: "المدة", gender: "الجنس", license_no: "رقم الإجازة", national_id: "رقم الهوية" } },
             ku: { title: "پیاچوونەوەی وردەکارییەکان", total: "کۆی گشتی خەمڵێنراو", btn: "پشتڕاستکردنەوە", back: "گەڕانەوە بۆ دەستکاری", curr: "د.ع",
-                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", city: "شار", car: "ئۆتۆمبێل", addon_name: "زیادکراوەکان", days: "ماوە", gender: "ڕەگەز", license: "مۆڵەت" } },
-            en: { title: "Review Details", total: "Approximate Total Price", btn: "Confirm & Order", back: "Back to Edit", curr: "IQD",
-                fields: { name: "Name", phone: "Phone", age: "Age", city: "City", car: "Car", addon_name: "Addons", days: "Days", gender: "Gender", license: "License" } },
-            tr: { title: "Detayları İncele", total: "Tahmini Toplam Tutar", btn: "Onayla ve Sipariş Et", back: "Düzenlemeye Dön", curr: "IQD",
-                fields: { name: "İsim", phone: "Telefon", age: "Yaş", city: "Şehir", car: "Araç", addon_name: "Ekstralar", days: "Gün", gender: "Cinsiyet", license: "Ehliyet" } }
-        };
-
-        // قاموس العرض: يحول من العربي (المخزن في الرابط) إلى لغة الواجهة
-        const displayTranslate = {
-            ku: { "بغداد": "بەغدا", "كركوك": "کەرکوک", "أربيل": "هەولێر", "البصرة": "بەسرە", "كورس أساسي (3 أيام)": "کۆرسی سەرەکی", "كورس ذهبي (5 أيام)": "کۆرسی زێڕین", "باقة الزهور الطبيعية": "گوڵی سروشتی", "باقة الموكب الملكي": "کاروانی شاهانە", "تأمين الحوت الشامل": "دڵنیایی گشتگیر", "بدون إضافات": "بێ زیادکراو", "ذكر": "نێر", "أنثى": "مێ" },
-            en: { "بغداد": "Baghdad", "كركوك": "Kirkuk", "أربيل": "Erbil", "البصرة": "Basra", "كورس أساسي (3 أيام)": "Basic (3 Days)", "كورس ذهبي (5 أيام)": "Gold (5 Days)", "باقة الزهور الطبيعية": "Flowers Pack", "باقة الموكب الملكي": "Royal Convoy", "تأمين الحوت الشامل": "Full Insurance", "بدون إضافات": "No Addons", "ذكر": "Male", "أنثى": "Female" },
-            tr: { "بغداد": "Bağdat", "كركوك": "Kerkük", "أربيل": "Erbil", "البصرة": "Basra", "كورس أساسي (3 أيام)": "Temel (3 Gün)", "كورس ذهبي (5 أيام)": "Altın (5 Gün)", "باقة الزهور الطبيعية": "Çiçek Paketi", "باقة الموكب الملكي": "Kraliyet Konvoyu", "تأمين الحوت الشامل": "Tam Sigorta", "بدون إضافات": "Ekstra Yok", "ذكر": "Erkek", "أنثى": "Kadın" }
+                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", province: "شار", car: "ئۆتۆمبێل", addon_display: "زیادکراوەکان", days: "ماوە", gender: "ڕەگەز", license_no: "مۆڵەت", national_id: "ناسنامە" } }
         };
 
         window.onload = () => {
             const t = configs[type] || configs.personal;
             const ui = uiContent[lang] || uiContent.ar;
+            
             document.documentElement.style.setProperty('--main', t.main);
             document.documentElement.style.setProperty('--accent', t.accent);
             document.getElementById('mainEmoji').innerText = t.emoji;
@@ -94,18 +91,27 @@
             Object.keys(ui.fields).forEach(key => {
                 let val = u.get(key);
                 if (val && val !== 'null' && val !== '---') {
-                    // ترجمة القيمة للعرض فقط
-                    let displayVal = (displayTranslate[lang] && displayTranslate[lang][val]) ? displayTranslate[lang][val] : val;
-                    gridHtml += `<div class="info-item"><span class="info-label">${ui.fields[key]}</span><span class="info-value">${displayVal}</span></div>`;
+                    gridHtml += `<div class="info-item"><span class="info-label">${ui.fields[key]}</span><span class="info-value">${val}</span></div>`;
                 }
             });
             document.getElementById('detailsGrid').innerHTML = gridHtml;
-            document.getElementById('totalVal').innerText = (parseInt(u.get('price') || 0) + parseInt(u.get('addon_price') || 0)).toLocaleString();
+
+            // تحديث السعر النهائي
+            const p1 = parseInt(u.get('price') || 0);
+            const p2 = parseInt(u.get('addon_price') || 0);
+            const total = p1 + p2;
+            document.getElementById('totalVal').innerText = total.toLocaleString();
+
+            // عرض معاينة الموقع إذا وجد
+            if (u.get('location_link')) {
+                document.getElementById('locationPreview').classList.remove('hidden');
+                document.getElementById('mapLink').href = u.get('location_link');
+            }
         };
 
         function confirmAndSubmit() {
-            // نرسل السعر النهائي فقط ونترك القيم الأصلية (العربية) لتذهب للنجاح ثم السكريبت
-            u.set('total_final', parseInt(u.get('price') || 0) + parseInt(u.get('addon_price') || 0));
+            const finalPrice = parseInt(u.get('price') || 0) + parseInt(u.get('addon_price') || 0);
+            u.set('total_final', finalPrice);
             window.location.href = `success.html?${u.toString()}`;
         }
     </script>
