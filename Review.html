@@ -58,7 +58,7 @@
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type') || 'personal';
         const lang = u.get('lang') || 'ar';
-        const days = parseInt(u.get('days') || '1');
+        const city = u.get('city') || 'كركوك';
 
         const configs = {
             training: { main: '#7c3aed', accent: '#D4AF37', emoji: '🎓' },
@@ -74,7 +74,21 @@
             ku: { 
                 title: "پیاچوونەوە", total: "کۆی گشتی", btn: "ناردنی داواکاری", back: "گەڕانەوە", curr: "د.ع", map: "بینینی شوێن",
                 fields: { name: "ناو", phone: "تەلەفۆن", province: "شار", car: "ئۆتۆمبێل", date: "بەروار", gender: "ڕەگەز", days: "ڕۆژ" } 
+            },
+            tr: {
+                title: "Detayları İncele", total: "Toplam Tutar", btn: "Onayla ve Gönder", back: "Düzenlemek için geri dön", curr: "IQD", map: "Konumu Görüntüle",
+                fields: { name: "İsim", phone: "Telefon", province: "Şehir", car: "Hizmet/Araç", date: "Tarih", gender: "Cinsiyet", days: "Gün Sayısı" }
+            },
+            en: {
+                title: "Review Details", total: "Total Amount", btn: "Confirm & Submit", back: "Back to Edit", curr: "IQD", map: "View Location",
+                fields: { name: "Name", phone: "Phone", province: "City", car: "Service/Car", date: "Date", gender: "Gender", days: "Days" }
             }
+        };
+
+        const styleColor = { 
+            'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 
+            'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 
+            'الأنبار': '#ef6c00', 'ديالى': '#558b2f' 
         };
 
         window.onload = () => {
@@ -82,8 +96,11 @@
             const ui = uiContent[lang] || uiContent.ar;
             const isRtl = (lang === 'ar' || lang === 'ku');
             
-            document.documentElement.style.setProperty('--main', t.main);
+            // تخصيص اللون حسب الخدمة أو المدينة
+            const mainColor = type === 'personal' ? (styleColor[city] || t.main) : t.main;
+            document.documentElement.style.setProperty('--main', mainColor);
             document.documentElement.style.setProperty('--accent', t.accent);
+
             document.getElementById('mainEmoji').innerText = t.emoji;
             document.getElementById('pageTitle').innerText = ui.title;
             document.getElementById('totalLabel').innerText = ui.total;
@@ -93,7 +110,6 @@
             document.getElementById('mapText').innerText = ui.map;
             document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
             
-            // عرض رقم الطلب للطمأنينة
             if(u.get('order_id')) {
                 document.getElementById('orderIdText').innerText = `#${u.get('order_id')}`;
             }
@@ -101,18 +117,15 @@
             let gridHtml = '';
             Object.keys(ui.fields).forEach(key => {
                 let val = u.get(key);
-                if (val && val !== 'null' && val !== '---') {
+                if (val && val !== 'null' && val !== '---' && val !== 'undefined') {
                     gridHtml += `<div class="info-item"><span class="info-label">${ui.fields[key]}</span><span class="info-value">${val}</span></div>`;
                 }
             });
             document.getElementById('detailsGrid').innerHTML = gridHtml;
 
-            // حساب السعر النهائي بدقة (السعر + الإضافات) * الأيام
-            const price = parseInt(u.get('price') || 0);
-            const addonPrice = parseInt(u.get('addon_price') || 0);
-            const total = (price + addonPrice) * days;
+            // سحب السعر النهائي الذي تم حسابه في الصفحة السابقة
+            const total = parseInt(u.get('total_price') || 0);
             document.getElementById('totalVal').innerText = total.toLocaleString();
-            u.set('total_final', total); // تخزينه للإرسال
 
             if (u.get('location_link')) {
                 document.getElementById('locationPreview').classList.remove('hidden');
@@ -121,7 +134,7 @@
         };
 
         function confirmAndSubmit() {
-            // التوجيه إلى صفحة النجاح التي تحتوي على سكريبت الإرسال الفعلي
+            // الخطوة النهائية: التوجه لصفحة النجاح والإرسال
             window.location.href = `success.html?${u.toString()}`;
         }
     </script>
