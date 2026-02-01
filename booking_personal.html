@@ -42,7 +42,7 @@
             <div class="flex flex-wrap justify-center gap-3">
                 <div class="summary-badge"><i class="fas fa-car text-amber-400"></i><span id="carLabel"></span></div>
                 <div class="summary-badge"><i class="fas fa-calendar-alt text-amber-400"></i><span id="dateLabel"></span></div>
-                <div class="summary-badge"><i class="fas fa-wallet text-amber-400"></i><span id="priceLabel"></span></div>
+                <div class="summary-badge"><i class="fas fa-clock text-amber-400"></i><span id="daysLabel"></span></div>
             </div>
         </div>
     </header>
@@ -67,14 +67,14 @@
                         </div>
                         <div>
                             <label id="lblAge" class="label-text">---</label>
-                            <input type="number" id="custAge" class="glass-input">
+                            <input type="number" id="custAge" class="glass-input" value="20">
                         </div>
                     </div>
                     <div>
                         <label id="lblGender" class="label-text">---</label>
                         <div class="flex gap-4">
-                            <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 ذكر</div>
-                            <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">👩 أنثى</div>
+                            <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">---</div>
+                            <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">---</div>
                         </div>
                     </div>
                 </div>
@@ -121,6 +121,7 @@
         const u = new URLSearchParams(window.location.search);
         const lang = u.get('lang') || 'ar';
         const city = u.get('city') || 'بغداد';
+        const days = parseInt(u.get('days') || '1');
 
         const data = {
             ar: {
@@ -129,31 +130,15 @@
                 lblID: "رقم الهوية الوطنية / الجواز", lblL: "رقم إجازة السوق", male: "👨 ذكر", female: "👩 أنثى",
                 warn: "تنبيه: يجب إحضار الوثائق الأصلية عند استلام السيارة لمطابقتها رسمياً.",
                 map: "موقع التوصيل / الاستلام", gps: "تحديد موقعي الحالي 🛰️", review: "مراجعة بيانات الطلب",
-                alert: "يرجى إكمال البيانات الأساسية للهوية والاتصال 🐋", mapP: "ابحث عن منطقة أو شارع...", curr: "د.ع"
+                alert: "يرجى إكمال البيانات الأساسية للهوية والاتصال 🐋", mapP: "ابحث عن منطقة أو شارع...", curr: "د.ع", day: "يوم"
             },
             ku: {
                 title: "تەواوکردنی زانیارییەکان", personal: "زانیارییە کەسییەکان", docs: "بەڵگەنامە داواکراوەکان",
                 lblN: "ناوی تەواوی کرێنشین", lblP: "ژمارەی مۆبایل", lblA: "تەمەن", lblG: "ڕەگەز",
                 lblID: "ژمارەی ناسنامە / پاسپۆرت", lblL: "ژمارەی مۆڵەتی شۆفێری", male: "👨 نێر", female: "👩 مێ",
-                warn: "ئاگاداری: پێویستە بەڵگەنامە ئەسڵییەکان لەگەڵ خۆت بهێنیت کاتی وەرگرتنی ئۆتۆمبێل.",
+                warn: "ئاگاداری: پێویستە بەڵگەنامە ئەسڵییەکان لەگەڵ خۆت بهێنیت كاتی وەرگرتنی ئۆتۆمبێل.",
                 map: "شوێنی وەرگرتن", gps: "دیاریکردنی شوێنەکەم 🛰️", review: "پێداچوونەوەی داواکاری",
-                alert: "تکایە زانیارییەکان تەواو بکە 🐋", mapP: "بگەڕێ بۆ شوێنێک...", curr: "د.ع"
-            },
-            tr: {
-                title: "Rezervasyon Detayları", personal: "Kişisel Bilgiler", docs: "Gerekli Belgeler",
-                lblN: "Kiracının Tam Adı", lblP: "Telefon Numarası", lblA: "Yaş", lblG: "Cinsiyet",
-                lblID: "Kimlik / Pasaport No", lblL: "Sürüş Ehliyeti No", male: "👨 Erkek", female: "👩 Kadın",
-                warn: "Uyarı: Aracı teslim alırken orijinal belgeleri yanınızda bulundurmalısınız.",
-                map: "Teslimat Konumu", gps: "Konumumu Bul 🛰️", review: "Siparişi İncele",
-                alert: "Lütfen tüm zorunlu alanları doldurun 🐋", mapP: "Bölge veya sokak ara...", curr: "IQD"
-            },
-            en: {
-                title: "Complete Booking Info", personal: "Personal Information", docs: "Required Documents",
-                lblN: "Full Tenant Name", lblP: "Phone Number", lblA: "Age", lblG: "Gender",
-                lblID: "ID / Passport Number", lblL: "Driving License Number", male: "👨 Male", female: "👩 Female",
-                warn: "Note: Original documents must be presented upon car collection.",
-                map: "Delivery Location", gps: "Get My Location 🛰️", review: "Review Order Data",
-                alert: "Please complete identity and contact fields 🐋", mapP: "Search area or street...", curr: "IQD"
+                alert: "تکایە زانیارییەکان تەواو بکە 🐋", mapP: "بگەڕێ بۆ شوێنێک...", curr: "د.ع", day: "ڕۆژ"
             }
         };
 
@@ -164,7 +149,7 @@
             const isRtl = (lang === 'ar' || lang === 'ku');
             document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
 
-            // تطبيق النصوص
+            // تعبئة النصوص
             document.getElementById('pageTitle').innerText = l.title;
             document.getElementById('personalInfoTitle').innerText = l.personal;
             document.getElementById('docsTitle').innerText = l.docs;
@@ -183,12 +168,11 @@
             document.getElementById('btnIcon').className = `fas fa-chevron-${isRtl ? 'left' : 'right'}`;
 
             document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
-            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🚗</text></svg>')`;
-
             document.getElementById('carLabel').innerText = u.get('car') || '---';
             document.getElementById('dateLabel').innerText = u.get('date') || '---';
-            document.getElementById('priceLabel').innerText = (u.get('price') || '0') + ` ${l.curr} / Day`;
+            document.getElementById('daysLabel').innerText = `${days} ${l.day}`;
 
+            // تهيئة الخريطة
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
@@ -220,19 +204,28 @@
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
             const id_no = document.getElementById('idNumber').value;
+            
             if(!name || !phone || !id_no) { alert(l.alert); return; }
             
+            // توليد رقم طلب فريد
+            const orderId = "HUT-" + Math.floor(1000 + Math.random() * 9000);
+            
             const pos = marker.getLatLng();
+            const carPrice = parseInt(u.get('price') || 0);
+            const addonPrice = parseInt(u.get('addon_price') || 0);
+            const finalTotal = (carPrice + addonPrice) * days; // السعر الكلي الصحيح
+
+            u.set('order_id', orderId);
             u.set('name', name);
             u.set('phone', phone);
             u.set('age', document.getElementById('custAge').value);
-            u.set('gender', selectedGender === 'Male' ? (lang === 'ar' ? 'ذكر' : 'Male') : (lang === 'ar' ? 'أنثى' : 'Female'));
+            u.set('gender', selectedGender === 'Male' ? 'ذكر' : 'أنثى');
             u.set('national_id', id_no);
             u.set('license_no', document.getElementById('drivingLicense').value);
             u.set('province', city);
             u.set('location_link', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
-            u.set('service', 'Personal Rental');
-            u.set('total_price', (parseInt(u.get('price')) + parseInt(u.get('addon_price') || 0)));
+            u.set('service', u.get('type') === 'wedding' ? 'زفاف' : 'شخصي');
+            u.set('total_price', finalTotal);
             
             window.location.href = `review.html?${u.toString()}`;
         }
