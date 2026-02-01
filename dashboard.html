@@ -48,12 +48,16 @@
 
         .price-tag { background: var(--soft-gold); color: #8a6d1a; padding: 0.5rem 1rem; border-radius: 1.2rem; border: 1px solid rgba(197, 160, 45, 0.2); font-weight: 900; }
         
-        /* ستايل الإضافات المميز */
         .addons-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 1.5rem; padding: 12px; }
         .addons-label { font-size: 9px; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .btn-transfer { background: #fff1f2; color: #e11d48; border: 1.5px dashed #fecdd3; transition: 0.3s; }
+        
+        /* وسوم الجنس */
+        .gender-tag { font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; }
+        .gender-male { background: #eff6ff; color: #1d4ed8; }
+        .gender-female { background: #fdf2f8; color: #be185d; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -116,7 +120,7 @@
 
         function playAlarm() {
             const s = document.getElementById('radarSound');
-            s.currentTime = 0; s.play();
+            s.currentTime = 0; s.play().catch(e => console.log("Audio Play Blocked"));
             setTimeout(() => { s.pause(); }, 5000);
         }
 
@@ -135,6 +139,12 @@
 
             container.innerHTML = list.map(o => {
                 const timerHtml = getTimeCounter(o.timestamp);
+                
+                // تحديد أيقونة وستايل الجنس
+                const isFemale = o.gender === 'أنثى' || o.gender === 'Female';
+                const genderIcon = isFemale ? '👩' : '👨';
+                const genderClass = isFemale ? 'gender-female' : 'gender-male';
+                const genderText = o.gender || '---';
 
                 if(currentTab === 'new') {
                     return `
@@ -144,7 +154,11 @@
                             <div class="price-tag"><span class="text-lg">${Number(o.price).toLocaleString()}</span></div>
                         </div>
                         <h3 class="text-xl font-black text-slate-800 mb-2">${o.car}</h3>
-                        <p class="text-[10px] font-bold text-slate-400 mb-4 flex items-center gap-2"><i class="fas fa-user-circle"></i> ${o.name}</p>
+                        
+                        <div class="flex items-center gap-3 mb-4">
+                            <p class="text-[10px] font-bold text-slate-400 flex items-center gap-1"><i class="fas fa-user-circle"></i> ${o.name}</p>
+                            <span class="gender-tag ${genderClass}">${genderIcon} ${genderText}</span>
+                        </div>
                         
                         <div class="addons-box mb-6">
                             <span class="addons-label">📋 ملاحظات وإضافات الطلب:</span>
@@ -169,7 +183,16 @@
                         <h3 class="text-2xl font-black text-slate-800 mb-1">${o.car}</h3>
                         <p class="text-xs font-black text-blue-600 mb-6 tracking-widest">رقم الطلب #${o.id}</p>
 
-                        <div class="bg-slate-50 p-5 rounded-3xl mb-4"><p class="text-[9px] font-black text-slate-400 uppercase mb-1">العميل</p><p class="font-black text-lg text-slate-800">${o.name}</p></div>
+                        <div class="flex gap-3 mb-4">
+                            <div class="bg-slate-50 p-5 rounded-3xl flex-[3]">
+                                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">العميل</p>
+                                <p class="font-black text-lg text-slate-800">${o.name}</p>
+                            </div>
+                            <div class="bg-slate-50 p-5 rounded-3xl flex-1 text-center">
+                                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">الجنس</p>
+                                <p class="text-xl">${genderIcon}</p>
+                            </div>
+                        </div>
                         
                         <div class="bg-indigo-900 text-indigo-50 p-5 rounded-3xl mb-6 shadow-lg shadow-indigo-100">
                              <span class="text-[8px] font-black uppercase opacity-50 mb-2 block">الطلبات الخاصة والإضافات:</span>
@@ -191,7 +214,10 @@
                     <div class="whale-card p-5 flex justify-between items-center opacity-70 grayscale-[0.5]">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full ${o.status.includes('✅') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} flex items-center justify-center text-xs"><i class="fas ${o.status.includes('✅') ? 'fa-check' : 'fa-times'}"></i></div>
-                            <div><h3 class="font-black text-slate-700 text-xs">${o.name}</h3><p class="text-[8px] font-bold text-slate-400 tracking-tighter">${o.timestamp}</p></div>
+                            <div>
+                                <h3 class="font-black text-slate-700 text-xs">${o.name} <span class="opacity-50">${genderIcon}</span></h3>
+                                <p class="text-[8px] font-bold text-slate-400 tracking-tighter">${o.timestamp}</p>
+                            </div>
                         </div>
                         <p class="font-black text-sm">${Number(o.price).toLocaleString()} د.ع</p>
                     </div>`;
@@ -217,11 +243,15 @@
         }
 
         function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+        
+        // تحديث تلقائي كل 10 ثواني
         setInterval(fetchOrders, 10000);
         fetchOrders();
+
+        // تفعيل الصوت بعد أول نقرة للمستخدم (بسبب سياسات المتصفح)
         document.body.addEventListener('click', () => {
             const s = document.getElementById('radarSound');
-            s.play().then(() => { s.pause(); });
+            s.play().then(() => { s.pause(); }).catch(e => {});
         }, {once: true});
     </script>
 </body>
