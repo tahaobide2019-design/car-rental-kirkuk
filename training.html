@@ -14,128 +14,151 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <style>
-        :root { --main-color: #7c3aed; --bg-soft: #f5f3ff; }
-        body { font-family: 'Tajawal', 'Poppins', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
-        .glass-card { background: rgba(255, 255, 255, 0.98); }
-        #map { height: 250px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
-        .input-training { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
-        .input-training:focus { border-color: var(--main-color); background: white; }
-        .gender-btn { flex: 1; padding: 1rem; border: 2px solid #ddd6fe; border-radius: 1.25rem; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; background: white; }
-        .gender-btn.active { background: var(--main-color); color: white; border-color: var(--main-color); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .dynamic-text { color: var(--main-color); transition: 0.5s; }
-        .dynamic-bg { background-color: var(--main-color); transition: 0.5s; }
+        body { font-family: 'Tajawal', 'Poppins', sans-serif; background-color: #f0f2f5; transition: 0.5s; overflow-x: hidden; }
+        .hero-bg { background: linear-gradient(135deg, #002349 0%, #004d99 100%); position: relative; padding-top: 3rem; padding-bottom: 10rem; overflow: hidden; border-bottom: 4px solid #D4AF37; }
+        .dynamic-pattern { position: absolute; inset: 0; opacity: 0.20; pointer-events: none; background-repeat: repeat; animation: bgMove 40s linear infinite; }
+        @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+        .city-overlay { position: absolute; inset: 0; opacity: 0.7; transition: 1s; pointer-events: none; }
+        .section-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-radius: 3.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.1); position: relative; z-index: 20; }
+        .glass-input { width: 100%; padding: 1.1rem 1.5rem; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 1.5rem; font-weight: 700; outline: none; transition: 0.3s; color: #002349; }
+        .glass-input:focus { border-color: #D4AF37; background: white; transform: translateY(-2px); }
+        #map { height: 280px; border-radius: 2.5rem; border: 4px solid #f1f5f9; z-index: 1; }
+        .gender-btn { flex: 1; padding: 1.1rem; border: 2px solid #e2e8f0; border-radius: 1.5rem; font-weight: 900; transition: 0.4s; cursor: pointer; text-align: center; background: white; }
+        .gender-btn.active { background: #002349; color: white; border-color: #002349; transform: scale(1.05); }
+        .summary-badge { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 1.5rem; padding: 12px 20px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .btn-confirm { background: #002349; color: #D4AF37; font-weight: 900; border-radius: 2.5rem; transition: 0.4s; }
+        .btn-confirm:hover { background: #D4AF37; color: #002349; transform: translateY(-5px); }
+        .label-text { font-weight: 900; font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; margin-right: 0.5rem; display: block; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="text-[#002349]">
 
-    <div id="mainCard" class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] transition-all duration-500" style="border-color: var(--main-color);">
-        
-        <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
-            <div class="text-5xl mb-3">🎓</div>
-            <h2 id="pageTitle" class="text-3xl font-black dynamic-text">---</h2>
-            <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-xs font-bold dynamic-text shadow-sm border border-indigo-100 flex flex-wrap justify-center gap-2"></div>
+    <header class="hero-bg text-white text-center">
+        <div id="cityOverlay" class="city-overlay"></div>
+        <div id="patternBox" class="dynamic-pattern"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-5xl mb-4">🎓</div>
+            <h1 id="pageTitle" class="text-3xl md:text-5xl font-black text-[#D4AF37] mb-6">---</h1>
+            <div class="flex flex-wrap justify-center gap-3">
+                <div class="summary-badge"><i class="fas fa-graduation-cap text-amber-400"></i><span id="courseLabel"></span></div>
+                <div class="summary-badge"><i class="fas fa-map-marker-alt text-amber-400"></i><span id="cityLabel"></span></div>
+                <div class="summary-badge"><i class="fas fa-wallet text-amber-400"></i><span id="priceLabel"></span></div>
+            </div>
         </div>
+    </header>
 
-        <div class="p-8 space-y-5">
-            <div>
-                <label id="lblFullname" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
-                <input type="text" id="tName" class="input-training">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label id="lblPhone" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
-                    <input type="tel" id="tPhone" class="input-training text-left" dir="ltr" placeholder="07xx xxx xxxx">
+    <main class="container mx-auto px-4 -mt-24 relative z-20 pb-20">
+        <div class="section-card p-8 md:p-12 max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-user-graduate text-xl"></i></div>
+                        <h3 id="personalInfoTitle" class="font-black text-2xl">بيانات المتدرب</h3>
+                    </div>
+                    <div>
+                        <label id="lblFullName" class="label-text">---</label>
+                        <input type="text" id="tName" class="glass-input">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="lblPhone" class="label-text">---</label>
+                            <input type="tel" id="tPhone" class="glass-input text-left" dir="ltr" placeholder="07xx xxx xxxx">
+                        </div>
+                        <div>
+                            <label id="lblAge" class="label-text">---</label>
+                            <input type="number" id="tAge" class="glass-input" value="18">
+                        </div>
+                    </div>
+                    <div>
+                        <label id="lblGender" class="label-text">---</label>
+                        <div class="flex gap-4">
+                            <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">---</div>
+                            <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">---</div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label id="lblAge" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
-                    <input type="number" id="tAge" class="input-training">
+
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-id-card text-xl"></i></div>
+                        <h3 id="docsTitle" class="font-black text-2xl">الوثائق الثبوتية</h3>
+                    </div>
+                    <div>
+                        <label id="lblID" class="label-text">---</label>
+                        <input type="text" id="tNationalID" class="glass-input">
+                    </div>
+                    <div class="p-5 bg-indigo-50 rounded-[2rem] border border-indigo-100 flex gap-3 items-start">
+                        <span class="text-2xl">💡</span>
+                        <p class="text-[12px] font-bold text-indigo-800 leading-relaxed">
+                            سيتم التواصل معك لتحديد موعد البدء بعد مراجعة بياناتك رسمياً.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label id="lblID" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
-                <input type="text" id="tNationalID" class="input-training">
-            </div>
-
-            <div>
-                <label id="lblGender" class="text-xs font-black text-gray-400 uppercase block mb-2">---</label>
-                <div class="flex gap-4">
-                    <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">---</div>
-                    <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">---</div>
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex justify-between items-center px-2">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-search-location"></i></div>
+                            <h3 id="mapTitle" class="font-black text-2xl">---</h3>
+                        </div>
+                        <button id="gpsBtn" onclick="getGPS()" class="text-[#002349] font-black text-sm bg-white px-5 py-3 rounded-2xl border-2 shadow-sm">---</button>
+                    </div>
+                    <div id="map"></div>
                 </div>
-            </div>
 
-            <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label id="lblMap" class="block font-black mb-3 text-sm text-indigo-900 flex items-center gap-2">
-                    <i class="fas fa-search dynamic-text"></i> ---
-                </label>
-                <div id="map" class="mb-4"></div>
-                <button type="button" id="gpsBtn" onclick="getGPS()" class="w-full py-4 text-white rounded-2xl font-black text-sm shadow-lg transition-all active:scale-95 dynamic-bg">---</button>
+                <button id="reviewBtn" onclick="goToReviewTraining()" class="btn-confirm md:col-span-2 w-full py-6 text-2xl shadow-2xl active:scale-95 flex items-center justify-center gap-4">
+                    <span id="reviewBtnText">---</span> <i id="btnIcon" class="fas fa-chevron-left"></i>
+                </button>
             </div>
-
-            <button id="reviewBtn" onclick="goToReviewTraining()" class="w-full text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 dynamic-bg">
-                <span id="reviewBtnText">---</span> <i id="btnIcon" class="fas fa-chevron-left"></i>
-            </button>
         </div>
-    </div>
+    </main>
 
     <script>
         let map, marker, selectedGender = 'Male';
         const p = new URLSearchParams(window.location.search);
         const lang = p.get('lang') || 'ar';
+        const city = p.get('city') || 'بغداد';
 
         const data = {
             ar: {
                 title: "كورس تعليم قيادة", lblN: "اسم المتدرب الكامل", lblP: "رقم الهاتف", 
-                lblA: "العمر", lblI: "رقم الهوية / الجواز", lblG: "جنس المتدرب",
-                male: "👨 ذكر", female: "👩 أنثى", lblM: "ابحث عن موقعك:", gps: "تحديد موقعي الحالي 🛰️",
-                review: "مراجعة البيانات", alert: "يرجى إكمال البيانات الأساسية 🐋", mapP: "ابحث عن منطقة...", curr: "د.ع"
+                lblA: "العمر", lblI: "رقم الهوية / الجواز", lblG: "الجنس",
+                male: "👨 ذكر", female: "👩 أنثى", lblM: "موقع السكن التقريبي", gps: "تحديد موقعي 🛰️",
+                review: "مراجعة الطلب", alert: "يرجى إكمال جميع الحقول 🐋", mapP: "ابحث عن منطقة...", curr: "د.ع"
             },
             ku: {
-                title: "کۆرسی فێربوونی شۆفێری", lblN: "ناوی تەواوی فێرخواز", lblP: "ژمارەی مۆبایل", 
-                lblA: "تەمەن", lblI: "ژمارەی ناسنامە / پاسپۆرت", lblG: "ڕەگەز",
-                male: "👨 نێر", female: "👩 مێ", lblM: "شوێنەکەت دیاری بکە:", gps: "دیاریکردنی شوێنەکەم 🛰️",
-                review: "پێداچوونەوەی زانیاری", alert: "تکایە زانیارییەکان تەواو بکە 🐋", mapP: "بگەڕێ بۆ شوێنێک...", curr: "د.ع"
-            },
-            tr: {
-                title: "Sürüş Eğitim Kursu", lblN: "Öğrencinin Tam Adı", lblP: "Telefon Numarası", 
-                lblA: "Yaş", lblI: "Kimlik / Pasaport No", lblG: "Cinsiyet",
-                male: "👨 Erkek", female: "👩 Kadın", lblM: "Konumunuzu Belirleyin:", gps: "Konumumu Bul 🛰️",
-                review: "Bilgileri İncele", alert: "Lütfen tüm alanları doldurun 🐋", mapP: "Bölge ara...", curr: "IQD"
-            },
-            en: {
-                title: "Driving Training Course", lblN: "Full Student Name", lblP: "Phone Number", 
-                lblA: "Age", lblI: "ID / Passport Number", lblG: "Gender",
-                male: "👨 Male", female: "👩 Female", lblM: "Search your location:", gps: "Get My Location 🛰️",
-                review: "Review Information", alert: "Please complete all fields 🐋", mapP: "Search area...", curr: "IQD"
+                title: "کۆرسی فێربوون", lblN: "ناوی تەواوی فێرخواز", lblP: "ژمارەی مۆبایل", 
+                lblA: "تەمەن", lblI: "ژمارەی ناسنامە", lblG: "ڕەگەز",
+                male: "👨 نێر", female: "👩 مێ", lblM: "شوێنی نیشتەجێبوون", gps: "دیاریکردنی شوێن 🛰️",
+                review: "پێداچوونەوە", alert: "تکایە هەموو خانەکان پڕبکەرەوە 🐋", mapP: "بگەڕێ...", curr: "د.ع"
             }
         };
+
+        const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
 
         window.onload = function() {
             const l = data[lang] || data['ar'];
             const isRtl = (lang === 'ar' || lang === 'ku');
             document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
             
-            // تعبئة النصوص
             document.getElementById('pageTitle').innerText = l.title;
-            document.getElementById('lblFullname').innerText = l.lblN;
+            document.getElementById('lblFullName').innerText = l.lblN;
             document.getElementById('lblPhone').innerText = l.lblP;
             document.getElementById('lblAge').innerText = l.lblA;
             document.getElementById('lblID').innerText = l.lblI;
             document.getElementById('lblGender').innerText = l.lblG;
             document.getElementById('maleBtn').innerText = l.male;
             document.getElementById('femaleBtn').innerText = l.female;
-            document.getElementById('lblMap').innerHTML = `<i class="fas fa-search dynamic-text"></i> ${l.lblM}`;
+            document.getElementById('mapTitle').innerText = l.lblM;
             document.getElementById('gpsBtn').innerText = l.gps;
             document.getElementById('reviewBtnText').innerText = l.review;
             document.getElementById('btnIcon').className = `fas fa-chevron-${isRtl ? 'left' : 'right'}`;
 
-            document.getElementById('summary').innerHTML = `
-                <span>📍 ${p.get('city') || '---'}</span> | 
-                <span>📅 ${p.get('date') || '---'}</span> | 
-                <span>💰 ${p.get('addon_price') || '0'} ${l.curr}</span>
-            `;
+            document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
+            document.getElementById('courseLabel').innerText = p.get('addon_display') || '---';
+            document.getElementById('cityLabel').innerText = city;
+            document.getElementById('priceLabel').innerText = (p.get('addon_price') || '0') + ` ${l.curr}`;
 
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -152,11 +175,8 @@
 
         function setGender(g) {
             selectedGender = g;
-            const root = document.documentElement;
-            const mainColor = g === 'Female' ? '#db2777' : '#7c3aed';
-            root.style.setProperty('--main-color', mainColor);
-            document.getElementById('femaleBtn').classList.toggle('active', g === 'Female');
             document.getElementById('maleBtn').classList.toggle('active', g === 'Male');
+            document.getElementById('femaleBtn').classList.toggle('active', g === 'Female');
         }
 
         function getGPS() {
@@ -173,17 +193,21 @@
             const id_no = document.getElementById('tNationalID').value;
             if(!name || !phone || !id_no) { alert(l.alert); return; }
             
+            const orderId = "EDU-" + Math.floor(1000 + Math.random() * 9000);
             const pos = marker.getLatLng();
+
+            p.set('order_id', orderId);
             p.set('name', name);
             p.set('phone', phone);
             p.set('national_id', id_no);
             p.set('age', document.getElementById('tAge').value);
-            p.set('gender', selectedGender === 'Male' ? (lang === 'ar' ? 'ذكر' : 'Male') : (lang === 'ar' ? 'أنثى' : 'Female'));
-            p.set('province', p.get('city'));
+            p.set('gender', selectedGender === 'Male' ? 'ذكر' : 'أنثى');
+            p.set('province', city);
             p.set('location_link', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
-            p.set('service', 'Driving Training');
-            p.set('car', 'Course: ' + (p.get('addon_display') || 'Training'));
+            p.set('service', 'تدريب قيادة');
+            p.set('car', p.get('addon_display'));
             p.set('total_price', p.get('addon_price'));
+            p.set('license_no', 'Training-No-License');
 
             window.location.href = `review.html?${p.toString()}`;
         }
