@@ -7,65 +7,57 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; transition: 0.5s; overflow-x: hidden; }
-        
-        /* الهيدر المتكيف (نفس نظام الفليت) */
         .hero-bg { 
             background: linear-gradient(135deg, #002349 0%, #004d99 100%); 
             transition: 1s; position: relative; padding-top: 3rem; padding-bottom: 10rem;
             overflow: hidden; border-bottom: 4px solid #D4AF37;
         }
-
         .dynamic-pattern {
             position: absolute; inset: 0; opacity: 0.20; pointer-events: none;
             background-repeat: repeat; animation: bgMove 40s linear infinite;
         }
         @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
         .city-overlay { position: absolute; inset: 0; opacity: 0.7; transition: 1s; pointer-events: none; }
-
-        /* البطاقة الرئيسية بنمط صورة المتدرب */
         .section-card { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(15px);
-            border-radius: 3.5rem; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+            border-radius: 3.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.1);
             position: relative; z-index: 20;
         }
-
         .glass-input { 
             width: 100%; padding: 1.1rem 1.5rem; background: #f8fafc; 
             border: 2px solid #e2e8f0; border-radius: 1.5rem; 
             font-weight: 700; outline: none; transition: 0.3s; color: #002349;
         }
         .glass-input:focus { border-color: #D4AF37; background: white; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-
-        #map { height: 220px; border-radius: 2.5rem; border: 4px solid #f1f5f9; z-index: 1; }
-
-        /* أزرار الجنس المتفاعلة */
+        #map { height: 280px; border-radius: 2.5rem; border: 4px solid #f1f5f9; z-index: 1; }
         .gender-btn { 
             flex: 1; padding: 1.1rem; border: 2px solid #e2e8f0; border-radius: 1.5rem; 
             font-weight: 900; transition: 0.4s; cursor: pointer; text-align: center; background: white; 
         }
         .gender-btn.active { background: #002349; color: white; border-color: #002349; transform: scale(1.05); }
-
         .summary-badge { 
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); 
             border-radius: 1.5rem; padding: 12px 20px; display: inline-flex; 
             align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.3); 
         }
-
         .btn-confirm { 
             background: #002349; color: #D4AF37; font-weight: 900; 
             border-radius: 2.5rem; transition: 0.4s; border: 2px solid transparent;
         }
         .btn-confirm:hover { background: #D4AF37; color: #002349; transform: translateY(-5px); }
-
         .label-text { font-weight: 900; font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; margin-right: 0.5rem; display: block; }
+        
+        /* تحسين مظهر صندوق البحث في الخريطة */
+        .leaflet-control-geocoder { border-radius: 12px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 5px; }
+        .leaflet-control-geocoder-form input { font-family: 'Tajawal', sans-serif; font-weight: bold; }
     </style>
 </head>
 <body class="text-[#002349]">
@@ -73,14 +65,12 @@
     <header class="hero-bg text-white text-center">
         <div id="cityOverlay" class="city-overlay"></div>
         <div id="patternBox" class="dynamic-pattern"></div>
-        
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-5xl mb-4">🐋</div>
             <h1 id="pageTitle" class="text-3xl md:text-5xl font-black text-[#D4AF37] mb-6 drop-shadow-md">إكمال بيانات الحجز</h1>
-            
             <div class="flex flex-wrap justify-center gap-3">
                 <div class="summary-badge"><i class="fas fa-car text-amber-400"></i><span id="carLabel" class="font-bold"></span></div>
-                <div class="summary-badge"><i class="fas fa-calendar-alt text-amber-400"></i><span id="daysLabel" class="font-bold"></span></div>
+                <div class="summary-badge"><i class="fas fa-calendar-alt text-amber-400"></i><span id="dateLabel" class="font-bold"></span></div>
                 <div class="summary-badge"><i class="fas fa-wallet text-amber-400"></i><span id="priceLabel" class="font-bold"></span></div>
             </div>
         </div>
@@ -88,35 +78,32 @@
 
     <main class="container mx-auto px-4 -mt-24 relative z-20 pb-20">
         <div class="section-card p-8 md:p-12 max-w-4xl mx-auto">
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-user-edit text-xl"></i></div>
-                        <h3 class="font-black text-2xl" id="secInfo">المعلومات الشخصية</h3>
+                        <h3 class="font-black text-2xl">المعلومات الشخصية</h3>
                     </div>
-
                     <div>
-                        <label class="label-text" id="lbl_name">اسم المستأجر</label>
-                        <input type="text" id="custName" class="glass-input" placeholder="الاسم الكامل">
+                        <label class="label-text">اسم المستأجر الكامل</label>
+                        <input type="text" id="custName" class="glass-input" placeholder="اكتب اسمك الثلاثي">
                     </div>
-
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="label-text" id="lbl_phone">رقم الهاتف</label>
+                            <label class="label-text">رقم الهاتف</label>
                             <input type="tel" id="custPhone" class="glass-input text-left" dir="ltr" placeholder="07xx xxx xxxx">
                         </div>
                         <div>
-                            <label class="label-text" id="lbl_age">العمر</label>
+                            <label class="label-text">العمر</label>
                             <input type="number" id="custAge" class="glass-input" placeholder="25">
                         </div>
                     </div>
-
                     <div>
-                        <label class="label-text" id="lbl_gender">جنس المستأجر</label>
+                        <label class="label-text">الجنس</label>
                         <div class="flex gap-4">
-                            <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 <span id="txtMale">ذكر</span></div>
-                            <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">👩 <span id="txtFemale">أنثى</span></div>
+                            <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 ذكر</div>
+                            <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">👩 أنثى</div>
                         </div>
                     </div>
                 </div>
@@ -124,35 +111,35 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-id-card text-xl"></i></div>
-                        <h3 class="font-black text-2xl" id="secDocs">الوثائق القانونية</h3>
+                        <h3 class="font-black text-2xl">الوثائق المطلوبة</h3>
                     </div>
-
                     <div>
-                        <label class="label-text" id="lbl_id">رقم الهوية / الجواز</label>
-                        <input type="text" id="idNumber" class="glass-input" placeholder="رقم الهوية أو الجواز">
+                        <label class="label-text">رقم الهوية الوطنية / الجواز</label>
+                        <input type="text" id="idNumber" class="glass-input" placeholder="أدخل رقم الهوية">
                     </div>
-
                     <div>
-                        <label class="label-text" id="lbl_license">رقم إجازة السوق</label>
-                        <input type="text" id="drivingLicense" class="glass-input" placeholder="رقم الإجازة">
+                        <label class="label-text">رقم إجازة السوق</label>
+                        <input type="text" id="drivingLicense" class="glass-input" placeholder="أدخل رقم الإجازة">
                     </div>
-
                     <div class="p-5 bg-amber-50 rounded-[2rem] border border-amber-100 flex gap-3 items-start">
                         <span class="text-2xl">⚠️</span>
-                        <p class="text-[12px] font-bold text-amber-800 leading-relaxed" id="legalNote">تنبيه: يجب إحضار الوثائق الأصلية عند استلام السيارة لمطابقتها رسمياً.</p>
+                        <p class="text-[12px] font-bold text-amber-800 leading-relaxed">تنبيه: يجب إحضار الوثائق الأصلية عند استلام السيارة لمطابقتها رسمياً مع البيانات المدخلة.</p>
                     </div>
                 </div>
 
                 <div class="md:col-span-2 space-y-4">
                     <div class="flex justify-between items-center px-2">
-                        <div class="flex items-center gap-3"><div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-map-marked-alt"></i></div><h3 class="font-black text-2xl" id="secMap">موقع استلام السيارة</h3></div>
-                        <button onclick="getGPS()" class="text-[#002349] font-black text-sm bg-white px-5 py-3 rounded-2xl border-2 shadow-sm hover:bg-slate-50" id="btnGPS">تحديد موقعي 🛰️</button>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-slate-100 p-3 rounded-2xl text-[#002349]"><i class="fas fa-search-location"></i></div>
+                            <h3 class="font-black text-2xl">موقع التوصيل / الاستلام</h3>
+                        </div>
+                        <button onclick="getGPS()" class="text-[#002349] font-black text-sm bg-white px-5 py-3 rounded-2xl border-2 shadow-sm hover:bg-slate-50 transition-all">تحديد موقعي الحالي 🛰️</button>
                     </div>
                     <div id="map"></div>
                 </div>
 
                 <button onclick="confirmBooking()" class="btn-confirm md:col-span-2 w-full py-6 text-2xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-4">
-                    <span id="btnSubmit">مراجعة الطلب وتأكيد الحجز</span> <i id="submitIcon" class="fas fa-chevron-left"></i>
+                    <span id="btnSubmit">مراجعة بيانات الطلب</span> <i class="fas fa-chevron-left"></i>
                 </button>
             </div>
         </div>
@@ -163,42 +150,36 @@
         const u = new URLSearchParams(window.location.search);
         const currentLang = u.get('lang') || 'ar';
         const city = u.get('city') || 'كركوك';
-        const type = u.get('type') || 'personal';
 
         const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
-        
-        const trans = {
-            ar: { dir: 'rtl', font: 'Tajawal', title: 'إكمال بيانات الرحلة', secInfo: 'المعلومات الشخصية', secDocs: 'الوثائق القانونية', secMap: 'موقع التسليم', btnGPS: 'تحديد موقعي 🛰️', male: 'ذكر', female: 'أنثى', submit: 'مراجعة الطلب النهائي', alert: 'يرجى إكمال جميع الحقول الأساسية 🐋', unit: 'يوم', curr: 'د.ع' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'تەواوکردنی زانیارییەکان', secInfo: 'زانیارییە کەسییەکان', secDocs: 'بەڵگەنامە یاساییەکان', secMap: 'شوێنی وەرگرتن', btnGPS: 'دیاریکردنی شوێنم 🛰️', male: 'نێر', female: 'مێ', submit: 'پێداچوونەوەی کۆتایی', alert: 'تکایە هەموو خانەکان پڕ بکەرەوە 🐋', unit: 'ڕۆژ', curr: 'دینار' }
-        };
 
         window.onload = function() {
-            const l = trans[currentLang] || trans['ar'];
-            document.getElementById('htmlTag').dir = l.dir;
-            document.body.style.fontFamily = l.font + ', sans-serif';
-            
-            // تطبيق ألوان المدينة والنمط
+            // تطبيق هوية المدينة
             document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
-            const icon = type === 'wedding' ? '🎁' : (type === 'training' ? '🎓' : '🚗');
-            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">${icon}</text></svg>')`;
+            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🚗</text></svg>')`;
 
-            // تعبئة البيانات من URL
-            document.getElementById('carLabel').innerText = u.get('car') || '...';
-            document.getElementById('daysLabel').innerText = `${u.get('days') || 1} ${l.unit}`;
-            let price = u.get('price') || "0";
-            document.getElementById('priceLabel').innerText = `${parseInt(price).toLocaleString()} ${l.curr}`;
-            
-            // تعريب النصوص
-            document.getElementById('pageTitle').innerText = l.title;
-            document.getElementById('btnSubmit').innerText = l.submit;
-            document.getElementById('txtMale').innerText = l.male;
-            document.getElementById('txtFemale').innerText = l.female;
-            document.getElementById('submitIcon').className = `fas fa-chevron-${l.dir === 'rtl' ? 'left' : 'right'}`;
+            // ملخص البيانات في الهيدر
+            document.getElementById('carLabel').innerText = u.get('car') || 'لم يتم اختيار سيارة';
+            document.getElementById('dateLabel').innerText = u.get('date') || '---';
+            document.getElementById('priceLabel').innerText = (u.get('price') || '0') + ' د.ع / يوم';
 
             // تهيئة الخريطة
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
+
+            // إضافة محرك البحث داخل الخريطة 🔍
+            const geocoder = L.Control.geocoder({
+                defaultMarkGeocode: false,
+                placeholder: "ابحث عن منطقة أو شارع...",
+                errorMessage: "لم يتم العثور على الموقع"
+            })
+            .on('markgeocode', function(e) {
+                const latlng = e.geocode.center;
+                map.setView(latlng, 16);
+                marker.setLatLng(latlng);
+            })
+            .addTo(map);
         };
 
         function setGender(g) {
@@ -217,12 +198,22 @@
         function confirmBooking() {
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
-            if(!name || !phone) { alert(trans[currentLang].alert); return; }
+            const id_no = document.getElementById('idNumber').value;
+            const lic_no = document.getElementById('drivingLicense').value;
+
+            if(!name || !phone || !id_no) { alert('يرجى إكمال البيانات الأساسية للهوية والاتصال 🐋'); return; }
             
             const pos = marker.getLatLng();
-            u.set('name', name); u.set('phone', phone); u.set('age', document.getElementById('custAge').value);
+            // مطابقة الأسماء مع السكريبت Apps Script
+            u.set('name', name);
+            u.set('phone', phone);
+            u.set('age', document.getElementById('custAge').value);
             u.set('gender', selectedGender);
-            u.set('map', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
+            u.set('national_id', id_no);
+            u.set('license_no', lic_no);
+            u.set('province', city);
+            u.set('location_link', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
+            u.set('service', u.get('type') === 'wedding' ? 'تأجير أعراس' : 'تأجير سيارة شخصية');
             
             window.location.href = `review.html?${u.toString()}`;
         }
