@@ -8,36 +8,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; transition: 0.5s; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #003366 100%); }
-        .car-card { transition: all 0.4s ease; border-radius: 3rem; overflow: hidden; background: white; border: 1px solid #eee; }
-        .car-card:hover { transform: translateY(-10px); border-color: #D4AF37; box-shadow: 0 20px 40px rgba(0,35,73,0.1); }
-        .price-badge { background: linear-gradient(45deg, #D4AF37, #fde047); color: #002349; padding: 8px 20px; border-radius: 1.5rem; font-weight: 900; }
-        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; transition: 0.5s; overflow-x: hidden; }
+        
+        /* الهيدر المتكيف مع المدينة والخدمة */
+        .hero-bg { 
+            background: linear-gradient(135deg, #002349 0%, #004d99 100%); 
+            transition: 1s; 
+            position: relative; 
+            padding-top: 5rem;
+            padding-bottom: 14rem;
+            overflow: hidden;
+            border-bottom: 4px solid #D4AF37;
+        }
+
+        /* نمط الإيموجي الضخم في الخلفية */
+        .map-pattern {
+            position: absolute; inset: 0; opacity: 0.20; pointer-events: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🚗</text></svg>');
+            background-repeat: repeat; animation: bgMove 40s linear infinite;
+        }
+        @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
+        .city-overlay { position: absolute; inset: 0; opacity: 0.7; transition: 1s; pointer-events: none; }
+
+        .whale-logo { font-size: 5rem; animation: floating 4s ease-in-out infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+
+        /* تصميم كروت السيارات */
+        .car-card { 
+            transition: all 0.4s ease; 
+            border-radius: 3rem; 
+            overflow: hidden; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+        .car-card:hover { transform: translateY(-12px); border-color: #D4AF37; box-shadow: 0 25px 50px rgba(0,35,73,0.15); }
+        
+        .price-badge { background: #002349; color: #D4AF37; padding: 10px 22px; border-radius: 1.5rem; font-weight: 900; display: inline-block; }
+        
+        /* الفلاتر الذكية */
+        .filter-box {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 3rem;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-80px);
+            position: relative;
+            z-index: 30;
+            border: 1px solid white;
+        }
+
+        select { -webkit-appearance: none; appearance: none; }
+        .smart-select {
+            padding: 1.1rem; background-color: #f8fafc; border-radius: 1.5rem;
+            font-weight: 900; color: #002349; border: 2px solid transparent;
+            transition: 0.3s; width: 100%; text-align: center; cursor: pointer;
+        }
+        .smart-select:focus { border-color: #D4AF37; background-color: #fff; }
+
+        .btn-select { background: #002349; color: white; transition: 0.3s; font-weight: 900; border-radius: 1.5rem; }
+        .btn-select:hover { background: #D4AF37; color: #002349; transform: scale(1.02); }
     </style>
 </head>
 <body class="text-[#002349]">
 
-    <header class="hero-bg text-white pt-16 pb-40 text-center relative overflow-hidden">
-        <div class="absolute top-0 right-0 opacity-10 text-[10rem] pointer-events-none">🐋</div>
-        <div class="text-6xl mb-4">🐋</div>
-        <h1 id="pageTitle" class="text-4xl font-black text-[#D4AF37]">أسطول سيارات الحوت</h1>
-        <p id="serviceLabel" class="text-lg opacity-80 mt-2 font-bold uppercase tracking-widest px-4"></p>
+    <header class="hero-bg text-white pt-16 pb-32 text-center relative">
+        <div id="cityOverlay" class="city-overlay"></div>
+        <div id="patternBox" class="map-pattern"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="whale-logo mb-4">🐋</div>
+            <h1 id="pageTitle" class="text-4xl md:text-6xl font-black text-[#D4AF37] drop-shadow-md">أسطول سيارات الحوت</h1>
+            <p id="serviceLabel" class="text-lg md:text-2xl opacity-90 mt-3 font-bold px-4 italic"></p>
+        </div>
     </header>
 
-    <main class="container mx-auto px-4 -mt-24 relative z-10 pb-20">
-        <div class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-[3rem] p-6 max-w-5xl mx-auto mb-12 border border-white flex flex-wrap gap-4 justify-center items-center">
-            <select id="engineFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none cursor-pointer hover:bg-slate-100 transition-all min-w-[180px] text-center">
-                <option value="all" id="optEngAll">كل المحركات</option>
-                <option value="hybrid" id="optEngHybrid">هايبرد</option>
-                <option value="auto" id="optEngAuto">أوتوماتيك</option>
-            </select>
-            <select id="categoryFilter" onchange="renderFleet()" class="p-4 bg-slate-50 rounded-2xl font-black outline-none border-none cursor-pointer hover:bg-slate-100 transition-all min-w-[180px] text-center">
-                <option value="all" id="optCatAll">كل الفئات</option>
-                <option value="economy" id="optCatEco">اقتصادية</option>
-                <option value="family" id="optCatFam">عائلية / SUV</option>
-                <option value="luxury" id="optCatLux">فاخرة VIP</option>
-            </select>
+    <main class="container mx-auto px-4 relative z-20 pb-20">
+        <div class="filter-box p-6 md:p-8 max-w-5xl mx-auto flex flex-col md:flex-row gap-5 items-center justify-center">
+            <div class="w-full md:w-1/3">
+                <select id="engineFilter" onchange="renderFleet()" class="smart-select">
+                    <option value="all" id="optEngAll">كل المحركات</option>
+                    <option value="hybrid" id="optEngHybrid">هايبرد</option>
+                    <option value="auto" id="optEngAuto">أوتوماتيك</option>
+                </select>
+            </div>
+            <div class="w-full md:w-1/3">
+                <select id="categoryFilter" onchange="renderFleet()" class="smart-select">
+                    <option value="all" id="optCatAll">كل الفئات</option>
+                    <option value="economy" id="optCatEco">اقتصادية</option>
+                    <option value="family" id="optCatFam">عائلية / SUV</option>
+                    <option value="luxury" id="optCatLux">فاخرة VIP</option>
+                </select>
+            </div>
         </div>
 
         <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto"></div>
@@ -45,23 +109,25 @@
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const type = u.get('type'); 
+        const type = u.get('type') || 'personal'; 
         const currentLang = u.get('lang') || 'ar';
+        const city = u.get('city') || 'كركوك';
 
+        // الألوان الموحدة
+        const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
+        
         const translations = {
             ar: { dir: 'rtl', font: 'Tajawal', title: 'أسطول سيارات الحوت', wedding: '✨ قسم سيارات الحفلات والأعراس', personal: '🚗 قسم السيارات الشخصية', engAll: 'كل أنواع المحركات', engHyb: 'هايبرد (هجين)', engAuto: 'أوتوماتيك', catAll: 'كل الفئات', catEco: 'اقتصادية', catFam: 'عائلية / SUV', catLux: 'فاخرة VIP', btn: 'اختيار السيارة', currency: 'د.ع / يوم', empty: 'عذراً، لا توجد سيارات تطابق هذا البحث 🐋' },
-            ku: { dir: 'rtl', font: 'Tajawal', title: 'ئەلحووت فلێت', wedding: '✨ بەشی ئۆتۆمبێلی زەماوەند', personal: '🚗 بەشی ئۆتۆمبێلی کەسی', engAll: 'هەموو بزوێنەرەکان', engHyb: 'هایبرید', engAuto: 'ئۆتۆماتیک', catAll: 'هەموو جۆرەکان', catEco: 'ئابووری', catFam: 'خێزانی / SUV', catLux: 'ناوازە VIP', btn: 'هەڵبژاردنی ئۆتۆمبێل', currency: 'د.ع / ڕۆژ', empty: 'ببورە، هیچ ئۆتۆمبێلێک نەدۆزرایەوە 🐋' },
-            tr: { dir: 'ltr', font: 'Poppins', title: 'Al-Hut Araç Filosu', wedding: '✨ Düğün Araçları Bölümü', personal: '🚗 Bireysel Araç Bölümü', engAll: 'Tüm Motorlar', engHyb: 'Hibrit', engAuto: 'Otomatik', catAll: 'Tüm Kategoriler', catEco: 'Ekonomik', catFam: 'Aile / SUV', catLux: 'Lüks VIP', btn: 'Aracı Seç', currency: 'IQD / Gün', empty: 'Üzgünüz, arama kriterlerine uygun araç yok 🐋' },
-            en: { dir: 'ltr', font: 'Poppins', title: 'Al-Hut Car Fleet', wedding: '✨ Wedding & Events Section', personal: '🚗 Personal Cars Section', engAll: 'All Engines', engHyb: 'Hybrid', engAuto: 'Automatic', catAll: 'All Categories', catEco: 'Economy', catFam: 'Family / SUV', catLux: 'Luxury VIP', btn: 'Select Car', currency: 'IQD / Day', empty: 'Sorry, no cars match your search 🐋' }
+            ku: { dir: 'rtl', font: 'Tajawal', title: 'ئەلحووت فلێت', wedding: '✨ بەشی ئۆتۆمبێلی زەماوەند', personal: '🚗 بەشی ئۆتۆمبێلی کەسی', engAll: 'هەموو بزوێنەرەکان', engHyb: 'هایبرید', engAuto: 'ئۆتۆماتیک', catAll: 'هەموو جۆرەکان', catEco: 'ئابووری', catFam: 'خێزانی / SUV', catLux: 'ناوازە VIP', btn: 'هەڵبژاردنی ئۆتۆمبێل', currency: 'د.ع / ڕۆژ', empty: 'ببورە، هیچ ئۆتۆمبێلێک نەدۆزرایەوە 🐋' }
         };
 
         const fleet = [
-            { name: {ar:"تويوتا كورولا 2025", ku:"تۆیۆتا کۆرۆلا ٢٠٢٥", tr:"Toyota Corolla 2025", en:"Toyota Corolla 2025"}, engine: "hybrid", cat: "economy", price: "45000", img: "Cars/corolla.jpg" },
-            { name: {ar:"دودج جارجر SRT", ku:"دۆج جارجەر SRT", tr:"Dodge Charger SRT", en:"Dodge Charger SRT"}, engine: "auto", cat: "luxury", price: "85000", img: "Cars/charger.jpg" },
-            { name: {ar:"هيونداي توسان", ku:"هیۆندای تۆسۆن", tr:"Hyundai Tucson", en:"Hyundai Tucson"}, engine: "auto", cat: "family", price: "60000", img: "Cars/tucson.jpg" },
-            { name: {ar:"مرسيدس S-Class", ku:"مێرسیدس S-Class", tr:"Mercedes S-Class", en:"Mercedes S-Class"}, engine: "auto", cat: "luxury", price: "150000", img: "Cars/mercedes.jpg" },
-            { name: {ar:"تويوتا كامري", ku:"تۆیۆتا کامری", tr:"Toyota Camry", en:"Toyota Camry"}, engine: "hybrid", cat: "economy", price: "55000", img: "Cars/camry.jpg" },
-            { name: {ar:"كيا سورينتو", ku:"کیا سۆرێنتۆ", tr:"Kia Sorento", en:"Kia Sorento"}, engine: "auto", cat: "family", price: "70000", img: "Cars/sorento.jpg" }
+            { name: {ar:"تويوتا كورولا 2025", ku:"تۆیۆتا کۆرۆلا ٢٠٢٥"}, engine: "hybrid", cat: "economy", price: "45000", img: "Cars/corolla.jpg" },
+            { name: {ar:"دودج جارجر SRT", ku:"دۆج جارجەر SRT"}, engine: "auto", cat: "luxury", price: "85000", img: "Cars/charger.jpg" },
+            { name: {ar:"هيونداي توسان", ku:"هیۆندای تۆسۆن"}, engine: "auto", cat: "family", price: "60000", img: "Cars/tucson.jpg" },
+            { name: {ar:"مرسيدس S-Class", ku:"مێرسیدس S-Class"}, engine: "auto", cat: "luxury", price: "150000", img: "Cars/mercedes.jpg" },
+            { name: {ar:"تويوتا كامري", ku:"تۆیۆتا کامری"}, engine: "hybrid", cat: "economy", price: "55000", img: "Cars/camry.jpg" },
+            { name: {ar:"كيا سورينتو", ku:"کیا سۆرێنتۆ"}, engine: "auto", cat: "family", price: "70000", img: "Cars/sorento.jpg" }
         ];
 
         function initLang() {
@@ -71,6 +137,13 @@
             document.getElementById('pageTitle').innerText = l.title;
             document.getElementById('serviceLabel').innerText = type === 'wedding' ? l.wedding : l.personal;
             
+            // تطبيق لون المدينة
+            document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
+
+            // تطبيق إيموجي الخدمة في الخلفية
+            const icon = type === 'wedding' ? '🎁' : '🚗';
+            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">${icon}</text></svg>')`;
+
             document.getElementById('optEngAll').innerText = l.engAll;
             document.getElementById('optEngHybrid').innerText = l.engHyb;
             document.getElementById('optEngAuto').innerText = l.engAuto;
@@ -87,24 +160,22 @@
             const l = translations[currentLang] || translations['ar'];
             grid.innerHTML = '';
 
-            const filtered = fleet.filter(car => {
-                return (eng === 'all' || car.engine === eng) && (cat === 'all' || car.cat === cat);
-            });
+            const filtered = fleet.filter(car => (eng === 'all' || car.engine === eng) && (cat === 'all' || car.cat === cat));
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-20 font-black text-gray-400 text-xl">${l.empty}</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-20 font-black text-slate-400 text-2xl">${l.empty}</div>`;
                 return;
             }
 
             filtered.forEach(car => {
                 const carName = car.name[currentLang] || car.name['ar'];
                 grid.innerHTML += `
-                    <div class="car-card p-4">
-                        <img src="${car.img}" class="w-full h-52 object-cover rounded-[2.5rem] mb-4 shadow-sm" onerror="this.src='https://via.placeholder.com/400x250?text=Al-Hut+Car'">
+                    <div class="car-card p-5">
+                        <img src="${car.img}" class="w-full h-56 object-cover rounded-[2.5rem] mb-5 shadow-inner" onerror="this.src='https://via.placeholder.com/400x250?text=Al-Hut+Car'">
                         <div class="px-2 ${l.dir === 'rtl' ? 'text-right' : 'text-left'}">
-                            <h3 class="text-2xl font-black mb-2">${carName}</h3>
-                            <div class="price-badge inline-block mb-6">${parseInt(car.price).toLocaleString()} ${l.currency}</div>
-                            <button onclick="selectCar('${carName}', '${car.price}')" class="w-full bg-[#002349] text-white py-4 rounded-2xl font-black hover:bg-[#D4AF37] hover:text-black transition-all active:scale-95">
+                            <h3 class="text-2xl font-black mb-3 text-slate-800">${carName}</h3>
+                            <div class="price-badge text-lg mb-6">${parseInt(car.price).toLocaleString()} ${l.currency}</div>
+                            <button onclick="selectCar('${carName}', '${car.price}')" class="btn-select w-full py-4 text-xl shadow-lg active:scale-95">
                                 ${l.btn}
                             </button>
                         </div>
@@ -114,17 +185,13 @@
         }
 
         function selectCar(name, price) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('car', name);
-            params.set('price', price);
-            params.set('lang', currentLang);
-            window.location.href = `addons.html?${params.toString()}`;
+            u.set('car', name);
+            u.set('price', price);
+            // إذا كانت الخدمة شخصية أو أعراس نذهب للإضافات، وإذا كانت تعليم تذهب لصفحة أخرى
+            window.location.href = `addons.html?${u.toString()}`;
         }
 
-        window.onload = () => {
-            initLang();
-            renderFleet();
-        };
+        window.onload = () => { initLang(); renderFleet(); };
     </script>
 </body>
 </html>
