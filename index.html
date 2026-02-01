@@ -20,7 +20,6 @@
             overflow: hidden;
         }
 
-        /* تحسين وضوح وحجم الخرائط في الخلفية */
         .map-pattern {
             position: absolute; inset: 0; opacity: 0.25; pointer-events: none;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🗺️</text></svg>');
@@ -28,7 +27,6 @@
         }
         @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
 
-        /* تأثير كلمة الحوت السحرية */
         .brand-wave {
             background: linear-gradient(to right, #D4AF37, #4fc3f7, #ffffff, #D4AF37);
             background-size: 200% auto;
@@ -46,7 +44,6 @@
         }
         @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
 
-        /* المربع الزجاجي المرفوع جداً */
         .glass-box {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(25px);
@@ -95,7 +92,7 @@
             <div class="text-right">
                 <h1 class="text-7xl md:text-9xl brand-wave mb-2 tracking-tighter" id="brandName">الحـوت</h1>
                 <p id="dynamicGreeting" class="text-xl md:text-3xl opacity-100 font-black italic h-10 transition-all duration-500 drop-shadow-lg text-white mb-2"></p>
-                <p id="servicesTitle" class="text-lg md:text-2xl font-bold text-[#D4AF37] drop-shadow-md">( خدمات السيارات )</p>
+                <p id="servicesTitle" class="text-lg md:text-2xl font-bold text-[#D4AF37] drop-shadow-md">( الحـوت للسيارات )</p>
             </div>
             <div class="whale-left" id="whaleIcon">🐋</div>
         </div>
@@ -156,43 +153,25 @@
                 dir: 'rtl', font: 'Tajawal', brand: 'الحـوت', labelCity: 'المدينة', labelService: 'الخدمة المطلوبة',
                 labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول 🐋',
                 morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
-                servicesTitle: '( خدمات السيارات )',
+                servicesTitle: '( الحـوت للسيارات )',
                 services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس ومناسبات', training: '🎓 تعليم قيادة (مدربين)' },
                 cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
-                msgs: { 
-                    'كركوك': 'أهلاً بكم في كركوك.. أرضكم ومسجدكم 💎', 
-                    'بغداد': 'من بغداد دار السلام.. الحوت يرافقكم 🏰', 
-                    'أربيل': 'بخير ببن لـ أربيل.. 🏔️', 
-                    'السليمانية': 'سليماني جوان.. 🌲', 
-                    'الموصل': 'أهلاً بالموصل الحدباء.. 🏹', 
-                    'البصرة': 'حي الله أهلنا بالبصرة ⚓', 
-                    'الأنبار': 'أهلاً بالأنبار العزيزة.. 🌴', 
-                    'ديالى': 'نورتم ديالى.. 🍊' 
-                }
+                msgs: { 'كركوك': 'أهلاً بكم في كركوك.. 💎', 'بغداد': 'من بغداد دار السلام.. 🏰', 'أربيل': 'بخير ببن لـ أربيل.. 🏔️', 'السليمانية': 'سليماني جوان.. 🌲', 'الموصل': 'أهلاً بالموصل الحدباء.. 🏹', 'البصرة': 'حي الله أهلنا بالبصرة ⚓', 'الأنبار': 'أهلاً بالأنبار العزيزة.. 🌴', 'ديالى': 'نورتم ديالى.. 🍊' }
             },
             ku: {
                 dir: 'rtl', font: 'Tajawal', brand: 'ئەلحووت', labelCity: 'شار', labelService: 'خزمەتگوزاری',
                 labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
                 morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
-                servicesTitle: '( خزمەتگوزارییەکانی ئۆتۆمبێل )',
+                servicesTitle: '( ئەلحووت بۆ ئۆتۆمبێل )',
                 services: { placeholder: '-- خزمەتگوزاری هەڵبژێرە --', personal: '🚗 بەکرێگرتنی ئۆتۆمبێل', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
                 cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 
-                    'كركوك': 'بەخێربێن بۆ کەرکوک، دڵی کوردستان و خاکی ئیسلام 💎', 
-                    'بغداد': 'سڵاو لە بەغداد.. 🏰', 
-                    'أربيل': 'بەخێربێن بۆ هەولێر.. 🏔️', 
-                    'السليمانية': 'سلێمانی جوان.. 🌲', 
-                    'الموصل': 'سڵاو بۆ مووسڵ.. 🏹', 
-                    'البصرة': 'سڵاو بۆ بەسرە.. ⚓', 
-                    'الأنبار': 'سڵاو بۆ ئەنبار.. 🌴', 
-                    'ديالى': 'سڵاو بۆ دیالە.. 🍊' 
-                }
+                msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک.. 💎', 'بغداد': 'سڵاو لە بەغداد.. 🏰', 'أربيل': 'بەخێربێن بۆ هەولێر.. 🏔️', 'السليمانية': 'سلێمانی جوان.. 🌲', 'الموصل': 'سڵاو بۆ مووسڵ.. 🏹', 'البصرة': 'سڵاو بۆ بەسرە.. ⚓', 'الأنبار': 'سڵاو بۆ ئەنبار.. 🌴', 'ديالى': 'سڵاو بۆ دیالە.. 🍊' }
             },
             tr: {
                 dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'City', labelService: 'Service',
                 labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
                 morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
-                servicesTitle: '( Araba Hizmetleri )',
+                servicesTitle: '( AL-HUT Motors )',
                 services: { placeholder: '-- Service --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
                 cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Bağdat 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
                 msgs: { 'كركوك': 'Selam Kerkük.. 💎', 'بغداد': 'Selam Bağdat.. 🏰', 'أربيل': 'Welcome to Erbil.. 🏔️', 'السليمانية': 'Nice Slemani.. 🌲', 'الموصل': 'Selam Musul.. 🏹', 'البصرة': 'Greetings Basra.. ⚓', 'الأنبار': 'Welcome Anbar.. 🌴', 'ديالى': 'Welcome Diyala.. 🍊' }
@@ -201,7 +180,7 @@
                 dir: 'ltr', font: 'Poppins', brand: 'AL-HUT', labelCity: 'City', labelService: 'Service',
                 labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
                 morning: 'Good Morning', day: 'Good Day', evening: 'Good Evening',
-                servicesTitle: '( Car Services )',
+                servicesTitle: '( AL-HUT Motors )',
                 services: { placeholder: '-- Service --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
                 cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Slemani 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
                 msgs: { 'كركوك': 'Welcome to Kirkuk.. 💎', 'بغداد': 'Welcome to Baghdad.. 🏰', 'أربيل': 'Welcome to Erbil.. 🏔️', 'السليمانية': 'Nice Slemani.. 🌲', 'الموصل': 'Welcome to Mosul.. 🏹', 'البصرة': 'Greetings Basra.. ⚓', 'الأنبار': 'Welcome Anbar.. 🌴', 'ديالى': 'Welcome Diyala.. 🍊' }
@@ -214,7 +193,7 @@
             document.getElementById('htmlTag').dir = l.dir;
             document.body.style.fontFamily = l.font + ', sans-serif';
             document.getElementById('brandName').innerText = l.brand;
-            document.getElementById('servicesTitle').innerText = l.servicesTitle; // ترجمة العنوان الجديد
+            document.getElementById('servicesTitle').innerText = l.servicesTitle; 
             document.getElementById('labelCity').innerText = l.labelCity;
             document.getElementById('labelService').innerText = l.labelService;
             document.getElementById('labelDate').innerText = l.labelDate;
