@@ -19,6 +19,7 @@
         .gender-tag { font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 8px; }
         .gender-male { background: #eff6ff; color: #1d4ed8; }
         .gender-female { background: #fdf2f8; color: #be185d; }
+        .price-text { color: #c5a02d; font-weight: 900; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -82,6 +83,7 @@
                 const isFemale = o.gen === 'أنثى' || o.gen === 'Female';
                 const genderIcon = isFemale ? '👩' : '👨';
                 const genderClass = isFemale ? 'gender-female' : 'gender-male';
+                const formattedPrice = Number(o.price).toLocaleString() + " د.ع";
 
                 // --- 1. عرض الرادار (قبل الاستلام) ---
                 if(currentTab === 'new') {
@@ -94,7 +96,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3 mb-4">
                             <div class="bg-slate-50 p-3 rounded-2xl"><span class="info-label">عدد الأيام</span><p class="text-sm font-black">${o.days} أيام</p></div>
-                            <div class="bg-slate-50 p-3 rounded-2xl"><span class="info-label">السعر</span><p class="text-sm font-black text-amber-600">${Number(o.price).toLocaleString()} د.ع</p></div>
+                            <div class="bg-slate-50 p-3 rounded-2xl"><span class="info-label">السعر الإجمالي</span><p class="text-sm font-black price-text">${formattedPrice}</p></div>
                         </div>
                         <div class="bg-blue-50 p-4 rounded-2xl mb-6">
                             <span class="info-label text-blue-400">الإضافات Addons</span>
@@ -118,14 +120,14 @@
 
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="info-box"><span class="info-label">رقم الهاتف</span><p class="font-black text-slate-800">${o.phone}</p></div>
-                            <div class="info-box"><span class="info-label">العمر</span><p class="font-black text-slate-800">${o.age} سنة</p></div>
+                            <div class="info-box"><span class="info-label">السعر الكلي</span><p class="font-black price-text">${formattedPrice}</p></div>
                             <div class="info-box"><span class="info-label">الجنس</span><p class="font-black text-slate-800">${genderIcon} ${o.gen}</p></div>
                             <div class="info-box"><span class="info-label">مدة الإيجار</span><p class="font-black text-slate-800">${o.days} أيام</p></div>
                         </div>
                         
                         <div class="bg-indigo-900 text-white p-5 rounded-3xl mb-6 shadow-lg">
-                             <span class="info-label text-indigo-300">الطلبات والإضافات:</span>
-                             <p class="text-xs font-bold">${o.addons || 'لا توجد إضافات'}</p>
+                             <span class="info-label text-indigo-300 text-center">الإضافات والملاحظات:</span>
+                             <p class="text-xs font-bold text-center">${o.addons || 'لا توجد إضافات'}</p>
                         </div>
 
                         <div class="space-y-3">
@@ -142,8 +144,15 @@
                 if(currentTab === 'done') {
                     return `
                     <div class="whale-card p-5 flex justify-between items-center opacity-70">
-                        <div><h3 class="font-black text-slate-700 text-sm">${o.name}</h3><p class="text-[10px] text-slate-400">${o.timestamp}</p></div>
-                        <div class="text-right"><p class="font-black text-xs text-slate-800">${o.car}</p><p class="text-[10px] font-bold ${o.status.includes('✅') ? 'text-green-500' : 'text-red-500'}">${o.status}</p></div>
+                        <div>
+                            <h3 class="font-black text-slate-700 text-sm">${o.name}</h3>
+                            <p class="text-[10px] text-slate-400">${o.timestamp}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-xs text-slate-800">${o.car}</p>
+                            <p class="font-black text-[11px] price-text">${formattedPrice}</p>
+                            <p class="text-[9px] font-bold ${o.status.includes('✅') ? 'text-green-500' : 'text-red-500'}">${o.status}</p>
+                        </div>
                     </div>`;
                 }
             }).reverse().join('');
