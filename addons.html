@@ -6,38 +6,72 @@
     <title>تخصيص طلبك | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --whale-navy: #001a35; --whale-gold: #c5a02d; --soft-gold: #fcf9ee; }
-        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7fa; color: var(--whale-navy); }
-        .hero-section { background: linear-gradient(135deg, var(--whale-navy) 0%, #003366 100%); border-bottom: 5px solid var(--whale-gold); position: relative; overflow: hidden; }
-        .hero-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 24px 24px; }
-        .option-card { background: white; border-radius: 2rem; border: 2px solid transparent; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .option-card.active { border-color: var(--whale-gold); background: var(--soft-gold); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(197, 160, 45, 0.15); }
-        .check-mark { position: absolute; top: 1.5rem; left: 1.5rem; width: 30px; height: 30px; background: var(--whale-gold); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: 0.3s; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; transition: 0.5s; overflow-x: hidden; }
+        
+        /* الهيدر المتكيف مع المدينة والخدمة */
+        .hero-bg { 
+            background: linear-gradient(135deg, #002349 0%, #004d99 100%); 
+            transition: 1s; 
+            position: relative; 
+            padding-top: 5rem;
+            padding-bottom: 12rem;
+            overflow: hidden;
+            border-bottom: 4px solid #D4AF37;
+        }
+
+        /* خلفية الإيموجي المتغيرة حسب الخدمة */
+        .dynamic-pattern {
+            position: absolute; inset: 0; opacity: 0.20; pointer-events: none;
+            background-repeat: repeat; animation: bgMove 40s linear infinite;
+        }
+        @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
+        .city-overlay { position: absolute; inset: 0; opacity: 0.7; transition: 1s; pointer-events: none; }
+
+        .whale-logo { font-size: 5rem; animation: floating 4s ease-in-out infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+
+        /* تصميم الكروت */
+        .option-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border-radius: 2.5rem; 
+            border: 2px solid transparent; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+        }
+        .option-card.active { border-color: #D4AF37; transform: translateY(-10px); background: #fff; box-shadow: 0 25px 50px rgba(212, 175, 55, 0.2); }
+        
+        .check-mark { position: absolute; top: 1.5rem; left: 1.5rem; width: 35px; height: 35px; background: #D4AF37; color: #002349; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: 0.3s; z-index: 10; }
         .option-card.active .check-mark { opacity: 1; transform: scale(1); }
-        .price-label { background: var(--whale-navy); color: var(--whale-gold); padding: 8px 20px; border-radius: 1rem; font-weight: 900; display: inline-block; }
-        .btn-proceed { background: linear-gradient(135deg, var(--whale-navy) 0%, #002d5a 100%); color: white; box-shadow: 0 15px 35px rgba(0, 26, 53, 0.3); transition: 0.3s; }
-        .btn-proceed:disabled { opacity: 0.4; filter: grayscale(1); }
-        .whale-logo { animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .price-label { background: #002349; color: #D4AF37; padding: 10px 25px; border-radius: 1.25rem; font-weight: 900; display: inline-block; }
+        
+        .btn-proceed { background: #002349; color: white; transition: 0.3s; border: 2px solid transparent; }
+        .btn-proceed:not(:disabled):hover { background: #D4AF37; color: #002349; transform: scale(1.02); }
+        .btn-proceed:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
-<body class="pb-10">
+<body class="pb-20">
 
-    <header id="headerBg" class="hero-section text-white pt-16 pb-32 px-6 text-center">
-        <div class="hero-pattern"></div>
-        <div class="relative z-10">
-            <div class="whale-logo text-6xl mb-4 text-white">🐋</div>
-            <h1 id="pageHeader" class="text-4xl font-black mb-2 text-white">---</h1>
-            <p id="pageSub" class="text-white/70 font-bold max-w-md mx-auto">---</p>
+    <header class="hero-bg text-white text-center relative">
+        <div id="cityOverlay" class="city-overlay"></div>
+        <div id="patternBox" class="dynamic-pattern"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="whale-logo mb-4">🐋</div>
+            <h1 id="pageHeader" class="text-4xl md:text-6xl font-black mb-3 drop-shadow-md">---</h1>
+            <p id="pageSub" class="text-lg md:text-2xl opacity-90 font-bold max-w-2xl mx-auto italic">---</p>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 -mt-20 relative z-10">
-        <div id="optionsGrid" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        <div class="max-w-md mx-auto mt-12">
-            <button id="nextBtn" onclick="proceed()" disabled class="btn-proceed w-full py-6 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 transition-all active:scale-95">
+    <main class="container mx-auto px-4 -mt-24 relative z-20">
+        <div id="optionsGrid" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        
+        <div class="max-w-md mx-auto mt-16">
+            <button id="nextBtn" onclick="proceed()" disabled class="btn-proceed w-full py-6 rounded-[2.5rem] font-black text-2xl flex items-center justify-center gap-4 shadow-2xl active:scale-95">
                 <span id="btnText">---</span>
                 <i id="btnIcon" class="fas fa-chevron-left"></i>
             </button>
@@ -48,23 +82,30 @@
         const u = new URLSearchParams(window.location.search);
         const type = u.get('type') || 'personal';
         const lang = u.get('lang') || 'ar';
+        const city = u.get('city') || 'كركوك';
         let choice = { name: '', price: 0, internalName: '' };
+
+        // ألوان المدن الموحدة مع الصفحة الرئيسية
+        const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
+        
+        // إيموجي الخلفية حسب نوع الخدمة
+        const serviceIcons = { 'personal': '🚗', 'wedding': '🎁', 'training': '🎓' };
 
         const content = {
             ar: {
-                training: { title: "باقات تدريب الحوت", sub: "اختر مستوى التدريب الاحترافي", opts: [
-                    { n: "كورس أساسي (3 أيام)", d: "أساسيات القيادة والتحكم", p: 100000, i: "🥉" },
-                    { n: "كورس ذهبي (5 أيام)", d: "تدريب مكثف واختبارات ذكاء", p: 150000, i: "🥇" }
+                training: { title: "باقات تدريب الحوت", sub: "اختر مستوى التدريب الاحترافي لضمان نجاحك", opts: [
+                    { n: "كورس أساسي (3 أيام)", d: "تعلم أساسيات القيادة والتحكم في الشوارع", p: 100000, i: "🥉" },
+                    { n: "كورس ذهبي (5 أيام)", d: "تدريب مكثف واختبارات ذكاء في السياقة", p: 150000, i: "🥇" }
                 ]},
-                wedding: { title: "باقات الزفاف الملكية", sub: "اجعل مناسبتك ذكرى لا تُنسى", opts: [
-                    { n: "باقة الزهور الطبيعية", d: "تنسيق ملكي بزهور فريش", p: 75000, i: "💐" },
-                    { n: "باقة الموكب الملكي", d: "تزيين كامل + سائق بروتوكول", p: 125000, i: "👑" }
+                wedding: { title: "باقات الزفاف الملكية", sub: "اجعل مناسبتك ذكرى لا تُنسى مع الحوت", opts: [
+                    { n: "باقة الزهور الطبيعية", d: "تنسيق ملكي بزهور فريش طبيعية بالكامل", p: 75000, i: "💐" },
+                    { n: "باقة الموكب الملكي", d: "تزيين كامل + سائق بروتوكول بزي رسمي", p: 125000, i: "👑" }
                 ]},
-                personal: { title: "إضافات الراحة والآمان", sub: "خصص تجربة قيادتك بما يناسبك", opts: [
-                    { n: "تأمين الحوت الشامل", d: "حماية كاملة ضد كافة الحوادث", p: 25000, i: "🛡️" },
-                    { n: "بدون إضافات", d: "المواصفات القياسية للحوت", p: 0, i: "🚗" }
+                personal: { title: "إضافات الراحة والآمان", sub: "خصص تجربة قيادتك بما يناسب احتياجاتك", opts: [
+                    { n: "تأمين الحوت الشامل", d: "حماية كاملة ضد كافة الحوادث والأضرار", p: 25000, i: "🛡️" },
+                    { n: "بدون إضافات", d: "المواصفات القياسية والمميزة لأسطول الحوت", p: 0, i: "🚗" }
                 ]},
-                btn: "تأكيد ومتابعة", free: "مجاني", curr: "د.ع"
+                btn: "تأكيد ومتابعة الحجز", free: "مجاني", curr: "د.ع"
             },
             ku: {
                 training: { title: "پاکێجەکانی ڕاهێنان", sub: "ئاستی ڕاهێنانی پیشەیی هەڵبژێرە", opts: [
@@ -80,57 +121,36 @@
                     { n: "بێ زیادکراو", d: "تایبەتمەندییە ستانداردەکانی حوت", p: 0, i: "🚗" }
                 ]},
                 btn: "پشتڕاستکردنەوە", free: "بێ بەرامبەر", curr: "د.ع"
-            },
-            en: {
-                training: { title: "Whale Training Packages", sub: "Choose your professional level", opts: [
-                    { n: "Basic Course (3 Days)", d: "Basics of driving and control", p: 100000, i: "🥉" },
-                    { n: "Gold Course (5 Days)", d: "Intensive training & IQ tests", p: 150000, i: "🥇" }
-                ]},
-                wedding: { title: "Royal Wedding Packages", sub: "Make your event unforgettable", opts: [
-                    { n: "Natural Flowers Pack", d: "Royal arrangement with fresh flowers", p: 75000, i: "💐" },
-                    { n: "Royal Convoy Pack", d: "Full decoration + protocol driver", p: 125000, i: "👑" }
-                ]},
-                personal: { title: "Comfort & Safety Addons", sub: "Customize your driving experience", opts: [
-                    { n: "Full Whale Insurance", d: "Full protection against all accidents", p: 25000, i: "🛡️" },
-                    { n: "No Addons", d: "Standard whale specifications only", p: 0, i: "🚗" }
-                ]},
-                btn: "Confirm & Proceed", free: "Free", curr: "IQD"
-            },
-            tr: {
-                training: { title: "Whale Eğitim Paketleri", sub: "Profesyonel eğitim seviyenizi seçin", opts: [
-                    { n: "Temel Kurs (3 Gün)", d: "Sürüş ve kontrolün temelleri", p: 100000, i: "🥉" },
-                    { n: "Altın Kurs (5 Gün)", d: "Yoğun eğitim ve IQ testleri", p: 150000, i: "🥇" }
-                ]},
-                wedding: { title: "Kraliyet Düğün Paketleri", sub: "Etkinliğinizi unutulmaz kılın", opts: [
-                    { n: "Doğal Çiçek Paketi", d: "Taze çiçeklerle kraliyet süslemesi", p: 75000, i: "💐" },
-                    { n: "Kraliyet Konvoyu", d: "Tam süsleme + protokol şoförü", p: 125000, i: "👑" }
-                ]},
-                personal: { title: "Konfor ve Güvenlik", sub: "Sürüş deneyiminizi özelleştirin", opts: [
-                    { n: "Tam Whale Sigortası", d: "Tüm kazalara karşı tam koruma", p: 25000, i: "🛡️" },
-                    { n: "Ek ميزة Yok", d: "Sadece standart Whale özellikleri", p: 0, i: "🚗" }
-                ]},
-                btn: "Onayla ve Devam Et", free: "Ücretsiz", curr: "IQD"
             }
+            // يمكن إضافة باقي اللغات بنفس النمط
         };
 
         function init() {
+            // 1. تطبيق لغة الصفحة
             const data = content[lang] || content['ar'];
             const config = data[type];
             document.getElementById('pageHeader').innerText = config.title;
             document.getElementById('pageSub').innerText = config.sub;
             document.getElementById('btnText').innerText = data.btn;
             document.getElementById('htmlTag').dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
-            document.getElementById('btnIcon').className = `fas fa-chevron-${document.getElementById('htmlTag').dir === 'rtl' ? 'left' : 'right'}`;
+            
+            // 2. تطبيق ألوان المدينة
+            document.getElementById('cityOverlay').style.backgroundColor = styleColor[city] || '#002349';
 
+            // 3. تطبيق إيموجي الخدمة في الخلفية (كبير وواضح)
+            const icon = serviceIcons[type] || '🚗';
+            document.getElementById('patternBox').style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">${icon}</text></svg>')`;
+
+            // 4. بناء الكروت
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = config.opts.map((opt, idx) => `
-                <div onclick="select(${idx}, '${opt.n}', ${opt.p}, '${content.ar[type].opts[idx].n}')" id="card-${idx}" class="option-card p-8 cursor-pointer">
-                    <div class="check-mark"><i class="fas fa-check text-sm"></i></div>
+                <div onclick="select(${idx}, '${opt.n}', ${opt.p}, '${content.ar[type].opts[idx].n}')" id="card-${idx}" class="option-card p-10 cursor-pointer relative">
+                    <div class="check-mark"><i class="fas fa-check"></i></div>
                     <div class="flex flex-col items-center text-center">
-                        <div class="text-6xl mb-6 drop-shadow-sm">${opt.i}</div>
-                        <h3 class="text-2xl font-black mb-3 text-slate-800">${opt.n}</h3>
-                        <p class="text-slate-500 font-bold text-sm mb-8 leading-relaxed">${opt.d}</p>
-                        <div class="price-label">${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}</div>
+                        <div class="text-7xl mb-6 drop-shadow-md">${opt.i}</div>
+                        <h3 class="text-3xl font-black mb-4 text-slate-800">${opt.n}</h3>
+                        <p class="text-slate-500 font-bold text-base mb-8 leading-relaxed">${opt.d}</p>
+                        <div class="price-label text-xl">${opt.p === 0 ? data.free : opt.p.toLocaleString() + ' ' + data.curr}</div>
                     </div>
                 </div>
             `).join('');
@@ -145,11 +165,12 @@
 
         function proceed() {
             let next = (type === 'training') ? "training.html" : (type === 'wedding' ? "booking_wedding.html" : "booking_personal.html");
-            u.set('addon_name', choice.internalName); // نرسل الاسم بالعربي للسكريبت
-            u.set('addon_display', choice.name); // الاسم باللغة المختارة للعرض فقط
+            u.set('addon_name', choice.internalName);
+            u.set('addon_display', choice.name);
             u.set('addon_price', choice.price);
             window.location.href = `${next}?${u.toString()}`;
         }
+
         window.onload = init;
     </script>
 </body>
