@@ -24,7 +24,6 @@
         .lang-btn:hover { background: #D4AF37; color: #002349; transform: scale(1.1); }
         .city-overlay { position: absolute; inset: 0; opacity: 0.65; transition: 1s; pointer-events: none; }
         
-        /* انميشن خيار الأيام */
         #daysWrapper { transition: all 0.4s ease; overflow: hidden; }
         .hidden-field { max-width: 0; opacity: 0; transform: scaleX(0); margin: 0; padding: 0; pointer-events: none; }
         .show-field { max-width: 500px; opacity: 1; transform: scaleX(1); }
@@ -55,7 +54,7 @@
         <div class="container mx-auto px-6 flex justify-between items-center relative z-10 header-flex">
             <div class="text-right">
                 <h1 class="text-5xl md:text-7xl brand-text-style mb-4" id="brandName">
-                    استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات
+                    استأجر سيارة<br>قريبة منك تناسب<br>رحلتك
                 </h1>
                 <p id="dynamicGreeting" class="text-xl md:text-2xl font-black transition-all duration-500 drop-shadow-lg text-white/90 mb-2 h-8"></p>
                 <p id="subGreeting" class="text-lg md:text-xl font-bold text-[#D4AF37]">سيارات رائعة بأسعار رائعة</p>
@@ -125,7 +124,7 @@
         let currentLang = 'ar';
         const data = {
             ar: {
-                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت', brand: 'استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات', subGreet: 'سيارات رائعة بأسعار رائعة',
+                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت', brand: 'استأجر سيارة<br>قريبة منك تناسب<br>رحلتك', subGreet: 'سيارات رائعة بأسعار رائعة',
                 labelCity: 'المدينة', labelService: 'الخدمة', labelDays: 'الأيام', labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول 🐋',
                 morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
                 services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس', training: '🎓 تعليم قيادة' },
@@ -141,7 +140,7 @@
                 msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک..', 'بغداد': 'سڵاو لە بەغداد..' }
             },
             tr: {
-                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Her geziye<br>uygun araç', subGreet: 'Harika fiyatlar',
+                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Yolculuğunuza uygun<br>yakın bir araç<br>kiralayın', subGreet: 'Harika fiyatlar',
                 labelCity: 'City', labelService: 'Service', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
                 morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
                 services: { placeholder: '-- Service --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
@@ -149,7 +148,7 @@
                 msgs: { 'كركوك': 'Kerkük\'e hoş geldiniz..' }
             },
             en: {
-                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Rent a car<br>easily', subGreet: 'Top prices',
+                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Rent a car<br>near you for<br>your trip', subGreet: 'Top prices',
                 labelCity: 'City', labelService: 'Service', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
                 morning: 'Good Morning', day: 'Good Day', evening: 'Good Evening',
                 services: { placeholder: '-- Select --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
@@ -183,7 +182,6 @@
             adaptToCity();
         }
 
-        // دالة فحص الخدمة لإظهار حقل الأيام
         function checkService() {
             const service = document.getElementById('mainService').value;
             const wrapper = document.getElementById('daysWrapper');
@@ -230,7 +228,6 @@
             if(!service || !date || !time) { alert(data[currentLang].alert); return; }
             
             let targetPage = (service === "training") ? "addons.html" : "fleet.html";
-            // نرسل عدد الأيام في الرابط أيضاً
             window.location.href = `${targetPage}?type=${service}&lang=${currentLang}&date=${date}&time=${time}&city=${city}&days=${days}`;
         }
 
