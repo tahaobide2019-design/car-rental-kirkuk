@@ -35,7 +35,7 @@
 
         <div id="locationPreview" class="mb-6 text-center hidden">
              <a id="mapLink" href="#" target="_blank" class="map-badge hover:bg-slate-200 transition-all">
-                <i class="fas fa-map-marker-alt"></i> <span id="mapText">عرض الموقع على الخريطة</span>
+                <i class="fas fa-map-marker-alt"></i> <span id="mapText">---</span>
              </a>
         </div>
 
@@ -69,19 +69,11 @@
         const uiContent = {
             ar: { 
                 title: "مراجعة التفاصيل", total: "إجمالي المبلغ التقريبي", btn: "تأكيد وإرسال الطلب", back: "رجوع للتعديل", curr: "د.ع", map: "عرض الموقع المختار",
-                fields: { name: "الاسم", phone: "الهاتف", age: "العمر", province: "المدينة", car: "الخدمة/السيارة", addon_display: "الإضافات", date: "التاريخ", gender: "الجنس", license_no: "رقم الإجازة", national_id: "رقم الهوية" } 
-            },
-            ku: { 
-                title: "پیاچوونەوەی وردەکارییەکان", total: "کۆی گشتی خەمڵێنراو", btn: "پشتڕاستکردنەوە و ناردن", back: "گەڕانەوە بۆ دەستکاری", curr: "د.ع", map: "بینینی شوێن لەسەر نەخشە",
-                fields: { name: "ناو", phone: "تەلەفۆن", age: "تەمەن", province: "شار", car: "ئۆتۆمبێل/خزمەتگوزاری", addon_display: "زیادکراوەکان", date: "بەروار", gender: "ڕەگەز", license_no: "ژ. مۆڵەت", national_id: "ژ. ناسنامە" } 
-            },
-            tr: { 
-                title: "Detayları İncele", total: "Tahmini Toplam Tutar", btn: "Onayla ve Gönder", back: "Düzenlemek İçin Geri Dön", curr: "IQD", map: "Haritada Görüntüle",
-                fields: { name: "Ad Soyad", phone: "Telefon", age: "Yaş", province: "Şehir", car: "Araç/Servis", addon_display: "Ekstralar", date: "Tarih", gender: "Cinsiyet", license_no: "Ehliyet No", national_id: "Kimlik No" } 
+                fields: { name: "الاسم", phone: "الهاتف", province: "المدينة", car: "السيارة", days: "عدد الأيام", addon_display: "الإضافات", gender: "الجنس" } 
             },
             en: { 
-                title: "Review Details", total: "Approximate Total Amount", btn: "Confirm & Send Order", back: "Back to Edit", curr: "IQD", map: "View Location on Map",
-                fields: { name: "Full Name", phone: "Phone", age: "Age", province: "City", car: "Car/Service", addon_display: "Add-ons", date: "Date", gender: "Gender", license_no: "License No", national_id: "ID Number" } 
+                title: "Review Details", total: "Total Amount", btn: "Confirm Order", back: "Edit Info", curr: "IQD", map: "View Map",
+                fields: { name: "Name", phone: "Phone", province: "City", car: "Car", days: "Days", addon_display: "Add-ons", gender: "Gender" } 
             }
         };
 
@@ -101,20 +93,27 @@
             document.getElementById('mapText').innerText = ui.map;
             document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
 
+            // حساب السعر قبل بناء الشبكة
+            const dailyPrice = parseInt(u.get('price') || 0);
+            const daysCount = parseInt(u.get('days') || 1);
+            const addonPrice = parseInt(u.get('addon_price') || 0);
+            
+            // المعادلة: (سعر اليوم × عدد الأيام) + سعر الإضافات
+            const finalTotal = (dailyPrice * daysCount) + addonPrice;
+            document.getElementById('totalVal').innerText = finalTotal.toLocaleString();
+
+            // بناء شبكة المعلومات (تأكدنا من وجود حقل days)
             let gridHtml = '';
             Object.keys(ui.fields).forEach(key => {
                 let val = u.get(key);
-                if (val && val !== 'null' && val !== '---' && val !== 'undefined') {
-                    gridHtml += `<div class="info-item"><span class="info-label">${ui.fields[key]}</span><span class="info-value">${val}</span></div>`;
+                if (val && val !== 'null' && val !== '---') {
+                    gridHtml += `<div class="info-item">
+                        <span class="info-label">${ui.fields[key]}</span>
+                        <span class="info-value">${val} ${key === 'days' ? (lang === 'ar' ? 'أيام' : 'Days') : ''}</span>
+                    </div>`;
                 }
             });
             document.getElementById('detailsGrid').innerHTML = gridHtml;
-
-            // حساب السعر النهائي
-            const price = parseInt(u.get('price') || 0);
-            const addonPrice = parseInt(u.get('addon_price') || 0);
-            const total = price + addonPrice;
-            document.getElementById('totalVal').innerText = total.toLocaleString();
 
             if (u.get('location_link')) {
                 document.getElementById('locationPreview').classList.remove('hidden');
@@ -123,11 +122,14 @@
         };
 
         function confirmAndSubmit() {
-            // نقوم بتمرير كافة البيانات إلى صفحة النجاح أو معالج البيانات
-            const finalPrice = parseInt(u.get('price') || 0) + parseInt(u.get('addon_price') || 0);
-            u.set('total_final', finalPrice);
+            const dailyPrice = parseInt(u.get('price') || 0);
+            const daysCount = parseInt(u.get('days') || 1);
+            const addonPrice = parseInt(u.get('addon_price') || 0);
+            const finalTotal = (dailyPrice * daysCount) + addonPrice;
+
+            // تحديث السعر الكلي في المعاملات قبل الانتقال
+            u.set('total_final', finalTotal);
             
-            // التوجيه إلى صفحة النجاح (التي ستقوم بإرسال البيانات فعلياً للسكريبت)
             window.location.href = `success.html?${u.toString()}`;
         }
     </script>
