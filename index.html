@@ -9,21 +9,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; transition: 0.5s; overflow-x: hidden; }
-        .hero-bg { background: linear-gradient(135deg, #002349 0%, #004d99 100%); transition: 1s; position: relative; padding-top: 5rem; padding-bottom: 16rem; overflow: hidden; }
-        .map-pattern { position: absolute; inset: 0; opacity: 0.25; pointer-events: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🗺️</text></svg>'); background-repeat: repeat; animation: bgMove 40s linear infinite; }
+        
+        .hero-bg { 
+            background: linear-gradient(135deg, #002349 0%, #004d99 100%); 
+            transition: 1s; 
+            position: relative; 
+            padding-top: 5rem;
+            padding-bottom: 16rem;
+            overflow: hidden;
+        }
+
+        .map-pattern {
+            position: absolute; inset: 0; opacity: 0.25; pointer-events: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text y="60" x="10" font-size="45">🗺️</text></svg>');
+            background-repeat: repeat; animation: bgMove 40s linear infinite;
+        }
         @keyframes bgMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
         .brand-text-style { font-weight: 900; line-height: 1.2; color: white; }
-        .whale-left-container { display: flex; flex-direction: column; align-items: center; justify-content: center; animation: floating 4s ease-in-out infinite; }
+
+        .whale-left-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: floating 4s ease-in-out infinite;
+        }
         .whale-emoji { font-size: 6rem; line-height: 1; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.4)); }
         .whale-text-white { font-size: 4rem; font-weight: 900; color: white; margin-top: -10px; }
+
         @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
-        .glass-box { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.4); transform: translateY(-180px); border-radius: 3.5rem; position: relative; z-index: 30; }
-        .smart-input { width: 100%; padding: 1.1rem; background-color: rgba(241, 245, 249, 0.95); border: 2px solid transparent; border-radius: 1.5rem; font-weight: 700; color: #002349; outline: none; transition: 0.3s; }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.4);
+            transform: translateY(-180px); 
+            border-radius: 3.5rem;
+            position: relative;
+            z-index: 30;
+        }
+
+        .smart-input { 
+            width: 100%; padding: 1.1rem; background-color: rgba(241, 245, 249, 0.95); 
+            border: 2px solid transparent; border-radius: 1.5rem; 
+            font-weight: 700; color: #002349; outline: none; transition: 0.3s; 
+        }
         .smart-input:focus { background-color: #fff; border-color: #D4AF37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+
         .lang-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 14px; font-size: 0.9rem; color: white; cursor: pointer; transition: 0.3s; font-weight: 900; }
         .lang-btn:hover { background: #D4AF37; color: #002349; transform: scale(1.1); }
+        
         .city-overlay { position: absolute; inset: 0; opacity: 0.65; transition: 1s; pointer-events: none; }
-        @media (max-width: 768px) { .glass-box { transform: translateY(-130px); margin: 0 10px; } .hero-bg { padding-bottom: 14rem; } .whale-emoji { font-size: 4rem; } .whale-text-white { font-size: 2.5rem; } .header-flex { flex-direction: column; text-align: center; } }
+        
+        /* تأثير الظهور لخانة الأيام */
+        #daysContainer { transition: all 0.5s ease; overflow: hidden; }
+        .hidden-days { max-height: 0; opacity: 0; transform: translateY(20px); pointer-events: none; }
+        .show-days { max-height: 200px; opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .glass-box { transform: translateY(-130px); margin: 0 10px; }
+            .hero-bg { padding-bottom: 14rem; }
+            .whale-emoji { font-size: 4rem; }
+            .whale-text-white { font-size: 2.5rem; }
+            .header-flex { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body class="text-[#002349]">
@@ -38,12 +89,16 @@
     <header id="mainHero" class="hero-bg text-white relative">
         <div id="cityOverlay" class="city-overlay"></div>
         <div class="map-pattern"></div>
+        
         <div class="container mx-auto px-6 flex justify-between items-center relative z-10 header-flex">
             <div class="text-right">
-                <h1 class="text-5xl md:text-7xl brand-text-style mb-4" id="brandName">استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات</h1>
+                <h1 class="text-5xl md:text-7xl brand-text-style mb-4" id="brandName">
+                    استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات
+                </h1>
                 <p id="dynamicGreeting" class="text-xl md:text-2xl font-black transition-all duration-500 drop-shadow-lg text-white/90 mb-2 h-8"></p>
                 <p id="subGreeting" class="text-lg md:text-xl font-bold text-[#D4AF37]">سيارات رائعة بأسعار رائعة</p>
             </div>
+
             <div class="whale-left-container">
                 <div class="whale-emoji">🐋</div>
                 <div class="whale-text-white" id="whaleTitle">الحـوت</div>
@@ -53,34 +108,36 @@
 
     <main class="container mx-auto px-4 relative z-20">
         <div class="glass-box p-8 md:p-12 max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                
                 <div class="md:col-span-2 space-y-2 text-right">
                     <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelCity">المدينة</label>
                     <select id="citySelect" onchange="adaptToCity()" class="smart-input appearance-none cursor-pointer"></select>
                 </div>
+
                 <div class="md:col-span-3 space-y-2 text-right">
                     <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelService">الخدمة المطلوبة</label>
-                    <select id="mainService" class="smart-input appearance-none text-sm cursor-pointer"></select>
+                    <select id="mainService" onchange="toggleDaysField()" class="smart-input appearance-none text-sm cursor-pointer"></select>
                 </div>
+
+                <div id="daysContainer" class="md:col-span-1 space-y-2 text-right hidden-days">
+                    <label class="block text-sm font-black text-slate-500 mr-2 uppercase" id="labelDays">الأيام</label>
+                    <input type="number" id="daysInput" class="smart-input" value="1" min="1">
+                </div>
+
                 <div class="md:col-span-2 space-y-2 text-right">
                     <label class="block text-sm font-black text-slate-500 mr-2" id="labelDate">التاريخ</label>
                     <input type="date" id="dateInput" class="smart-input">
                 </div>
-                <div class="md:col-span-1 space-y-2 text-right">
-                    <label class="block text-[10px] font-black text-slate-500 mr-1 uppercase" id="labelDays">الأيام</label>
-                    <select id="rentalDays" class="smart-input appearance-none cursor-pointer">
-                        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                        <option value="4">4</option><option value="5">5</option><option value="7">7</option>
-                        <option value="30">30</option>
-                    </select>
-                </div>
-                <div class="md:col-span-1 space-y-2 text-right">
-                    <label class="block text-[10px] font-black text-slate-500 mr-1 uppercase" id="labelTime">الوقت</label>
+
+                <div class="md:col-span-2 space-y-2 text-right">
+                    <label class="block text-sm font-black text-slate-500 mr-2" id="labelTime">الوقت</label>
                     <input type="time" id="timeInput" class="smart-input" onchange="validateTime()">
                 </div>
-                <div class="md:col-span-3">
-                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-2xl shadow-2xl hover:bg-[#b8962d] transform transition-all active:scale-95 flex items-center justify-center gap-2">
-                        <span id="btnText">استمر الآن</span> <i id="btnIcon" class="fas fa-arrow-left"></i>
+
+                <div class="md:col-span-2">
+                    <button id="submitBtn" onclick="startBooking()" class="w-full bg-[#D4AF37] text-[#002349] py-4 rounded-2xl font-black text-xl shadow-2xl hover:bg-[#b8962d] transform transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <span id="btnText">استمر</span> <i id="btnIcon" class="fas fa-arrow-left"></i>
                     </button>
                 </div>
             </div>
@@ -111,46 +168,31 @@
         let currentLang = 'ar';
         const data = {
             ar: {
-                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت', brand: 'استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات',
-                subGreet: 'سيارات رائعة بأسعار رائعة من أكبر الشركات', labelCity: 'المدينة', labelService: 'الخدمة المطلوبة',
-                labelDate: 'التاريخ', labelTime: 'الوقت', labelDays: 'الأيام', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول 🐋',
+                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت',
+                brand: 'استئجار سيارة<br>تناسب جميع<br>أنواع الرحلات',
+                subGreet: 'سيارات رائعة بأسعار رائعة من أكبر الشركات',
+                labelCity: 'المدينة', labelService: 'الخدمة المطلوبة', labelDays: 'الأيام',
+                labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول 🐋',
                 morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
                 services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس ومناسبات', training: '🎓 تعليم قيادة (مدربين)' },
                 cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
                 msgs: { 'كركوك': 'أهلاً بكم في كركوك..', 'بغداد': 'أهلاً بكم في بغداد..', 'أربيل': 'بخير ببن لـ أربيل..', 'السليمانية': 'سليماني جوان..', 'الموصل': 'أهلاً بالموصل الحدباء..', 'البصرة': 'حي الله أهلنا بالبصرة', 'الأنبار': 'أهلاً بالأنبار العزيزة..', 'ديالى': 'نورتم ديالى..' }
             },
             ku: {
-                dir: 'rtl', font: 'Tajawal', whale: 'ئەلحووت', brand: 'ئۆتۆمبێلێک بەکرێ بگرە<br>بۆ هەموو جۆرە<br>گەشتەکان',
-                subGreet: 'ئۆتۆمبێلی نایاب بە نرخێکی گونجاو لە گەورەترین کۆمپانیاکان', labelCity: 'شار', labelService: 'خزمەتگوزاری',
-                labelDate: 'بەروار', labelTime: 'کات', labelDays: 'ڕۆژ', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
+                dir: 'rtl', font: 'Tajawal', whale: 'ئەلحووت',
+                brand: 'ئۆتۆمبێلێک بەکرێ بگرە<br>بۆ هەموو جۆرە<br>گەشتەکان',
+                subGreet: 'ئۆتۆمبێلی نایاب بە نرخێکی گونجاو لە کۆمپانیاکان',
+                labelCity: 'شار', labelService: 'خزمەتگوزاری', labelDays: 'ڕۆژەکان', labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
                 morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
-                services: { placeholder: '-- خزمەتگوزاری هەڵبژێرە --', personal: '🚗 بەکرێگرتنی ئۆتۆمبێل', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
+                services: { placeholder: '-- خزمەتگوزاری --', personal: '🚗 بەکرێگرتن', wedding: '🎁 ئۆتۆمبێلی زەماوەند', training: '🎓 فێربوونی شۆفێری' },
                 cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک..', 'بغداد': 'سڵاو لە بەغداد..', 'أربيل': 'بەخێربێن بۆ هەولێر..', 'السليمانية': 'سلێمانی جوان..', 'الموصل': 'سڵاو بۆ مووسڵ..', 'البصرة': 'سڵاو بۆ بەسرە..', 'الأنبار': 'سڵاو بۆ ئەنبار..', 'ديالى': 'سڵاو بۆ دیالە..' }
-            },
-            tr: {
-                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Her türlü geziye<br>uygun araç<br>kiralayın',
-                subGreet: 'Harika arabalar, harika fiyatlar', labelCity: 'City', labelService: 'Service',
-                labelDate: 'Date', labelTime: 'Time', labelDays: 'Days', btnText: 'Continue', alert: 'Fill fields 🐋',
-                morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
-                services: { placeholder: '-- Service --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Training' },
-                cities: { 'كركوك': 'Kerkük 💎', 'بغداد': 'Bağdat 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Süleymaniye 🌲', 'الموصل': 'Musul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Enbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Selam Kerkük..', 'بغداد': 'Selam Bağdat..' }
-            },
-            en: {
-                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Rent a car<br>that fits all<br>trips',
-                subGreet: 'Great cars at great prices', labelCity: 'City', labelService: 'Service',
-                labelDate: 'Date', labelTime: 'Time', labelDays: 'Days', btnText: 'Continue', alert: 'Fill fields 🐋',
-                morning: 'Good Morning', day: 'Good Day', evening: 'Good Evening',
-                services: { placeholder: '-- Select --', personal: '🚗 Rental', wedding: '🎁 Wedding', training: '🎓 Lessons' },
-                cities: { 'كركوك': 'Kirkuk 💎', 'بغداد': 'Baghdad 🏰', 'أربيل': 'Erbil 🏔️', 'السليمانية': 'Slemani 🌲', 'الموصل': 'Mosul 🏹', 'البصرة': 'Basra ⚓', 'الأنبار': 'Anbar 🌴', 'ديالى': 'Diyala 🍊' },
-                msgs: { 'كركوك': 'Welcome to Kirkuk..', 'بغداد': 'Welcome to Baghdad..' }
+                msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک..', 'بغداد': 'سڵاو لە بەغداد..', 'أربيل': 'بەخێربێن بۆ هەولێر..' }
             }
         };
 
         function changeLang(lang) {
             currentLang = lang;
-            const l = data[lang];
+            const l = data[lang] || data['ar'];
             document.getElementById('htmlTag').dir = l.dir;
             document.body.style.fontFamily = l.font + ', sans-serif';
             document.getElementById('brandName').innerHTML = l.brand;
@@ -158,25 +200,37 @@
             document.getElementById('subGreeting').innerText = l.subGreet;
             document.getElementById('labelCity').innerText = l.labelCity;
             document.getElementById('labelService').innerText = l.labelService;
+            document.getElementById('labelDays').innerText = l.labelDays;
             document.getElementById('labelDate').innerText = l.labelDate;
             document.getElementById('labelTime').innerText = l.labelTime;
-            document.getElementById('labelDays').innerText = l.labelDays;
             document.getElementById('btnText').innerText = l.btnText;
-            document.getElementById('btnIcon').className = `fas fa-arrow-${l.dir === 'rtl' ? 'left' : 'right'}`;
             
             const citySelect = document.getElementById('citySelect');
-            citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}">${val}</option>`).join('');
+            const currentCity = citySelect.value || 'كركوك';
+            citySelect.innerHTML = Object.entries(l.cities).map(([key, val]) => `<option value="${key}" ${key === currentCity ? 'selected' : ''}>${val}</option>`).join('');
             
             const serviceSelect = document.getElementById('mainService');
             serviceSelect.innerHTML = `<option value="">${l.services.placeholder}</option><option value="personal">${l.services.personal}</option><option value="wedding">${l.services.wedding}</option><option value="training">${l.services.training}</option>`;
             adaptToCity();
         }
 
+        function toggleDaysField() {
+            const service = document.getElementById('mainService').value;
+            const container = document.getElementById('daysContainer');
+            if (service === 'personal') {
+                container.classList.remove('hidden-days');
+                container.classList.add('show-days');
+            } else {
+                container.classList.add('hidden-days');
+                container.classList.remove('show-days');
+            }
+        }
+
         function adaptToCity() {
             const city = document.getElementById('citySelect').value;
             const greet = document.getElementById('dynamicGreeting');
             const overlay = document.getElementById('cityOverlay');
-            const l = data[currentLang];
+            const l = data[currentLang] || data['ar'];
             const hour = new Date().getHours();
             let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
             const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
@@ -201,8 +255,11 @@
             const date = document.getElementById('dateInput').value;
             const time = document.getElementById('timeInput').value;
             const city = document.getElementById('citySelect').value;
-            const days = document.getElementById('rentalDays').value;
-            if(!service || !date || !time) { alert(data[currentLang].alert); return; }
+            const days = document.getElementById('daysInput').value;
+            const l = data[currentLang] || data['ar'];
+            
+            if(!service || !date || !time) { alert(l.alert); return; }
+            
             let targetPage = (service === "training") ? "addons.html" : "fleet.html";
             window.location.href = `${targetPage}?type=${service}&lang=${currentLang}&date=${date}&time=${time}&city=${city}&days=${days}`;
         }
