@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>حجز كورس تعليم | الحوت 🐋</title>
+    <title id="docTitle">حجز كورس تعليم | الحوت 🐋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 
     <style>
         :root { --main-color: #7c3aed; --bg-soft: #f5f3ff; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
+        body { font-family: 'Tajawal', 'Poppins', sans-serif; background-color: var(--bg-soft); transition: 0.5s; overflow-x: hidden; }
         .glass-card { background: rgba(255, 255, 255, 0.98); }
         #map { height: 250px; border-radius: 2rem; border: 4px solid white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.1); z-index: 1; }
         .input-training { border: 2px solid #ddd6fe; transition: 0.3s; border-radius: 1.25rem; padding: 1rem; width: 100%; background: #f9fafb; font-weight: bold; outline: none; }
@@ -30,53 +30,52 @@
 
     <div id="mainCard" class="max-w-xl mx-auto glass-card rounded-[3.5rem] shadow-2xl overflow-hidden border-t-[12px] transition-all duration-500" style="border-color: var(--main-color);">
         
-        <div id="headerBox" class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
+        <div class="bg-indigo-50 p-8 text-center border-b border-indigo-100">
             <div class="text-5xl mb-3">🎓</div>
-            <h2 id="pageTitle" class="text-3xl font-black dynamic-text">كورس تعليم قيادة</h2>
-            <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-xs font-bold dynamic-text shadow-sm border border-indigo-100 flex flex-wrap justify-center gap-2">
-                </div>
+            <h2 id="pageTitle" class="text-3xl font-black dynamic-text">---</h2>
+            <div id="summary" class="mt-4 p-3 bg-white rounded-2xl text-xs font-bold dynamic-text shadow-sm border border-indigo-100 flex flex-wrap justify-center gap-2"></div>
         </div>
 
-        <div id="formContent" class="p-8 space-y-5">
+        <div class="p-8 space-y-5">
             <div>
-                <label class="block text-xs font-black text-gray-400 mb-2 uppercase">اسم المتدرب الكامل</label>
-                <input type="text" id="tName" class="input-training" placeholder="الاسم الثلاثي">
+                <label id="lblFullname" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
+                <input type="text" id="tName" class="input-training">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-black text-gray-400 mb-2 uppercase">رقم الهاتف</label>
+                    <label id="lblPhone" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
                     <input type="tel" id="tPhone" class="input-training text-left" dir="ltr" placeholder="07xx xxx xxxx">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-400 mb-2 uppercase">العمر</label>
-                    <input type="number" id="tAge" class="input-training" placeholder="25">
+                    <label id="lblAge" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
+                    <input type="number" id="tAge" class="input-training">
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-black text-gray-400 mb-2 uppercase">رقم الهوية / الجواز</label>
-                <input type="text" id="tNationalID" class="input-training" placeholder="رقم الهوية الوطنية">
+                <label id="lblID" class="block text-xs font-black text-gray-400 mb-2 uppercase">---</label>
+                <input type="text" id="tNationalID" class="input-training">
             </div>
 
             <div>
-                <label class="text-xs font-black text-gray-400 uppercase block mb-2">جنس المتدرب</label>
+                <label id="lblGender" class="text-xs font-black text-gray-400 uppercase block mb-2">---</label>
                 <div class="flex gap-4">
-                    <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">👨 ذكر</div>
-                    <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">👩 أنثى</div>
+                    <div id="maleBtn" onclick="setGender('Male')" class="gender-btn active">---</div>
+                    <div id="femaleBtn" onclick="setGender('Female')" class="gender-btn">---</div>
                 </div>
             </div>
 
             <div class="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-white shadow-inner">
-                <label class="block font-black mb-3 text-sm text-indigo-900 flex items-center gap-2">
-                    <i class="fas fa-search dynamic-text"></i> ابحث عن موقعك أو حدده:
+                <label id="lblMap" class="block font-black mb-3 text-sm text-indigo-900 flex items-center gap-2">
+                    <i class="fas fa-search dynamic-text"></i> ---
                 </label>
                 <div id="map" class="mb-4"></div>
-                <button type="button" onclick="getGPS()" class="w-full py-4 text-white rounded-2xl font-black text-sm shadow-lg transition-all active:scale-95 dynamic-bg">تحديد موقعي الحالي 🛰️</button>
+                <button type="button" id="gpsBtn" onclick="getGPS()" class="w-full py-4 text-white rounded-2xl font-black text-sm shadow-lg transition-all active:scale-95 dynamic-bg">---</button>
             </div>
 
-            <button onclick="goToReviewTraining()" class="w-full text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 dynamic-bg">
-                <span>مراجعة البيانات</span> <i class="fas fa-chevron-left"></i>
+            <button id="reviewBtn" onclick="goToReviewTraining()" class="w-full text-white py-5 rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 dynamic-bg">
+                <span id="reviewBtnText">---</span> <i id="btnIcon" class="fas fa-chevron-left"></i>
             </button>
         </div>
     </div>
@@ -84,23 +83,67 @@
     <script>
         let map, marker, selectedGender = 'Male';
         const p = new URLSearchParams(window.location.search);
+        const lang = p.get('lang') || 'ar';
+
+        const data = {
+            ar: {
+                title: "كورس تعليم قيادة", lblN: "اسم المتدرب الكامل", lblP: "رقم الهاتف", 
+                lblA: "العمر", lblI: "رقم الهوية / الجواز", lblG: "جنس المتدرب",
+                male: "👨 ذكر", female: "👩 أنثى", lblM: "ابحث عن موقعك:", gps: "تحديد موقعي الحالي 🛰️",
+                review: "مراجعة البيانات", alert: "يرجى إكمال البيانات الأساسية 🐋", mapP: "ابحث عن منطقة...", curr: "د.ع"
+            },
+            ku: {
+                title: "کۆرسی فێربوونی شۆفێری", lblN: "ناوی تەواوی فێرخواز", lblP: "ژمارەی مۆبایل", 
+                lblA: "تەمەن", lblI: "ژمارەی ناسنامە / پاسپۆرت", lblG: "ڕەگەز",
+                male: "👨 نێر", female: "👩 مێ", lblM: "شوێنەکەت دیاری بکە:", gps: "دیاریکردنی شوێنەکەم 🛰️",
+                review: "پێداچوونەوەی زانیاری", alert: "تکایە زانیارییەکان تەواو بکە 🐋", mapP: "بگەڕێ بۆ شوێنێک...", curr: "د.ع"
+            },
+            tr: {
+                title: "Sürüş Eğitim Kursu", lblN: "Öğrencinin Tam Adı", lblP: "Telefon Numarası", 
+                lblA: "Yaş", lblI: "Kimlik / Pasaport No", lblG: "Cinsiyet",
+                male: "👨 Erkek", female: "👩 Kadın", lblM: "Konumunuzu Belirleyin:", gps: "Konumumu Bul 🛰️",
+                review: "Bilgileri İncele", alert: "Lütfen tüm alanları doldurun 🐋", mapP: "Bölge ara...", curr: "IQD"
+            },
+            en: {
+                title: "Driving Training Course", lblN: "Full Student Name", lblP: "Phone Number", 
+                lblA: "Age", lblI: "ID / Passport Number", lblG: "Gender",
+                male: "👨 Male", female: "👩 Female", lblM: "Search your location:", gps: "Get My Location 🛰️",
+                review: "Review Information", alert: "Please complete all fields 🐋", mapP: "Search area...", curr: "IQD"
+            }
+        };
 
         window.onload = function() {
-            // عرض ملخص الحجز
+            const l = data[lang] || data['ar'];
+            const isRtl = (lang === 'ar' || lang === 'ku');
+            document.getElementById('htmlTag').dir = isRtl ? 'rtl' : 'ltr';
+            
+            // تعبئة النصوص
+            document.getElementById('pageTitle').innerText = l.title;
+            document.getElementById('lblFullname').innerText = l.lblN;
+            document.getElementById('lblPhone').innerText = l.lblP;
+            document.getElementById('lblAge').innerText = l.lblA;
+            document.getElementById('lblID').innerText = l.lblI;
+            document.getElementById('lblGender').innerText = l.lblG;
+            document.getElementById('maleBtn').innerText = l.male;
+            document.getElementById('femaleBtn').innerText = l.female;
+            document.getElementById('lblMap').innerHTML = `<i class="fas fa-search dynamic-text"></i> ${l.lblM}`;
+            document.getElementById('gpsBtn').innerText = l.gps;
+            document.getElementById('reviewBtnText').innerText = l.review;
+            document.getElementById('btnIcon').className = `fas fa-chevron-${isRtl ? 'left' : 'right'}`;
+
             document.getElementById('summary').innerHTML = `
-                <span>📍 ${p.get('city') || 'كركوك'}</span> | 
+                <span>📍 ${p.get('city') || '---'}</span> | 
                 <span>📅 ${p.get('date') || '---'}</span> | 
-                <span>💰 ${p.get('addon_price') || '0'} د.ع</span>
+                <span>💰 ${p.get('addon_price') || '0'} ${l.curr}</span>
             `;
 
-            // تهيئة الخريطة والبحث
             map = L.map('map').setView([33.3152, 44.3661], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             marker = L.marker([33.3152, 44.3661], {draggable: true}).addTo(map);
 
             L.Control.geocoder({
                 defaultMarkGeocode: false,
-                placeholder: "ابحث عن منطقة، شارع..."
+                placeholder: l.mapP
             }).on('markgeocode', function(e) {
                 map.setView(e.geocode.center, 16);
                 marker.setLatLng(e.geocode.center);
@@ -112,9 +155,8 @@
             const root = document.documentElement;
             const mainColor = g === 'Female' ? '#db2777' : '#7c3aed';
             root.style.setProperty('--main-color', mainColor);
-            
-            document.getElementById('femaleBtn').className = g === 'Female' ? 'gender-btn active' : 'gender-btn';
-            document.getElementById('maleBtn').className = g === 'Male' ? 'gender-btn active' : 'gender-btn';
+            document.getElementById('femaleBtn').classList.toggle('active', g === 'Female');
+            document.getElementById('maleBtn').classList.toggle('active', g === 'Male');
         }
 
         function getGPS() {
@@ -125,23 +167,22 @@
         }
 
         function goToReviewTraining() {
+            const l = data[lang] || data['ar'];
             const name = document.getElementById('tName').value;
             const phone = document.getElementById('tPhone').value;
             const id_no = document.getElementById('tNationalID').value;
-            const age = document.getElementById('tAge').value;
-            
-            if(!name || !phone || !id_no) { alert('يرجى إكمال البيانات الأساسية 🐋'); return; }
+            if(!name || !phone || !id_no) { alert(l.alert); return; }
             
             const pos = marker.getLatLng();
             p.set('name', name);
             p.set('phone', phone);
             p.set('national_id', id_no);
-            p.set('age', age);
-            p.set('gender', selectedGender === 'Male' ? 'ذكر' : 'أنثى');
+            p.set('age', document.getElementById('tAge').value);
+            p.set('gender', selectedGender === 'Male' ? (lang === 'ar' ? 'ذكر' : 'Male') : (lang === 'ar' ? 'أنثى' : 'Female'));
             p.set('province', p.get('city'));
             p.set('location_link', `https://www.google.com/maps?q=${pos.lat},${pos.lng}`);
-            p.set('service', 'تعليم قيادة محترفين');
-            p.set('car', 'كورس ' + (p.get('addon_display') || 'تعليم'));
+            p.set('service', 'Driving Training');
+            p.set('car', 'Course: ' + (p.get('addon_display') || 'Training'));
             p.set('total_price', p.get('addon_price'));
 
             window.location.href = `review.html?${p.toString()}`;
