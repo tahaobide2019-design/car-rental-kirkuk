@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "00b7f5b3-cf0a-43b7-97c1-2ff0f8e36c29",
+        });
+      });
+    </script>
+
     <title>الحوت لتأجير السيارات وتعليم السياقة | أفضل مكتب تعليم قيادة في العراق</title>
-    <meta name="description" content="الحوت هو افضل موقع لتاجير السيارات في العراق (بغداد، كركوك، اربيل، سليمانية، موصل، ديالى، انبار، بصرة). ارخص مكتب تعليم قيادة واحسن مكاتب تعليم السياقة.">
+    <meta name="description" content="الحوت هو افضل موقع لتاجير السيارات في العراق (بغداد، كركوك، اربيل، بصرة). ارخص مكتب تعليم قيادة واحسن مكاتب تعليم السياقة في كركوك وكافة المحافظات.">
     <meta name="keywords" content="تاجير سيارات، تعليم سياقة، كركوك، بغداد، اربيل، السليمانية، الموصل، ديالى، الانبار، البصرة، ارخص مكتب تعليم قيادة، افضل موقع تاجير سيارات العراق">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,16 +39,14 @@
         .lang-btn:hover { background: #D4AF37; color: #002349; transform: scale(1.1); }
         .city-overlay { position: absolute; inset: 0; opacity: 0.65; transition: 1s; pointer-events: none; }
         #daysWrapper { transition: all 0.4s ease; overflow: hidden; }
-        .hidden-field { max-width: 0; opacity: 0; transform: scaleX(0); margin: 0; padding: 0; pointer-events: none; }
-        .show-field { max-width: 500px; opacity: 1; transform: scaleX(1); }
+        .hidden-field { max-width: 0; opacity: 0; transform: scaleX(0); margin: 0; padding: 0; pointer-events: none; visibility: hidden; }
+        .show-field { max-width: 500px; opacity: 1; transform: scaleX(1); visibility: visible; }
         @media (max-width: 768px) {
             .glass-box { transform: translateY(-130px); margin: 0 10px; }
             .hero-bg { padding-bottom: 14rem; }
             .whale-emoji { font-size: 4rem; }
             .whale-text-white { font-size: 2.5rem; }
             .header-flex { flex-direction: column; text-align: center; }
-            .hidden-field { max-height: 0; max-width: 100%; transform: scaleY(0); }
-            .show-field { max-height: 200px; max-width: 100%; transform: scaleY(1); }
         }
     </style>
 </head>
@@ -57,10 +65,10 @@
         <div class="container mx-auto px-6 flex justify-between items-center relative z-10 header-flex">
             <div class="text-right">
                 <h1 class="text-5xl md:text-7xl brand-text-style mb-4" id="brandName">
-                    استأجر سيارة<br>قريبة منك تناسب<br>رحلتك
+                    استأجر سيارة<br>أو تعلم السياقة<br>بأفضل الأسعار
                 </h1>
                 <p id="dynamicGreeting" class="text-xl md:text-2xl font-black transition-all duration-500 drop-shadow-lg text-white/90 mb-2 h-8"></p>
-                <p id="subGreeting" class="text-lg md:text-xl font-bold text-[#D4AF37]">أفضل منصة لتأجير السيارات وتعليم السياقة</p>
+                <p id="subGreeting" class="text-lg md:text-xl font-bold text-[#D4AF37]">أفضل منصة في العراق</p>
             </div>
             <div class="whale-left-container">
                 <div class="whale-emoji">🐋</div>
@@ -115,9 +123,8 @@
         let currentLang = 'ar';
         const data = {
             ar: {
-                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت', brand: 'استأجر سيارة<br>أو تعلم السياقة<br>بأفضل الأسعار', subGreet: 'أفضل موقع لتأجير السيارات وتعليم السياقة',
+                dir: 'rtl', font: 'Tajawal', whale: 'الحـوت', brand: 'استأجر سيارة<br>أو تعلم السياقة<br>بأفضل الأسعار', subGreet: 'أفضل موقع لتأجير السيارات وتعليم القيادة',
                 labelCity: 'المدينة', labelService: 'الخدمة', labelDays: 'الأيام', labelDate: 'التاريخ', labelTime: 'الوقت', btnText: 'استمر الآن', alert: 'يرجى ملء جميع الحقول 🐋',
-                morning: 'صباح الخير', day: 'طاب يومك', evening: 'مساء الخير',
                 whyTitle: 'لماذا منصة الحوت هي الأفضل في العراق؟',
                 whyDesc: 'نحن نغطي (كركوك، بغداد، أربيل، السليمانية، الموصل، ديالى، الأنبار، والبصرة). نوفر أرخص مكتب تعليم قيادة وأحدث سيارات الإيجار بضمان الجودة والأمان.',
                 faqTitle: 'الأسئلة الشائعة حول خدماتنا في العراق',
@@ -128,24 +135,22 @@
                 ],
                 services: { placeholder: '-- اختر الخدمة --', personal: '🚗 تأجير سيارة شخصية', wedding: '🎁 سيارات أعراس', training: '🎓 تعليم قيادة' },
                 cities: { 'كركوك': 'كركوك 💎', 'بغداد': 'بغداد 🏰', 'أربيل': 'أربيل 🏔️', 'السليمانية': 'السليمانية 🌲', 'الموصل': 'الموصل 🏹', 'البصرة': 'البصرة ⚓', 'الأنبار': 'الأنبار 🌴', 'ديالى': 'ديالى 🍊' },
-                msgs: { 'كركوك': 'في كركوك..', 'بغداد': 'في بغداد..', 'أربيل': 'في أربيل..', 'السليمانية': 'في السليمانية..', 'الموصل': 'في الموصل..', 'البصرة': 'في البصرة..', 'الأنبار': 'في الأنبار..', 'ديالى': 'في ديالى..' }
+                msgs: { 'كركوك': 'أفضل مكاتب كركوك..', 'بغداد': 'أهلاً بك في بغداد..', 'أربيل': 'خدماتنا في أربيل..', 'السليمانية': 'جمال السليمانية..', 'الموصل': 'عراقة الموصل..', 'البصرة': 'بصرتنا الفيحاء..', 'الأنبار': 'كرم الأنبار..', 'ديالى': 'ديالى البرتقال..' }
             },
             ku: {
                 dir: 'rtl', font: 'Tajawal', whale: 'ئەلحووت', brand: 'ئۆتۆمبێلێکی نزیک<br>بۆ گەشتەکەت<br>بەکرێ بگرە', subGreet: 'باشترین نرخ و باشترین ئۆتۆمبێل',
                 labelCity: 'شار', labelService: 'خزمەتگوزاری', labelDays: 'ڕۆژەکان', labelDate: 'بەروار', labelTime: 'کات', btnText: 'بەردەوام بە', alert: 'تکایە خانەکان پڕبکەرەوە 🐋',
-                morning: 'بەیانیت باش', day: 'ڕۆژت باش', evening: 'ئێوارەت باش',
                 whyTitle: 'بۆچی ئەلحووت باشترینە لە عێراق؟',
                 whyDesc: 'ئێمە لە کەرکوک، هەولێر، سلێمانی، بەغداد و هەموو شارەکان ئامادەین.',
                 faqTitle: 'پسیارە باوەکان',
                 faqs: [{q: 'نوسینگەی ئەلحووت لە کوێیە؟', a: 'لە کەرکوک، هەولێر، سلێمانی، بەغداد و هەموو شارەکانی تری عێراق.'}],
                 services: { placeholder: '-- خزمەتگوزاری --', personal: '🚗 بەکرێگرتن', wedding: '🎁 زەماوەند', training: '🎓 فێربوون' },
                 cities: { 'كركوك': 'کەرکوک 💎', 'بغداد': 'بەغداد 🏰', 'أربيل': 'هەولێر 🏔️', 'السليمانية': 'سلێمانی 🌲', 'الموصل': 'مووسڵ 🏹', 'البصرة': 'بەسرە ⚓', 'الأنبار': 'ئەنبار 🌴', 'ديالى': 'دیالە 🍊' },
-                msgs: { 'كركوك': 'بەخێربێن بۆ کەرکوک..', 'بغداد': 'سڵاو لە بەغداد..', 'أربيل': 'بەخێربێن بۆ هەولێر..' }
+                msgs: { 'كركوك': 'کەرکوک..', 'أربيل': 'هەولێر..', 'بغداد': 'بەغداد..' }
             },
             tr: {
-                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Araç Kiralama<br>ve Ehliyet Kursu', subGreet: 'Harika fiyatlar',
+                dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Yolculuğunuza uygun<br>yakın bir araç<br>kiralayın', subGreet: 'Harika fiyatlar',
                 labelCity: 'City', labelService: 'Service', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
-                morning: 'Günaydın', day: 'İyi günler', evening: 'İyi akşamlar',
                 whyTitle: 'Neden Al-Hut Platformu?',
                 whyDesc: 'Kerkük, Bağdat, Erbil ve tüm Irak şehirlerinde hizmet vermekteyiz.',
                 faqTitle: 'Sıkça Sorulan Sorular',
@@ -157,7 +162,6 @@
             en: {
                 dir: 'ltr', font: 'Poppins', whale: 'AL-HUT', brand: 'Rent a car<br>near you for<br>your trip', subGreet: 'Top prices',
                 labelCity: 'City', labelService: 'Service', labelDays: 'Days', labelDate: 'Date', labelTime: 'Time', btnText: 'Continue', alert: 'Fill fields 🐋',
-                morning: 'Good Morning', day: 'Good Day', evening: 'Good Evening',
                 whyTitle: 'Why Al-Hut is the Best?',
                 whyDesc: 'We cover Kirkuk, Baghdad, Erbil, Basra and all Iraqi cities.',
                 faqTitle: 'Frequently Asked Questions',
@@ -211,12 +215,13 @@
             const overlay = document.getElementById('cityOverlay');
             const l = data[currentLang];
             const hour = new Date().getHours();
-            let timeText = hour < 12 ? l.morning : (hour < 18 ? l.day : l.evening);
+            let timeBase = hour < 12 ? (l.morning || "صباح الخير") : (hour < 18 ? (l.day || "طاب يومك") : (l.evening || "مساء الخير"));
+            let cityMsg = (l.msgs && l.msgs[city]) ? l.msgs[city] : city;
             const styleColor = { 'كركوك': '#004d40', 'بغداد': '#1a237e', 'أربيل': '#2e7d32', 'السليمانية': '#6a1b9a', 'الموصل': '#4e342e', 'البصرة': '#0277bd', 'الأنبار': '#ef6c00', 'ديالى': '#558b2f' };
             
             greet.style.opacity = 0;
             setTimeout(() => {
-                greet.innerText = `${timeText}.. ${l.msgs[city] || ('أهلاً بك في ' + city)}`;
+                greet.innerText = `${timeBase}.. ${cityMsg}`;
                 greet.style.opacity = 1;
                 overlay.style.backgroundColor = styleColor[city] || '#002349';
             }, 300);
